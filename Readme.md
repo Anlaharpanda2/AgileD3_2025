@@ -1,6 +1,8 @@
 # Dinas Pemberdayaan Perempuan & Perlindungan Anak Provinsi Sumatera Barat
 
-![Logo](assets/logo/logo.png)
+<p align="center">
+  <img src="assets/logo/logo.png" width="33%">
+</p>
 
 ## 📌 Deskripsi Proyek
 Website ini dibuat untuk **Dinas Pemberdayaan Perempuan & Perlindungan Anak Provinsi Sumatera Barat** dalam rangka **manajemen dan pengelolaan data internal kedinasan**. 
@@ -19,7 +21,7 @@ Fitur utama dari sistem ini adalah:
 ## 🛠️ Instalasi dan Konfigurasi
 ### 1️⃣ Clone Repository
 ```bash
-git clone https://github.com/username/proyek-dinas.git
+git clone https://github.com/Anlaharpanda2/AgileD3_2025.git
 cd proyek-dinas
 ```
 
@@ -34,7 +36,7 @@ Buat file `.env` dari contoh yang tersedia:
 ```bash
 cp .env.example .env
 ```
-Lalu, sesuaikan konfigurasi database di `.env`:
+Lalu, sesuaikan konfigurasi database di `.env` (kami kelompok 3 menggunakan database mysql):
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -54,7 +56,7 @@ php artisan migrate --seed
 ```bash
 php artisan serve
 ```
-Akses website melalui `http://127.0.0.1:8000`
+Akses website melalui IP yang ditampilkan
 
 ## 🤝 Kontribusi
 Jika ingin berkontribusi dalam pengembangan proyek ini, silakan:

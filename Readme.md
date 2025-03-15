@@ -72,7 +72,3 @@ Proyek ini menggunakan lisensi **MIT License**. Lihat file `LICENSE` untuk infor
 ---
 
 Dikelola oleh **Anla Harpanda, Vania Ulimaz Rivani, Agel Deska Wisamulya & Nadya Hermalia Putri** 🎯
-
-```
-baru
-```

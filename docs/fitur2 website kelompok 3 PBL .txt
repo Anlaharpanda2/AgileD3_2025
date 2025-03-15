@@ -1,0 +1,68 @@
+fitur2 website dinas pemberdayaan 
+
+- peningkatan ekonomi perempuan
+yang dilatih ibu2, jumlahnya lebih 5000 org
+pep(menjahit, kuliner, dll)
+
+
+- pengurustamaan gender
+
+keinginan
+peserta tergambar diwebsite
+simoner
+yang diutamakan ibu2
+pelatihan 35 org
+
+menampilkan 
+pelatihannya menampilkan data, pendaftaran, lokasi
+pemberian sertifikat secara online
+
+keinginan
+data ada 35 org, dapat menentukan kelompok kehadiran berdasarkan usia
+fitur mudah digunakan
+
+fitur2 Utama
+1. input data (pendaftaran umum dan internal) admin yang atur Waktu penutupan
+2. menjahit, kuliner, suvernir,
+3. website perbidang
+4. ada pelaporan (pemberitahuan), nantinya kalau minta data tinggal ambil dari website.
+5. sebagai penyimpan data
+hanya untuk bidang ini
+persamaan gender, pemberdayaan perempuan, pengurus tamaaan keluarga, 
+6. data ekonomi perempuan dan perspektif gender ()
+7. yang dilatih ada perempuan, rentan, berkeluarga, dll
+8. pritest pertama yg diinginkan langsung dari website (ex : buatkan pertanyaan biasa mengenai perekenomian dan pengaturan keuangan)
+9. tampilan firturnya gambar kepala dinas
+10. ada 4 bidang (ekonomi, social, hukum, politik) buatkan tampilan perbidang
+11. keinginan dimudahkan dalam permintaan data
+12. sediaan tampilan sertifikat
+
+
+kesulitan
+1. dalam peritest manual menggunakan kertas
+
+*===fitur utama===*
+data peserta (persyaratan umum peserta) entrikan data berdasarkan nik yang didaftarkan hanya 1 kali
+pilihan pelatihan, ada jadwal, (ex : lpep)
+data peserta secara umum
+pritest, postes, meteri 
+pemateri siapa aja
+sertifikat pemateri dan peserta
+
+warna khas : dasarnya pink fanta
+
+=================================================================
+
+pokir
+pilihan kabupaten kota(pemilihan daerah)
+untuk kedepannya masukkan data baru dengan menggunakan database
+membuat data pertahun
+dari website nanti pihak dinas bisa menganalisa dan mengevaluasi dengan mudah
+siga sistem informasi gender dan anak
+sipak 
+website dinas websikuburger ()
+bikin admin bertingkat
+
+================================================
+tampilan endafaran : nama, nik, alamat, password
+================================================

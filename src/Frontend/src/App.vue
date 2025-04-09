@@ -3,9 +3,8 @@ import HomeView from './views/HomeView.vue'
 </script>
 
 <template>
-  <div id="app">
-    <h1>Selamat Datang di Aplikasi Mahasiswa</h1>
-    <HomeView />
+  <div>
+    <router-view />
   </div>
 </template>
 

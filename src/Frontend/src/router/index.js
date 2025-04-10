@@ -1,22 +1,22 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
+import DataPendaftaranView from '../views/DataPendaftaranView.vue'
 import HomeView from '../views/HomeView.vue'
-import TentangView from '../views/TentangView.vue'
 import NotFound from '../views/NotFound.vue'
 
 const routes = [
+  {
+    path: '/Pendaftaran',
+    name: 'Pendaftaran',
+    component: DataPendaftaranView
+  },
   {
     path: '/',
     name: 'home',
     component: HomeView
   },
   {
-    path: '/tentang',
-    name: 'tentang',
-    component: TentangView
-  },
-  {
-    path: '/:pathMatch(.*)*', // Catch all route
+    path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: NotFound
   }

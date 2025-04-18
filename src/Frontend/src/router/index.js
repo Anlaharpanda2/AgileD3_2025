@@ -4,6 +4,7 @@ import DataPendaftaranView from '../views/DataPendaftaranView.vue'
 import HomeView from '../views/HomeView.vue'
 import NotFound from '../views/NotFound.vue'
 import LoginView from '../views/LoginView.vue'
+import RapidAPI from '../views/RapidAPI.vue'
 
 const routes = [
   {
@@ -25,6 +26,11 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LoginView
+  },
+  {
+    path: '/rapidapi',
+    name: 'premierleague',
+    component: RapidAPI
   }
 ]
 

@@ -1,38 +1,36 @@
-<script setup>
-import { ref, onMounted } from 'vue'
-import api from '../api.js'
-
-const mahasiswas = ref([])
-
-onMounted(async () => {
-  try {
-    const res = await api.get('/mahasiswa')
-    mahasiswas.value = res.data
-  } catch (error) {
-    console.error('Gagal mengambil data:', error)
-  }
-})
-</script>
-
 <template>
-  <div class="page">
-    <h1>📘 Daftar Mahasiswa</h1>
-    <div class="table-wrapper">
-      <table>
-        <thead>
+  <div class="container mt-5">
+    <h3 class="mb-4 text-center">Data Pendaftaran</h3>
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered table-striped shadow-sm">
+        <thead class="table-dark">
           <tr>
-            <th>NIM</th>
-            <th>Nama</th>
-            <th>Email</th>
-            <th>Alamat</th>
+            <th>NIK</th>
+            <th>Peserta</th>
+            <th>Tempat & Tanggal Lahir</th>
+            <th>Jenis Kelamin</th>
+            <th class="w-25">Alamat</th>
+            <th>Pendidikan</th>
+            <th>Pekerjaan</th>
+            <th class="w-25">Email</th>
+            <th class="w-25">Pelatihan</th>
+            <th class="w-25">Tanggal Pelatihan</th>
+            <th class="w-25">Tempat Pelatihan</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="mhs in mahasiswas" :key="mhs.nim">
-            <td>{{ mhs.nim }}</td>
-            <td>{{ mhs.name }}</td>
-            <td>{{ mhs.email }}</td>
-            <td>{{ mhs.alamat }}</td>
+          <tr v-for="data in pendaftar" :key="data.nik">
+            <td>{{ maskData(data.nik) }}</td>
+            <td>{{ data.peserta }}</td>
+            <td>{{ maskData(data.tempat_tanggal_lahir) }}</td>
+            <td>{{ data.jenis_kelamin }}</td>
+            <td>{{ data.alamat }}</td>
+            <td>{{ data.pendidikan }}</td>
+            <td>{{ data.pekerjaan }}</td>
+            <td>{{ maskData(data.email) }}</td>
+            <td>{{ data.pelatihan }}</td>
+            <td>{{ data.tanggal_pelatihan }}</td>
+            <td>{{ data.tempat_pelatihan }}</td>
           </tr>
         </tbody>
       </table>
@@ -40,50 +38,84 @@ onMounted(async () => {
   </div>
 </template>
 
+<script setup>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+
+const pendaftar = ref([])
+
+onMounted(async () => {
+  try {
+    const response = await axios.get('http://localhost:8000/api/pendaftar')
+    pendaftar.value = response.data
+  } catch (error) {
+    console.error('Gagal ambil data:', error)
+  }
+})
+
+const maskData = (data) => {
+  if (!data) return data
+  return data.replace(/./g, '•') // Ganti setiap karakter dengan titik
+}
+</script>
+
 <style scoped>
-.page {
-  padding: 40px;
-  background-color: #f8edeb;
-  min-height: 100vh;
-  font-family: 'Segoe UI', sans-serif;
+.container {
+  max-width: 90%;
+  margin: auto;
 }
 
-h1 {
-  text-align: center;
-  color: #2b2d42;
-  margin-bottom: 30px;
+h3 {
+  color: #343a40;
+  font-weight: 600;
 }
 
-.table-wrapper {
-  max-width: 1000px;
-  margin: 0 auto;
+.table-responsive {
   overflow-x: auto;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  padding: 20px;
 }
 
 table {
   width: 100%;
-  border-collapse: collapse;
-  font-size: 16px;
+  margin-top: 20px;
+  font-size: 14px; /* Mengatur ukuran font untuk tabel agar lebih kecil */
+}
+
+th, td {
+  text-align: center;
+  vertical-align: middle; /* Menjaga agar teks tidak terlalu tinggi */
+  padding: 10px;
 }
 
 th {
-  background-color: #ffb5a7;
-  color: #fff;
-  padding: 15px;
-  text-align: left;
+  background-color: #343a40;
+  color: white;
 }
 
 td {
-  padding: 15px;
-  border-bottom: 1px solid #eee;
-  color: #333;
+  background-color: #f8f9fa;
 }
 
-tr:hover {
-  background-color: #ffe5d9;
+tbody tr:hover {
+  background-color: #f1f3f5;
+}
+
+table th, table td {
+  border: 1px solid #dee2e6;
+  padding: 12px 15px;
+}
+
+.w-25 {
+  width: 25% !important; /* Menetapkan lebar kolom menjadi 25% */
+}
+
+@media (max-width: 768px) {
+  table {
+    font-size: 12px; /* Ukuran font lebih kecil pada layar kecil */
+  }
+
+  /* Mengatur lebar kolom pada layar kecil */
+  .w-25 {
+    width: auto !important;
+  }
 }
 </style>

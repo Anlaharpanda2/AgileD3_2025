@@ -4,6 +4,7 @@ import DataPendaftaranView from '../views/DataPendaftaranView.vue'
 import HomeView from '../views/HomeView.vue'
 import NotFound from '../views/NotFound.vue'
 import LoginView from '../views/LoginView.vue'
+import DaftarView from '../views/DaftarView.vue'
 import RapidAPI from '../views/RapidAPI.vue'
 
 const routes = [
@@ -31,6 +32,11 @@ const routes = [
     path: '/rapidapi',
     name: 'premierleague',
     component: RapidAPI
+  },
+  {
+    path: '/Daftar',
+    name: 'Daftar',
+    component: DaftarView
   }
 ]
 

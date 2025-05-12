@@ -1,7 +1,3 @@
-<script setup>
-import HomeView from './views/DataPendaftaranView.vue'
-</script>
-
 <template>
   <div>
     <router-view />

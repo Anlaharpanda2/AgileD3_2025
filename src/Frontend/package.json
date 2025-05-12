@@ -9,15 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@lottiefiles/vue-lottie-player": "^1.1.0",
     "axios": "^1.8.4",
-    "date-fns": "^4.1.0",
-    "lodash.isequal": "^4.5.0",
+    "element-plus": "^2.9.9",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
-    "sass-embedded": "^1.86.3",
     "vite": "^6.2.0"
   }
 }

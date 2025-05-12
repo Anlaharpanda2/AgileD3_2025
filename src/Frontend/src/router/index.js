@@ -1,48 +1,57 @@
-// src/router/index.js
-import { createRouter, createWebHistory } from 'vue-router'
-import DataPendaftaranView from '../views/DataPendaftaranView.vue'
-import HomeView from '../views/HomeView.vue'
-import NotFound from '../views/NotFound.vue'
-import LoginView from '../views/LoginView.vue'
-import DaftarView from '../views/DaftarView.vue'
-import RapidAPI from '../views/RapidAPI.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import LoginMasyarakat from '../views/Login/LoginMasyarakat.vue';
+import LoginOperator from '../views/Login/LoginOperator.vue';
+import LoginPegawai from '../views/Login/LoginPegawai.vue';
+import Home from '../views/Home/HomeView.vue';
+import DataPendaftarView from '../views/DataPendaftar/DataPendaftarView.vue';
+import NotFound from '../views/NotFound.vue';
 
 const routes = [
   {
-    path: '/Pendaftaran',
-    name: 'Pendaftaran',
-    component: DataPendaftaranView
+    path: '/',
+    name: 'Home',
+    component: Home
   },
   {
-    path: '/',
-    name: 'home',
-    component: HomeView
+    path: '/login/masyarakat',
+    name: 'LoginMasyarakat',
+    component: LoginMasyarakat
+  },
+  {
+    path: '/login/pegawai',
+    name: 'LoginPegawai',
+    component: LoginPegawai
+  },
+  {
+    path: '/login/operator',
+    name: 'LoginOperator',
+    component: LoginOperator
+  },
+  {
+    path: '/data/pendaftar',
+    name: 'DataPendaftar',
+    component: DataPendaftarView,
+    meta: { requiresAuth: true }
   },
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: NotFound
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: LoginView
-  },
-  {
-    path: '/rapidapi',
-    name: 'premierleague',
-    component: RapidAPI
-  },
-  {
-    path: '/Daftar',
-    name: 'Daftar',
-    component: DaftarView
   }
-]
+];
 
 const router = createRouter({
   history: createWebHistory(),
   routes
-})
+});
+router.beforeEach((to, from, next) => {
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
-export default router
+  if (to.meta.requiresAuth && !isLoggedIn) {
+    next({ path: '/login/masyarakat' });
+  } else {
+    next();
+  }
+});
+
+export default router;

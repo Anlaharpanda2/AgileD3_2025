@@ -2,12 +2,11 @@
 import { ref, onMounted } from 'vue'
 import api from '../api.js'
 
-const mahasiswas = ref([])
-
+const vania = ref([])
 onMounted(async () => {
   try {
-    const res = await api.get('/mahasiswa')
-    mahasiswas.value = res.data
+    const res = await api.get('/vaniaroute')
+    vania.value = res.data
   } catch (error) {
     console.error('Gagal mengambil data:', error)
   }
@@ -16,23 +15,23 @@ onMounted(async () => {
 
 <template>
   <div class="page">
-    <h1>📘 Daftar Mahasiswa</h1>
+    <h1>📘 Data vania</h1>
     <div class="table-wrapper">
       <table>
         <thead>
           <tr>
-            <th>NIM</th>
-            <th>Nama</th>
-            <th>Email</th>
-            <th>Alamat</th>
+            <th>Kolom1</th>
+            <th>Kolom2</th>
+            <th>Kolom3</th>
+            <th>Kolom4</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="mhs in mahasiswas" :key="mhs.nim">
-            <td>{{ mhs.nim }}</td>
-            <td>{{ mhs.name }}</td>
-            <td>{{ mhs.email }}</td>
-            <td>{{ mhs.alamat }}</td>
+          <tr v-for="mhs in vania" :key="mhs.contoh1">
+            <td>{{ mhs.contoh1}}</td>
+            <td>{{ mhs.contoh2 }}</td>
+            <td>{{ mhs.contoh3 }}</td>
+            <td>{{ mhs.contoh4 }}</td>
           </tr>
         </tbody>
       </table>

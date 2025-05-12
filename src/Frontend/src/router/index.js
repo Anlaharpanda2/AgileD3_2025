@@ -4,6 +4,9 @@ import DataPendaftaranView from '../views/DataPendaftaranView.vue'
 import HomeView from '../views/HomeView.vue'
 import NotFound from '../views/NotFound.vue'
 import LoginView from '../views/LoginView.vue'
+import VaniaView from '../views/VaniaView.vue'
+import baru from '../views/baru.vue'
+import HapusPendaftarView from '../views/HapusPendaftarView.vue'
 
 const routes = [
   {
@@ -25,6 +28,21 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LoginView
+  },
+  {
+    path: '/vania',
+    name: 'vania',
+    component: VaniaView
+  },
+  {
+    path: '/baru',
+    name: 'terserah',
+    component: baru
+  },
+  {
+    path: '/HapusPendaftarView',
+    name: 'hapus',
+    component: HapusPendaftarView
   }
 ]
 

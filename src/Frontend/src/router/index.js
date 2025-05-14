@@ -1,33 +1,43 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
-import DataPendaftaranView from '../views/DataPendaftaranView.vue'
-import HomeView from '../views/HomeView.vue'
-import NotFound from '../views/NotFound.vue'
-import LoginView from '../views/LoginView.vue'
 
+// Import semua halaman (views)
+import HomeView from '../views/HomeView.vue'
+import DataPendaftaranView from '../views/DataPendaftaranView.vue'
+import TambahPesertaView from '../views/TambahPesertaView.vue'
+import LoginView from '../views/LoginView.vue'
+import NotFound from '../views/NotFound.vue'
+
+// Daftar rute
 const routes = [
-  {
-    path: '/Pendaftaran',
-    name: 'Pendaftaran',
-    component: DataPendaftaranView
-  },
   {
     path: '/',
     name: 'home',
     component: HomeView
   },
   {
-    path: '/:pathMatch(.*)*',
-    name: 'NotFound',
-    component: NotFound
+    path: '/peserta',
+    name: 'Peserta',
+    component: DataPendaftaranView
+  },
+  {
+    path: '/tambah',
+    name: 'TambahPeserta',
+    component: TambahPesertaView
   },
   {
     path: '/login',
-    name: 'login',
+    name: 'Login',
     component: LoginView
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFound
   }
 ]
 
+// Buat dan export router
 const router = createRouter({
   history: createWebHistory(),
   routes

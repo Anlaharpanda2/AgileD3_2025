@@ -52,7 +52,7 @@ const handleFileUpload = async (event) => {
   formData.append('file', file)
 
   try {
-    const res = await api.post('/imporpendaftar', formData, {
+    const res = await api.post('/pendaftar/impor', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -106,7 +106,7 @@ const handleFileUpload = async (event) => {
         </thead>
         <tbody>
           <tr v-for="item in filteredPendaftars" :key="item.id">
-            <td>{{ item.nik }}</td>
+            <td >{{ item.nik }}</td>
             <td>{{ item.peserta }}</td>
             <td>{{ item.tempat_tanggal_lahir }}</td>
             <td>{{ item.jenis_kelamin }}</td>

@@ -42,7 +42,7 @@ export default {
       }
 
       try {
-        const response = await api.post('/login', {
+        const response = await api.post('/login/masyarakat', {
           nik: this.nik,
           nama: this.nama,
         });

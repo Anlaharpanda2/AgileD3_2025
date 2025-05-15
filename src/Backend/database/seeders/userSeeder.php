@@ -12,9 +12,9 @@ class userSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'name' => 'baru',
+            'name' => 'anla',
             'password' => Hash::make('12345678aS@'),
-            'email' => 'test2@example.com',
+            'email' => 'test3@example.com',
         ]);
     }
 }

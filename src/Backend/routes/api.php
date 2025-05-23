@@ -1,7 +1,9 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use App\Http\Controllers\PesertaController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\Auth\AuthMasyarakatController;
 use App\Http\Controllers\Auth\AuthOperatorController;
@@ -17,3 +19,9 @@ Route::post('/logout',function(Request $request){
     Auth::logout();
     return response()->json(['message' => 'Logout berhasil']);
 });
+
+// Endpoint untuk ambil semua peserta
+Route::get('/peserta', [PesertaController::class, 'index']);
+
+// Endpoint untuk menambahkan peserta
+Route::post('/peserta', [PesertaController::class, 'store']);

@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mahasiswas', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('daftar_pendaftar', function (Blueprint $table) {
+            $table->timestamps(); // Menambahkan created_at dan updated_at
         });
     }
 
@@ -22,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mahasiswas');
+        Schema::table('daftar_pendaftar', function (Blueprint $table) {
+            //
+        });
     }
 };

@@ -13,6 +13,8 @@ use App\Http\Controllers\Auth\AuthPegawaiController;
 use Illuminate\Support\Facades\RateLimiter;
 use App\Http\Controllers\DosenController; 
 use App\Http\Controllers\NadyaController;
+use App\Http\Controllers\VaniaController;
+use App\Http\Controllers\PendaftaranBaru\PendaftaranBaruController;
 
 
 Route::get('/', [Backend::class, 'index']);
@@ -40,3 +42,12 @@ Route::post('/pendaftar/impor', [ImporPendaftarController::class, 'impor']);
 
 
 Route::get('/pendaftar/ekspor', [EksporPendaftarController::class, 'ekspor']);
+Route::get('/vaniaroute', [VaniaController::class, 'index']);
+
+Route::get('/pendaftaranbaru', [PendaftaranBaruController::class, 'index']);
+Route::post('/pendaftaranbaru', [PendaftaranBaruController::class, 'store']);
+Route::put('/pendaftaranbaru/{nik}', [PendaftaranBaruController::class, 'update']);
+Route::delete('/pendaftaranbaru/{nik}', [PendaftaranBaruController::class, 'destroy']);
+Route::get('/pendaftaranbaru/trash', [PendaftaranBaruController::class, 'trash']); // Lihat yang dihapus
+Route::put('/pendaftaranbaru/restore/{nik}', [PendaftaranBaruController::class, 'restore']); // Pulihkan
+Route::delete('/pendaftaranbaru/permanent/{nik}', [PendaftaranBaruController::class, 'forceDelete']);

@@ -1,19 +1,13 @@
-
-import { createRouter, createWebHistory } from 'vue-router';
-import LoginMasyarakat from '../views/Login/LoginMasyarakat.vue';
-import LoginOperator from '../views/Login/LoginOperator.vue';
-import LoginPegawai from '../views/Login/LoginPegawai.vue';
-import Home from '../views/Home/HomeView.vue';
-import DataPendaftarView from '../views/DataPendaftar/DataPendaftarView.vue';
-import NotFound from '../views/NotFound.vue';
-import DataPendaftaranView from '../views/DataPendaftaran/DataPendaftaranView.vue'
+// src/router/index.js
+import { createRouter, createWebHistory } from 'vue-router'
+import DataPendaftaranView from '../views/Pendaftar/DataPendaftaranView.vue'
 import HomeView from '../views/HomeView.vue'
 import DataPendaftaranView from '../views/DataPendaftaranView.vue'
 import TambahPesertaView from '../views/TambahPesertaView.vue'
 import LoginView from '../views/LoginView.vue'
-import NadyaView from '../views/NadyaView.vue'
-import EksporPendaftar from '../views/ekspor/EksporPendaftar.vue'
-import ImporPendaftar from '../views/impor/ImporPendaftar.vue'
+import VaniaView from '../views/vaniaView.vue'
+import DataPendaftaran from '../views/PendaftaranBaru/DataPendaftaran.vue';
+import DataSampah from '../views/PendaftaranBaru/DataSampah.vue'
 
 const routes = [
   {
@@ -76,24 +70,19 @@ const routes = [
     component: LoginView
   },
   {
-    path: '/nadya',
-    name: 'nadya',
-    component: NadyaView
+    path: '/anla',
+    name: 'vania',
+    component: VaniaView
   },
   {
-    path: '/pendaftar/ekspor',
-    name: 'ekspor',
-    component: EksporPendaftar
+    path: '/hapusedit',
+    name: 'hapusedit',
+    component: DataPendaftaran
   },
   {
-    path: '/pendaftar/impor',
-    name: 'impor',
-    component: ImporPendaftar
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    name: 'NotFound',
-    component: NotFound
+  path: '/pendaftaran/terhapus',
+  name: 'DataSampah',
+  component: DataSampah
   }
 ];
 
@@ -111,4 +100,4 @@ router.beforeEach((to, from, next) => {
   }
 });
 
-export default router;
+export default router

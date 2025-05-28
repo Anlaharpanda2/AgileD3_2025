@@ -13,7 +13,7 @@ export default {
   mounted() {
     // Jika sudah login, langsung arahkan ke halaman data pendaftar
     if (localStorage.getItem('isLoggedIn') === 'true') {
-      this.$router.push('/data/pendaftar');
+      this.$router.push('/data/pelatihan');
     }
   },
   watch: {
@@ -54,7 +54,7 @@ export default {
 
         // Redirect setelah sedikit delay
         setTimeout(() => {
-          this.$router.push('/data/pendaftar');
+          this.$router.push('/data/pelatihan');
         }, 100);
       } catch (error) {
         this.errorMessage = error.response?.data?.message || 'Login gagal';

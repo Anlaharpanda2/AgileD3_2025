@@ -1,19 +1,32 @@
-// src/router/index.js
-import { createRouter, createWebHistory } from 'vue-router'
-import DataPendaftaranView from '../views/Pendaftar/DataPendaftaranView.vue'
-import HomeView from '../views/HomeView.vue'
-import DataPendaftaranView from '../views/DataPendaftaranView.vue'
-import TambahPesertaView from '../views/TambahPesertaView.vue'
-import LoginView from '../views/LoginView.vue'
-import VaniaView from '../views/vaniaView.vue'
-import DataPendaftaran from '../views/PendaftaranBaru/DataPendaftaran.vue';
-import DataSampah from '../views/PendaftaranBaru/DataSampah.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+
+import def from '../layouts/DefaultLayout.vue'
+import def2 from '../layouts/DefaultLayout2.vue'
+import FormImport from '../components/FormTambahDataPelatihan.vue'
+
+// rute login
+import LoginMasyarakat from '../views/Login/LoginMasyarakat.vue';
+import LoginOperator from '../views/Login/LoginOperator.vue';
+import LoginPegawai from '../views/Login/LoginPegawai.vue';
+
+// rute pengelola data pendaftar
+import DataPelatihanView from '../views/PengelolaDataPelatihan/DataPelatihanView.vue';
+import DataPelatihanSampahView from '../views/PengelolaDataPelatihan/DataPelatihanSampahView.vue';
+
+import NotFound from '../views/NotFound.vue';
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path:'/form',
+    component : FormImport
+  },
+  {
+    path:'/def',
+    component : def
+  },
+  {
+    path:'/def2',
+    component : def2
   },
   {
     path: '/login/masyarakat',
@@ -30,69 +43,36 @@ const routes = [
     name: 'LoginOperator',
     component: LoginOperator
   },
+
+  // halaman data pelatihan
   {
-    path: '/data/pendaftar',
-    name: 'DataPendaftar',
-    component: DataPendaftarView,
+    path: '/data/pelatihan',
+    name: 'DataPenlatihan',
+    component: DataPelatihanView,
     meta: { requiresAuth: true }
   },
   {
-    name: 'home',
-    component: HomeView
+    path: '/data/pelatihan/sampah',
+    name: 'DataPenlatihanSampah',
+    component: DataPelatihanSampahView,
+    meta: { requiresAuth: true }
   },
+
+  // halaman tidak ditemukan
   {
-    path: '/peserta',
-    name: 'Peserta',
-    component: DataPendaftaranView
-  },
-  {
-    path: '/tambah',
-    name: 'TambahPeserta',
-    component: TambahPesertaView
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: LoginView
-  },
-  {
-    name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/pendaftaran',
-    name: 'pendaftaran',
-    component: DataPendaftaranView
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: LoginView
-  },
-  {
-    path: '/anla',
-    name: 'vania',
-    component: VaniaView
-  },
-  {
-    path: '/hapusedit',
-    name: 'hapusedit',
-    component: DataPendaftaran
-  },
-  {
-  path: '/pendaftaran/terhapus',
-  name: 'DataSampah',
-  component: DataSampah
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFound
   }
 ];
 
-// Buat dan export router
 const router = createRouter({
   history: createWebHistory(),
   routes
 });
 router.beforeEach((to, from, next) => {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
   if (to.meta.requiresAuth && !isLoggedIn) {
     next({ path: '/login/masyarakat' });
   } else {
@@ -100,4 +80,4 @@ router.beforeEach((to, from, next) => {
   }
 });
 
-export default router
+export default router;

@@ -11,17 +11,11 @@ class User extends Authenticatable
 {
     use HasFactory; 
     protected $table = 'users';
-    
-    // Kolom yang dapat diisi
-    protected $fillable = ['name', 'password'];
-
-    // Kolom username yang digunakan untuk autentikasi
+    protected $fillable = ['name', 'password', 'role'];
     public function getAuthIdentifierName()
     {
         return 'name';
     }
-
-    // Kolom password yang digunakan untuk autentikasi
     public function getAuthPassword()
     {
         return $this->password;

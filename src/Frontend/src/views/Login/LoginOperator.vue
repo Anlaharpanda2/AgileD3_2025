@@ -1,5 +1,5 @@
 <script>
-import api from '../../api'; // axios instance
+import api from '../../api';
 
 export default {
   data() {
@@ -12,48 +12,47 @@ export default {
   },
   mounted() {
     if (localStorage.getItem('isLoggedIn') === 'true') {
-      this.$router.push('/data/pendaftar');
-    }
-  },
-  watch: {
-    showPassword(newValue) {
-      this.$nextTick(() => {
-        if (this.$refs.passwordInput) {
-          this.$refs.passwordInput.type = newValue ? 'text' : 'password';
-        }
-      });
+      this.$router.push('/data/pelatihan');
     }
   },
   methods: {
     async validateForm(event) {
       event.preventDefault();
+      this.errorMessage = '';
 
-      // Validasi username
+      if (!this.username && !this.password) {
+        this.errorMessage = 'Silakan isi username dan password.';
+        return;
+      }
+      if (!this.username) {
+        this.errorMessage = 'Silakan isi username.';
+        return;
+      }
+      if (!this.password) {
+        this.errorMessage = 'Silakan isi password.';
+        return;
+      }
       if (!/^[a-zA-Z0-9_.]{1,30}$/.test(this.username)) {
         this.errorMessage = 'Username maksimal 30 karakter dan hanya boleh huruf, angka, titik, atau underscore.';
         return;
       }
-
-      // Validasi password
-      const pwd = this.password;
-
-      if (pwd.length < 8 || pwd.length > 30) {
+      if (this.password.length < 8 || this.password.length > 30) {
         this.errorMessage = 'Password harus 8 hingga 30 karakter.';
         return;
       }
-      if (!/[A-Z]/.test(pwd)) {
+      if (!/[A-Z]/.test(this.password)) {
         this.errorMessage = 'Password harus mengandung setidaknya satu huruf besar (A-Z).';
         return;
       }
-      if (!/[a-z]/.test(pwd)) {
+      if (!/[a-z]/.test(this.password)) {
         this.errorMessage = 'Password harus mengandung setidaknya satu huruf kecil (a-z).';
         return;
       }
-      if (!/\d/.test(pwd)) {
+      if (!/\d/.test(this.password)) {
         this.errorMessage = 'Password harus mengandung setidaknya satu angka (0-9).';
         return;
       }
-      if (!/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) {
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(this.password)) {
         this.errorMessage = 'Password harus mengandung setidaknya satu simbol (contoh: !@#$%^&*).';
         return;
       }
@@ -64,34 +63,16 @@ export default {
           username: this.username,
         });
 
-        // Simpan status login
         localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('savedpassword', this.password);
         localStorage.setItem('savedusername', this.username);
-
-        // Redirect
-        setTimeout(() => {
-          this.$router.push('/data/pendaftar');
-        }, 100);
+        this.$router.push('/data/pelatihan');
       } catch (error) {
-        const message = error.response?.data?.message;
-
-        // Tampilkan pesan dari backend secara manusiawi
-        if (message === 'Password salah') {
-          this.errorMessage = 'Password salah';
-        } else if (message === 'Username salah') {
-          this.errorMessage = 'Username salah';
-        } else if (message === 'Username dan Password salah') {
-          this.errorMessage = 'Username dan Password salah';
-        } else {
-          this.errorMessage = 'Login gagal. Silakan coba lagi.';
-        }
+        this.errorMessage = error.response?.data?.message || 'Login gagal. Silakan coba lagi.';
       }
     }
   }
 };
 </script>
-
 
 <template>
     <div class="coverpage">

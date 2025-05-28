@@ -1,5 +1,5 @@
 <script>
-import api from '../../api'; // axios instance
+import api from '../../api';
 
 export default {
   data() {
@@ -12,7 +12,7 @@ export default {
   },
   mounted() {
     if (localStorage.getItem('isLoggedIn') === 'true') {
-      this.$router.push('/data/pendaftar');
+      this.$router.push('/data/pelatihan');
     }
   },
   watch: {
@@ -59,7 +59,7 @@ export default {
       }
 
       try {
-        const response = await api.post('/login/operator', {
+        const response = await api.post('/login/pegawai', {
           password: this.password,
           username: this.username,
         });
@@ -71,7 +71,7 @@ export default {
 
         // Redirect
         setTimeout(() => {
-          this.$router.push('/data/pendaftar');
+          this.$router.push('/data/pelatihan');
         }, 100);
       } catch (error) {
         const message = error.response?.data?.message;

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\DaftarPendaftar;
+use App\Models\DataPendaftar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
@@ -15,13 +15,14 @@ class AuthMasyarakatController extends Controller
             'nik' => 'required|string',
             'nama' => 'required|string',
         ]);
-        $peserta = DaftarPendaftar::where('nik', $request->nik)
-            ->where('peserta', $request->nama)
+        $pendaftar = DataPendaftar::where('nik', $request->nik)
+            ->where('nama', $request->nama)
             ->first();
-        if (!$peserta) {
+        if (!$pendaftar) {
             return response()->json(['message' => 'NIK atau Nama tidak valid'], 401);
         }
-        Auth::login($peserta);
+        Auth::login($pendaftar);
+
         return response()->json(['message' => 'Login berhasil']);
     }
 }

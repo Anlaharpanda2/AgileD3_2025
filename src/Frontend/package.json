@@ -11,19 +11,26 @@
   "dependencies": {
     "@lottiefiles/vue-lottie-player": "^1.1.0",
     "axios": "^1.8.4",
-<<<<<<< HEAD
-    "element-plus": "^2.9.9",
-=======
+    "bootstrap": "^5.3.6",
     "datatables.net": "^2.3.0",
     "datatables.net-buttons": "^3.2.3",
     "datatables.net-buttons-dt": "^3.2.3",
     "datatables.net-dt": "^2.3.0",
->>>>>>> NadyaUS1105,US1106
+    "docx": "^9.5.0",
+    "element-plus": "^2.9.11",
+    "file-saver": "^2.0.5",
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
     "vue": "^3.5.13",
-    "vue-router": "^4.5.0"
+    "vue-router": "^4.5.0",
+    "vue3-lottie": "^3.3.1",
+    "vuetify": "^3.8.6",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
+    "sass": "^1.89.0",
+    "sass-loader": "^16.0.5",
     "vite": "^6.2.0"
   }
 }

@@ -40,18 +40,6 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-
-        'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
-            'hash' => false,
-        ],
-
-        'masyarakat' => [ // Tambahkan guard untuk masyarakat
-            'driver' => 'sanctum', // Atau 'token' jika tidak menggunakan Sanctum
-            'provider' => 'masyarakat',
-            'hash' => false, // Sesuaikan dengan kebutuhanmu
-        ],
     ],
 
     /*
@@ -72,10 +60,15 @@ return [
     */
 
     'providers' => [
-        'data_peserta' => [
+        'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\DataPeserta::class,
+            'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
+
+        // 'users' => [
+        //     'driver' => 'database',
+        //     'table' => 'users',
+        // ],
     ],
 
     /*

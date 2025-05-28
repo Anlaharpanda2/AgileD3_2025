@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 
-class AuthOperatorController extends Controller
+class AuthPegawaiController extends Controller
 {
     public function login(Request $request)
     {
@@ -16,11 +16,23 @@ class AuthOperatorController extends Controller
             'username' => 'required|string',
             'password' => 'required|string',
         ]);
+
         $user = User::where('name', $request->username)->first();
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Username atau password salah'], 401);
+
+        if (!$user) {
+            return response()->json(['message' => 'Username salah'], 401);
         }
+
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Password salah'], 401);
+        }
+
+        if ($user->role !== 'pegawai') {
+            return response()->json(['message' => 'Anda bukan pegawai'], 403);
+        }
+
         Auth::login($user);
+
         return response()->json(['message' => 'Login berhasil']);
     }
 }

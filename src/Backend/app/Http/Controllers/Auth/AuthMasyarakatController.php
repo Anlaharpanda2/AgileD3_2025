@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\DataPendaftar;
+use App\Models\UserMasyarakat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
@@ -15,7 +15,7 @@ class AuthMasyarakatController extends Controller
             'nik' => 'required|string',
             'nama' => 'required|string',
         ]);
-        $pendaftar = DataPendaftar::where('nik', $request->nik)
+        $pendaftar = UserMasyarakat::where('nik', $request->nik)
             ->where('nama', $request->nama)
             ->first();
         if (!$pendaftar) {

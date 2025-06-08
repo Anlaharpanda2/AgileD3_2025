@@ -17,7 +17,7 @@
         </div>
 
         <div class="search-box">
-          <input type="text" placeholder="Cari" v-model="search" />
+          <input type="text" placeholder="Cari Judul atau Jenis Konten" v-model="search" />
           <img src="/table/cari.svg" alt="Search" />
         </div>
       </div>
@@ -45,11 +45,16 @@
         :row-style="rowStyle"
       >
         <el-table-column type="selection" width="55" show-overflow-tooltip/>
-        <el-table-column prop="judul" label="Judul Berita" show-overflow-tooltip/>
-        <el-table-column prop="tanggal" label="Tanggal" show-overflow-tooltip/>
-        <el-table-column prop="kategori" label="Kategori" show-overflow-tooltip/>
-        <el-table-column prop="penulis" label="Penulis" show-overflow-tooltip/>
-        <el-table-column prop="status" label="Status" show-overflow-tooltip/>
+        <el-table-column prop="judul" label="Judul" show-overflow-tooltip/>
+        <el-table-column prop="jenis_konten" label="Jenis Konten" show-overflow-tooltip/>
+        <el-table-column prop="isi" label="Isi Berita" show-overflow-tooltip/>
+        <el-table-column prop="updated_at" label="Tanggal Update" show-overflow-tooltip/>
+        <el-table-column prop="created_at" label="Tanggal Buat" show-overflow-tooltip/>
+        <el-table-column label="Gambar" width="120">
+          <template #default="{ row }">
+            <img :src="getImageUrl(row.gambar)" alt="Gambar Berita" style="width: 60px; height: auto" @error="onImageError" />
+          </template>
+        </el-table-column>
 
         <el-table-column label="Aksi" width="120" fixed="right">
           <template #default="{ row }">
@@ -102,10 +107,15 @@ import { ElMessage } from 'element-plus';
 interface Berita {
   id: number;
   judul: string;
-  tanggal: string;
-  kategori: string;
-  penulis: string;
-  status: string;
+  jenis_konten: string;
+  isi: string;
+  /**
+   * Nama file gambar yang disimpan di folder `storage/app/public/berita_foto/`.
+   * Format: .jpg, .jpeg, .png, atau URL absolut.
+   */
+  gambar: string | File;
+  created_at?: string;
+  updated_at?: string;
 }
 
 const tableData = ref<Berita[]>([])
@@ -117,6 +127,18 @@ const currentPage = ref(1)
 const dropdownOpen = ref(false)
 
 const perPageOptions = [10, 20, 50, 100, 'all']
+
+function getImageUrl(file: string): string {
+  if (!file) return '/placeholder.jpg'; // fallback jika kosong
+  // Jika sudah URL lengkap (misal: https://...), pakai langsung
+  if (file.startsWith('http')) return file;
+  return `/storage/berita_foto/${file}`;
+}
+
+function onImageError(event: Event) {
+  const target = event.target as HTMLImageElement;
+  target.src = '/placeholder.jpg'; // fallback gambar error
+}
 
 function toggleDropdown() {
   dropdownOpen.value = !dropdownOpen.value
@@ -130,8 +152,7 @@ function changeItemsPerPage(opt: number | string) {
 const filteredData = computed(() =>
   tableData.value.filter(i =>
     i.judul.toLowerCase().includes(search.value.toLowerCase()) ||
-    i.kategori.toLowerCase().includes(search.value.toLowerCase()) ||
-    i.penulis.toLowerCase().includes(search.value.toLowerCase())
+    i.jenis_konten.toLowerCase().includes(search.value.toLowerCase())
   )
 )
 
@@ -195,6 +216,10 @@ async function onMassDeletePermanentClick() {
     const ids = selected.value.map(p => p.id)
     await api.delete('/kelola/berita/permanent', { data: { ids } })
     await fetchData()
+    ElMessage.success('Berhasil menghapus data secara permanen')
+  } catch (err) {
+    console.error('Gagal menghapus data:', err)
+    ElMessage.error('Terjadi kesalahan saat menghapus data')
   } finally {
     loading.value = false
   }
@@ -202,9 +227,16 @@ async function onMassDeletePermanentClick() {
 
 async function onDelete(row: Berita) {
   loading.value = true
-  await api.delete(`/kelola/berita/permanent/${row.id}`)
-  await fetchData()
-  loading.value = false
+  try {
+    await api.delete(`/kelola/berita/permanent/${row.id}`)
+    await fetchData()
+    ElMessage.success('Berhasil menghapus data secara permanen')
+  } catch (err) {
+    console.error('Gagal menghapus data:', err)
+    ElMessage.error('Terjadi kesalahan saat menghapus data')
+  } finally {
+    loading.value = false
+  }
 }
 
 // Restore (mass/single)
@@ -215,6 +247,7 @@ async function onMassRestoreClick() {
     const ids = selected.value.map(p => p.id)
     await api.put('/kelola/berita/restore', { ids })
     await fetchData()
+    ElMessage.success('Berhasil memulihkan data')
   } catch (err) {
     console.error('Gagal memulihkan data:', err)
     ElMessage.error('Terjadi kesalahan saat memulihkan data')
@@ -225,17 +258,30 @@ async function onMassRestoreClick() {
 
 async function onRestore(row: Berita) {
   loading.value = true
-  await api.put(`/kelola/berita/restore/${row.id}`)
-  await fetchData()
-  loading.value = false
+  try {
+    await api.put(`/kelola/berita/restore/${row.id}`)
+    await fetchData()
+    ElMessage.success('Berhasil memulihkan data')
+  } catch (err) {
+    console.error('Gagal memulihkan data:', err)
+    ElMessage.error('Terjadi kesalahan saat memulihkan data')
+  } finally {
+    loading.value = false
+  }
 }
 
 async function fetchData() {
   loading.value = true
-  const res = await api.get('/kelola/berita/trash')
-  tableData.value = Array.isArray(res) ? res : res.data || []
-  currentPage.value = 1
-  loading.value = false
+  try {
+    const res = await api.get('/kelola/berita/trash')
+    tableData.value = Array.isArray(res) ? res : res.data || []
+    currentPage.value = 1
+  } catch (err) {
+    console.error('Gagal mengambil data:', err)
+    ElMessage.error('Terjadi kesalahan saat mengambil data')
+  } finally {
+    loading.value = false
+  }
 }
 
 onMounted(fetchData)
@@ -252,8 +298,6 @@ function rowStyle() {
 </script>
 
 <style scoped>
-/* Gunakan style yang sama seperti pada contoh sebelumnya, bisa copy-paste saja */
-
 .table-header {
   display: flex;
   flex-wrap: wrap;

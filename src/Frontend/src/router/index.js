@@ -13,6 +13,10 @@ import LoginPegawai from '../views/Login/LoginPegawai.vue';
 import DataPelatihanView from '../views/PengelolaDataPelatihan/DataPelatihanView.vue';
 import DataPelatihanSampahView from '../views/PengelolaDataPelatihan/DataPelatihanSampahView.vue';
 
+//rute pengelola data berita
+import DataBeritaView from '../views/PengelolaDataBerita/DataBeritaView.vue';
+import DataBeritaSampahView from '../views/PengelolaDataBerita/DataBeritaSampahView.vue';
+
 import NotFound from '../views/NotFound.vue';
 
 const routes = [
@@ -55,6 +59,20 @@ const routes = [
     path: '/data/pelatihan/sampah',
     name: 'DataPenlatihanSampah',
     component: DataPelatihanSampahView,
+    meta: { requiresAuth: true }
+  },
+
+  // halaman data berita
+  {
+    path: '/data/berita/sampah',
+    name: 'DataBeritaSampah',
+    component: DataBeritaSampahView,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/data/berita',
+    name: 'DataBerita',
+    component: DataBeritaView,
     meta: { requiresAuth: true }
   },
 

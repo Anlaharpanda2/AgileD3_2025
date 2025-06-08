@@ -6,7 +6,7 @@
               <div class="text-wrapper">404</div>
               <div class="group-2">
                   <p class="p">Maaf halaman yang anda cari tidak tersedia di sistem DP3AP2KB Provinsi Sumatera Barat</p>
-                  <div class="overlap-group-wrapper" @click="goToPendaftaran">
+                  <div class="overlap-group-wrapper" @click="goToBeranda">
                       <div class="overlap-group">
                         <div class="text-wrapper-2">Kembali Ke Beranda</div>
                     </div>
@@ -22,11 +22,12 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-function goToPendaftaran() {
-  router.push('/data/pendaftaran')
+function goToBeranda() {
+  router.push('/home')
 }
 </script>
-<style>
+
+<style scoped>
 @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
 * {
     -webkit-font-smoothing: antialiased;
@@ -44,13 +45,13 @@ a {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-10px); /* naik */
+    transform: translateY(-10px);
   }
   100% {
     transform: translateY(0);
   }
 }
-.element-error-page {
+.element-error-pagi {
     background-color: rgba(255, 255, 255, 1.0);
     display: flex;
     flex-direction: row;
@@ -58,8 +59,7 @@ a {
     width: 100%;
     height: 100%;
 }
-
-.element-error-page .div {
+.div {
     background-color: rgba(255, 255, 255, 1.0);
     background: linear-gradient(
         72deg,
@@ -174,6 +174,19 @@ a {
     top: 125px;
     left: 683px;
     object-fit: cover;
+}
+
+@media(max-width:750px){
+    .element-error-page .group {
+        position: absolute;
+        width: 463px;
+        height: 414px;
+        top: 50%;
+        left: 50%;
+    }
+    .element{
+        display: none;
+    }
 }
 
 </style>

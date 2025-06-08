@@ -115,14 +115,17 @@ const navigate = (url: string) => {
 <style scoped>
 .toggle-button {
   position: absolute;
+  display: flex;
+  align-items: center;
   top: 10px;
   left: 20px;
   z-index: 1000;
+  height: 32px;
+  width: 32px;
   cursor: pointer;
   background: #C80970;
   border-radius: 4px;
   padding: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .overlay {
@@ -150,6 +153,7 @@ const navigate = (url: string) => {
 }
 
 .toggle{
+  align-items: center;
   color:rgb(218, 218, 218);
 }
 
@@ -172,14 +176,15 @@ const navigate = (url: string) => {
 }
 
 /* Custom menu item hover style */
-.custom-menu >>> .el-menu-item,
-.custom-menu >>> .el-sub-menu__title {
+.custom-menu :deep(.el-menu-item),
+.custom-menu :deep(.el-sub-menu__title) {
   transition: background-color 0.3s ease;
 }
 
-.custom-menu >>> .el-menu-item:hover,
-.custom-menu >>> .el-sub-menu__title:hover {
+.custom-menu :deep(.el-menu-item:hover),
+.custom-menu :deep(.el-sub-menu__title:hover) {
   background-color: #ff69b4 !important; /* pink */
   color: white !important;
 }
+
 </style>

@@ -18,7 +18,7 @@ api.interceptors.response.use(
             console.error('Kesalahan saat mengirim permintaan:', error.message);
         }
 
-        return Promise.reject(error); // Tetap lempar ke komponen Vue
+        return Promise.reject(error);
     }
 );
 

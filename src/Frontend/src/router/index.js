@@ -1,32 +1,45 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import def from '../layouts/DefaultLayout.vue'
-import def2 from '../layouts/DefaultLayout2.vue'
-import FormImport from '../components/FormTambahDataPelatihan.vue'
+import KelolaAksesView from '../views/KelolaAkses/KelolaAksesView.vue';
+import def2 from '../layouts/DefaultLayout2.vue';
+import FormFilterDataPelatihan from '../components/KelolaDataPelatihan/FormFilterDataPelatihan.vue';
+
+// halaman home
+import HomeView from '../views/Home/HomeView.vue';
 
 // rute login
 import LoginMasyarakat from '../views/Login/LoginMasyarakat.vue';
 import LoginOperator from '../views/Login/LoginOperator.vue';
 import LoginPegawai from '../views/Login/LoginPegawai.vue';
 
+//rute reset password
+import OtpView from '../views/ResetPassword/OtpView.vue';
+import ForgotView from '../views/ResetPassword/ForgotView.vue';
+import ResetPassword from '../views/ResetPassword/ResetPassword.vue';
+
 // rute pengelola data pendaftar
 import DataPelatihanView from '../views/PengelolaDataPelatihan/DataPelatihanView.vue';
 import DataPelatihanSampahView from '../views/PengelolaDataPelatihan/DataPelatihanSampahView.vue';
 
 import NotFound from '../views/NotFound.vue';
+import Unauthorized from '../views/Unauthorized.vue'; // Anda perlu membuat ini
 
 const routes = [
   {
-    path:'/form',
-    component : FormImport
+    path: '/home',
+    component: HomeView
   },
   {
-    path:'/def',
-    component : def
+    path: '/form',
+    component: FormFilterDataPelatihan
   },
   {
-    path:'/def2',
-    component : def2
+    path: '/kelola/akses',
+    component: KelolaAksesView
+  },
+  {
+    path: '/def2',
+    component: def2
   },
   {
     path: '/login/masyarakat',
@@ -43,22 +56,38 @@ const routes = [
     name: 'LoginOperator',
     component: LoginOperator
   },
-
-  // halaman data pelatihan
+  {
+    path: '/reset/otp',
+    name: 'resetOperatorOtp',
+    component: OtpView
+  },
+  {
+    path: '/reset/forgot',
+    name: 'resetOperatorForgot',
+    component: ForgotView
+  },
+  {
+    path: '/reset/password',
+    name: 'resetOperatorPassword',
+    component: ResetPassword
+  },
   {
     path: '/data/pelatihan',
-    name: 'DataPenlatihan',
+    name: 'DataPelatihan',
     component: DataPelatihanView,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, role: 'operator' }
   },
   {
     path: '/data/pelatihan/sampah',
-    name: 'DataPenlatihanSampah',
+    name: 'DataPelatihanSampah',
     component: DataPelatihanSampahView,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true}
   },
-
-  // halaman tidak ditemukan
+  {
+    path: '/unauthorized',
+    name: 'Unauthorized',
+    component: Unauthorized
+  },
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
@@ -70,11 +99,19 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 });
+
 router.beforeEach((to, from, next) => {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const userRole = localStorage.getItem('role');
 
-  if (to.meta.requiresAuth && !isLoggedIn) {
-    next({ path: '/login/masyarakat' });
+  if (to.meta.requiresAuth) {
+    if (!isLoggedIn) {
+      next({ path: '/login/masyarakat' });
+    } else if (to.meta.role && to.meta.role !== userRole) {
+      next({ path: '/unauthorized' });
+    } else {
+      next();
+    }
   } else {
     next();
   }

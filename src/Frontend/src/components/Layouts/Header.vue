@@ -1,19 +1,15 @@
 <template>
   <header class="header">
-    <div class="header__container">
       <!-- KIRI -->
-      <div class="header__left">
         <SideBar/>
         <div class="header__brand">
           <Vue3Lottie
             :animationLink="'/lottie/logo.json'"
-            :height="36"
-            :width="300"
             :loop="false"
             :autoplay="true"
+            class="panjang"
           />
         </div>
-      </div>
 
       <!-- TENGAH -->
       <div class="header__center">
@@ -33,17 +29,15 @@
 
       <!-- KANAN -->
       <div class="header__right">
-        <img src="/layout/image-6.png" alt="Gambar 1" class="header__icon-right" />
         <Avatar class="header__icon-right" />
       </div>
-    </div>
   </header>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import Avatar from '@/components/Avatar.vue'
-import SideBar from '@/components/SideBar.vue'
+import Avatar from '@/components/layouts/Avatar.vue'
+import SideBar from '@/components/layouts/SideBar.vue'
 const searchQuery = ref('')
 const isFocused = ref(false)
 </script>
@@ -67,27 +61,14 @@ body, html {
   background: linear-gradient(8deg, #fb9cb1 0%, #ff5b91 100%);
   width: 100%;
   display: flex;
-  justify-content: center;
-  padding: 10px;
-}
-
-.header__container {
-  max-width: 1280px;
-  width: 100%;
-  padding: 0 20px;
-  display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 24px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  padding-top: 10px;
 }
 
 /* KIRI */
-.header__left {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
 .header__brand {
   display: flex;
   align-items: center;
@@ -159,6 +140,7 @@ body, html {
 
 /* KANAN */
 .header__right {
+  padding-left: 20px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -171,8 +153,10 @@ body, html {
   object-fit: contain;
   cursor: pointer;
 }
+.panjang{
+  width: 300px;
+}
 
-/* RESPONSIF */
 @media (max-width: 768px) {
   .header__container {
     flex-direction: column;
@@ -181,17 +165,16 @@ body, html {
   }
 
   .header__center {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    display: none;
   }
-
   .header__right {
-    align-self: flex-end;
+  padding:0px;
   }
+}
 
-  .header__search-wrapper {
-    width: 100% !important;
+@media(max-width:361px){
+  .panjang{
+    width: 250px;
   }
 }
 </style>

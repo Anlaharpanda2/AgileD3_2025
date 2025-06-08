@@ -6,14 +6,14 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-class DatabaseSeeder extends Seeder
+class UserSeeder extends Seeder
 {
     public function run(): void
     {
         User::factory()->create([
-            'name' => 'anla',
-            'role' => 'pegawai',
-            'email' => 'pria@sigma.com',
+            'name' => 'aan',
+            'role' => 'operator',
+            'email' => 'anlaharpanda2@gmail.com',
             'password' => Hash::make('Aa12345!')
         ]);
     }

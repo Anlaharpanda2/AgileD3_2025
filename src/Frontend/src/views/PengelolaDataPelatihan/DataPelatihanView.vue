@@ -1,22 +1,25 @@
 <template>
   <!-- Form pop up -->
   <DefaultLayout>
-    <FormTambah 
-      v-if="showTambah && TambahData" 
-      :initialData="TambahData" 
+    <FormFilterDataPelatihan
+      v-model="showFilter"  :columns="filterableColumns"
+      v-model:active-filters="activeFilters"
+    />
+    <FormTambahDataPeltihan 
+      v-if="showTambah"
       @close="showTambah = false" 
     />
-    <FormEdit 
+    <FormEditDataPelatihan
       v-if="showEdit && editData" 
       :initialData="editData" 
       @close="showEdit = false" 
     />
-    <FormExport 
+    <FormExportDataPelatihan
       v-if="showExport" 
       :data="pagedData" 
       @close="showExport = false" 
     />
-    <FormImport
+    <FormImportDataPeltihan
       v-if="showImport" 
       @close="showImport = false" 
     />
@@ -41,19 +44,27 @@
 
         <!-- pencarian -->
         <div class="search-box">
-          <input type="text" placeholder="Cari" v-model="search" />
+          <input type="text" placeholder="Cari Nama" v-model="search" />
           <img src="/table/cari.svg" alt="Search" />
         </div>
 
         <!-- filter dan sorting -->
-        <div class="icon-group">
-          <img src="/table/filter.svg" alt="Filter" @click="onFilterClick" />
-          <img src="/table/sort.svg" alt="Sort" @click="onSortClick" />
-        </div>
+          <button class="button2" @click="showFilter = true">
+            <img src="/table/filter.svg" alt="Filter" />
+          </button>
+          <button class="button2" @click="showSort = true">
+            <img src="/table/sort.svg" alt="Sort" />
+          </button>
       </div>
 
       <!-- export, import, sampah, hapus masal dan tambah data disiko -->
-      <div class="right-controls">
+      <div class="right-control">
+        <button class="button1" @click="showFilter = true">
+          <img src="/table/filter.svg" alt="Filter" />
+        </button>
+        <button class="button1" @click="showSort = true">
+          <img src="/table/sort.svg" alt="Sort" />
+        </button>
         <button class="button" @click="showExport = true">
           <img src="/table/export.svg" alt="Export" />
         </button>
@@ -65,65 +76,159 @@
         </button>
         <button class="button" @click="onMassDeleteClick">
           <img src="/table/hapusMass.svg" alt="hapusMassal" />
-          Hapus Massal
+          <span class="hilang">Hapus Massal</span>
         </button>
-        <button class="button" @click="openTambah" >
+        <button class="button" @click="showTambah = true" >
           <img src="/table/tambah.svg" alt="Add" />
-          Tambah Data
+          <span class="hilang">Tambah Data</span>
         </button>
       </div>
     </div>
 
     <!-- sturktur tabel -->
-    <div class="table-wrapper">
-      <el-table
-        ref="elTable"
-        :data="pagedData"
-        v-loading="loading"
-        style="width: 100%"
-        @selection-change="onSelectionChange"
-        :header-cell-style="headerCellStyle"
-        :row-style="rowStyle"
-      >
-        <el-table-column type="selection" width="55" show-overflow-tooltip/>
-        <el-table-column prop="nama" label="Nama" show-overflow-tooltip/>
-        <el-table-column prop="nik" label="NIK" show-overflow-tooltip/>
-        <el-table-column prop="jenis_bimtek" label="Jenis Bimtek" show-overflow-tooltip/>
-        <el-table-column prop="tanggal_kegiatan" label="Tanggal Kegiatan" show-overflow-tooltip/>
-        <el-table-column prop="tempat_kegiatan" label="Tempat Kegiatan" show-overflow-tooltip />
-        <el-table-column prop="angkatan" label="Angkatan" show-overflow-tooltip/>
-        <el-table-column prop="alamat" label="Alamat" show-overflow-tooltip />
-        <el-table-column prop="pendidikan" label="Pendidikan" show-overflow-tooltip/>
-        <el-table-column prop="status" label="Status" show-overflow-tooltip/>
-        <el-table-column prop="jenis_usaha" label="Jenis Usaha" show-overflow-tooltip />
-        <el-table-column prop="penghasilan_perbulan" label="Penghasilan" show-overflow-tooltip/>
-        <el-table-column prop="nomor_telefon" label="No. Telp" show-overflow-tooltip />
+  <div class="table-wrapper">
+    <el-table
+      ref="elTable"
+      :data="pagedData"
+      v-loading="loading"
+      style="width: 100%"
+      @selection-change="onSelectionChange"
+      :header-cell-style="headerCellStyle"
+      :row-style="rowStyle"
+    >
+      <el-table-column type="selection" width="40" fixed="left" show-overflow-tooltip />
 
-        <el-table-column label="Aksi" width="120" fixed="right">
-          <template #default="{ row }">
-            <div class="action-buttons">
+      <el-table-column prop="nama" show-overflow-tooltip>
+        <template #header>
+          <el-tooltip content="Nama" placement="top">
+            <span class="header-tooltip-text">Nama</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
 
-              <!-- edit data -->
-              <img
+      <el-table-column prop="nik" show-overflow-tooltip>
+        <template #header>
+          <el-tooltip content="NIK" placement="top">
+            <span class="header-tooltip-text">NIK</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="jenis_bimtek" show-overflow-tooltip>
+        <template #header>
+          <el-tooltip content="Jenis Bimtek" placement="top">
+            <span class="header-tooltip-text">Jenis Bimtek</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="tanggal_kegiatan" show-overflow-tooltip>
+        <template #header>
+          <el-tooltip content="Tanggal Kegiatan" placement="top">
+            <span class="header-tooltip-text">Tanggal Kegiatan</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="tempat_kegiatan" show-overflow-tooltip>
+        <template #header>
+          <el-tooltip content="Tempat Kegiatan" placement="top">
+            <span class="header-tooltip-text">Tempat Kegiatan</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="angkatan" show-overflow-tooltip>
+        <template #header>
+          <el-tooltip content="Angkatan" placement="top">
+            <span class="header-tooltip-text">Angkatan</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="tempat_tanggal_lahir" show-overflow-tooltip>
+        <template #header>
+          <el-tooltip content="Tempat Tanggal Lahir" placement="top">
+            <span class="header-tooltip-text">Tempat Tanggal Lahir</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="pendidikan" show-overflow-tooltip>
+        <template #header>
+          <el-tooltip content="Pendidikan" placement="top">
+            <span class="header-tooltip-text">Pendidikan</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="status" show-overflow-tooltip>
+        <template #header>
+          <el-tooltip content="Status" placement="top">
+            <span class="header-tooltip-text">Status</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="alamat" show-overflow-tooltip>
+        <template #header>
+          <el-tooltip content="Alamat" placement="top">
+            <span class="header-tooltip-text">Alamat</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="jenis_usaha" show-overflow-tooltip>
+        <template #header>
+          <el-tooltip content="Jenis Usaha" placement="top">
+            <span class="header-tooltip-text">Jenis Usaha</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="penghasilan_perbulan" show-overflow-tooltip>
+        <template #header>
+          <el-tooltip content="Penghasilan per bulan" placement="top">
+            <span class="header-tooltip-text">Penghasilan per bulan</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="nomor_telefon" show-overflow-tooltip>
+        <template #header>
+          <el-tooltip content="No. Telp" placement="top">
+            <span class="header-tooltip-text">No. Telp</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="Aksi" width="60" fixed="right">
+        <template #header>
+          <el-tooltip content="Aksi" placement="top">
+            <span class="header-tooltip-text">Aksi</span>
+          </el-tooltip>
+        </template>
+        <template #default="{ row }">
+          <div class="action-buttons">
+            <img
               src="/table/edit.svg"
               alt="Edit"
               class="action-icon"
-              @click="openEdit(row)" 
+              @click="openEdit(row)"
               title="Edit"
-              />
-              <!-- hapus data idividu -->
-              <img
-                src="/table/hapus.svg"
-                alt="Hapus"
-                class="action-icon"
-                @click="onDelete(row)"
-                title="Hapus"
-              />
-            </div>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+            />
+            <img
+              src="/table/hapus.svg"
+              alt="Hapus"
+              class="action-icon"
+              @click="onDelete(row)"
+              title="Hapus"
+            />
+          </div>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
 
     <!-- pagination bawah -->
     <div class="pagination">
@@ -156,10 +261,11 @@
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import api from "../../api.js";
 import DefaultLayout from "../../layouts/DefaultLayout.vue";
-import FormExport from "../../components/FormExport.vue";
-import FormImport from "../../components/FormImport.vue";
-import FormEdit from '../../components/FormEditDataPelatihan.vue'; 
-import FormTambah from '../../components/FormTambahDataPelatihan.vue'; 
+import FormExportDataPelatihan from "../../components/KelolaDataPelatihan/FormExportDataPelatihan.vue";
+import FormImportDataPeltihan from "../../components/KelolaDataPelatihan/FormImportDataPelatihan.vue";
+import FormEditDataPelatihan from "../../components/KelolaDataPelatihan/FormEditDataPelatihan.vue";
+import FormTambahDataPeltihan from "../../components/KelolaDataPelatihan/FormTambahDataPelatihan.vue";
+import FormFilterDataPelatihan from "../../components/KelolaDataPelatihan/FormFilterDataPelatihan.vue";
 import { ElNotification } from 'element-plus';
 
 interface Peserta {
@@ -192,16 +298,12 @@ const showExport = ref(false)
 const showImport = ref(false)
 const showEdit = ref(false)
 const showTambah = ref(false)
+const showSort = ref(false)
+const showFilter = ref(false)
 const editData = ref(null)
-const TambahData = ref(null)
 const perPageOptions = [10, 20, 50, 100, "all"];
 
 const openEdit = (row) => {
-  editData.value = { ...row }
-  showEdit.value = true
-  loading.value = false;
-}
-const openTambah = (row) => {
   editData.value = { ...row }
   showEdit.value = true
   loading.value = false;
@@ -217,14 +319,43 @@ function changeItemsPerPage(option: number | string) {
   dropdownOpen.value = false;
 }
 
-const filteredData = computed(() =>
-  tableData.value.filter(
-    (item) =>
-      item.nama.toLowerCase().includes(search.value.toLowerCase()) ||
-      item.nik.toLowerCase().includes(search.value.toLowerCase()) ||
-      item.alamat.toLowerCase().includes(search.value.toLowerCase())
-  )
-);
+// Inisialisasi activeFilters (baru ditambahkan)
+const activeFilters = ref<{ [key: string]: string | number | null }>({});
+
+// Perbaiki computed property filterableColumns (baru ditambahkan)
+const filterableColumns = computed(() => {
+  if (!tableData.value || tableData.value.length === 0) {
+    return [ /* default columns */ ];
+  }
+  const exclude = ['id', 'created_at', 'updated_at'];
+  return Object.keys(tableData.value[0] || {}).filter(key => !exclude.includes(key));
+});
+
+const filteredData = computed(() => {
+  let data = tableData.value;
+
+  if (search.value) {
+    data = data.filter(item =>
+      item.nama.toLowerCase().includes(search.value.toLowerCase())
+    );
+  }
+
+  // Logika filter berdasarkan activeFilters (BARU)
+  for (const key in activeFilters.value) {
+    const filterValue = activeFilters.value[key];
+
+    if (filterValue !== null && filterValue !== '') {
+      data = data.filter(item => {
+        const itemValue = (item as any)[key];
+        if (itemValue === null || itemValue === undefined) {
+          return false;
+        }
+        return String(itemValue).toLowerCase().includes(String(filterValue).toLowerCase());
+      });
+    }
+  }
+  return data;
+});
 
 const totalPages = computed(() =>
   Math.ceil(
@@ -304,7 +435,13 @@ async function onMassDeleteClick() {
   } 
   catch (err) {
     console.error('Gagal menghapus data:', err);
-  } 
+    ElNotification({ // Notifikasi error (BARU)
+      title: 'Error',
+      message: 'Gagal menghapus data massal.',
+      type: 'error',
+      duration: 3000,
+    });
+  }
   finally {
     loading.value = false;
   }
@@ -319,19 +456,41 @@ async function onExportClick() {
 // Single delete → DELETE /kelola/pelatihan/{nik}
 async function onDelete(row: Peserta) {
   loading.value = true;
-  await api.delete(`/kelola/pelatihan/${row.nik}`);
-  await fetchData();
-  loading.value = false;
+  try { // Ditambahkan try-catch
+    await api.delete(`/kelola/pelatihan/${row.nik}`);
+    await fetchData();
+    ElNotification({ // Notifikasi sukses (sudah ada)
+      title: 'Berhasil',
+      message: 'Data berhasil dihapus',
+      type: 'success',
+      duration: 3000,
+    });
+  } catch (err) { // Notifikasi error (BARU)
+    console.error('Gagal menghapus data:', err);
+    ElNotification({
+      title: 'Error',
+      message: 'Gagal menghapus data.',
+      type: 'error',
+      duration: 3000,
+    });
+  } finally { // Pastikan loading diatur
+    loading.value = false;
+  }
 }
 
-// other handlers unchanged
-function onFilterClick() {}
-function onSortClick() {}
-function onAddClick() {}
-
 async function fetchData() {
-  const res = await api.get('/kelola/pelatihan');
-  tableData.value = Array.isArray(res) ? res : res.data || [];
+  try { // Ditambahkan try-catch
+    const res = await api.get('/kelola/pelatihan');
+    tableData.value = Array.isArray(res) ? res : res.data || [];
+  } catch (error) { // Notifikasi error (BARU)
+    console.error('Error fetching data:', error);
+    ElNotification({
+      title: 'Error',
+      message: 'Gagal memuat data dari server.',
+      type: 'error',
+      duration: 3000,
+    });
+  }
 }
 
 onMounted(async () => {
@@ -363,6 +522,14 @@ function rowStyle() {
 
 <style>
 
+.header-tooltip-text {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
 .table-container {
   padding: 40px;
   display: flex;
@@ -372,6 +539,7 @@ function rowStyle() {
 
 .table-header {
   display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
   align-items: center;
   gap: 12px;
@@ -383,14 +551,15 @@ function rowStyle() {
   gap: 12px;
   flex-wrap: wrap;
 }
-.right-controls {
+.right-control {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-left: auto;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .select-box {
+  height: 34px;
   background: #69C5C2;
   padding: 6px 10px;
   border-radius: 6px;
@@ -425,12 +594,14 @@ function rowStyle() {
   color: white;
 }
 .search-box {
+  width: 239px;
+  height: 34px;
   display: flex;
   align-items: center;
   gap: 4px;
   border: 2px solid #8a8a8a;
   border-radius: 6px;
-  padding: 2px 6px;
+  padding: 2px 5px;
 }
 .search-box input {
   border: none;
@@ -438,13 +609,26 @@ function rowStyle() {
   padding: 6px;
   flex: 1;
 }
-.icon-group img,
+.icon-group .img{
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
 .button img {
   width: 18px;
   height: 18px;
   cursor: pointer;
   transition: transform 0.2s;
 }
+.button2 img {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
 .button {
   background: #69C5C2;
   color: white;
@@ -456,7 +640,24 @@ function rowStyle() {
   align-items: center;
   gap: 6px;
 }
+.button2 {
+  background: #69C5C2;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.button1 {
+  display: none;
+}
 .button.danger {
+  background: #e74c3c;
+}
+.button2.danger {
   background: #e74c3c;
 }
 
@@ -552,5 +753,85 @@ function rowStyle() {
 .button:hover{
   transform: scale(1.05);
   background: #549b98;
+}
+.button1:hover{
+  transform: scale(1.05);
+  background: #549b98;
+}
+.button2:hover{
+  transform: scale(1.05);
+  background: #549b98;
+}
+
+@media(max-width:700px){
+  .hilang{
+    display: none;
+  }
+  .search-box{
+    width: 79%;
+  }
+  .table-header {
+    flex-wrap: none;
+  }
+  .button2{
+    display: none;
+  }
+  .button1 {
+    background: #69C5C2;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .button1 img {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .right-control{
+    gap: 12px;
+  }
+  .left-controls{
+    width: 100%;
+  }
+}
+@media(max-width:365px){
+  .hilang{
+    display: none;
+  }
+  .search-box{
+    width: 75%;
+  }
+  .table-header {
+    flex-wrap: none;
+  }
+  .button2{
+    display: none;
+  }
+  .button1 {
+    background: #69C5C2;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .button1 img {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .right-control{
+    gap: 5px;
+  }
 }
 </style>

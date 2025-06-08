@@ -64,8 +64,6 @@ export default {
 };
 </script>
 
-
-
 <template>
     <div class="coverpage">
       <div class="overlap-wrapper">

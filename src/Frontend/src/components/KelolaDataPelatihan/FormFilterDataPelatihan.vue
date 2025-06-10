@@ -7,7 +7,6 @@
             <i class="fa-solid fa-filter dialog-icon"></i>
             Filter Data Pelatihan
           </h4>
-          <!-- The close button now uses the primary color for consistency -->
           <el-button class="el-button--primary-custom" circle :icon="Close" @click="handleClose" />
         </div>
         <div class="scrollable-form-container">
@@ -60,30 +59,25 @@
     </div>
   </Transition>
 </template>
-
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
 import { Close } from '@element-plus/icons-vue';
-
 const props = defineProps<{
-  modelValue: boolean; // Controls dialog visibility
-  columns: string[]; // List of available columns for filtering
-  initialFilters?: { [key: string]: string | number | null }; // Initial filters when dialog opens
+  modelValue: boolean; 
+  columns: string[]; 
+  initialFilters?: { [key: string]: string | number | null }; 
 }>();
-
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void; // To update dialog visibility in parent
-  (e: 'update:activeFilters', filters: { [key: string]: string | number | null }): void; // To send active filters to parent
+  (e: 'update:modelValue', value: boolean): void; 
+  (e: 'update:activeFilters', filters: { [key: string]: string | number | null }): void; 
 }>();
-
 const localDialogVisible = ref(props.modelValue);
 const localSelectedColumns = ref<string[]>([]);
 const localActiveFilters = ref<{ [key: string]: string | number | null }>({});
 const isLoading = ref(false);
-
 watch(() => props.modelValue, (newVal) => {
   localDialogVisible.value = newVal;
-  if (newVal) { // Only reset/initialize when dialog opens
+  if (newVal) { 
     if (props.initialFilters) {
       localActiveFilters.value = { ...props.initialFilters };
       localSelectedColumns.value = Object.keys(props.initialFilters).filter(
@@ -94,12 +88,10 @@ watch(() => props.modelValue, (newVal) => {
         localSelectedColumns.value = [];
     }
   }
-}, { immediate: true }); // immediate: true so the watcher runs when the component is first mounted
-
+}, { immediate: true }); 
 watch(localDialogVisible, (newVal) => {
   emit('update:modelValue', newVal);
 });
-
 watch(localSelectedColumns, (newSelected, oldSelected) => {
   newSelected.forEach(col => {
     if (!(col in localActiveFilters.value)) {
@@ -112,20 +104,17 @@ watch(localSelectedColumns, (newSelected, oldSelected) => {
     }
   });
 });
-
 const formatColumnName = (col: string): string => {
-  return col.replace(/([A-Z])/g, ' $1') // Add space before capital letters
-    .replace(/^./, str => str.toUpperCase()) // Capitalize first letter
-    .replace(/_/g, ' '); // Replace underscores with spaces
+  return col.replace(/([A-Z])/g, ' $1') 
+    .replace(/^./, str => str.toUpperCase()) 
+    .replace(/_/g, ' '); 
 };
-
 const handleClose = () => {
   localDialogVisible.value = false;
 };
-
 const handleApplyFilters = async () => {
-  isLoading.value = true; // Activate loading status
-  await new Promise(resolve => setTimeout(resolve, 800)); // 0.8 second delay
+  isLoading.value = true; 
+  await new Promise(resolve => setTimeout(resolve, 800)); 
   const filtersToEmit: { [key: string]: string | number | null } = {};
   for (const col of localSelectedColumns.value) {
     const value = localActiveFilters.value[col];
@@ -133,19 +122,17 @@ const handleApplyFilters = async () => {
       filtersToEmit[col] = value;
     }
   }
-  emit('update:activeFilters', filtersToEmit); // Emit cleaned filters to parent
-  localDialogVisible.value = false; // Close dialog
-  isLoading.value = false; // Deactivate loading status
+  emit('update:activeFilters', filtersToEmit); 
+  localDialogVisible.value = false; 
+  isLoading.value = false; 
 };
-
 const handleClearFilters = () => {
-  localSelectedColumns.value = []; // Clear selected columns
-  localActiveFilters.value = {}; // Clear active filters
-  emit('update:activeFilters', {}); // Emit empty filters to parent
-  localDialogVisible.value = false; // Close dialog
+  localSelectedColumns.value = []; 
+  localActiveFilters.value = {}; 
+  emit('update:activeFilters', {}); 
+  localDialogVisible.value = false; 
 };
 </script>
-
 <style scoped>
 /* Dialog transition styles */
 .dialog-fade-enter-active,
@@ -165,7 +152,6 @@ const handleClearFilters = () => {
   transform: translateY(50px);
   opacity: 0;
 }
-
 /* Overlay and dialog container */
 .filter-dialog-overlay {
   display: flex;
@@ -176,7 +162,6 @@ const handleClearFilters = () => {
   align-items: center;
   z-index: 1000;
 }
-
 .filter-dialog {
   width: 90%;
   max-width: 650px;
@@ -187,7 +172,6 @@ const handleClearFilters = () => {
   flex-direction: column;
   max-height: 90vh;
 }
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .filter-dialog {
@@ -198,7 +182,6 @@ const handleClearFilters = () => {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
 }
-
 /* Header styles (using #69C5C2 as primary color) */
 .my-header {
   display: flex;
@@ -212,7 +195,6 @@ const handleClearFilters = () => {
   border-radius: 12px 12px 0 0;
   flex-shrink: 0;
 }
-
 .my-header h4 {
   margin: 0;
   font-size: 1.5em;
@@ -221,12 +203,10 @@ const handleClearFilters = () => {
   align-items: center;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
-
 .dialog-icon {
   margin-right: 10px;
   font-size: 1.2em;
 }
-
 /* Scrollable form container */
 .scrollable-form-container {
   flex-grow: 1;
@@ -234,7 +214,6 @@ const handleClearFilters = () => {
   padding: 20px;
   background-color: #ffffff; /* White background for form content */
 }
-
 /* Filter section styles */
 .filter-section {
   margin-bottom: 20px;
@@ -244,7 +223,6 @@ const handleClearFilters = () => {
   border: 1px solid #e0e0e0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
-
 /* Section title (using #69C5C2 as primary color) */
 .section-title {
   margin-top: 0;
@@ -255,14 +233,12 @@ const handleClearFilters = () => {
   border-bottom: 2px solid #B0E0DF; /* Lighter shade of primary for border */
   padding-bottom: 5px;
 }
-
 /* Checkbox group layout */
 .column-checkboxes {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 12px;
 }
-
 /* Individual checkbox styling (using #69C5C2 for themed elements) */
 .column-checkbox {
   background-color: #F0FBFA; /* Very light teal background */
@@ -274,30 +250,25 @@ const handleClearFilters = () => {
   color: #333;
   cursor: pointer;
 }
-
 .column-checkbox:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(105, 197, 194, 0.1); /* Primary color for hover shadow */
 }
-
 .column-checkbox-label-text {
   white-space: normal;
   word-break: break-word;
   line-height: 1.3;
 }
-
 .column-checkbox.is-checked {
   background-color: #E0F5F4; /* Slightly darker light teal when checked */
   border-color: #69C5C2; /* Primary color for border when checked */
   box-shadow: 0 0 0 2px #69C5C2; /* Primary color for box shadow when checked */
   color: #69C5C2; /* Primary color for text when checked */
 }
-
 /* Input field styling */
 .filter-input-item {
   margin-bottom: 12px;
 }
-
 .styled-input .el-input-group__prepend {
   min-width: 120px;
   text-align: right;
@@ -310,18 +281,15 @@ const handleClearFilters = () => {
   justify-content: flex-end;
   padding-right: 10px;
 }
-
 .styled-input .el-input__wrapper {
   border-radius: 6px;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
-
 /* Input focus style (using #69C5C2 for focus) */
 .styled-input .el-input__wrapper.is-focus {
   border-color: #69C5C2; /* Primary color for border on focus */
   box-shadow: 0 0 0 2px rgba(105, 197, 194, 0.2); /* Primary color for shadow on focus */
 }
-
 /* Dialog footer styles */
 .dialog-footer {
   display: flex;
@@ -334,7 +302,6 @@ const handleClearFilters = () => {
   border-radius: 0 0 12px 12px;
   flex-shrink: 0;
 }
-
 .footer-button {
   min-width: 140px;
   padding: 10px 16px;
@@ -343,14 +310,12 @@ const handleClearFilters = () => {
   border-radius: 8px;
   transition: all 0.3s ease;
 }
-
 /* Reset button styling */
 .reset-button {
   background-color: #fef0f0; /* Light red background */
   color: #f56c6c; /* Red text */
   border: 1px solid #fbc4c4; /* Light red border */
 }
-
 .reset-button:hover {
   background-color: #fef7f7;
   border-color: #f7a7a7;
@@ -358,7 +323,6 @@ const handleClearFilters = () => {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(245, 108, 108, 0.2);
 }
-
 /* Apply button styling (using #69C5C2 as primary color) */
 .apply-button {
   /* Updated gradient with shades of #69C5C2 */
@@ -366,21 +330,18 @@ const handleClearFilters = () => {
   border: none;
   color: white;
 }
-
 .apply-button:hover {
   /* Darker gradient for hover state */
   background: linear-gradient(to right, #72C3C0, #5AAEA8);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(105, 197, 194, 0.3); /* Primary color for hover shadow */
 }
-
 /* Custom styling for the close button to match the primary color */
 .el-button--primary-custom {
   background-color: #69C5C2 !important;
   border-color: #69C5C2 !important;
   color: white !important;
 }
-
 .el-button--primary-custom:hover,
 .el-button--primary-custom:focus {
   background-color: #88D3D1 !important; /* Lighter shade for hover */

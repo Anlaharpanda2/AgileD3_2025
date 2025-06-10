@@ -5,7 +5,6 @@
         <div class="form-header background text-center text-white py-3 rounded-top">
           <h3 class="mb-0">Form Data Pelatihan</h3>
         </div>
-
         <div class="form-body">
           <el-form
             :model="form"
@@ -57,7 +56,6 @@
                 </el-form-item>
               </el-col>
             </el-row>
-
             <el-form-item class="d-flex justify-content-end gap-3 mt-4">
               <el-button @click="$emit('close')" class="btn-cancel">Batal</el-button>
               <el-button type="primary" @click="submitForm" class="btn-submit">Simpan</el-button>
@@ -68,7 +66,6 @@
     </transition>
   </div>
 </template>
-
 <style scoped>
 /* Latar belakang gelap untuk overlay */
 .form-overlay {
@@ -82,7 +79,6 @@
   z-index: 1050;
   padding: 1rem;
 }
-
 /* Kontainer popup form */
 .form-popup {
   width: 100%;
@@ -98,7 +94,6 @@
   transform: scale(1); /* Pastikan skala awal adalah 1 */
   transition: transform 0.3s ease-out; /* Transisi untuk skala saat interaksi */
 }
-
 /* Header form */
 .form-header {
   background: linear-gradient(45deg, #69C5C2, #4CAF50); /* Gradien hijau yang menarik */
@@ -109,13 +104,11 @@
   font-weight: 600; /* Tebal sedikit */
   letter-spacing: 0.5px; /* Spasi huruf */
 }
-
 /* Bagian isi form scrollable */
 .form-body {
   overflow-y: auto;
   padding: 2rem; /* Padding lebih banyak */
 }
-
 /* Styling untuk el-input dan el-date-picker */
 .form-control {
   width: 100%;
@@ -124,24 +117,20 @@
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Bayangan dalam lembut */
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
-
 .form-control:focus-within {
   border-color: #69C5C2;
   box-shadow: 0 0 0 3px rgba(105, 197, 194, 0.25), inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Bayangan fokus yang modern */
 }
-
 /* Styling khusus untuk el-select */
 .form-control-select .el-input__wrapper {
   border-radius: 0.5rem !important; /* Sudut membulat */
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05) !important;
   transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
 }
-
 .form-control-select.is-focus .el-input__wrapper {
   border-color: #69C5C2 !important;
   box-shadow: 0 0 0 3px rgba(105, 197, 194, 0.25), inset 0 1px 3px rgba(0, 0, 0, 0.05) !important;
 }
-
 /* Tombol Submit */
 .btn-submit {
   background: linear-gradient(45deg, #69C5C2, #4CAF50); /* Gradien yang sama dengan header */
@@ -163,7 +152,6 @@
   transform: translateY(0); /* Kembali ke posisi semula saat diklik */
   box-shadow: 0 2px 5px rgba(76, 175, 80, 0.2);
 }
-
 /* Tombol Batal */
 .btn-cancel {
   background-color: #f0f2f5; /* Warna latar belakang abu-abu terang */
@@ -184,7 +172,6 @@
   transform: translateY(0);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
-
 /* Animasi masuk */
 @keyframes popupIn {
   from {
@@ -197,23 +184,16 @@
   }
 }
 </style>
-
 <script setup>
 import { reactive, ref, watch, onMounted } from 'vue'
 import { ElNotification } from 'element-plus'
 import api from '../../api.js'; 
-
 const props = defineProps({
   initialData: Object, 
 })
-
-const emit = defineEmits(['close']) // Emit event 'close' saat form ditutup
-
-const formRef = ref(null) // Ref untuk instance form Element Plus
-
-const statusOptions = ['kawin', 'lajang', 'janda'] // Pilihan untuk dropdown status
-
-// Definisi bidang-bidang form
+const emit = defineEmits(['close']) 
+const formRef = ref(null) 
+const statusOptions = ['kawin', 'lajang', 'janda'] 
 const fields = [
   { key: 'nama', label: 'Nama', component: 'el-input', type: 'text' },
   { key: 'nik', label: 'NIK', component: 'el-input', type: 'text' },
@@ -230,8 +210,6 @@ const fields = [
   { key: 'penghasilan_perbulan', label: 'Penghasilan Perbulan', component: 'el-input', type: 'text' },
   { key: 'nomor_telefon', label: 'Nomor Telefon', component: 'el-input', type: 'tel' },
 ]
-
-// Objek form reaktif dengan nilai default
 const form = reactive({
   nik: '',
   nama: '',
@@ -248,7 +226,6 @@ const form = reactive({
   penghasilan_perbulan: '',
   nomor_telefon: '',
 })
-
 const applyInitialData = (data) => {
   if (data) {
     Object.assign(form, data);
@@ -263,11 +240,9 @@ const applyInitialData = (data) => {
     }
   }
 };
-
 watch(() => props.initialData, (newVal) => {
   applyInitialData(newVal);
 }, { deep: true, immediate: true });
-
 const rules = {
   nama: [{ required: true, message: 'Nama wajib diisi', trigger: 'blur' }],
   nik: [{ required: true, message: 'NIK wajib diisi', trigger: 'blur' }],
@@ -293,7 +268,6 @@ const rules = {
       trigger: 'blur',
     },
   ],
-
   tempat_tanggal_lahir: [{ required: true, message: 'Tempat tanggal lahir wajib diisi', trigger: 'blur' }],
   pendidikan: [{ required: true, message: 'Pendidikan wajib diisi', trigger: 'blur' }],
   status: [{ required: true, message: 'Status wajib diisi', trigger: 'change' }],
@@ -302,16 +276,13 @@ const rules = {
   penghasilan_perbulan: [{ required: true, message: 'Penghasilan wajib diisi', trigger: 'blur' }],
   nomor_telefon: [{ required: true, message: 'Nomor telepon wajib diisi', trigger: 'blur' }],
 }
-
 const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1)
-
 const submitForm = () => {
   formRef.value.validate(async valid => {
     if (!valid) {
       ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });
       return;
     }
-
     const payload = {
       ...form,
       kegiatan_dimulai: form.kegiatan_dimulai instanceof Date
@@ -322,13 +293,12 @@ const submitForm = () => {
         : form.kegiatan_berakhir,
       angkatan: Number(form.angkatan),
     };
-
     try {
       console.log('Kirim JSON:', JSON.stringify(payload));
       const response = await api.post('/kelola/pelatihan', payload);
         ElNotification({
           title: 'Berhasil',
-          message: response.data.message || 'Data berhasil disimpan!', // Ambil pesan dari response.data.message
+          message: response.data.message || 'Data berhasil disimpan!', 
           type: 'success',
           duration: 3000,
         });
@@ -338,7 +308,7 @@ const submitForm = () => {
       console.error('Error submitting form:', error);
       ElNotification({
         title: 'Gagal',
-        message: error.response?.data?.message || 'Gagal menyimpan data. Terjadi kesalahan jaringan atau server.', // Ambil pesan dari error.response.data.message
+        message: error.response?.data?.message || 'Gagal menyimpan data. Terjadi kesalahan jaringan atau server.', 
         type: 'error',
         duration: 0, 
       });

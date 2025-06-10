@@ -21,22 +21,16 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '@/api.js'
-
 const pengaduans = ref([])
-
-// Ambil NIK user login dari localStorage/session atau state auth
-const nik = localStorage.getItem('nik') || '' // Ganti sesuai sumber NIK login
-
+const nik = localStorage.getItem('nik') || '' 
 onMounted(async () => {
   if (!nik) return
   const res = await api.get('/pengaduan', { params: { nik } })
   pengaduans.value = res.data
 })
-
 function formatDate(dt) {
   if (!dt) return '-'
   const d = new Date(dt)
@@ -50,7 +44,6 @@ function formatDateTime(dt) {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
 </script>
-
 <style scoped>
 .card-list {
   display: flex;

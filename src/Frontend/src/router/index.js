@@ -13,6 +13,10 @@ import LoginPegawai from '../views/Login/LoginPegawai.vue';
 import DataPelatihanView from '../views/PengelolaDataPelatihan/DataPelatihanView.vue';
 import DataPelatihanSampahView from '../views/PengelolaDataPelatihan/DataPelatihanSampahView.vue';
 
+//rute pengelola pelaporan pengaduan
+import PelaporanPengaduan from '../views/PengelolaPelaporanPengaduan/PelaporanPengaduan.vue';
+import StatusPengaduan from '../views/PengelolaPelaporanPengaduan/StatusPengaduan.vue';
+
 import NotFound from '../views/NotFound.vue';
 
 const routes = [
@@ -56,6 +60,19 @@ const routes = [
     name: 'DataPenlatihanSampah',
     component: DataPelatihanSampahView,
     meta: { requiresAuth: true }
+  },
+
+  // halaman pelaporan pengaduan
+  {
+    path: '/pengaduan',
+    name: 'PelaporanPengaduan',
+    component: PelaporanPengaduan
+  },
+  
+  {
+  path: '/pengaduan/status',
+  name: 'StatusPengaduan',
+  component: StatusPengaduan
   },
 
   // halaman tidak ditemukan

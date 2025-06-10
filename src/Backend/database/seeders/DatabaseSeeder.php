@@ -11,10 +11,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::factory()->create([
-            'name' => 'anla',
+            'name' => 'vania',
             'role' => 'pegawai',
-            'email' => 'pria@sigma.com',
-            'password' => Hash::make('Aa12345!')
+            'email' => 'vania@gmail.com',
+            'password' => Hash::make('vaniA12345!')
         ]);
     }
 }

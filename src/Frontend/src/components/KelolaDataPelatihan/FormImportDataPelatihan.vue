@@ -2,8 +2,6 @@
 <div class="modal-overlay"> 
     <div class="form-import">
         <button class="close-btn" @click="$emit('close')">×</button>
-
-      <!-- Drag & Drop Upload -->
       <el-upload
         class="upload-area"
         drag
@@ -21,8 +19,6 @@
         </div>
         <div class="upload-tip">(.xls, .xlsx) Maksimal 1 file</div>
       </el-upload>
-  
-      <!-- Button Controls -->
       <div class="btn-group">
         <el-button
           type="warning"
@@ -45,11 +41,9 @@
     </div>
 </div>
 </template>
-
 <script>
 import api from '@/api.js';
 import { ElNotification } from 'element-plus';
-
 export default {
   name: 'FormImport',
   data() {
@@ -64,7 +58,6 @@ export default {
       if (!isExcel) {
         ElMessage.error('File harus berformat .xls atau .xlsx');
       }
-      // Only allow one file
       if (this.fileList.length >= 1) {
         this.fileList.splice(0, this.fileList.length - 1);
       }
@@ -100,7 +93,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .close-btn {
   position: absolute;
@@ -129,7 +121,6 @@ export default {
   z-index: 1000;
   animation: fadeIn 0.3s ease;
 }
-
 .form-import {
   background: #ffffff;
   border-radius: 1rem;
@@ -149,7 +140,6 @@ export default {
     opacity: 1;
   }
 }
-
 @keyframes fadeIn {
   from {
     background: rgba(0, 0, 0, 0);
@@ -158,7 +148,6 @@ export default {
     background: rgba(0, 0, 0, 0.6);
   }
 }
-
 .upload-area {
   border: 2px dashed #69C5C2;
   border-radius: 0.75rem;
@@ -196,5 +185,4 @@ export default {
 .btn-import:hover {
   box-shadow: 0 4px 12px #69C5C2;
 }
-
 </style>

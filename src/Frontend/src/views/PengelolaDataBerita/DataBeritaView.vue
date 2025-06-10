@@ -79,7 +79,7 @@
         <el-table-column prop="created_at" label="Tanggal Buat" show-overflow-tooltip />
         <el-table-column label="Gambar" width="120">
           <template #default="{ row }">
-            <img :src="getImageUrl(row.gambar)" alt="Gambar Berita" style="width: 60px; height: auto" />
+            <img :src="getImageUrl(row.foto)" alt="Gambar Berita" style="width: 60px; height: auto" />
           </template>
         </el-table-column>
         <el-table-column label="Aksi" width="120" fixed="right">
@@ -120,10 +120,9 @@
 
 <script lang="ts" setup>
 function getImageUrl(file: string): string {
-  if (!file) return '/placeholder.jpg'; // fallback jika kosong
-  // Jika sudah URL lengkap (misal: https://...), pakai langsung
+  if (!file) return '/placeholder.jpg';
   if (file.startsWith('http')) return file;
-  return `/storage/berita_foto/${file}`;
+  return `http://127.0.0.1:8000/storage/${file}`;
 }
 
 function onImageError(event: Event) {

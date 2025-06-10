@@ -49,7 +49,7 @@
                 </el-form-item>
               </el-col>
 
-              <!-- Tanggal Buat dan Update biasanya otomatis dari backend, tapi kita tampilkan readonly -->
+              
               <el-col :span="24" :md="12" class="mb-3">
                 <el-form-item label="Tanggal Buat">
                   <el-input v-model="form.created_at" readonly placeholder="Tanggal Buat" />
@@ -63,7 +63,7 @@
 
               <el-col :span="24" class="mb-3">
                 <el-form-item label="Gambar">
-                  <!-- Show current image if exists -->
+                  
                   <div v-if="currentImageUrl" class="current-image mb-3">
                     <p class="mb-2">Gambar saat ini:</p>
                     <img :src="currentImageUrl" alt="Current Image" style="max-width: 200px; height: auto; border-radius: 4px;" />

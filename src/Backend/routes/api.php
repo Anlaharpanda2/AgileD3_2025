@@ -15,9 +15,9 @@ use App\Http\Controllers\KelolaPretestPostest\PrePostController;
 use App\Http\Controllers\KelolaPretestPostest\PrePostTestController;
 use App\Http\Controllers\Pengaduan\PengaduanController;
 use App\Http\Controllers\KelolaAkses\KelolaAksesController;
-
 use App\Http\Controllers\KelolaBerita\KelolaDataBeritaController;
 
+//login
 Route::post('/login/masyarakat', [AuthMasyarakatController::class, 'login']);
 Route::post('/login/pegawai', [AuthPegawaiController::class, 'login']);
 Route::post('/login/operator', [AuthOperatorController::class, 'login']);
@@ -26,6 +26,7 @@ Route::post('/password/forgot', [AuthOperatorController::class, 'sendOtp']);
 Route::post('/otp/confirm', [AuthOperatorController::class, 'confirmOtp']);
 Route::post('/password/reset', [AuthOperatorController::class, 'resetPassword']);
 
+//kelola data pelatihan
 Route::put('/kelola/pelatihan/restore', [KelolaDataPelatihanController::class, 'restoreMassal']);
 Route::delete('/kelola/pelatihan/permanent', [KelolaDataPelatihanController::class, 'forceDeleteMassal']);
 Route::get('/kelola/pelatihan', [KelolaDataPelatihanController::class, 'index']);
@@ -36,25 +37,26 @@ Route::put('/kelola/pelatihan/restore/{nik}', [KelolaDataPelatihanController::cl
 Route::delete('/kelola/pelatihan/permanent/{nik}', [KelolaDataPelatihanController::class, 'forceDelete']);
 Route::delete('/kelola/pelatihan/{nik}', [KelolaDataPelatihanController::class, 'destroy']);
 Route::delete('/kelola/pelatihan', [KelolaDataPelatihanController::class, 'destroyMassal']);
-Route::post('kelola/pelatihan/impor', [ImporPelatihanController::class, 'impor']);
+Route::post('kelola/pelatihan/impor', [KelolaDataPelatihanController::class, 'impor']);
 
+//Prestest Postest
 Route::get('/kelola/test', [PrePostTestController::class, 'index']);               // Semua nilai test
 Route::post('/kelola/test', [PrePostTestController::class, 'store']);              // Tambah nilai
 Route::put('/kelola/test/{id}', [PrePostTestController::class, 'update']);         // Edit nilai
 Route::delete('/kelola/test/{id}', [PrePostTestController::class, 'destroy']);     // Hapus satu nilai
 Route::post('/kelola/test/mass-delete', [PrePostTestController::class, 'massDestroy']); // Hapus banyak nilai
-
 Route::get('/kelola/preposttest', [PrePostController::class, 'index']);                  // Semua soal
 Route::get('/kelola/preposttest/{type}', [PrePostController::class, 'show']);            // Soal per tipe
 Route::post('/kelola/preposttest', [PrePostController::class, 'store']);                 // Tambah soal
 Route::delete('/kelola/preposttest/{id}', [PrePostController::class, 'destroy']);        // Hapus soal
 
-
+//pengaduan
 Route::get('pengaduan', [PengaduanController::class, 'index']);
 Route::get('pengaduan/{id}', [PengaduanController::class, 'show']);
 Route::post('pengaduan', [PengaduanController::class, 'store']);
 Route::put('pengaduan/{id}', [PengaduanController::class, 'update']);
 Route::delete('pengaduan/{id}', [PengaduanController::class, 'destroy']);
+
 //api untuk halaman kelola data berita
 Route::put('/kelola/berita/restore', [KelolaDataBeritaController::class, 'restoreMassal']);
 Route::delete('/kelola/berita/permanent', [KelolaDataBeritaController::class, 'forceDeleteMassal']);
@@ -66,6 +68,7 @@ Route::put('/kelola/berita/restore/{id}', [KelolaDataBeritaController::class, 'r
 Route::delete('/kelola/berita/permanent/{id}', [KelolaDataBeritaController::class, 'forceDelete']);
 Route::delete('/kelola/berita/{id}', [KelolaDataBeritaController::class, 'destroy']);
 Route::delete('/kelola/berita', [KelolaDataBeritaController::class, 'destroyMassal']);
+
 //api untuk halaman kelola data Pendaftaran
 Route::put('/kelola/Pendaftaran/restore', [KelolaDataPendaftaranController::class, 'restoreMassal']);
 Route::delete('/kelola/Pendaftaran/permanent', [KelolaDataPendaftaranController::class, 'forceDeleteMassal']);

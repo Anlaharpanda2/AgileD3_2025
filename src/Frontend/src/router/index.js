@@ -19,6 +19,11 @@ import PesanView from '../views/PengelolaPesan/PesanView.vue';
 
 import PrePostTestView from '../views/PengelolaPretestPostest/PrePostTestView.vue';
 
+//rute pengelola pelaporan pengaduan
+import PelaporanPengaduan from '../views/PengelolaPelaporanPengaduan/PelaporanPengaduan.vue';
+import StatusPengaduan from '../views/PengelolaPelaporanPengaduan/StatusPengaduan.vue';
+import BuatPengaduanPage from '../views/PengelolaPelaporanPengaduan/BuatPengaduanPage.vue';
+
 import NotFound from '../views/NotFound.vue';
 
 const routes = [
@@ -85,6 +90,25 @@ const routes = [
     name: 'KelolaTest',
     component: PrePostTestView
   },
+  // halaman pelaporan pengaduan
+  {
+    path: '/pengaduan',
+    name: 'PelaporanPengaduan',
+    component: PelaporanPengaduan
+  },
+  
+  {
+  path: '/pengaduan/status',
+  name: 'StatusPengaduan',
+  component: StatusPengaduan
+  },
+
+  {
+  path: '/pengaduan/buat',
+  name: 'BuatPengaduan',
+  component: BuatPengaduanPage
+  },
+
   // halaman tidak ditemukan
   {
     path: '/:pathMatch(.*)*',

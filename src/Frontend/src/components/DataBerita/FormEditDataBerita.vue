@@ -125,29 +125,28 @@ const form = reactive({
 
 const fileList = ref([])
 
-// Computed property to get current image URL
 const currentImageUrl = computed(() => {
   if (!form.currentFoto) return null
-  
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
-  
-  // If it's already a full URL, return as is
+
+  const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000'
+
+  // Jika sudah berupa URL lengkap
   if (form.currentFoto.startsWith('http://') || form.currentFoto.startsWith('https://')) {
     return form.currentFoto
   }
-  
-  // If it starts with storage/, construct the URL
+
+  // Jika sudah mengandung 'storage/', maka langsung pakai baseUrl + path
   if (form.currentFoto.startsWith('storage/')) {
     return `${baseUrl}/${form.currentFoto}`
   }
-  
-  // If it starts with /, it's an absolute path
-  if (form.currentFoto.startsWith('/')) {
-    return `${baseUrl}${form.currentFoto}`
+
+  // Jika path sudah mulai dari 'berita_foto/', tambahkan 'storage/' di depannya
+  if (form.currentFoto.startsWith('berita_foto/')) {
+    return `${baseUrl}/storage/${form.currentFoto}`
   }
-  
-  // If it's just the filename, assume it's in storage/berita/
-  return `${baseUrl}/storage/berita/${form.currentFoto}`
+
+  // Jika hanya nama file, asumsikan disimpan di storage/berita_foto/
+  return `${baseUrl}/storage/berita_foto/${form.currentFoto}`
 })
 
 // Watch for initialData changes

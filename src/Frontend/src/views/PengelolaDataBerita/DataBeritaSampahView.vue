@@ -102,47 +102,58 @@
 import { ref, computed, onMounted } from 'vue'
 import api from '../../api.js'
 import DefaultLayout2 from '../../layouts/DefaultLayout2.vue'
-import { ElMessage } from 'element-plus';
+import { ElMessage } from 'element-plus'
 
 interface Berita {
-  id: number;
-  judul: string;
-  jenis_konten: string;
-  isi: string;
+  id: number
+  judul: string
+  jenis_konten: string
+  isi: string
   /**
-   * Nama file gambar yang disimpan di folder `storage/app/public/berita_foto/`.
-   * Format: .jpg, .jpeg, .png, atau URL absolut.
+   * Nama file gambar yang disimpan di folder `storage/app/public/berita_foto/`
+   * Bisa berupa URL absolut atau nama file.
    */
-  gambar: string | File;
-  created_at?: string;
-  updated_at?: string;
+  gambar: string | File
+  created_at?: string
+  updated_at?: string
 }
 
 const tableData = ref<Berita[]>([])
 const selected = ref<Berita[]>([])
 const search = ref('')
 const loading = ref(false)
-const itemsPerPage = ref<number|string>(10)
+const itemsPerPage = ref<number | string>(10)
 const currentPage = ref(1)
 const dropdownOpen = ref(false)
 
 const perPageOptions = [10, 20, 50, 100, 'all']
 
-function getImageUrl(file: string): string {
-  if (!file) return '/placeholder.jpg'; // fallback jika kosong
-  // Jika sudah URL lengkap (misal: https://...), pakai langsung
-  if (file.startsWith('http')) return file;
-  return `/storage/berita_foto/${file}`;
+function getImageUrl(file: string | File): string {
+  if (!file) return '/placeholder.jpg'
+
+  // Jika berupa File dari upload
+  if (file instanceof File) {
+    return URL.createObjectURL(file)
+  }
+
+  // Jika sudah URL lengkap
+  if (file.startsWith('http://') || file.startsWith('https://')) {
+    return file
+  }
+
+  // Jika format: "berita_foto/namafile.jpg"
+  return `/storage/${file}`
 }
 
 function onImageError(event: Event) {
-  const target = event.target as HTMLImageElement;
-  target.src = '/placeholder.jpg'; // fallback gambar error
+  const target = event.target as HTMLImageElement
+  target.src = '/placeholder.jpg'
 }
 
 function toggleDropdown() {
   dropdownOpen.value = !dropdownOpen.value
 }
+
 function changeItemsPerPage(opt: number | string) {
   itemsPerPage.value = opt === 'all' ? filteredData.value.length : opt
   currentPage.value = 1
@@ -168,23 +179,25 @@ const pagedData = computed(() => {
 function prevPage() {
   if (currentPage.value > 1) currentPage.value--
 }
+
 function nextPage() {
   if (currentPage.value < totalPages.value) currentPage.value++
 }
+
 function goToPage(p: number) {
   currentPage.value = p
 }
 
 const visiblePages = computed<(number | '...')[]>(() => {
-  const total = totalPages.value,
-    cur = currentPage.value,
-    d = 2,
-    pages: (number | '...')[] = []
+  const total = totalPages.value
+  const cur = currentPage.value
+  const d = 2
+  const pages: (number | '...')[] = []
 
   if (total > 0) {
     pages.push(1)
-    let l = cur - d,
-      r = cur + d
+    let l = cur - d
+    let r = cur + d
     if (l < 2) {
       r += 2 - l
       l = 2
@@ -207,7 +220,6 @@ function onSelectionChange(rows: Berita[]) {
   selected.value = rows
 }
 
-// Permanent delete (mass/single)
 async function onMassDeletePermanentClick() {
   if (!selected.value.length) return
 
@@ -239,9 +251,9 @@ async function onDelete(row: Berita) {
   }
 }
 
-// Restore (mass/single)
 async function onMassRestoreClick() {
   if (!selected.value.length) return
+
   loading.value = true
   try {
     const ids = selected.value.map(p => p.id)
@@ -296,6 +308,7 @@ function rowStyle() {
   return { backgroundColor: '#F7F6FE' }
 }
 </script>
+
 
 <style scoped>
 .table-header {

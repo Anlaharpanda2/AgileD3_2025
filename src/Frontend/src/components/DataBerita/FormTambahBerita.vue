@@ -43,7 +43,6 @@
                 <el-form-item label="Jenis Konten" prop="jenis_konten" required>
                   <el-select v-model="form.jenis_konten" placeholder="Pilih Jenis Konten" clearable>
                     <el-option label="Berita" value="berita" />
-                    <el-option label="Artikel" value="artikel" />
                     <el-option label="Pengumuman" value="pengumuman" />
                   </el-select>
                 </el-form-item>
@@ -108,7 +107,7 @@ const form = reactive({
   jenis_konten: '',
   created_at: '',
   updated_at: '',
-  gambar: null,
+  gambar: null, // tetap disebut 'gambar' di frontend untuk keperluan UI
 })
 
 const fileList = ref([])
@@ -161,7 +160,7 @@ const submitForm = () => {
       payload.append('judul', form.judul)
       payload.append('isi', form.isi)
       payload.append('jenis_konten', form.jenis_konten)
-      if (form.gambar) payload.append('gambar', form.gambar)
+      if (form.gambar) payload.append('foto', form.gambar) // GANTI dari 'gambar' ke 'foto'
 
       const response = await api.post('/kelola/berita', payload, {
         headers: {
@@ -188,6 +187,7 @@ const submitForm = () => {
   })
 }
 </script>
+
 
 <style scoped>
 .background {

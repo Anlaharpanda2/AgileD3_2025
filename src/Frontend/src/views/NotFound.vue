@@ -35,7 +35,7 @@ function goToBeranda() {
 
 <style scoped>
 @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
-/* Impor font yang digunakan */
+
 @import url("https://fonts.googleapis.com/css2?family=Clash+Grotesk:wght@500&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Concert+One&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=ABeeZee&display=swap");
@@ -54,7 +54,7 @@ a {
   text-decoration: none;
 }
 
-/* Animasi Goyang Atas Bawah untuk gambar */
+
 @keyframes goyangAtasBawah {
   0% {
     transform: translateY(0);
@@ -67,17 +67,17 @@ a {
   }
 }
 
-/* Kontainer utama halaman error */
+
 .element-error-page {
   background-color: rgba(255, 255, 255, 1.0);
   display: flex;
   flex-direction: row;
   justify-content: center;
   width: 100%;
-  min-height: 100vh; /* Gunakan min-height untuk memastikan tinggi penuh */
+  min-height: 100vh; 
 }
 
-/* Div utama dengan background gradient dan layout flexbox */
+
 .div {
   background: linear-gradient(
     72deg,
@@ -85,65 +85,62 @@ a {
     rgb(255, 98, 147) 100%
   );
   width: 100%;
-  min-height: 100vh; /* Pastikan tinggi penuh */
-  display: flex; /* Menggunakan Flexbox */
-  flex-direction: row; /* Default: item berdampingan (konten kiri - gambar) */
-  flex-wrap: wrap; /* Izinkan wrapping untuk tampilan responsif */
-  justify-content: center; /* Pusatkan item secara horizontal */
-  align-items: center; /* Pusatkan item secara vertikal */
-  gap: 40px; /* Jarak antara konten kiri dan gambar */
-  padding: 20px; /* Padding keseluruhan untuk ruang */
+  min-height: 100vh; 
+  display: flex; 
+  flex-direction: row; 
+  flex-wrap: wrap; 
+  justify-content: center; 
+  align-items: center; 
+  gap: 40px; 
+  padding: 20px; 
 }
 
-/* Wrapper baru untuk konten panel kiri (404ERRORS title, 404 number, paragraph, button) */
+
 .left-panel {
   display: flex;
-  flex-direction: column; /* Susun item secara vertikal */
-  align-items: center; /* Pusatkan item horizontal di dalam panel kiri */
+  flex-direction: column; 
+  align-items: center; 
   justify-content: center;
-  flex-basis: 500px; /* Lebar dasar item, memungkinkan penyusutan/pembesaran */
-  max-width: 90%; /* Batasi lebar maksimum untuk layar kecil */
-  text-align: center; /* Pusatkan teks di dalam panel kiri */
-  /* Tambahkan min-width agar panel tidak terlalu kecil pada layar sangat sempit */
+  flex-basis: 500px; 
+  max-width: 90%; 
+  text-align: center; 
+  
   min-width: 280px;
 }
 
-/* Judul "404ERRORS" */
+
 .element-error-page .element {
   font-family: "Clash Grotesk-Medium", Helvetica;
   font-weight: 500;
   color: #ffffff;
-  font-size: 22px; /* Tetap fixed pixel seperti aslinya */
+  font-size: 22px; 
   letter-spacing: 0;
   line-height: normal;
-  margin-bottom: 20px; /* Jarak di bawah judul */
-  text-align: center; /* Pastikan teks di tengah */
+  margin-bottom: 20px; 
+  text-align: center; 
 }
 
-/* Grup utama yang berisi teks "404", paragraf, dan tombol */
+
 .element-error-page .group {
-  width: 100%; /* Ambil lebar penuh dari left-panel */
-  max-width: 463px; /* Lebar maksimum seperti aslinya */
-  height: auto; /* Tinggi menyesuaikan konten */
+  width: 100%; 
+  max-width: 463px; 
+  height: auto; 
   display: flex;
-  flex-direction: column; /* Susun children secara vertikal */
-  align-items: center; /* Pusatkan children secara horizontal */
-  position: relative; /* Penting: Jadikan induk relatif agar .text-wrapper bisa absolute di dalamnya */
-  /* Sesuaikan padding-top untuk mencegah tumpang tindih dengan teks '404' besar */
-  /* Perhitungan: jika 404 di top -60px dan tinggi sekitar 302px (font-size),
-     maka bagian bawahnya 302-60 = 242px dari top group.
-     Padding-top harus lebih besar dari ini. */
-  padding-top: 250px; /* Cukupkan padding atas untuk menghindari tumpang tindih */
-  padding-bottom: 20px; /* Padding di bawah tombol */
+  flex-direction: column; 
+  align-items: center; 
+  position: relative; 
+  
+  padding-top: 250px; 
+  padding-bottom: 20px; 
 }
 
-/* Teks besar "404" */
+
 .element-error-page .text-wrapper {
-  /* TETAP menggunakan position: absolute untuk menjaga tampilan layering */
+  
   position: absolute;
-  top: -60px; /* Offset ke atas relatif terhadap parent .group */
-  left: 50%; /* Pusatkan secara horizontal */
-  transform: translateX(-50%); /* Penyesuaian untuk centering absolut */
+  top: -60px; 
+  left: 50%; 
+  transform: translateX(-50%); 
   background: linear-gradient(
     180deg,
     rgba(27, 48, 68, 1) 0%,
@@ -155,128 +152,128 @@ a {
   font-family: "Concert One-Regular", Helvetica;
   font-weight: 400;
   color: transparent;
-  font-size: 302px; /* Tetap fixed pixel seperti aslinya */
+  font-size: 302px; 
   text-align: center;
   letter-spacing: 0;
   line-height: normal;
   white-space: nowrap;
-  z-index: 0; /* Letakkan di belakang konten lain */
-  pointer-events: none; /* Pastikan tidak menghalangi klik */
+  z-index: 0; 
+  pointer-events: none; 
 }
 
-/* Kontainer paragraf dan tombol */
+
 .element-error-page .group-2 {
   width: 100%;
-  max-width: 382px; /* Lebar maksimum seperti aslinya */
-  height: auto; /* Tinggi menyesuaikan konten */
+  max-width: 382px; 
+  height: auto; 
   display: flex;
-  flex-direction: column; /* Susun children secara vertikal */
-  align-items: center; /* Pusatkan children horizontal */
-  margin-top: 20px; /* Jarak dari elemen di atasnya (setelah padding group) */
-  z-index: 1; /* Bawa ke depan dari teks '404' besar */
+  flex-direction: column; 
+  align-items: center; 
+  margin-top: 20px; 
+  z-index: 1; 
 }
 
-/* Paragraf pesan error */
+
 .element-error-page .p {
   width: 100%;
-  max-width: 380px; /* Lebar maksimum seperti aslinya */
+  max-width: 380px; 
   -webkit-text-stroke: 0.5px #ffffff;
   font-family: "ABeeZee-Regular", Helvetica;
   font-weight: 400;
   color: #ffffff;
-  font-size: 21px; /* Tetap fixed pixel seperti aslinya */
+  font-size: 21px; 
   text-align: center;
   letter-spacing: 0;
   line-height: normal;
-  margin-bottom: 30px; /* Jarak di bawah paragraf */
+  margin-bottom: 30px; 
 }
 
-/* Wrapper tombol "Kembali Ke Beranda" */
+
 .element-error-page .overlap-group-wrapper {
   width: 204px;
   height: 48px;
   cursor: pointer;
-  margin-top: 10px; /* Jarak di atas tombol */
+  margin-top: 10px; 
 }
 
 .element-error-page .overlap-group {
-  position: relative; /* Bisa tetap relative jika ada elemen di dalamnya yang butuh absolute */
+  position: relative; 
   width: 202px;
   height: 48px;
   background-color: #1a3f55;
   border-radius: 16px;
-  display: flex; /* Menggunakan Flexbox untuk memusatkan teks */
+  display: flex; 
   justify-content: center;
   align-items: center;
 }
 
-/* Teks tombol "Kembali Ke Beranda" */
+
 .element-error-page .text-wrapper-2 {
   font-family: "Aclonica-Regular", Helvetica;
   font-weight: 400;
   color: #ffffff;
-  font-size: 14px; /* Tetap fixed pixel seperti aslinya */
+  font-size: 14px; 
   text-align: center;
   letter-spacing: 0;
   line-height: normal;
   white-space: nowrap;
 }
 
-/* Gambar */
+
 .element-error-page .img {
   animation: goyangAtasBawah 2s ease-in-out infinite;
-  width: auto; /* Biarkan flexbox dan max-width menentukan */
-  height: auto; /* Jaga rasio aspek */
-  max-width: 474px; /* Lebar maksimum gambar, seperti aslinya */
-  flex-shrink: 0; /* Cegah gambar menyusut terlalu banyak */
+  width: auto; 
+  height: auto; 
+  max-width: 474px; 
+  flex-shrink: 0; 
   object-fit: cover;
-  /* Tambahkan min-width agar gambar tidak terlalu kecil */
+  
   min-width: 250px;
 }
 @media(max-width:750px){
-  /* Container utama: susun item secara vertikal */
+  
   .div {
-    flex-direction: column; /* Konten dan gambar bertumpuk */
-    gap: 20px; /* Kurangi jarak antar item */
+    flex-direction: column; 
+    gap: 20px; 
   }
 
-  /* Urutan item untuk mobile: gambar di atas, teks di bawah */
+  
   .left-panel {
-    order: 2; /* Panel kiri (teks) akan berada di bawah */
-    flex-basis: auto; /* Reset flex-basis */
-    max-width: 95%; /* Lebih lebar untuk mobile */
+    order: 2; 
+    flex-basis: auto; 
+    max-width: 95%; 
   }
   .element-error-page .img {
-    order: 1; /* Gambar akan berada di atas */
-    width: 50%; /* Lebar 50% dari layar */
-    max-width: 250px; /* Batasi ukuran gambar agar tidak terlalu besar di mobile */
-    min-width: 150px; /* Batasi ukuran gambar agar tidak terlalu kecil */
+    order: 1; 
+    width: 50%; 
+    max-width: 250px; 
+    min-width: 150px; 
   }
 
-  /* Sembunyikan judul "404ERRORS" di mobile */
+  
   .element {
     display: none;
   }
 
-  /* Sesuaikan grup utama untuk mobile */
+  
   .element-error-page .group {
     width: 100%;
-    max-width: 400px; /* Batasi lebar untuk mobile */
-    padding-top: 150px; /* Sesuaikan padding untuk teks '404' */
+    max-width: 400px; 
+    padding-top: 150px; 
   }
 
-  /* Ukuran teks '404' besar untuk mobile */
+  
   .element-error-page .text-wrapper {
-    font-size: 200px; /* Ukuran lebih kecil */
-    top: -40px; /* Sesuaikan offset */
+    font-size: 200px; 
+    top: -40px; 
   }
 
-  /* Ukuran paragraf untuk mobile */
+  
   .element-error-page .p {
     font-size: 18px;
   }
 
-  /* Sesuaikan kontainer paragraf dan tombol untuk mobile */
+  
   .element-error-page .group-2 {
     max-width: 300px;
   }

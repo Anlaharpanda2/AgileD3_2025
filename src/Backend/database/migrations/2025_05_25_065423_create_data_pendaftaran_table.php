@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('data_pendaftaran', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->string('nik');
+            $table->string('nik')->unique();
             $table->string('jenis_bimtek');
-            $table->date('tanggal_kegiatan');
+            $table->date('tanggal_kegiatan_dimulai');
+            $table->date('tanggal_kegiatan_berakhir');
             $table->string('tempat_kegiatan');
             $table->unsignedInteger('angkatan');
             $table->string('tempat_tanggal_lahir');
@@ -36,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('data_pelatihan');
+        Schema::dropIfExists('data_pendaftaran');
     }
 };

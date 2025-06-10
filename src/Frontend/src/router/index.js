@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import KelolaAksesView from '../views/KelolaAkses/KelolaAksesView.vue';
 import def2 from '../layouts/DefaultLayout2.vue';
-import FormFilterDataPelatihan from '../components/KelolaDataPelatihan/FormFilterDataPelatihan.vue';
+import FormSortingDataPelatihan from '../components/KelolaDataPelatihan/FormSortingDataPelatihan.vue';
 
 // halaman home
 import HomeView from '../views/Home/HomeView.vue';
@@ -25,74 +25,20 @@ import NotFound from '../views/NotFound.vue';
 import Unauthorized from '../views/Unauthorized.vue'; // Anda perlu membuat ini
 
 const routes = [
-  {
-    path: '/home',
-    component: HomeView
-  },
-  {
-    path: '/form',
-    component: FormFilterDataPelatihan
-  },
-  {
-    path: '/kelola/akses',
-    component: KelolaAksesView
-  },
-  {
-    path: '/def2',
-    component: def2
-  },
-  {
-    path: '/login/masyarakat',
-    name: 'LoginMasyarakat',
-    component: LoginMasyarakat
-  },
-  {
-    path: '/login/pegawai',
-    name: 'LoginPegawai',
-    component: LoginPegawai
-  },
-  {
-    path: '/login/operator',
-    name: 'LoginOperator',
-    component: LoginOperator
-  },
-  {
-    path: '/reset/otp',
-    name: 'resetOperatorOtp',
-    component: OtpView
-  },
-  {
-    path: '/reset/forgot',
-    name: 'resetOperatorForgot',
-    component: ForgotView
-  },
-  {
-    path: '/reset/password',
-    name: 'resetOperatorPassword',
-    component: ResetPassword
-  },
-  {
-    path: '/data/pelatihan',
-    name: 'DataPelatihan',
-    component: DataPelatihanView,
-    meta: { requiresAuth: true, role: 'operator' }
-  },
-  {
-    path: '/data/pelatihan/sampah',
-    name: 'DataPelatihanSampah',
-    component: DataPelatihanSampahView,
-    meta: { requiresAuth: true}
-  },
-  {
-    path: '/unauthorized',
-    name: 'Unauthorized',
-    component: Unauthorized
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    name: 'NotFound',
-    component: NotFound
-  }
+  {path: '/home',component: HomeView},
+  {path: '/form',component: FormSortingDataPelatihan},
+  {path: '/kelola/akses',component: KelolaAksesView},
+  {path: '/def2',component: def2},
+  {path: '/login/masyarakat',name: 'LoginMasyarakat',component: LoginMasyarakat},
+  {path: '/login/pegawai',name: 'LoginPegawai',component: LoginPegawai},
+  {path: '/login/operator',name: 'LoginOperator',component: LoginOperator},
+  {path: '/reset/otp',name: 'resetOperatorOtp',component: OtpView},
+  {path: '/reset/forgot',name: 'resetOperatorForgot',component: ForgotView},
+  {path: '/reset/password',name: 'resetOperatorPassword',component: ResetPassword},
+  {path: '/data/pelatihan',name: 'DataPelatihan',component: DataPelatihanView,meta: { requiresAuth: true, role: 'operator' }},
+  {path: '/data/pelatihan/sampah',name: 'DataPelatihanSampah',component: DataPelatihanSampahView,meta: { requiresAuth: true}},
+  {path: '/unauthorized',name: 'Unauthorized',component: Unauthorized},
+  {path: '/:pathMatch(.*)*',name: 'NotFound',component: NotFound}
 ];
 
 const router = createRouter({

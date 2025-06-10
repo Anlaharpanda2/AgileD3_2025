@@ -4,16 +4,16 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
-        Schema::create('data_pendaftar', function (Blueprint $table) {
+        Schema::create('users_masyarakat', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->string('nik');
+            $table->string('nik')->unique();
             $table->string('jenis_bimtek');
-            $table->date('tanggal_kegiatan');
+            $table->date('kegiatan_dimulai');
+            $table->date('kegiatan_berakhir');
             $table->string('tempat_kegiatan');
             $table->unsignedInteger('angkatan');
             $table->string('tempat_tanggal_lahir');
@@ -27,8 +27,9 @@ return new class extends Migration
             $table->timestamps();
         });
     }
+
     public function down(): void
     {
-        Schema::dropIfExists('data_pendaftar');
+        Schema::dropIfExists('users_masyarakat');
     }
 };

@@ -7,7 +7,8 @@
             <i class="fa-solid fa-filter dialog-icon"></i>
             Filter Data Pelatihan
           </h4>
-          <el-button type="danger" circle :icon="Close" @click="handleClose" />
+          <!-- The close button now uses the primary color for consistency -->
+          <el-button class="el-button--primary-custom" circle :icon="Close" @click="handleClose" />
         </div>
         <div class="scrollable-form-container">
           <div class="filter-section filter-selection">
@@ -59,25 +60,30 @@
     </div>
   </Transition>
 </template>
+
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
 import { Close } from '@element-plus/icons-vue';
+
 const props = defineProps<{
-  modelValue: boolean; // Mengontrol visibilitas dialog
-  columns: string[]; // Daftar nama kolom yang tersedia untuk filter
-  initialFilters?: { [key: string]: string | number | null }; // Filter awal saat dialog dibuka
+  modelValue: boolean; // Controls dialog visibility
+  columns: string[]; // List of available columns for filtering
+  initialFilters?: { [key: string]: string | number | null }; // Initial filters when dialog opens
 }>();
+
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void; // Untuk memperbarui visibilitas dialog di parent
-  (e: 'update:activeFilters', filters: { [key: string]: string | number | null }): void; // Untuk mengirim filter yang aktif ke parent
+  (e: 'update:modelValue', value: boolean): void; // To update dialog visibility in parent
+  (e: 'update:activeFilters', filters: { [key: string]: string | number | null }): void; // To send active filters to parent
 }>();
+
 const localDialogVisible = ref(props.modelValue);
 const localSelectedColumns = ref<string[]>([]);
 const localActiveFilters = ref<{ [key: string]: string | number | null }>({});
 const isLoading = ref(false);
+
 watch(() => props.modelValue, (newVal) => {
   localDialogVisible.value = newVal;
-  if (newVal) { // Hanya reset/inisialisasi saat dialog dibuka
+  if (newVal) { // Only reset/initialize when dialog opens
     if (props.initialFilters) {
       localActiveFilters.value = { ...props.initialFilters };
       localSelectedColumns.value = Object.keys(props.initialFilters).filter(
@@ -88,10 +94,12 @@ watch(() => props.modelValue, (newVal) => {
         localSelectedColumns.value = [];
     }
   }
-}, { immediate: true }); // immediate: true agar watcher dijalankan saat komponen pertama kali di-mount
+}, { immediate: true }); // immediate: true so the watcher runs when the component is first mounted
+
 watch(localDialogVisible, (newVal) => {
   emit('update:modelValue', newVal);
 });
+
 watch(localSelectedColumns, (newSelected, oldSelected) => {
   newSelected.forEach(col => {
     if (!(col in localActiveFilters.value)) {
@@ -104,17 +112,20 @@ watch(localSelectedColumns, (newSelected, oldSelected) => {
     }
   });
 });
+
 const formatColumnName = (col: string): string => {
-  return col.replace(/([A-Z])/g, ' $1') // Tambahkan spasi sebelum huruf kapital
-    .replace(/^./, str => str.toUpperCase()) // Kapitalisasi huruf pertama
-    .replace(/_/g, ' '); // Ganti underscore dengan spasi
+  return col.replace(/([A-Z])/g, ' $1') // Add space before capital letters
+    .replace(/^./, str => str.toUpperCase()) // Capitalize first letter
+    .replace(/_/g, ' '); // Replace underscores with spaces
 };
+
 const handleClose = () => {
   localDialogVisible.value = false;
 };
+
 const handleApplyFilters = async () => {
-  isLoading.value = true; // Aktifkan status loading
-  await new Promise(resolve => setTimeout(resolve, 800)); // Penundaan 0.8 detik
+  isLoading.value = true; // Activate loading status
+  await new Promise(resolve => setTimeout(resolve, 800)); // 0.8 second delay
   const filtersToEmit: { [key: string]: string | number | null } = {};
   for (const col of localSelectedColumns.value) {
     const value = localActiveFilters.value[col];
@@ -122,63 +133,86 @@ const handleApplyFilters = async () => {
       filtersToEmit[col] = value;
     }
   }
-  emit('update:activeFilters', filtersToEmit); // Emit filter yang sudah dibersihkan ke parent
-  localDialogVisible.value = false; // Tutup dialog
-  isLoading.value = false; // Nonaktifkan status loading
+  emit('update:activeFilters', filtersToEmit); // Emit cleaned filters to parent
+  localDialogVisible.value = false; // Close dialog
+  isLoading.value = false; // Deactivate loading status
 };
+
 const handleClearFilters = () => {
-  localSelectedColumns.value = []; // Bersihkan kolom yang dipilih
-  localActiveFilters.value = {}; // Bersihkan filter aktif
-  emit('update:activeFilters', {}); // Emit filter kosong ke parent
-  localDialogVisible.value = false; // Tutup dialog
+  localSelectedColumns.value = []; // Clear selected columns
+  localActiveFilters.value = {}; // Clear active filters
+  emit('update:activeFilters', {}); // Emit empty filters to parent
+  localDialogVisible.value = false; // Close dialog
 };
 </script>
+
 <style scoped>
+/* Dialog transition styles */
 .dialog-fade-enter-active,
 .dialog-fade-leave-active {
-  transition: opacity 0.3s ease-in-out; }
+  transition: opacity 0.7s ease-in-out;
+}
 .dialog-fade-enter-from,
 .dialog-fade-leave-to {
   opacity: 0;
 }
 .dialog-fade-enter-active .filter-dialog,
 .dialog-fade-leave-active .filter-dialog {
-  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.3s ease-in-out;
+  transition: transform 0.7s, opacity 0.7s ease-in-out;
 }
 .dialog-fade-enter-from .filter-dialog,
 .dialog-fade-leave-to .filter-dialog {
-  transform: translateY(-50px) scale(0.95);   opacity: 0;
+  transform: translateY(50px);
+  opacity: 0;
 }
+
+/* Overlay and dialog container */
 .filter-dialog-overlay {
   display: flex;
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.6);
   justify-content: center;
-  align-items: center;   z-index: 1000;
+  align-items: center;
+  z-index: 1000;
 }
+
 .filter-dialog {
-  width: 90%;   max-width: 650px;   border-radius: 12px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);   background-color: #f8f9fa;
+  width: 90%;
+  max-width: 650px;
+  border-radius: 12px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+  background-color: #f8f9fa; /* Light background for the dialog content */
   display: flex;
-  flex-direction: column;   max-height: 90vh; }
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .filter-dialog {
-    width: 95vw !important;     margin: 10px;   }
+    width: 95vw !important;
+    margin: 10px;
+  }
   .column-checkboxes {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
 }
+
+/* Header styles (using #69C5C2 as primary color) */
 .my-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px 25px;
-  background: linear-gradient(to right, #6dd5ed, #2193b0);
+  /* Updated gradient with shades of #69C5C2 */
+  background: linear-gradient(to right, #88D3D1, #69C5C2);
   color: white;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px 12px 0 0;
-  flex-shrink: 0; }
+  flex-shrink: 0;
+}
+
 .my-header h4 {
   margin: 0;
   font-size: 1.5em;
@@ -187,90 +221,120 @@ const handleClearFilters = () => {
   align-items: center;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
+
 .dialog-icon {
   margin-right: 10px;
   font-size: 1.2em;
 }
+
+/* Scrollable form container */
 .scrollable-form-container {
-  flex-grow: 1;   overflow-y: auto;   padding: 20px;
-  background-color: #ffffff; }
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: #ffffff; /* White background for form content */
+}
+
+/* Filter section styles */
 .filter-section {
   margin-bottom: 20px;
-  background-color: #fefefe;
+  background-color: #fefefe; /* Slightly off-white background */
   padding: 20px;
   border-radius: 10px;
   border: 1px solid #e0e0e0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
+
+/* Section title (using #69C5C2 as primary color) */
 .section-title {
   margin-top: 0;
   margin-bottom: 15px;
-  color: #2193b0;
+  color: #69C5C2; /* Primary color for title */
   font-size: 1.2em;
   font-weight: 600;
-  border-bottom: 2px solid #e0e0e0;
+  border-bottom: 2px solid #B0E0DF; /* Lighter shade of primary for border */
   padding-bottom: 5px;
 }
+
+/* Checkbox group layout */
 .column-checkboxes {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 12px;
 }
+
+/* Individual checkbox styling (using #69C5C2 for themed elements) */
 .column-checkbox {
-  background-color: #f0f8ff;
-  border-color: #a7d9f7;
+  background-color: #F0FBFA; /* Very light teal background */
+  border-color: #B0E0DF; /* Light teal border */
   border-radius: 8px;
   padding: 10px 12px;
   transition: all 0.3s ease;
   font-weight: 500;
   color: #333;
-  cursor: pointer; }
+  cursor: pointer;
+}
+
 .column-checkbox:hover {
-    transform: translateY(-2px);     box-shadow: 0 4px 8px rgba(167, 217, 247, 0.3); }
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(105, 197, 194, 0.1); /* Primary color for hover shadow */
+}
+
 .column-checkbox-label-text {
   white-space: normal;
   word-break: break-word;
   line-height: 1.3;
 }
+
 .column-checkbox.is-checked {
-  background-color: #e6f7ff;
-  border-color: #2193b0;
-  box-shadow: 0 0 0 2px #2193b0;
-  color: #2193b0;
+  background-color: #E0F5F4; /* Slightly darker light teal when checked */
+  border-color: #69C5C2; /* Primary color for border when checked */
+  box-shadow: 0 0 0 2px #69C5C2; /* Primary color for box shadow when checked */
+  color: #69C5C2; /* Primary color for text when checked */
 }
+
+/* Input field styling */
 .filter-input-item {
   margin-bottom: 12px;
 }
+
 .styled-input .el-input-group__prepend {
   min-width: 120px;
   text-align: right;
   font-weight: bold;
   color: #555;
-  background-color: #f1f7f9;
+  background-color: #f1f7f9; /* Light grey background */
   border-right: 1px solid #dcdfe6;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   padding-right: 10px;
 }
+
 .styled-input .el-input__wrapper {
   border-radius: 6px;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
+
+/* Input focus style (using #69C5C2 for focus) */
 .styled-input .el-input__wrapper.is-focus {
-  border-color: #2193b0;
-  box-shadow: 0 0 0 2px rgba(33, 147, 176, 0.2);
+  border-color: #69C5C2; /* Primary color for border on focus */
+  box-shadow: 0 0 0 2px rgba(105, 197, 194, 0.2); /* Primary color for shadow on focus */
 }
+
+/* Dialog footer styles */
 .dialog-footer {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 12px;
   padding: 15px 20px;
-  background-color: #f8f9fa;
+  background-color: #f8f9fa; /* Light background for footer */
   border-top: 1px solid #e0e0e0;
   border-radius: 0 0 12px 12px;
-  flex-shrink: 0; }
+  flex-shrink: 0;
+}
+
 .footer-button {
   min-width: 140px;
   padding: 10px 16px;
@@ -279,11 +343,14 @@ const handleClearFilters = () => {
   border-radius: 8px;
   transition: all 0.3s ease;
 }
+
+/* Reset button styling */
 .reset-button {
-  background-color: #fef0f0;
-  color: #f56c6c;
-  border: 1px solid #fbc4c4;
+  background-color: #fef0f0; /* Light red background */
+  color: #f56c6c; /* Red text */
+  border: 1px solid #fbc4c4; /* Light red border */
 }
+
 .reset-button:hover {
   background-color: #fef7f7;
   border-color: #f7a7a7;
@@ -291,14 +358,32 @@ const handleClearFilters = () => {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(245, 108, 108, 0.2);
 }
+
+/* Apply button styling (using #69C5C2 as primary color) */
 .apply-button {
-  background: linear-gradient(to right, #6dd5ed, #2193b0);
+  /* Updated gradient with shades of #69C5C2 */
+  background: linear-gradient(to right, #88D3D1, #69C5C2);
   border: none;
   color: white;
 }
+
 .apply-button:hover {
-  background: linear-gradient(to right, #5bc3d4, #1a7b91);
+  /* Darker gradient for hover state */
+  background: linear-gradient(to right, #72C3C0, #5AAEA8);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(33, 147, 176, 0.3);
+  box-shadow: 0 4px 8px rgba(105, 197, 194, 0.3); /* Primary color for hover shadow */
+}
+
+/* Custom styling for the close button to match the primary color */
+.el-button--primary-custom {
+  background-color: #69C5C2 !important;
+  border-color: #69C5C2 !important;
+  color: white !important;
+}
+
+.el-button--primary-custom:hover,
+.el-button--primary-custom:focus {
+  background-color: #88D3D1 !important; /* Lighter shade for hover */
+  border-color: #88D3D1 !important;
 }
 </style>

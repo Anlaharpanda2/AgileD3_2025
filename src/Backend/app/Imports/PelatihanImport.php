@@ -35,19 +35,20 @@ class PelatihanImport implements
     {
         // Hapus logging demi performa
         return new ImportPelatihan([
-            'nama'                 => $row['nama'],
-            'nik'                  => $row['nik'],
-            'jenis_bimtek'         => $row['jenis_bimtek'],
-            'tanggal_kegiatan'     => $this->transformDate($row['tanggal_kegiatan']),
-            'tempat_kegiatan'      => $row['tempat_kegiatan'],
-            'angkatan'             => $row['angkatan'],
-            'tempat_tanggal_lahir' => $row['tempat_tanggal_lahir'],
-            'pendidikan'           => $row['pendidikan'],
-            'status'               => $row['status'],
-            'alamat'               => $row['alamat'],
-            'jenis_usaha'          => $row['jenis_usaha'],
-            'penghasilan_perbulan' => $row['penghasilan_perbulan'],
-            'nomor_telefon'        => $row['nomor_telefon'],
+            'nama'                      => $row['nama'],
+            'nik'                       => $row['nik'],
+            'jenis_bimtek'              => $row['jenis_bimtek'],
+            'tanggal_kegiatan_dimulai'  => $this->transformDate($row['tanggal_kegiatan_dimulai']),
+            'tanggal_kegiatan_berakhir' => $this->transformDate($row['tanggal_kegiatan_berakhir']),
+            'tempat_kegiatan'           => $row['tempat_kegiatan'],
+            'angkatan'                  => $row['angkatan'],
+            'tempat_tanggal_lahir'      => $row['tempat_tanggal_lahir'],
+            'pendidikan'                => $row['pendidikan'],
+            'status'                    => $row['status'],
+            'alamat'                    => $row['alamat'],
+            'jenis_usaha'               => $row['jenis_usaha'],
+            'penghasilan_perbulan'      => $row['penghasilan_perbulan'],
+            'nomor_telefon'             => $row['nomor_telefon'],
         ]);
     }
 

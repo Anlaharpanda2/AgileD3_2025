@@ -1,6 +1,13 @@
 <template>
   <!-- Form pop up -->
   <DefaultLayout>
+    <FormSortingDataPelatihan
+      v-if="showSort"
+      :visible="showSort"
+      :columns="filterableColumns"
+      :data="tableData"
+      @update:visible="showSort = $event"
+    />
     <FormFilterDataPelatihan
       v-model="showFilter"  :columns="filterableColumns"
       v-model:active-filters="activeFilters"
@@ -122,10 +129,18 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="tanggal_kegiatan" show-overflow-tooltip>
+      <el-table-column prop="kegiatan_dimulai" show-overflow-tooltip>
         <template #header>
-          <el-tooltip content="Tanggal Kegiatan" placement="top">
-            <span class="header-tooltip-text">Tanggal Kegiatan</span>
+          <el-tooltip content="Kegiatan dimulai" placement="top">
+            <span class="header-tooltip-text">Kegiatan dimulai</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="kegiatan_berakhir" show-overflow-tooltip>
+        <template #header>
+          <el-tooltip content="Kegiatan berakhir" placement="top">
+            <span class="header-tooltip-text">Kegiatan berakhir</span>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -266,6 +281,7 @@ import FormImportDataPeltihan from "../../components/KelolaDataPelatihan/FormImp
 import FormEditDataPelatihan from "../../components/KelolaDataPelatihan/FormEditDataPelatihan.vue";
 import FormTambahDataPeltihan from "../../components/KelolaDataPelatihan/FormTambahDataPelatihan.vue";
 import FormFilterDataPelatihan from "../../components/KelolaDataPelatihan/FormFilterDataPelatihan.vue";
+import FormSortingDataPelatihan from "../../components/KelolaDataPelatihan/FormSortingDataPelatihan.vue";
 import { ElNotification } from 'element-plus';
 
 interface Peserta {
@@ -273,7 +289,8 @@ interface Peserta {
   nama: string;
   nik: string;
   jenis_bimtek: string;
-  tanggal_kegiatan: string;
+  kegiatan_dimulai: string;
+  kegiatan_berakhir: string;
   tempat_kegiatan: string;
   angkatan: number;
   tempat_tanggal_lahir: string;

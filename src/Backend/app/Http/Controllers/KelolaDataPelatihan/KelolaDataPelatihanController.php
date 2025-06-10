@@ -78,7 +78,7 @@ use Illuminate\Http\Request;
         }
         $deleted = DataPelatihan::whereIn('nik', $niks)->delete();
         return response()->json([
-            'message' => "Berhasil menghapus {$deleted} data pelatihan"
+            'message' => "Berhasil menghapus {$deleted} data Pelatihan"
         ]);
     }
 

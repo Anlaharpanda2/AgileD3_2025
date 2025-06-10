@@ -14,6 +14,7 @@ use App\Http\Controllers\KelolaPretestPostest\PrePostController;
 use App\Http\Controllers\KelolaPretestPostest\PrePostTestController;
 use App\Http\Controllers\Pengaduan\PengaduanController;
 
+use App\Http\Controllers\KelolaBerita\KelolaDataBeritaController;
 
 Route::post('/login/masyarakat', [AuthMasyarakatController::class, 'login']);
 Route::post('/login/operator', [AuthOperatorController::class, 'login']);
@@ -52,3 +53,14 @@ Route::get('pengaduan/{id}', [PengaduanController::class, 'show']);
 Route::post('pengaduan', [PengaduanController::class, 'store']);
 Route::put('pengaduan/{id}', [PengaduanController::class, 'update']);
 Route::delete('pengaduan/{id}', [PengaduanController::class, 'destroy']);
+//api untuk halaman kelola data berita
+Route::put('/kelola/berita/restore', [KelolaDataBeritaController::class, 'restoreMassal']);
+Route::delete('/kelola/berita/permanent', [KelolaDataBeritaController::class, 'forceDeleteMassal']);
+Route::get('/kelola/berita', [KelolaDataBeritaController::class, 'index']);
+Route::post('/kelola/berita', [KelolaDataBeritaController::class, 'store']);
+Route::put('/kelola/berita/{id}', [KelolaDataBeritaController::class, 'update']);
+Route::get('/kelola/berita/trash', [KelolaDataBeritaController::class, 'trash']);
+Route::put('/kelola/berita/restore/{id}', [KelolaDataBeritaController::class, 'restore']);
+Route::delete('/kelola/berita/permanent/{id}', [KelolaDataBeritaController::class, 'forceDelete']);
+Route::delete('/kelola/berita/{id}', [KelolaDataBeritaController::class, 'destroy']);
+Route::delete('/kelola/berita', [KelolaDataBeritaController::class, 'destroyMassal']);

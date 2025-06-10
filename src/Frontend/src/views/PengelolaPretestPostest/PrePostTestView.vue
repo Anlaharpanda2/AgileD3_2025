@@ -1,10 +1,7 @@
 <template>
   <DefaultLayout>
-    <!-- Modal Forms -->
     <FormTambahTest v-if="showTambah && TambahData" :initialData="TambahData" @close="showTambah = false" />
     <FormEditTest v-if="showEdit && editData" :initialData="editData" @close="showEdit = false" />
-    
-    <!-- Header -->
     <div class="table-header">
       <div class="left-controls">
         <div class="select-box" @click.stop="toggleDropdown">
@@ -16,18 +13,15 @@
             </li>
           </ul>
         </div>
-
         <div class="search-box">
           <input type="text" placeholder="Cari" v-model="search" />
           <img src="/table/cari.svg" alt="Search" />
         </div>
-
         <div class="icon-group">
           <img src="/table/filter.svg" alt="Filter" @click="onFilterClick" />
           <img src="/table/sort.svg" alt="Sort" @click="onSortClick" />
         </div>
       </div>
-
       <div class="right-controls">
         <button class="button" @click="openTambah">
           <img src="/table/tambah.svg" alt="Add" />
@@ -35,8 +29,6 @@
         </button>
       </div>
     </div>
-
-    <!-- Table -->
     <div class="table-wrapper">
       <el-table
         :data="pagedData"
@@ -60,8 +52,6 @@
         </el-table-column>
       </el-table>
     </div>
-
-    <!-- Pagination -->
     <div class="pagination">
       <button class="page-btn" :disabled="currentPage === 1" @click="prevPage">
         <img src="/table/sebelum.svg" alt="preview" />
@@ -76,7 +66,6 @@
     </div>
   </DefaultLayout>
 </template>
-
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import api from '../../api';
@@ -84,7 +73,6 @@ import DefaultLayout from '../../layouts/DefaultLayout.vue';
 import FormEditTest from '../../components/FormEditPrePostTest.vue';
 import FormTambahTest from '../../components/FormTambahPrePostTest.vue';
 import { ElNotification } from 'element-plus';
-
 interface TestData {
   id: number;
   nama: string;
@@ -92,7 +80,6 @@ interface TestData {
   nilai: number;
   tanggal_test: string;
 }
-
 const tableData = ref<TestData[]>([]);
 const selected = ref<TestData[]>([]);
 const search = ref('');
@@ -105,7 +92,6 @@ const showTambah = ref(false);
 const editData = ref(null);
 const TambahData = ref(null);
 const perPageOptions = [10, 20, 50, 100, 'all'];
-
 const toggleDropdown = () => (dropdownOpen.value = !dropdownOpen.value);
 const changeItemsPerPage = (opt: number | string) => {
   itemsPerPage.value = opt === 'all' ? Infinity : opt;
@@ -123,7 +109,6 @@ const pagedData = computed(() => {
 const totalPages = computed(() =>
   Math.ceil(filteredData.value.length / (typeof itemsPerPage.value === 'number' ? itemsPerPage.value : 1))
 );
-
 const visiblePages = computed(() => {
   const total = totalPages.value;
   const current = currentPage.value;
@@ -147,12 +132,10 @@ const visiblePages = computed(() => {
   if (total > 1) pages.push(total);
   return pages;
 });
-
 const onSelectionChange = (rows: TestData[]) => (selected.value = rows);
 const prevPage = () => currentPage.value--;
 const nextPage = () => currentPage.value++;
 const goToPage = (n: number) => (currentPage.value = n);
-
 const openEdit = (row: TestData) => {
   editData.value = { ...row };
   showEdit.value = true;
@@ -181,14 +164,11 @@ const onMassDeleteClick = async () => {
     loading.value = false;
   }
 };
-
 const fetchData = async () => {
   const res = await api.get('/kelola/test');
   tableData.value = Array.isArray(res) ? res : res.data || [];
 };
-
 onMounted(fetchData);
-
 const headerCellStyle = {
   backgroundImage: 'linear-gradient(to top, #FB9CB1, #FE6B99)',
   color: 'white',
@@ -197,16 +177,13 @@ const headerCellStyle = {
 };
 const rowStyle = () => ({ backgroundColor: '#F7F6FE' });
 </script>
-
 <style>
-
 .table-container {
   padding: 40px;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
-
 .table-header {
   display: flex;
   flex-wrap: wrap;
@@ -226,7 +203,6 @@ const rowStyle = () => ({ backgroundColor: '#F7F6FE' });
   gap: 10px;
   margin-left: auto;
 }
-
 .select-box {
   background: #69C5C2;
   padding: 6px 10px;
@@ -296,7 +272,6 @@ const rowStyle = () => ({ backgroundColor: '#F7F6FE' });
 .button.danger {
   background: #e74c3c;
 }
-
 .pagination {
   display: flex;
   justify-content: center;
@@ -324,7 +299,6 @@ const rowStyle = () => ({ backgroundColor: '#F7F6FE' });
 .page-number.ellipsis {
   cursor: default;
 }
-
 .table-wrapper {
   overflow-x: auto;
   font-size: 10pt;
@@ -334,8 +308,6 @@ const rowStyle = () => ({ backgroundColor: '#F7F6FE' });
   table-layout: auto !important;
   font-size: inherit;
 }
-
-/* Header corner radius */
 .el-table__header-wrapper thead th:first-child {
   border-top-left-radius: 15px !important;
 }
@@ -345,8 +317,6 @@ const rowStyle = () => ({ backgroundColor: '#F7F6FE' });
 .el-table__header-wrapper {
   overflow: visible !important;
 }
-
-/* Body cell styles */
 .el-table th > div,
 .el-table td > div {
   white-space: nowrap;
@@ -359,18 +329,12 @@ const rowStyle = () => ({ backgroundColor: '#F7F6FE' });
   font-size: inherit;
   transition: background-color 0.3s ease;
 }
-
-/* Row background */
 .el-table .el-table__body-wrapper tbody tr td {
   background-color: #ececec;
 }
-
-/* Selection column width */
 .el-table-column--selection {
   width: 55px !important;
 }
-
-/* Action button styling */
 .action-buttons {
   display: flex;
   gap: 8px;

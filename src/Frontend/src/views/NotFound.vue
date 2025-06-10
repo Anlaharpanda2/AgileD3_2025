@@ -23,7 +23,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 function goToBeranda() {
-  router.push('/home')
+  router.push('/')
 }
 </script>
 

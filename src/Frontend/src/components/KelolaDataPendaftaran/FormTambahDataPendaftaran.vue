@@ -3,7 +3,7 @@
     <transition name="popup">
       <div class="form-popup">
         <div class="form-header background text-center text-white py-3 rounded-top">
-          <h3 class="mb-0">Form Data Pelatihan</h3>
+          <h3 class="mb-0">Form Data Pendaftaran</h3>
         </div>
 
         <div class="form-body">
@@ -210,7 +210,7 @@ const rules = {
   jenis_bimtek: [{ required: true, message: 'Jenis bimtek wajib diisi', trigger: 'blur' }],
   tanggal_kegiatan: [{ type: 'date', required: true, message: 'Tanggal wajib diisi', trigger: 'change' }],
   tempat_kegiatan: [{ required: true, message: 'Tempat wajib diisi', trigger: 'blur' }],
-  angkatan: [{ required: true, type: 'messege', message: 'Angkatan wajib diisi', trigger: 'blur' }],
+  angkatan: [{ required: true, type: 'messege', message: 'Angkatan wajib diisi', trigger: 'change' }],
   tempat_tanggal_lahir: [{ required: true, message: 'Tempat tanggal lahir wajib diisi', trigger: 'blur' }],
   pendidikan: [{ required: true, message: 'Pendidikan wajib diisi', trigger: 'blur' }],
   status: [{ required: true, message: 'Status wajib diisi', trigger: 'change' }],
@@ -235,6 +235,7 @@ const submitForm = () => {
     }
 
     try {
+      // Format tanggal menjadi string 'YYYY-MM-DD' saat submit
       const payload = {
         ...form,
         tanggal_kegiatan:
@@ -244,7 +245,7 @@ const submitForm = () => {
         angkatan: Number(form.angkatan),
       }
 
-      const response = await api.put(`/kelola/pelatihan/${form.nik}`, payload)
+      const response = await api.post(`/kelola/Pendaftaran`, payload)
 
       ElNotification({
         title: 'Berhasil',

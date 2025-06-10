@@ -1,29 +1,35 @@
 <template>
   <!-- Form pop up -->
   <DefaultLayout>
-    <FormSortingDataPelatihan
+    <FormSortingDataPendaftaran
       v-if="showSort"
       :visible="showSort"
       :columns="filterableColumns"
       :data="tableData"
       @update:visible="showSort = $event"
     />
-    <FormFilterDataPelatihan
+    <FormFilterDataPendaftaran
       v-model="showFilter"  :columns="filterableColumns"
       v-model:active-filters="activeFilters"
     />
-    <a href="/data/pelatihan" class="d-inline-flex align-items-center text-decoration-none mb-2">
-      <img src="/arrow.svg" alt="Kembali" width="25" height="25" class="me-2" />
-      <span class="h6 text-grey pt-2">Kembali ke Data Pelatihan</span>
-    </a>
-    <div class="d-flex justify-content-between align-items-center border-bottom  pb-2 mb-4">
-      <h1 class="h3 fw-bold text-secondary">
-        Data Pelatihan Sampah
-      </h1>
-      <span class="h6 text-muted pt-2">
-        Data akan terhapus otomatis dalam 15 hari
-      </span>
-    </div>
+    <FormTambahDataPeltihan 
+      v-if="showTambah"
+      @close="showTambah = false" 
+    />
+    <FormEditDataPendaftaran
+      v-if="showEdit && editData" 
+      :initialData="editData" 
+      @close="showEdit = false" 
+    />
+    <FormExportDataPendaftaran
+      v-if="showExport" 
+      :data="pagedData" 
+      @close="showExport = false" 
+    />
+    <FormImportDataPeltihan
+      v-if="showImport" 
+      @close="showImport = false" 
+    />
     <!-- pagination atas-->
     <div class="table-header">
       <div class="left-controls">
@@ -66,13 +72,22 @@
         <button class="button1" @click="showSort = true">
           <img src="/table/sort.svg" alt="Sort" />
         </button>
-        <button class="button" @click="onMassDeletePermanentClick">
-          <img src="/table/deleteForever.svg" alt="hapusPermanenMassal" />
-          Hapus Permanen Massal
+        <button class="button" @click="showExport = true">
+          <img src="/table/export.svg" alt="Export" />
         </button>
-        <button class="button" @click="onMassRestoreClick">
-          <img src="/table/pulihkan.svg" alt="restoreMassal" />
-          Pulihkan Massal
+        <button class="button" @click="showImport = true">
+          <img src="/table/import.svg" alt="Import" />
+        </button>
+        <button class="button" @click="onExportClick">
+          <img src="/table/sampah.svg" alt="Sampah" />
+        </button>
+        <button class="button" @click="onMassDeleteClick">
+          <img src="/table/hapusMass.svg" alt="hapusMassal" />
+          <span class="hilang">Hapus Massal</span>
+        </button>
+        <button class="button" @click="showTambah = true" >
+          <img src="/table/tambah.svg" alt="Add" />
+          <span class="hilang">Tambah Data</span>
         </button>
       </div>
     </div>
@@ -210,21 +225,21 @@
         </template>
         <template #default="{ row }">
           <div class="action-buttons">
-              <img
-                src="/table/pulihkan2.svg"
-                alt="Restore"
-                class="action-icon"
-                @click="onRestoreClick(row)"
-                title="pulihkan data"
-              />
-              <img
-                src="/table/deleteForever2.svg"
-                alt="HapusSelamanya"
-                class="action-icon"
-                @click="onDeletePermanentClick(row)"
-                title="Hapus Selamanya"
-              />
-            </div>
+            <img
+              src="/table/edit.svg"
+              alt="Edit"
+              class="action-icon"
+              @click="openEdit(row)"
+              title="Edit"
+            />
+            <img
+              src="/table/hapus.svg"
+              alt="Hapus"
+              class="action-icon"
+              @click="onDelete(row)"
+              title="Hapus"
+            />
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -261,9 +276,13 @@
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import api from "../../api.js";
 import DefaultLayout from "../../layouts/DefaultLayout.vue";
-import FormFilterDataPelatihan from "../../components/KelolaDataPelatihan/FormFilterDataPelatihan.vue";
-import FormSortingDataPelatihan from "../../components/KelolaDataPelatihan/FormSortingDataPelatihan.vue";
-import { ElNotification, ElMessageBox, ElMessage } from 'element-plus';
+import FormExportDataPendaftaran from "../../components/KelolaDataPendaftaran/FormExportDataPendaftaran.vue";
+import FormImportDataPeltihan from "../../components/KelolaDataPendaftaran/FormImportDataPendaftaran.vue";
+import FormEditDataPendaftaran from "../../components/KelolaDataPendaftaran/FormEditDataPendaftaran.vue";
+import FormTambahDataPeltihan from "../../components/KelolaDataPendaftaran/FormTambahDataPendaftaran.vue";
+import FormFilterDataPendaftaran from "../../components/KelolaDataPendaftaran/FormFilterDataPendaftaran.vue";
+import FormSortingDataPendaftaran from "../../components/KelolaDataPendaftaran/FormSortingDataPendaftaran.vue";
+import { ElNotification } from 'element-plus';
 
 interface Peserta {
   id: number;
@@ -292,10 +311,20 @@ const loading = ref(false);
 const itemsPerPage = ref<number | string>(10);
 const currentPage = ref(1);
 const dropdownOpen = ref(false);
-const showSort = ref(false);
-const showFilter = ref(false);
+const showExport = ref(false)
+const showImport = ref(false)
+const showEdit = ref(false)
+const showTambah = ref(false)
+const showSort = ref(false)
+const showFilter = ref(false)
+const editData = ref(null)
 const perPageOptions = [10, 20, 50, 100, "all"];
 
+const openEdit = (row) => {
+  editData.value = { ...row }
+  showEdit.value = true
+  loading.value = false;
+}
 
 function toggleDropdown() {
   dropdownOpen.value = !dropdownOpen.value;
@@ -403,86 +432,72 @@ function onSelectionChange(rows: Peserta[]) {
   selected.value = rows;
 }
 
-
-// Permanent delete (mass/single)
-async function onMassDeletePermanentClick() {
+async function onMassDeleteClick() {
   if (!selected.value.length) return;
 
-  try {
-    await ElMessageBox.confirm(
-      `Yakin ingin menghapus permanen ${selected.value.length} data ini?`,
-      'Konfirmasi Hapus',
-      {
-        confirmButtonText: 'Iya, Hapus',
-        cancelButtonText: 'Batal',
-        type: 'warning',
-      }
-    );
-
-    loading.value = true;
-    const niks = selected.value.map(p => p.nik);
-    await api.delete('/kelola/pelatihan/permanent', {
-      data: { niks },
-    });
-    await fetchData();
-    ElMessage.success('Data berhasil dihapus permanen.');
-  } catch (err) {
-    // Dibatalkan, tidak perlu error log
-  } finally {
-    loading.value = false;
-  }
-}
-
-async function onDeletePermanentClick(row: Peserta) {
-  try {
-    await ElMessageBox.confirm(
-      `Yakin ingin menghapus permanen peserta dengan NIK ${row.nik}?`,
-      'Konfirmasi Hapus',
-      {
-        confirmButtonText: 'Iya, Hapus',
-        cancelButtonText: 'Batal',
-        type: 'warning',
-      }
-    );
-
-    loading.value = true;
-    await api.delete(`/kelola/pelatihan/permanent/${row.nik}`);
-    await fetchData();
-    ElMessage.success('Peserta berhasil dihapus permanen.');
-  } catch (err) {
-    // Dibatalkan oleh user
-  } finally {
-    loading.value = false;
-  }
-}
-
-// Restore (mass/single)
-async function onMassRestoreClick() {
-  if (!selected.value.length) return;
   loading.value = true;
 
   try {
     const niks = selected.value.map(p => p.nik);
-    // Satu request massal ke backend
-    const res = await api.put('/kelola/pelatihan/restore', { niks });
-    // interceptor api.js return response.data
+    await api.delete('/kelola/Pendaftaran', {
+      data: { niks }
+    });
     await fetchData();
-  } catch (err) {
-    console.error('Gagal memulihkan data:', err);
-    ElMessage.error('Terjadi kesalahan saat memulihkan data');
-  } finally {
+    ElNotification({
+      title: 'Berhasil',
+      message: 'Hapus Data Massal',
+      type: 'success',
+      duration: 3000,
+    });
+  } 
+  catch (err) {
+    console.error('Gagal menghapus data:', err);
+    ElNotification({ // Notifikasi error (BARU)
+      title: 'Error',
+      message: 'Gagal menghapus data massal.',
+      type: 'error',
+      duration: 3000,
+    });
+  }
+  finally {
     loading.value = false;
   }
 }
 
-async function onRestoreClick(row:Peserta){ loading.value=true;
-  await api.put(`/kelola/pelatihan/restore/${row.nik}`);
-  await fetchData(); loading.value=false }
 
+// Sampah route → GET /data/Pendaftaran/sampah
+async function onExportClick() {
+  window.location.href = '/data/Pendaftaran/sampah';
+}
+
+// Single delete → DELETE /kelola/Pendaftaran/{nik}
+async function onDelete(row: Peserta) {
+  loading.value = true;
+  try { // Ditambahkan try-catch
+    await api.delete(`/kelola/Pendaftaran/${row.nik}`);
+    await fetchData();
+    ElNotification({ // Notifikasi sukses (sudah ada)
+      title: 'Berhasil',
+      message: 'Data berhasil dihapus',
+      type: 'success',
+      duration: 3000,
+    });
+  } catch (err) { // Notifikasi error (BARU)
+    console.error('Gagal menghapus data:', err);
+    ElNotification({
+      title: 'Error',
+      message: 'Gagal menghapus data.',
+      type: 'error',
+      duration: 3000,
+    });
+  } finally { // Pastikan loading diatur
+    loading.value = false;
+  }
+}
 
 async function fetchData() {
   try { // Ditambahkan try-catch
-    const res = await api.get('/kelola/pelatihan/trash');
+    const res = await api.get('/kelola/Pendaftaran');
     tableData.value = Array.isArray(res) ? res : res.data || [];
   } catch (error) { // Notifikasi error (BARU)
     console.error('Error fetching data:', error);

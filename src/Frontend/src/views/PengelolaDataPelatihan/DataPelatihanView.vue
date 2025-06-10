@@ -31,6 +31,9 @@
       @close="showImport = false" 
     />
     <!-- pagination atas-->
+    <h1 class="h3 fw-bold text-secondary border-bottom pb-2 mb-4">
+      Data Pelatihan
+    </h1>
     <div class="table-header">
       <div class="left-controls">
         <div class="show-wrapper">

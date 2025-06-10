@@ -33,7 +33,7 @@ class DataPelatihanSeeder extends Seeder
         $pendidikanList = ['SD', 'SMP', 'SMA', 'Diploma III', 'Sarjana (S1)'];
         $statusList = ['kawin', 'lajang', 'janda'];
         $usahaList = ['Dagang', 'Petani', 'Ibu Rumah Tangga', 'Buruh Tani', 'Tenaga Pendidik PAUD', 'Belum Bekerja'];
-        for ($i = 0; $i < 2; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $tanggalMulai = $faker->dateTimeBetween('2023-01-01', '2025-12-31');
             $tanggalBerakhir = $faker->dateTimeBetween($tanggalMulai, '2025-12-31');
             DataPelatihan::create([

@@ -51,10 +51,11 @@ export default {
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('savedNIK', this.nik);
         localStorage.setItem('savedNama', this.nama);
+        localStorage.setItem('role', 'masyarakat');
 
         // Redirect setelah sedikit delay
         setTimeout(() => {
-          this.$router.push('/data/pelatihan');
+          this.$router.push('/');
         }, 100);
       } catch (error) {
         this.errorMessage = error.response?.data?.message || 'Login gagal';
@@ -66,7 +67,6 @@ export default {
 
 <template>
     <div class="coverpage">
-      <div class="overlap-wrapper">
         <div class="overlap">
           <div class="ellipse"></div>
           <div class="div"></div>
@@ -168,7 +168,6 @@ export default {
           </div>
         </div>
       </div>
-    </div>
 </template>
 <style scoped>
 @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
@@ -195,7 +194,9 @@ a {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
   width: 100%;
+  height: 100vh;
 }
 
 /* Animasi keyframes untuk pop-up */
@@ -228,18 +229,12 @@ a {
   margin-right: 5px;     /* Jarak antara kotak dan teks */
 }
 
-.coverpage .overlap-wrapper {
-  background-color: #ffe4ed;
-  width: 1280px;
-  height: 720px;
-}
-
-.coverpage .overlap {
+.overlap {
   position: relative;
-  width: 976px;
-  height: 555px;
-  top: 37px;
-  left: 157px;
+  align-items: center;
+  justify-content: center;
+  width: 950px;
+  height: 550px;
 }
 
 .error-message {
@@ -279,7 +274,7 @@ a {
   border: none;
 }
 
-.coverpage .ellipse {
+ .ellipse {
   position: absolute;
   width: 63px;
   height: 63px;
@@ -312,8 +307,7 @@ a {
   }
 }
 
-
-.coverpage .div {
+.div {
   position: absolute;
   width: 75px;
   height: 75px;
@@ -343,9 +337,9 @@ a {
 }
 
 
-.coverpage .login {
+.login {
   position: absolute;
-  width: 911px;
+  width: 900px;
   height: 512px;
   top: 32px;
   left: 32px;
@@ -371,7 +365,7 @@ a {
 }
 
 
-.coverpage .overlap-group {
+ .overlap-group {
   position: absolute;
   width: 455px;
   height: 512px;
@@ -381,7 +375,7 @@ a {
   background-size: 100% 100%;
 }
 
-.coverpage .rectangle {
+ .rectangle {
   position: absolute;
   width: 275px;
   height: 349px;
@@ -395,7 +389,7 @@ a {
   -webkit-backdrop-filter: blur(4.53px) brightness(100%);
 }
 
-.coverpage .mask-group {
+ .mask-group {
   position: absolute;
   width: 275px;
   height: 349px;
@@ -403,7 +397,7 @@ a {
   left: 91px;
 }
 
-.coverpage .group {
+ .group {
   position: absolute;
   width: 53px;
   height: 53px;
@@ -413,7 +407,7 @@ a {
   border-radius: 26.33px;
 }
 
-.coverpage .thunderbolt {
+ .thunderbolt {
   position: absolute;
   width: 28px;
   height: 28px;
@@ -422,7 +416,7 @@ a {
   object-fit: cover;
 }
 
-.coverpage .keluarga-sejahtera {
+ .keluarga-sejahtera {
   position: absolute;
   top: 117px;
   left: 111px;
@@ -434,7 +428,7 @@ a {
   line-height: 30.7px;
 }
 
-.coverpage .overlap-2 {
+ .overlap-2 {
   position: absolute;
   width: 250px;
   height: 313px;
@@ -442,7 +436,7 @@ a {
   left: 106px;
 }
 
-.coverpage .group-2 {
+.group-2 {
   position: absolute;
   width: 250px;
   height: 313px;
@@ -450,7 +444,7 @@ a {
   left: 0;
 }
 
-.coverpage .overlap-3 {
+ .overlap-3 {
   position: absolute;
   width: 248px;
   height: 95px;
@@ -458,7 +452,7 @@ a {
   left: 0;
 }
 
-.coverpage .overlap-group-wrapper {
+ .overlap-group-wrapper {
   position: absolute;
   width: 248px;
   height: 16px;
@@ -466,13 +460,13 @@ a {
   left: 0;
 }
 
-.coverpage .overlap-group-2 {
+ .overlap-group-2 {
   position: relative;
   width: 246px;
   height: 16px;
 }
 
-.coverpage .text-wrapper {
+ .text-wrapper {
   position: absolute;
   top: 0;
   left: 112px;
@@ -484,7 +478,7 @@ a {
   line-height: normal;
 }
 
-.coverpage .subtract {
+ .subtract {
   position: absolute;
   width: 246px;
   height: 1px;
@@ -492,7 +486,7 @@ a {
   left: 0;
 }
 
-.coverpage .group-3 {
+ .group-3 {
   position: absolute;
   width: 243px;
   height: 80px;
@@ -500,7 +494,7 @@ a {
   left: 0;
 }
 
-.coverpage .group-wrapper {
+ .group-wrapper {
   position: relative;
   width: 243px;
   height: 35px;
@@ -512,7 +506,7 @@ a {
   transition: transform 0.3s ease;
   overflow: visible;
 }
-.coverpage .manage-accounts {
+ .manage-accounts {
   position: absolute;
   width: 20px;
   height: 20px;
@@ -535,16 +529,17 @@ a {
   color: white;
 }
 
-.coverpage .masuk-sebagai-wrapper {
+ .masuk-sebagai-wrapper {
   position: relative;
   width: 103px;
   height: 12px;
   top: 10px;
   left: 90px;
   overflow: visible;
+  white-space: nowrap;
 }
 
-.coverpage .masuk-sebagai {
+ .masuk-sebagai {
   left: 0;
   font-weight: 400;
   color: #1c1c1c;
@@ -556,16 +551,16 @@ a {
   line-height: normal;
 }
 
-.coverpage .span {
+ .span {
   font-family: "Poppins", Helvetica;
   font-weight: 400;
 }
 
-.coverpage .text-wrapper-2 {
+ .text-wrapper-2 {
   font-weight: 700;
 }
 
-.coverpage .div-wrapper {
+ .div-wrapper {
   position: absolute;
   width: 243px;
   height: 35px;
@@ -590,7 +585,7 @@ a {
   color:white;
 }
 
-.coverpage .group-4 {
+ .group-4 {
   position: relative;
   width: 101px;
   height: 12px;
@@ -598,7 +593,7 @@ a {
   left: 90px;
 }
 
-.coverpage .masuk {
+ .masuk {
   left: 90px;
   font-weight: 700;
   color: #000000;
@@ -611,7 +606,7 @@ a {
   line-height: normal;
 }
 
-.coverpage .p {
+ .p {
   position: absolute;
   top: 21px;
   left: 9px;
@@ -623,7 +618,7 @@ a {
   line-height: normal;
 }
 
-.coverpage .group-5 {
+ .group-5 {
   position: absolute;
   width: 245px;
   height: 35px;
@@ -631,7 +626,7 @@ a {
   left: 0;
 }
 
-.coverpage .overlap-4 {
+ .overlap-4 {
   position: relative;
   width: 243px;
   height: 35px;
@@ -639,13 +634,13 @@ a {
   border-radius: 10.67px;
 }
 
-.coverpage .text-wrapper-3 {
+ .text-wrapper-3 {
   border: none;
   background: transparent;
   padding: 0;
   outline: none;
   line-height: 1.5;
-  width: 100%;
+  width: 80%;
   position: absolute;
   top: 11px;
   left: 32px;
@@ -657,7 +652,7 @@ a {
   line-height: normal;
 }
 
-.coverpage .frame {
+ .frame {
   position: absolute;
   width: 16px;
   height: 16px;
@@ -665,7 +660,7 @@ a {
   left: 12px;
 }
 
-.coverpage .group-6 {
+ .group-6 {
   position: absolute;
   width: 245px;
   height: 35px;
@@ -673,7 +668,7 @@ a {
   left: 0;
 }
 
-.coverpage .group-7 {
+ .group-7 {
   position: absolute;
   width: 85px;
   height: 35px;
@@ -681,7 +676,8 @@ a {
   left: 80px;
 }
 
-.coverpage .overlap-5 {
+ .overlap-5 {
+  top: 15px;
   position: relative;
   width: 83px;
   height: 35px;
@@ -689,7 +685,7 @@ a {
   box-shadow: 0px 5.33px 14px #00000029;
 }
 
-.coverpage .text-wrapper-4 {
+ .text-wrapper-4 {
   position: absolute;
   top: 11px;
   left: 20px;
@@ -701,36 +697,36 @@ a {
   line-height: normal;
 }
 
-.coverpage .belum-memiliki-akun {
+ .belum-memiliki-akun {
   position: absolute;
   width: 166px;
   height: 23px;
-  top: 186px;
-  left: 49px;
+  top: 135px;
+  left: 140px;
   font-family: "Roboto", Helvetica;
   font-weight: 400;
   color: transparent;
-  font-size: 11.3px;
+  font-size: 9px;
   letter-spacing: 0;
   line-height: 16.1px;
 }
 
-.coverpage .text-wrapper-5 {
+ .text-wrapper-5 {
   font-weight: 300;
   color: #000000;
 }
 
-.coverpage .text-wrapper-6 {
+ .text-wrapper-6 {
   font-weight: 700;
   color: #000000;
 }
 
-.coverpage .text-wrapper-7 {
+ .text-wrapper-7 {
   font-weight: 700;
   color: #fe3275;
 }
 
-.coverpage .img {
+ .img {
   position: absolute;
   width: 20px;
   height: 20px;
@@ -741,4 +737,42 @@ a {
   z-index: 1;
 }
 
+@media(max-width:750px){
+  .overlap-group{
+    display: none;
+  }
+  .login{
+    width: 340px;
+    align-items: center;
+    justify-content: center;
+  }
+   .group-2 {
+    align-items: center;
+    justify-content: center;
+  }
+  .overlap {
+    position: absolute;
+    top: 80px;
+    width: 100%;
+  }
+  .div{
+    position: absolute;
+    top: 500px;
+    left: 330px;
+  }
+  .group-2 {
+    width: 250px;
+    height: 313px;
+  }
+  .overlap-2 {
+    position: absolute;
+    width: 250px;
+    height: 313px;
+    top: 20%;
+    left: 15%;
+  }
+  .error-message {
+    margin-top: -230px;
+  }
+}
 </style>

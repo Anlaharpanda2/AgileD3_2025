@@ -6,6 +6,7 @@
             <button v-if="isOperator">operator</button>
             <button v-if="isPegawai">Pegawai</button>
             <button v-if="isNotLogin">tidak login</button>
+            <button v-if="isMasyarakat">masyarakat</button>
             <Layanan1 v-if="isOperator"></Layanan1>
             <Layanan1 v-if="isPegawai"></Layanan1>
             <Layanan2 v-if="isNotLogin"></Layanan2>

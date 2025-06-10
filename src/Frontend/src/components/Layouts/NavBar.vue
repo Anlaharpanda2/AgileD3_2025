@@ -4,7 +4,7 @@
       <li class="hover"><a href="/home"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">BERANDA</span></a></li>
       <li class="hover"><a href="#"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">DASHBOARD</span></a></li>
       <li class="hover"><a href="#"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">PRE/POSTTEST</span></a></li>
-      <li  class="hover"><a href="#"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">PENDAFTAR</span></a></li>
+      <li  class="hover"><a href="/data/pendaftaran"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">PENDAFTAR</span></a></li>
       <li class="hover"><a href="/data/pelatihan"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">PELATIHAN</span></a></li>
       <li class="hover"><a href="#"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">PELAPORAN</span></a></li>
       <li class="hover"><a href="#"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">KELOLA DATA</span></a></li>

@@ -9,7 +9,7 @@ class UserMasyarakat extends Authenticatable
 {
     use HasFactory;
 
-    protected $table = 'data_pelatihan'; // karena datanya masih disimpan di tabel yang sama
+    protected $table = 'users_masyarakat'; // karena datanya masih disimpan di tabel yang sama
 
     protected $fillable = [
         'nama',

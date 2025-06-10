@@ -17,15 +17,16 @@ import OtpView from '../views/ResetPassword/OtpView.vue';
 import ForgotView from '../views/ResetPassword/ForgotView.vue';
 import ResetPassword from '../views/ResetPassword/ResetPassword.vue';
 
-// rute pengelola data pendaftar
+// rute pengelola data pelatihan
 import DataPelatihanView from '../views/PengelolaDataPelatihan/DataPelatihanView.vue';
 import DataPelatihanSampahView from '../views/PengelolaDataPelatihan/DataPelatihanSampahView.vue';
+import DataPendaftaranView from '../views/PengelolaDataPendaftaran/DataPendaftaranView.vue';
 
 import NotFound from '../views/NotFound.vue';
 import Unauthorized from '../views/Unauthorized.vue'; // Anda perlu membuat ini
 
 const routes = [
-  {path: '/home',component: HomeView},
+  {path: '/',component: HomeView},
   {path: '/form',component: FormSortingDataPelatihan},
   {path: '/kelola/akses',component: KelolaAksesView},
   {path: '/def2',component: def2},
@@ -36,6 +37,7 @@ const routes = [
   {path: '/reset/forgot',name: 'resetOperatorForgot',component: ForgotView},
   {path: '/reset/password',name: 'resetOperatorPassword',component: ResetPassword},
   {path: '/data/pelatihan',name: 'DataPelatihan',component: DataPelatihanView,meta: { requiresAuth: true, role: 'operator' }},
+  {path: '/data/Pendaftaran',name: 'DataPendaftaran',component: DataPendaftaranView,meta: { requiresAuth: true, role: 'operator' }},
   {path: '/data/pelatihan/sampah',name: 'DataPelatihanSampah',component: DataPelatihanSampahView,meta: { requiresAuth: true}},
   {path: '/unauthorized',name: 'Unauthorized',component: Unauthorized},
   {path: '/:pathMatch(.*)*',name: 'NotFound',component: NotFound}

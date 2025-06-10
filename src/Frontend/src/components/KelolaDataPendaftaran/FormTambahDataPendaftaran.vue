@@ -3,7 +3,7 @@
     <transition name="popup">
       <div class="form-popup">
         <div class="form-header background text-center text-white py-3 rounded-top">
-          <h3 class="mb-0">Form Data Pelatihan</h3>
+          <h3 class="mb-0">Form Data Pendaftaran</h3>
         </div>
 
         <div class="form-body">
@@ -245,7 +245,7 @@ const submitForm = () => {
         angkatan: Number(form.angkatan),
       }
 
-      const response = await api.post(`/kelola/pelatihan`, payload)
+      const response = await api.post(`/kelola/Pendaftaran`, payload)
 
       ElNotification({
         title: 'Berhasil',

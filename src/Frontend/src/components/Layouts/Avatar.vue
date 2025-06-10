@@ -32,7 +32,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import api from '../api';
+import api from '../../api';
 const router = useRouter()
 
 const user = {
@@ -43,8 +43,14 @@ const user = {
 
 const handleLogout = async () => {
   try {
-    await api.post('/logout')
     localStorage.removeItem('isLoggedIn')
+    localStorage.removeItem('role')
+    localStorage.removeItem('userId')
+    localStorage.removeItem('token')
+    localStorage.removeItem('savedusername')
+    localStorage.removeItem('savedpassword')
+    localStorage.removeItem('savedNama')
+    localStorage.removeItem('savedNIK')
     router.push('/login/masyarakat')
   } catch (error) {
     console.error('Gagal logout:', error)

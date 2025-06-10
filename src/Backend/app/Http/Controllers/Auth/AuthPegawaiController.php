@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
+use Laravel\Sanctum\HasApiTokens;
 
 class AuthPegawaiController extends Controller
 {
@@ -28,11 +29,21 @@ class AuthPegawaiController extends Controller
         }
 
         if ($user->role !== 'pegawai') {
-            return response()->json(['message' => 'Anda bukan pegawai'], 403);
+            return response()->json(['message' => 'Anda bukan Pegawai'], 403);
         }
 
+        // Login dan buat token
         Auth::login($user);
+        $token = $user->createToken('Pegawai_token')->plainTextToken;
 
-        return response()->json(['message' => 'Login berhasil']);
+        return response()->json([
+            'message' => 'Login berhasil',
+            'user' => [
+                'id' => $user->id,
+                'username' => $user->name,
+                'role' => $user->role,
+            ],
+            'token' => $token,
+        ]);
     }
 }

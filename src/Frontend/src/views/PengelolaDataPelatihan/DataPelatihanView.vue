@@ -477,7 +477,7 @@ async function onExportClick() {
 async function onDelete(row: Peserta) {
   loading.value = true;
   try { // Ditambahkan try-catch
-    await api.delete(`/kelola/pelatihan/${row.nik}`);
+    await api.delete(`/kelola/pelatihan/${row.id}`);
     await fetchData();
     ElNotification({ // Notifikasi sukses (sudah ada)
       title: 'Berhasil',

@@ -30,7 +30,6 @@ class DataPelatihan extends Model
     ];
 
     protected $dates = [
-        'tanggal_kegiatan',
         'deleted_at',
         'created_at',
         'updated_at',

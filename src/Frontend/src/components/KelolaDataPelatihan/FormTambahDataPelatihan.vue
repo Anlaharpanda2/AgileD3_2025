@@ -201,10 +201,10 @@
 <script setup>
 import { reactive, ref, watch, onMounted } from 'vue'
 import { ElNotification } from 'element-plus'
-import api from '../../api.js'; // Mengimpor instance axios dari api.js Anda
+import api from '../../api.js'; 
 
 const props = defineProps({
-  initialData: Object, // Prop untuk data awal saat melakukan edit
+  initialData: Object, 
 })
 
 const emit = defineEmits(['close']) // Emit event 'close' saat form ditutup
@@ -249,34 +249,25 @@ const form = reactive({
   nomor_telefon: '',
 })
 
-// Fungsi untuk mengaplikasikan data awal ke form dan mengkonversi tipe data
 const applyInitialData = (data) => {
   if (data) {
-    Object.assign(form, data); // Salin semua properti dari data awal ke form
-
-    // Konversi string tanggal menjadi objek Date untuk el-date-picker
+    Object.assign(form, data);
     if (form.kegiatan_dimulai && typeof form.kegiatan_dimulai === 'string') {
       form.kegiatan_dimulai = new Date(form.kegiatan_dimulai);
     }
     if (form.kegiatan_berakhir && typeof form.kegiatan_berakhir === 'string') {
       form.kegiatan_berakhir = new Date(form.kegiatan_berakhir);
     }
-    // Konversi string angkatan menjadi number
     if (form.angkatan !== null && typeof form.angkatan === 'string') {
       form.angkatan = Number(form.angkatan);
     }
   }
 };
 
-// Mengaplikasikan data awal saat komponen dimuat pertama kali
-// Menggunakan watch dengan immediate: true untuk menangani inisialisasi awal
-// dan juga perubahan prop initialData
 watch(() => props.initialData, (newVal) => {
   applyInitialData(newVal);
 }, { deep: true, immediate: true });
 
-
-// Aturan validasi form
 const rules = {
   nama: [{ required: true, message: 'Nama wajib diisi', trigger: 'blur' }],
   nik: [{ required: true, message: 'NIK wajib diisi', trigger: 'blur' }],
@@ -312,10 +303,8 @@ const rules = {
   nomor_telefon: [{ required: true, message: 'Nomor telepon wajib diisi', trigger: 'blur' }],
 }
 
-// Fungsi helper untuk mengkapitalisasi string
 const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1)
 
-// Fungsi untuk submit form
 const submitForm = () => {
   formRef.value.validate(async valid => {
     if (!valid) {
@@ -323,7 +312,6 @@ const submitForm = () => {
       return;
     }
 
-    // build payload
     const payload = {
       ...form,
       kegiatan_dimulai: form.kegiatan_dimulai instanceof Date
@@ -337,36 +325,22 @@ const submitForm = () => {
 
     try {
       console.log('Kirim JSON:', JSON.stringify(payload));
-
-      // Menggunakan instance `api` yang diimpor dari '../../api.js'
-      // Route POST disesuaikan menjadi '/api/kelola/pelatihan'
       const response = await api.post('/kelola/pelatihan', payload);
-
-      // Memeriksa status HTTP (2xx untuk sukses)
-      if (response.status >= 190 && response.status < 300) {
         ElNotification({
           title: 'Berhasil',
           message: response.data.message || 'Data berhasil disimpan!', // Ambil pesan dari response.data.message
           type: 'success',
           duration: 3000,
         });
-        emit('close'); // Tutup form setelah berhasil
-      } else {
-        // Jika status bukan 2xx, anggap sebagai kegagalan meskipun request sukses
-        ElNotification({
-          title: 'Gagal',
-          message: response.data.message || 'Gagal menyimpan data karena kesalahan server.', // Ambil pesan dari response.data.message
-          type: 'error',
-          duration: 0, // Tampilkan selamanya sampai ditutup manual
-        });
-      }
+        emit('close');
+        window.location.reload();
     } catch (error) {
       console.error('Error submitting form:', error);
       ElNotification({
         title: 'Gagal',
         message: error.response?.data?.message || 'Gagal menyimpan data. Terjadi kesalahan jaringan atau server.', // Ambil pesan dari error.response.data.message
         type: 'error',
-        duration: 0, // Tampilkan selamanya sampai ditutup manual
+        duration: 0, 
       });
     }
   });

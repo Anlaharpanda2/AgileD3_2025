@@ -27,17 +27,18 @@ Route::post('/otp/confirm', [AuthOperatorController::class, 'confirmOtp']);
 Route::post('/password/reset', [AuthOperatorController::class, 'resetPassword']);
 
 //kelola data pelatihan
-Route::put('/kelola/pelatihan/restore', [KelolaDataPelatihanController::class, 'restoreMassal']);
-Route::delete('/kelola/pelatihan/permanent', [KelolaDataPelatihanController::class, 'forceDeleteMassal']);
-Route::get('/kelola/pelatihan', [KelolaDataPelatihanController::class, 'index']);
-Route::post('/kelola/pelatihan', [KelolaDataPelatihanController::class, 'store']);
-Route::put('/kelola/pelatihan/{nik}', [KelolaDataPelatihanController::class, 'update']);
-Route::get('/kelola/pelatihan/trash', [KelolaDataPelatihanController::class, 'trash']);
-Route::put('/kelola/pelatihan/restore/{nik}', [KelolaDataPelatihanController::class, 'restore']);
-Route::delete('/kelola/pelatihan/permanent/{nik}', [KelolaDataPelatihanController::class, 'forceDelete']);
-Route::delete('/kelola/pelatihan/{nik}', [KelolaDataPelatihanController::class, 'destroy']);
-Route::delete('/kelola/pelatihan', [KelolaDataPelatihanController::class, 'destroyMassal']);
 Route::post('kelola/pelatihan/impor', [KelolaDataPelatihanController::class, 'impor']);
+Route::get('kelola/pelatihan/trash', [KelolaDataPelatihanController::class, 'trash']);
+
+Route::put('kelola/pelatihan/restore', [KelolaDataPelatihanController::class, 'restoreMassal']);
+Route::delete('kelola/pelatihan/permanent', [KelolaDataPelatihanController::class, 'forceDeleteMassal']);
+Route::delete('kelola/pelatihan', [KelolaDataPelatihanController::class, 'destroyMassal']);
+Route::put('kelola/pelatihan/{id}/restore', [KelolaDataPelatihanController::class, 'restore']);
+Route::delete('kelola/pelatihan/{id}/permanent', [KelolaDataPelatihanController::class, 'forceDelete']);
+Route::get('kelola/pelatihan', [KelolaDataPelatihanController::class, 'index']);
+Route::post('kelola/pelatihan', [KelolaDataPelatihanController::class, 'store']);
+Route::put('kelola/pelatihan/{data_pelatihan}', [KelolaDataPelatihanController::class, 'update']);
+Route::delete('kelola/pelatihan/{data_pelatihan}', [KelolaDataPelatihanController::class, 'destroy']);
 
 //Prestest Postest
 Route::get('/kelola/test', [PrePostTestController::class, 'index']);               // Semua nilai test

@@ -446,7 +446,7 @@ async function onDeletePermanentClick(row: Peserta) {
     );
 
     loading.value = true;
-    await api.delete(`/kelola/pelatihan/permanent/${row.nik}`);
+    await api.delete(`/kelola/pelatihan/${row.id}/permanent`);
     await fetchData();
     ElMessage.success('Peserta berhasil dihapus permanen.');
   } catch (err) {
@@ -476,7 +476,7 @@ async function onMassRestoreClick() {
 }
 
 async function onRestoreClick(row:Peserta){ loading.value=true;
-  await api.put(`/kelola/pelatihan/restore/${row.nik}`);
+  await api.put(`/kelola/pelatihan/${row.id}/restore`);
   await fetchData(); loading.value=false }
 
 

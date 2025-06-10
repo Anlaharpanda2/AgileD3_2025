@@ -9,13 +9,23 @@ import LoginMasyarakat from '../views/Login/LoginMasyarakat.vue';
 import LoginOperator from '../views/Login/LoginOperator.vue';
 import LoginPegawai from '../views/Login/LoginPegawai.vue';
 
+
+import contoh from '../views/contohdata/contoh.vue';
+
 // rute pengelola data pendaftar
 import DataPelatihanView from '../views/PengelolaDataPelatihan/DataPelatihanView.vue';
 import DataPelatihanSampahView from '../views/PengelolaDataPelatihan/DataPelatihanSampahView.vue';
+import PesanView from '../views/PengelolaPesan/PesanView.vue';
+
+import PrePostTestView from '../views/PengelolaPretestPostest/PrePostTestView.vue';
 
 import NotFound from '../views/NotFound.vue';
 
 const routes = [
+  {
+    path:'/contoh',
+    component : contoh
+  },
   {
     path:'/form',
     component : FormImport
@@ -57,7 +67,24 @@ const routes = [
     component: DataPelatihanSampahView,
     meta: { requiresAuth: true }
   },
+   {
+    path:'/pesan',
+    component : PesanView
+  },
 
+
+  {
+    path: '/preposttest',
+    name: 'PrePostTest',
+    component: PrePostTestView
+  },
+
+  
+  {
+    path: '/kelolatest',
+    name: 'KelolaTest',
+    component: PrePostTestView
+  },
   // halaman tidak ditemukan
   {
     path: '/:pathMatch(.*)*',

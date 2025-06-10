@@ -29,7 +29,7 @@ class DataPelatihanSeeder extends Seeder
         $statusList = ['kawin', 'lajang', 'janda'];
         $usahaList = ['Dagang', 'Petani', 'Ibu Rumah Tangga', 'Buruh Tani', 'Tenaga Pendidik PAUD', 'Belum Bekerja'];
 
-        for ($i = 0; $i < 500; $i++) {
+        for ($i = 0; $i < 200; $i++) {
             DataPelatihan::create([
                 'nama' => $faker->name,
                 'nik' => $faker->numerify('################'),

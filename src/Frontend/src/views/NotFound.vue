@@ -19,6 +19,7 @@
     </div>
   </div>
 </template>
+
 <script setup>
 import { useRouter } from 'vue-router'
 const router = useRouter()
@@ -26,6 +27,7 @@ function goToBeranda() {
   router.push('/')
 }
 </script>
+
 <style scoped>
 @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
 @import url("https://fonts.googleapis.com/css2?family=Clash+Grotesk:wght@500&display=swap");

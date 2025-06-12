@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class NilaiPrePostTest extends Model
+{
+    use HasFactory;
+
+    protected $table = 'nilai_pre_post_tests';
+
+    protected $fillable = [
+        'nama_peserta',
+        'jenis',
+        'nilai',
+    ];
+}

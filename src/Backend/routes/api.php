@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Controllers\Auth\AuthMasyarakatController;
 use App\Http\Controllers\Auth\AuthOperatorController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\AuthPegawaiController;
 use App\Http\Controllers\KelolaDataPelatihan\KelolaDataPelatihanController;
 use App\Http\Controllers\KelolaDataPendaftaran\KelolaDataPendaftaranController;
@@ -21,10 +22,15 @@ use App\Http\Controllers\KelolaBerita\KelolaDataBeritaController;
 Route::post('/login/masyarakat', [AuthMasyarakatController::class, 'login']);
 Route::post('/login/pegawai', [AuthPegawaiController::class, 'login']);
 Route::post('/login/operator', [AuthOperatorController::class, 'login']);
-Route::post('/email/check', [AuthOperatorController::class, 'checkEmail']);
-Route::post('/password/forgot', [AuthOperatorController::class, 'sendOtp']);
-Route::post('/otp/confirm', [AuthOperatorController::class, 'confirmOtp']);
-Route::post('/password/reset', [AuthOperatorController::class, 'resetPassword']);
+
+//daftar masyarakat
+Route::post('/daftar/masyarakat', [AuthMasyarakatController::class, 'register']);
+
+//reset password
+Route::post('/email/check', [ResetPasswordController::class, 'checkEmail']);
+Route::post('/password/forgot', [ResetPasswordController::class, 'sendOtp']);
+Route::post('/otp/confirm', [ResetPasswordController::class, 'confirmOtp']);
+Route::patch('/password/reset', [ResetPasswordController::class, 'resetPassword']);
 
 //kelola data pelatihan
 Route::post('kelola/pelatihan/impor', [KelolaDataPelatihanController::class, 'impor']);

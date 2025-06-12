@@ -1,6 +1,5 @@
-<script>
+user<script>
 import api from '@/api';
-
 export default {
   data() {
     return {
@@ -11,7 +10,6 @@ export default {
     };
   },
   mounted() {
-    // Jika sudah login dan role = Pegawai, langsung redirect
     if (localStorage.getItem('isLoggedIn') === 'true' &&
         localStorage.getItem('role') === 'Pegawai') {
       this.$router.push('/data/pelatihan');
@@ -21,8 +19,6 @@ export default {
     async validateForm(event) {
       event.preventDefault();
       this.errorMessage = '';
-
-      // Validasi input
       if (!this.username && !this.password) {
         this.errorMessage = 'Silakan isi username dan password.';
         return;
@@ -59,40 +55,30 @@ export default {
         this.errorMessage = 'Password harus mengandung setidaknya satu simbol (contoh: !@#$%^&*).';
         return;
       }
-
       try {
-        // Karena interceptor mengembalikan response.data, di sini 'data' langsung = { message, user, token }
         const data = await api.post('/login/pegawai', {
           username: this.username,
           password: this.password
         });
-
-        // Logika debug (boleh dihapus jika sudah OK)
         console.log('[LoginPegawai] data =', data);
-
-        // Pastikan server mengembalikan user dan token
         if (!data || !data.user || !data.token) {
           throw new Error('Data login tidak lengkap dari server.');
         }
-
         const { user, token } = data;
-        // Pastikan role benar-benar Pegawai
         if (user.role !== 'pegawai') {
           this.errorMessage = 'Anda bukan pegawai.';
           return;
         }
-
-        // Simpan ke localStorage
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('savedusername', user.username);
+        localStorage.setItem('savedName', user.name);
         localStorage.setItem('role', user.role);
+        localStorage.setItem('email', user.email);
         localStorage.setItem('token', token);
         localStorage.setItem('userId', user.id);
-
-        // Redirect ke halaman data pelatihan
+        
         this.$router.push('/data/pelatihan');
       } catch (error) {
-        // Jika error berasal dari server (error.response.data), gunakan pesan di sana
         this.errorMessage =
           error.response?.data?.message ||
           error.message ||
@@ -102,7 +88,6 @@ export default {
   }
 };
 </script>
-
 <template>
     <div class="coverpage">
         <div class="overlap">
@@ -178,7 +163,6 @@ export default {
                       <img class="frame" src="https://c.animaapp.com/IJi6pJQY/img/frame-1.svg" />
                     </div>
                   </div>
-
                   <div class="group-8">
                     <label class = "checkbox">
                       <input type="checkbox" v-model="showPassword" />
@@ -198,7 +182,7 @@ export default {
               <p class="belum-memiliki-akun">
                 <span class="text-wrapper-5">Lupa Kata Sandi ?</span>
                 <span class="text-wrapper-6">&nbsp;&nbsp;</span>
-                <a href="/reset/Pegawai/forgot">
+                <a href="/reset/forgot">
                   <span class="text-wrapper-7">Reset</span>
                 </a>
               </p>
@@ -236,7 +220,6 @@ a {
   width: 100%;
   height: 100vh;
 }
-
 /* Animasi keyframes untuk pop-up */
 @keyframes popIn {
   0% {
@@ -252,7 +235,6 @@ a {
     opacity: 1;
   }
 }
-
 .checkbox {
   display: flex;         /* Supaya checkbox dan teks sejajar */
   align-items: center;   /* Vertikal rata tengah */
@@ -260,13 +242,11 @@ a {
   margin-left: 5px;      /* Jarak dari elemen atasnya */
   font-size: 8px;       /* Besar huruf */
 }
-
 .checkbox input[type="checkbox"] {
   width: 12px;           /* Ukuran kotak checkbox */
   height: 18px;
   margin-right: 5px;     /* Jarak antara kotak dan teks */
 }
-
 .overlap {
   position: relative;
   align-items: center;
@@ -274,7 +254,6 @@ a {
   width: 950px;
   height: 550px;
 }
-
 .error-message {
   background-color: #ff4d4d;
   color: white;
@@ -287,11 +266,9 @@ a {
   transform: scale(0.5);
   animation: popUp 0.8s ease-out forwards;
 }
-
 .error-message p {
   margin: 0;
 }
-
 .btn-gradient {
   background: linear-gradient(
     218deg,
@@ -301,7 +278,6 @@ a {
   color: white;
   border: none;
 }
-
 .btn-gradient:hover {
   background: linear-gradient(
     218deg,
@@ -311,7 +287,6 @@ a {
   color: white;
   border: none;
 }
-
  .ellipse {
   position: absolute;
   width: 63px;
@@ -324,12 +299,10 @@ a {
     rgba(255, 51, 118, 0.49) 0%,
     rgba(255, 51, 118, 1) 100%
   );
-
   opacity: 0;
   transform: scale(0.5);
   animation: popUp 0.8s ease-out forwards;
 }
-
 @keyframes popUp {
   0% {
     opacity: 0;
@@ -344,7 +317,6 @@ a {
     transform: scale(1);
   }
 }
-
 .div {
   position: absolute;
   width: 75px;
@@ -353,12 +325,10 @@ a {
   left: 901px;
   background-color: #ffffff;
   border-radius: 37.5px;
-
   opacity: 0;
   transform: scale(0.5);
   animation: popUp 0.8s ease-out forwards;
 }
-
 @keyframes popUp {
   0% {
     opacity: 0;
@@ -373,8 +343,6 @@ a {
     transform: scale(1);
   }
 }
-
-
 .login {
   position: absolute;
   width: 900px;
@@ -385,12 +353,10 @@ a {
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 21px 22px 124px 3px #0000003b;
-
   opacity: 0;
   transform: translateY(30px);
   animation: fadeUp 0.8s ease-out forwards;
 }
-
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -401,8 +367,6 @@ a {
     transform: translateY(0);
   }
 }
-
-
  .overlap-group {
   position: absolute;
   width: 455px;
@@ -412,7 +376,6 @@ a {
   background-image: url(https://c.animaapp.com/IJi6pJQY/img/rectangle-4.svg);
   background-size: 100% 100%;
 }
-
  .rectangle {
   position: absolute;
   width: 275px;
@@ -426,7 +389,6 @@ a {
   backdrop-filter: blur(4.53px) brightness(100%);
   -webkit-backdrop-filter: blur(4.53px) brightness(100%);
 }
-
  .mask-group {
   position: absolute;
   width: 275px;
@@ -434,7 +396,6 @@ a {
   top: 81px;
   left: 91px;
 }
-
  .group {
   position: absolute;
   width: 53px;
@@ -444,7 +405,6 @@ a {
   background-color: #ffffff;
   border-radius: 26.33px;
 }
-
  .thunderbolt {
   position: absolute;
   width: 28px;
@@ -453,7 +413,6 @@ a {
   left: 13px;
   object-fit: cover;
 }
-
  .keluarga-sejahtera {
   position: absolute;
   top: 117px;
@@ -465,7 +424,6 @@ a {
   letter-spacing: 0;
   line-height: 30.7px;
 }
-
  .overlap-2 {
   position: absolute;
   width: 250px;
@@ -473,7 +431,6 @@ a {
   top: 99px;
   left: 106px;
 }
-
 .group-2 {
   position: absolute;
   width: 250px;
@@ -481,7 +438,6 @@ a {
   top: 0;
   left: 0;
 }
-
  .overlap-3 {
   position: absolute;
   width: 248px;
@@ -489,7 +445,6 @@ a {
   top: 218px;
   left: 0;
 }
-
  .overlap-group-wrapper {
   position: absolute;
   width: 248px;
@@ -497,13 +452,11 @@ a {
   top: 0;
   left: 0;
 }
-
  .overlap-group-2 {
   position: relative;
   width: 246px;
   height: 16px;
 }
-
  .text-wrapper {
   position: absolute;
   top: 0;
@@ -515,7 +468,6 @@ a {
   letter-spacing: 0;
   line-height: normal;
 }
-
  .subtract {
   position: absolute;
   width: 246px;
@@ -523,7 +475,6 @@ a {
   top: 7px;
   left: 0;
 }
-
  .group-3 {
   position: absolute;
   width: 243px;
@@ -531,7 +482,6 @@ a {
   top: 15px;
   left: 0;
 }
-
  .group-wrapper {
   position: relative;
   width: 243px;
@@ -554,7 +504,6 @@ a {
   pointer-events: none;
   z-index: 1;
 }
-
 .group-wrapper:hover {
   background: linear-gradient(
     218deg,
@@ -566,7 +515,6 @@ a {
 .group-wrapper:hover *{
   color: white;
 }
-
  .masuk-sebagai-wrapper {
   position: relative;
   width: 103px;
@@ -576,7 +524,6 @@ a {
   overflow: visible;
   white-space: nowrap;
 }
-
  .masuk-sebagai {
   left: 0;
   font-weight: 400;
@@ -588,16 +535,13 @@ a {
   letter-spacing: 0;
   line-height: normal;
 }
-
  .span {
   font-family: "Poppins", Helvetica;
   font-weight: 400;
 }
-
  .text-wrapper-2 {
   font-weight: 700;
 }
-
  .div-wrapper {
   position: absolute;
   width: 243px;
@@ -609,7 +553,6 @@ a {
   border-color: #d4d4d4;
   transition: transform 0.3s ease;
 }
-
 .div-wrapper:hover {
   background: linear-gradient(
     218deg,
@@ -618,11 +561,9 @@ a {
   );
   transform: scale(1.05);
 }
-
 .div-wrapper:hover *{
   color:white;
 }
-
  .group-4 {
   position: relative;
   width: 101px;
@@ -630,7 +571,6 @@ a {
   top: 10px;
   left: 90px;
 }
-
  .masuk {
   left: 90px;
   font-weight: 700;
@@ -643,7 +583,6 @@ a {
   letter-spacing: 0;
   line-height: normal;
 }
-
  .p {
   position: absolute;
   top: 21px;
@@ -655,7 +594,6 @@ a {
   letter-spacing: 0;
   line-height: normal;
 }
-
  .group-5 {
   position: absolute;
   width: 245px;
@@ -663,7 +601,6 @@ a {
   top: 99px;
   left: 0;
 }
-
  .overlap-4 {
   position: relative;
   width: 243px;
@@ -671,7 +608,6 @@ a {
   background-color: #efedffcc;
   border-radius: 10.67px;
 }
-
  .text-wrapper-3 {
   border: none;
   background: transparent;
@@ -689,7 +625,6 @@ a {
   letter-spacing: 0;
   line-height: normal;
 }
-
  .frame {
   position: absolute;
   width: 16px;
@@ -697,7 +632,6 @@ a {
   top: 9px;
   left: 12px;
 }
-
  .group-6 {
   position: absolute;
   width: 245px;
@@ -705,7 +639,6 @@ a {
   top: 53px;
   left: 0;
 }
-
  .group-7 {
   position: absolute;
   width: 85px;
@@ -713,7 +646,6 @@ a {
   top: 150px;
   left: 80px;
 }
-
  .overlap-5 {
   top: 15px;
   position: relative;
@@ -722,7 +654,6 @@ a {
   border-radius: 10.67px;
   box-shadow: 0px 5.33px 14px #00000029;
 }
-
  .text-wrapper-4 {
   position: absolute;
   top: 11px;
@@ -734,7 +665,6 @@ a {
   letter-spacing: 0;
   line-height: normal;
 }
-
  .belum-memiliki-akun {
   position: absolute;
   width: 166px;
@@ -748,22 +678,18 @@ a {
   letter-spacing: 0;
   line-height: 16.1px;
 }
-
  .text-wrapper-5 {
   font-weight: 300;
   color: #000000;
 }
-
  .text-wrapper-6 {
   font-weight: 700;
   color: #000000;
 }
-
  .text-wrapper-7 {
   font-weight: 700;
   color: #fe3275;
 }
-
  .img {
   position: absolute;
   width: 20px;
@@ -774,7 +700,6 @@ a {
   pointer-events: none;
   z-index: 1;
 }
-
 @media(max-width:750px){
   .overlap-group{
     display: none;

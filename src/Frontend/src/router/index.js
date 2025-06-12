@@ -20,6 +20,7 @@ import ResetPassword from '../views/ResetPassword/ResetPassword.vue';
 import DataPendaftaranView from '../views/PengelolaDataPendaftaran/DataPendaftaranView.vue';
 import NotFound from '../views/NotFound.vue';
 import Unauthorized from '../views/Unauthorized.vue';
+import DaftarMasyarakatView from '../views/DaftarMasyarakat/DaftarMasyarakatView.vue';
 
 const routes = [
   //halaman home
@@ -32,6 +33,9 @@ const routes = [
   {path: '/login/masyarakat',name: 'LoginMasyarakat',component: LoginMasyarakat},
   {path: '/login/pegawai',name: 'LoginPegawai',component: LoginPegawai},
   {path: '/login/operator',name: 'LoginOperator',component: LoginOperator},
+
+  //halaman daftar masyarakat
+  {path: '/daftar/masyarakat',name: 'DaftarMasyarakat',component: DaftarMasyarakatView},
 
   //halaman lupa password
   {path: '/reset/otp',name: 'resetOperatorOtp',component: OtpView},

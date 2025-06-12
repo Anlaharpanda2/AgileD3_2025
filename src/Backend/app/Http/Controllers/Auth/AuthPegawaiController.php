@@ -18,7 +18,7 @@ class AuthPegawaiController extends Controller
             'password' => 'required|string',
         ]);
 
-        $user = User::where('name', $request->username)->first();
+        $user = User::where('username', $request->username)->first();
 
         if (!$user) {
             return response()->json(['message' => 'Username salah'], 401);
@@ -31,8 +31,6 @@ class AuthPegawaiController extends Controller
         if ($user->role !== 'pegawai') {
             return response()->json(['message' => 'Anda bukan Pegawai'], 403);
         }
-
-        // Login dan buat token
         Auth::login($user);
         $token = $user->createToken('Pegawai_token')->plainTextToken;
 
@@ -40,8 +38,10 @@ class AuthPegawaiController extends Controller
             'message' => 'Login berhasil',
             'user' => [
                 'id' => $user->id,
-                'username' => $user->name,
+                'username' => $user->username,
+                'name' => $user->name,
                 'role' => $user->role,
+                'email' => $user->email,
             ],
             'token' => $token,
         ]);

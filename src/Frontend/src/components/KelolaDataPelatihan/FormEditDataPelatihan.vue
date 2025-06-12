@@ -1,5 +1,5 @@
 <template>
-  <div class="form-overlay">
+  <div class="form-overlay" @click.self="$emit('close')">
     <transition name="popup">
       <div class="form-popup">
         <div class="form-header background text-center text-white py-3 rounded-top">

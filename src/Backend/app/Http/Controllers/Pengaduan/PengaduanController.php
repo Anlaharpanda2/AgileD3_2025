@@ -85,4 +85,20 @@ class PengaduanController extends Controller
         }
         return response()->json($pengaduan);
     }
+    public function getByNik($nik)
+    {
+        $pengaduans = Pengaduan::where('nik', $nik)->orderBy('created_at', 'desc')->get();
+
+        if ($pengaduans->isEmpty()) {
+            return response()->json([
+                'status' => 'empty',
+                'message' => 'Anda belum membuat laporan'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $pengaduans
+        ]);
+    }
 }

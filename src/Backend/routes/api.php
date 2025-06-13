@@ -85,3 +85,4 @@ Route::post('kelola/Pendaftaran/impor', [KelolaDataPendaftaranController::class,
 
 //api untuk kelola akses
 Route::get('/kelola/akses',[KelolaAksesController::class,'index']);
+Route::get('/pengaduan/user/{nik}', [PengaduanController::class, 'getByNik']);

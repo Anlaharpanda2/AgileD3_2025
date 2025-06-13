@@ -25,11 +25,23 @@
 import { ref, onMounted } from 'vue'
 import api from '@/api.js'
 const pengaduans = ref([])
-const nik = localStorage.getItem('nik') || '' 
+
+// Ambil NIK user login dari localStorage/session atau state auth
+const nik = localStorage.getItem('savedNIK') || ''
+
 onMounted(async () => {
   if (!nik) return
-  const res = await api.get('/pengaduan', { params: { nik } })
-  pengaduans.value = res.data
+  try {
+    const res = await api.get(`/pengaduan/user/${nik}`)
+    // Jika backend Anda mengembalikan {status: 'success', data: [...]}
+    if (res.data.status === 'success') {
+      pengaduans.value = res.data.data
+    } else {
+      pengaduans.value = []
+    }
+  } catch (e) {
+    pengaduans.value = []
+  }
 })
 function formatDate(dt) {
   if (!dt) return '-'

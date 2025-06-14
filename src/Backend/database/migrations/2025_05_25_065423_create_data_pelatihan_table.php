@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->unsignedInteger('angkatan');
             $table->string('tempat_tanggal_lahir');
             $table->string('pendidikan');
-            $table->enum('status', ['kawin', 'lajang', 'janda']);
+            $table->string('status');
             $table->text('alamat');
             $table->string('jenis_usaha');
             $table->string('penghasilan_perbulan');

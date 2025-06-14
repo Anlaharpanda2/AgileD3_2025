@@ -36,7 +36,7 @@ const exportColumns = [
   { key: "pendidikan", label: "Pendidikan" },
   { key: "status", label: "Status" },
   { key: "jenis_usaha", label: "Jenis Usaha" },
-  { key: "penghasilan_perbulan", label: "Penghasilan" },
+  { key: "penghasilan_perbulan", label: "Penghasilan perbulan" },
   { key: "nomor_telefon", label: "No. Telp" },
 ]
 const judul = ref('')
@@ -242,6 +242,7 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
   else if (format === 'pdf') ExportPdf(judul.value, showLogo1.value, showLogo2.value)
 }
 </script>
+
 <template>
   <div class="overlay" @click.self="$emit('close')">
     <div class="popup">

@@ -51,75 +51,87 @@
   </div>
 </template>
 
-<script>
-// Pastikan ElMessage dan ElNotification diimpor jika digunakan
-import { ElMessage, ElNotification } from 'element-plus';
-// Pastikan path ke api.js sesuai dengan struktur proyek Anda
-import api from '@/api.js';
+<script setup lang="ts">
+import { ref } from 'vue'
+import { ElMessage, ElNotification } from 'element-plus'
+import api from '@/api.js'
 
-export default {
-  name: 'FormImport',
-  data() {
-    return {
-      fileList: [],
-      loading: false,
-    };
-  },
-  methods: {
-    beforeUpload(file) {
-      const isExcel = /\.(xls|xlsx)$/i.test(file.name);
-      if (!isExcel) {
-        ElMessage.error('File harus berformat .xls atau .xlsx');
-      }
-      // Memastikan hanya satu file yang diizinkan
-      if (this.fileList.length >= 1) {
-        // Hapus file lama jika ada
-        this.fileList = [];
-      }
-      return isExcel;
-    },
-    handleChange(file, fileList) {
-      // Hanya menyimpan file terakhir yang ditambahkan
-      this.fileList = fileList.slice(-1);
-    },
-    handleRemove() {
-      this.fileList = [];
-    },
-    async submitFile() {
-      if (!this.fileList.length) return;
-      this.loading = true;
-      const file = this.fileList[0].raw;
-      const formData = new FormData();
-      formData.append('file', file);
-      try {
-        // Contoh API call, sesuaikan dengan endpoint Anda
-        const res = await api.post('/kelola/pelatihan/impor', formData);
-        ElNotification({
-          title: 'Berhasil',
-          message: 'Data berhasil diimpor!',
-          type: 'success',
-          duration: 3000,
-        });
-        this.fileList = [];
-        this.$emit('close'); // Tutup form setelah berhasil impor
-      } catch (err) {
-        // Handle error response dari API
-        const errorMessage = err.response?.data?.error || 'Terjadi kesalahan saat mengimpor data.';
-        ElMessage.error(errorMessage);
-        console.error("Import error:", err); // Log error lebih detail
-      } finally {
-        this.loading = false;
-      }
-    },
-    // Metode baru untuk mereset dan memilih file lain
-    resetAndSelectNewFile() {
-      this.fileList = [];
-      // Secara opsional, Anda bisa memicu klik pada input file tersembunyi jika diperlukan
-      // this.$refs.upload.$refs['upload-inner'].$el.querySelector('input[type="file"]').click();
-    }
-  },
-};
+const fileList = ref<File[]>([])
+const loading = ref(false)
+
+/**
+ * Validasi sebelum upload file
+ */
+const beforeUpload = (file: File) => {
+  const isExcel = /\.(xls|xlsx)$/i.test(file.name)
+  if (!isExcel) {
+    ElMessage.error('File harus berformat .xls atau .xlsx')
+  }
+
+  if (fileList.value.length >= 1) {
+    fileList.value = []
+  }
+
+  return isExcel
+}
+
+/**
+ * Tangani perubahan file
+ */
+const handleChange = (file: any, fileListRaw: any[]) => {
+  // Ambil file terakhir, bisa .raw jika <el-upload> atau langsung File jika <input>
+  const lastFile = fileListRaw.slice(-1)[0]
+  fileList.value = [lastFile.raw || lastFile]
+}
+
+/**
+ * Hapus file
+ */
+const handleRemove = () => {
+  fileList.value = []
+}
+
+/**
+ * Kirim file ke API
+ */
+const submitFile = async () => {
+  if (!fileList.value.length) return
+  loading.value = true
+
+  const file = fileList.value[0] // aman karena sudah handle .raw di atas
+  const formData = new FormData()
+  formData.append('file', file)
+
+  try {
+    await api.post('/kelola/pelatihan/impor', formData)
+
+    ElNotification({
+      title: 'Berhasil',
+      message: 'Data berhasil diimpor!',
+      type: 'success',
+      duration: 3000
+    })
+
+    fileList.value = []
+    // emit event jika perlu
+    // emit('close')
+  } catch (err: any) {
+    const errorMessage = err.response?.data?.error || 'Terjadi kesalahan saat mengimpor data.'
+    ElMessage.error(errorMessage)
+    console.error('Import error:', err)
+  } finally {
+    loading.value = false
+  }
+}
+
+/**
+ * Reset dan pilih ulang file baru
+ */
+const resetAndSelectNewFile = () => {
+  fileList.value = []
+}
 </script>
+
 
 <style scoped>
 /* Warna utama */

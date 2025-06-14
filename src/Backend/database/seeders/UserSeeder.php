@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'anla harpanda',
                 'username' => 'aan',
-                'role' => 'pegawain',
+                'role' => 'pegawai',
                 'email' => 'anlaharpanda2@gmail.com',
                 'password' => Hash::make('Aa12345!')
             ]

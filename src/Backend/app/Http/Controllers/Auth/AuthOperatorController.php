@@ -22,7 +22,7 @@ class AuthOperatorController extends Controller
             'password' => 'required|string',
         ]);
 
-        $user = User::where('name', $request->username)->first();
+        $user = User::where('username', $request->username)->first();
 
         if (!$user) {
             return response()->json(['message' => 'Username salah'], 401);

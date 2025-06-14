@@ -8,7 +8,6 @@ import LoginOperator from '../views/Login/LoginOperator.vue';
 import LoginPegawai from '../views/Login/LoginPegawai.vue';
 import DataPelatihanView from '../views/PengelolaDataPelatihan/DataPelatihanView.vue';
 import DataPelatihanSampahView from '../views/PengelolaDataPelatihan/DataPelatihanSampahView.vue';
-import PrePostTestView from '../views/PengelolaPretestPostest/PrePostTestView.vue';
 import PelaporanPengaduan from '../views/PengelolaPelaporanPengaduan/PelaporanPengaduan.vue';
 import StatusPengaduan from '../views/PengelolaPelaporanPengaduan/StatusPengaduan.vue';
 import BuatPengaduanPage from '../views/PengelolaPelaporanPengaduan/BuatPengaduanPage.vue';
@@ -20,6 +19,8 @@ import ResetPassword from '../views/ResetPassword/ResetPassword.vue';
 import DataPendaftaranView from '../views/PengelolaDataPendaftaran/DataPendaftaranView.vue';
 import NotFound from '../views/NotFound.vue';
 import Unauthorized from '../views/Unauthorized.vue';
+import SoalPrePostTestPage from '../views/PengelolaPretestPostest/SoalPrePostTestPage.vue';
+import NilaiPrePostTestPage from '../views/PengelolaPretestPostest/NilaiPrePostTestPage.vue';
 
 const routes = [
   //halaman home
@@ -44,8 +45,6 @@ const routes = [
   {path: '/data/pelatihan/sampah',name: 'DataPelatihanSampah',component: DataPelatihanSampahView,meta: { requiresAuth: true}},
   
   //halaman pretest postest
-  {path: '/preposttest',name: 'PrePostTest',component: PrePostTestView},
-  {path: '/kelolatest',name: 'KelolaTest',component: PrePostTestView},
 
   // halaman pelaporan pengaduan
   {path: '/pengaduan',name: 'PelaporanPengaduan',component: PelaporanPengaduan},
@@ -55,6 +54,18 @@ const routes = [
   // halaman data berita
   {path: '/data/berita/sampah',name: 'DataBeritaSampah',component: DataBeritaSampahView,meta: { requiresAuth: true }},
   {path: '/data/berita',name: 'DataBerita',component: DataBeritaView,meta: { requiresAuth: true }},
+
+  {path: '/nilai-prepost',
+    name: 'NilaiPrePostTestPage',
+    component: NilaiPrePostTestPage,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/soal-prepost',
+    name: 'SoalPrePostTestPage',
+    component: SoalPrePostTestPage,
+    meta: { requiresAuth: true }
+  },
   
   //halaman not found dan tidak diizinkan
   {path: '/:pathMatch(.*)*',name: 'NotFound',component: NotFound},

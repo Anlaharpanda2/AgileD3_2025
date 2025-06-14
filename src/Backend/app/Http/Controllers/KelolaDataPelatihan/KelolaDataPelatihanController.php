@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\DataPelatihan;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\imports\PelatihanImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class KelolaDataPelatihanController extends Controller
 {
@@ -157,7 +159,10 @@ class KelolaDataPelatihanController extends Controller
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls',
         ]);
+
         try {
+            Excel::import(new PelatihanImport, $request->file('file'));
+
             return response()->json([
                 'message' => 'Data pelatihan berhasil diimpor',
             ], 200);

@@ -184,7 +184,7 @@ export default {
 
       this.isLoading = true; // Set loading state
       try {
-        const response = await api.post('/password/reset', {
+        const response = await api.patch('/password/reset', {
           email: this.email,
           password: this.newPassword,
           password_confirmation: this.confirmPassword,

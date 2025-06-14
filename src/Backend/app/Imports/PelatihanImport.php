@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Imports;
-
-use App\Models\ImportPelatihan;
 use Maatwebsite\Excel\Concerns\ToModel;
+use App\Models\DataPelatihan;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
@@ -33,22 +32,21 @@ class PelatihanImport implements
 
     public function model(array $row)
     {
-        // Hapus logging demi performa
-        return new ImportPelatihan([
-            'nama'                      => $row['nama'],
-            'nik'                       => $row['nik'],
-            'jenis_bimtek'              => $row['jenis_bimtek'],
-            'tanggal_kegiatan_dimulai'  => $this->transformDate($row['tanggal_kegiatan_dimulai']),
-            'tanggal_kegiatan_berakhir' => $this->transformDate($row['tanggal_kegiatan_berakhir']),
-            'tempat_kegiatan'           => $row['tempat_kegiatan'],
-            'angkatan'                  => $row['angkatan'],
-            'tempat_tanggal_lahir'      => $row['tempat_tanggal_lahir'],
-            'pendidikan'                => $row['pendidikan'],
-            'status'                    => $row['status'],
-            'alamat'                    => $row['alamat'],
-            'jenis_usaha'               => $row['jenis_usaha'],
-            'penghasilan_perbulan'      => $row['penghasilan_perbulan'],
-            'nomor_telefon'             => $row['nomor_telefon'],
+        return new DataPelatihan([
+            'nama' => $row['nama'] ?? $row['Nama'] ?? $row['NAMA'] ?? null,
+            'nik' => $row['nik'] ?? $row['NIK'] ?? null,
+            'jenis_bimtek' => $row['jenis_bimtek'] ?? $row['Jenis_Bimtek'] ?? $row['jenis bimtek'] ?? $row['Jenis Bimtek'] ?? $row['JENIS BIMTEK'] ?? null,
+            'kegiatan_dimulai' => $row['kegiatan_dimulai'] ?? $row['Kegiatan_Dimulai'] ?? $row['kegiatan dimulai'] ?? $row['Kegiatan Dimulai'] ?? null,
+            'kegiatan_berakhir' => $row['kegiatan_berakhir'] ?? $row['Kegiatan_Berakhir'] ?? $row['kegiatan berakhir'] ?? $row['Kegiatan Berakhir'] ?? null,
+            'tempat_kegiatan' => $row['tempat_kegiatan'] ?? $row['Tempat_Kegiatan'] ?? $row['tempat kegiatan'] ?? $row['Tempat Kegiatan'] ?? null,
+            'angkatan' => $row['angkatan'] ?? $row['Angkatan'] ?? $row['ANGKATAN'] ?? null,
+            'tempat_tanggal_lahir' => $row['tempat_tanggal_lahir'] ?? $row['Tempat_Tanggal_Lahir'] ?? $row['tempat tanggal lahir'] ?? $row['Tempat Tanggal Lahir'] ?? $row['TTL'] ?? null,
+            'pendidikan' => $row['pendidikan'] ?? $row['Pendidikan'] ?? null,
+            'status' => $row['status'] ?? $row['Status'] ?? null,
+            'alamat' => $row['alamat'] ?? $row['Alamat'] ?? null,
+            'jenis_usaha' => $row['jenis_usaha'] ?? $row['Jenis_Usaha'] ?? $row['jenis usaha'] ?? $row['Jenis Usaha'] ?? null,
+            'penghasilan_perbulan' => $row['penghasilan_perbulan'] ?? $row['Penghasilan_Perbulan'] ?? $row['penghasilan perbulan'] ?? $row['Penghasilan Perbulan'] ?? null,
+            'nomor_telefon' => $row['no._telp'] ?? $row['no_telp'] ?? $row['no telp'] ?? null,
         ]);
     }
 

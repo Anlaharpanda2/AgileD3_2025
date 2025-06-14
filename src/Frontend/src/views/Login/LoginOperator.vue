@@ -85,7 +85,9 @@ export default {
         // Simpan ke localStorage
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('savedusername', user.username);
+        localStorage.setItem('savedName', user.name);
         localStorage.setItem('role', user.role);
+        localStorage.setItem('email', user.email);
         localStorage.setItem('token', token);
         localStorage.setItem('userId', user.id);
 
@@ -198,7 +200,7 @@ export default {
               <p class="belum-memiliki-akun">
                 <span class="text-wrapper-5">Lupa Kata Sandi ?</span>
                 <span class="text-wrapper-6">&nbsp;&nbsp;</span>
-                <a href="/reset/operator/forgot">
+                <a href="/reset/forgot">
                   <span class="text-wrapper-7">Reset</span>
                 </a>
               </p>

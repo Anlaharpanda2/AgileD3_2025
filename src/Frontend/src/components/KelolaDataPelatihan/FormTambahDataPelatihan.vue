@@ -1,5 +1,5 @@
 <template>
-  <div class="form-overlay">
+  <div class="form-overlay"@click.self="$emit('close')">
     <transition name="popup">
       <div class="form-popup">
         <div class="form-header background text-center text-white py-3 rounded-top">
@@ -286,10 +286,10 @@ const submitForm = () => {
     const payload = {
       ...form,
       kegiatan_dimulai: form.kegiatan_dimulai instanceof Date
-        ? form.kegiatan_dimulai.toISOString().slice(0, 10)
+        ? `${form.kegiatan_dimulai.getFullYear()}-${String(form.kegiatan_dimulai.getMonth() + 1).padStart(2, '0')}-${String(form.kegiatan_dimulai.getDate()).padStart(2, '0')}`
         : form.kegiatan_dimulai,
       kegiatan_berakhir: form.kegiatan_berakhir instanceof Date
-        ? form.kegiatan_berakhir.toISOString().slice(0, 10)
+        ? `${form.kegiatan_berakhir.getFullYear()}-${String(form.kegiatan_berakhir.getMonth() + 1).padStart(2, '0')}-${String(form.kegiatan_berakhir.getDate()).padStart(2, '0')}`
         : form.kegiatan_berakhir,
       angkatan: Number(form.angkatan),
     };

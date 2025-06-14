@@ -50,7 +50,7 @@ export default {
         // Simpan status login dan inputan untuk autocomplete
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('savedNIK', this.nik);
-        localStorage.setItem('savedNama', this.nama);
+        localStorage.setItem('savedName', this.nama);
         localStorage.setItem('role', 'masyarakat');
 
         // Redirect setelah sedikit delay
@@ -160,7 +160,7 @@ export default {
               <p class="belum-memiliki-akun">
                 <span class="text-wrapper-5">Belum memiliki akun?</span>
                 <span class="text-wrapper-6">&nbsp;&nbsp;</span>
-                <a href="#">
+                <a href="/daftar/masyarakat">
                   <span class="text-wrapper-7">Daftar</span>
                 </a>
               </p>

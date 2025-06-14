@@ -131,22 +131,20 @@
           </el-tooltip>
         </template>
       </el-table-column>
+      
+<el-table-column label="Tanggal Kegiatan" show-overflow-tooltip>
+  <template #header>
+    <el-tooltip content="Tanggal Kegiatan" placement="top">
+      <span class="header-tooltip-text">Tanggal Kegiatan</span>
+    </el-tooltip>
+  </template>
+  <template #default="{ row }">
+    <span>{{ formatTanggalKegiatan(row.kegiatan_dimulai, row.kegiatan_berakhir) }}</span>
+  </template>
+</el-table-column>
 
-      <el-table-column prop="kegiatan_dimulai" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="Kegiatan dimulai" placement="top">
-            <span class="header-tooltip-text">Kegiatan dimulai</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
 
-      <el-table-column prop="kegiatan_berakhir" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="Kegiatan berakhir" placement="top">
-            <span class="header-tooltip-text">Kegiatan berakhir</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
+
 
       <el-table-column prop="tempat_kegiatan" show-overflow-tooltip>
         <template #header>
@@ -338,6 +336,34 @@ function changeItemsPerPage(option: number | string) {
   currentPage.value = 1;
   dropdownOpen.value = false;
 }
+function formatTanggalKegiatan(mulai: string, berakhir: string): string {
+  if (!mulai || !berakhir) return '-'
+
+  const tanggalMulai = new Date(mulai)
+  const tanggalBerakhir = new Date(berakhir)
+
+  const optionsBulan = { month: 'long' } as const
+  const optionsTahun = { year: 'numeric' } as const
+
+  const hariMulai = tanggalMulai.getDate()
+  const hariBerakhir = tanggalBerakhir.getDate()
+
+  const bulanMulai = tanggalMulai.toLocaleDateString('id-ID', optionsBulan)
+  const bulanBerakhir = tanggalBerakhir.toLocaleDateString('id-ID', optionsBulan)
+
+  const tahunMulai = tanggalMulai.toLocaleDateString('id-ID', optionsTahun)
+  const tahunBerakhir = tanggalBerakhir.toLocaleDateString('id-ID', optionsTahun)
+
+  if (bulanMulai === bulanBerakhir && tahunMulai === tahunBerakhir) {
+    // Contoh: 25 - 30 Juni 2025
+    return `${hariMulai} - ${hariBerakhir} ${bulanMulai} ${tahunMulai}`
+  } else {
+    // Contoh: 25 Mei 2025 - 2 Juni 2025
+    return `${hariMulai} ${bulanMulai} ${tahunMulai} - ${hariBerakhir} ${bulanBerakhir} ${tahunBerakhir}`
+  }
+}
+
+
 
 // Inisialisasi activeFilters (baru ditambahkan)
 const activeFilters = ref<{ [key: string]: string | number | null }>({});

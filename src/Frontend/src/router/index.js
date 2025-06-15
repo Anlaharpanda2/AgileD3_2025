@@ -17,7 +17,8 @@ import DataBeritaSampahView from '../views/PengelolaDataBerita/DataBeritaSampahV
 import OtpView from '../views/ResetPassword/OtpView.vue';
 import ForgotView from '../views/ResetPassword/ForgotView.vue';
 import ResetPassword from '../views/ResetPassword/ResetPassword.vue';
-import DataPendaftaranView from '../views/PengelolaDataPendaftaran/DataPendaftaranView.vue';
+import DetailDataPendaftaran from '../views/PengelolaDataPendaftaran/DetailDataPendaftaran.vue';
+import DatapendaftaranView from '../views/PengelolaDataPendaftaran/DataPendaftaranView.vue';
 import NotFound from '../views/NotFound.vue';
 import Unauthorized from '../views/Unauthorized.vue';
 import DaftarMasyarakatView from '../views/DaftarMasyarakat/DaftarMasyarakatView.vue';
@@ -44,10 +45,12 @@ const routes = [
   {path: '/reset/password',name: 'resetOperatorPassword',component: ResetPassword},
 
   //halaman kelola pelatihan
-  {path: '/data/pelatihan',name: 'DataPelatihan',component: DataPelatihanView,meta: { requiresAuth: true, role: 'operator' }},
-  {path: '/data/Pendaftaran',name: 'DataPendaftaran',component: DataPendaftaranView,meta: { requiresAuth: true, role: 'operator' }},
-  {path: '/data/pelatihan/sampah',name: 'DataPelatihanSampah',component: DataPelatihanSampahView,meta: { requiresAuth: true}},
-  {path: '/peserta/:id',name: 'DetailPeserta',component: DetailDataPelatihan,meta: { requiresAuth: true, role: 'operator' }},
+  {path: '/data/pelatihan',name: 'DataPelatihan',component: DataPelatihanView,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
+  {path: '/data/pelatihan/sampah',name: 'DataPelatihanSampah',component: DataPelatihanSampahView,meta: { requiresAuth: true, role: ['operator', 'pegawai']}},
+  {path: '/peserta/:id',name: 'DetailPeserta',component: DetailDataPelatihan,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
+  //halaman kelola pendaftaran
+  {path: '/data/pendaftaran',name: 'Datapendaftaran',component: DatapendaftaranView,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
+  {path: '/pendaftar/:id',name: 'DetailPeserta',component: DetailDataPendaftaran,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
 
   //halaman pretest postest
   {path: '/preposttest',name: 'PrePostTest',component: PrePostTestView},
@@ -75,18 +78,33 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   const userRole = localStorage.getItem('role');
+  const userId = localStorage.getItem('userId'); // pastikan disimpan saat login
 
   if (to.meta.requiresAuth) {
     if (!isLoggedIn) {
-      next({ path: '/login/masyarakat' });
-    } else if (to.meta.role && to.meta.role !== userRole) {
-      next({ path: '/unauthorized' });
-    } else {
-      next();
+      return next({ path: '/login/masyarakat' });
     }
-  } else {
-    next();
+
+    // Role dari meta
+    const allowedRoles = to.meta.role;
+
+    // Cek apakah role dibatasi
+    if (allowedRoles) {
+      const isAllowedRole = Array.isArray(allowedRoles)
+        ? allowedRoles.includes(userRole)
+        : allowedRoles === userRole;
+
+      const isSelfAccess =
+        to.params.id && userId && String(to.params.id) === String(userId);
+
+      if (!isAllowedRole && !isSelfAccess) {
+        return next({ path: '/unauthorized' });
+      }
+    }
   }
+
+  next();
 });
+
 
 export default router;

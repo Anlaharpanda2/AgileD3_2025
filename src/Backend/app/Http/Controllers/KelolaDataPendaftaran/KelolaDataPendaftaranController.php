@@ -1,162 +1,105 @@
 <?php
-
 namespace App\Http\Controllers\KelolaDataPendaftaran;
-
 use App\Http\Controllers\Controller;
 use App\Models\DataPendaftaran;
+use App\Models\DataPelatihan;
 use Illuminate\Http\Request;
-
- class KelolaDataPendaftaranController extends Controller
- {
-    public function index(){
-        return DataPendaftaran::all();
+use Illuminate\Validation\Rule;
+use App\Imports\PendaftaranImport;
+use Maatwebsite\Excel\Facades\Excel;
+class KelolaDataPendaftaranController extends Controller
+{
+    /**
+     * Menampilkan semua data pendaftar
+     */
+    public function index()
+    {
+        return response()->json(DataPendaftaran::all());
     }
-    
+    /**
+     * Menambah data pendaftar
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
-            'nik' => 'required|string|max:255',
-            'jenis_bimtek' => 'required|string|max:255',
-            'tanggal_kegiatan_dimulai' => 'required|date',
-            'tanggal_kegiatan_berakhir' => 'required|date',
-            'tempat_kegiatan' => 'required|string|max:255',
-            'angkatan' => 'required|integer|min:1',
-            'tempat_tanggal_lahir' => 'required|string|max:255',
-            'pendidikan' => 'required|string|max:255',
-            'status' => 'required|in:kawin,lajang,janda',
-            'alamat' => 'required|string',
-            'jenis_usaha' => 'required|string|max:255',
-            'penghasilan_perbulan' => 'required|string|max:255',
-            'nomor_telefon' => 'required|string|max:255',
+            'nik' => 'required|string|max:255|unique:data_pendaftaran,nik',
+            'email' => 'nullable|email|max:255',
+            'telepon' => 'nullable|string|max:20',
         ]);
-        $peserta = DataPendaftaran::create($validated);
+        $pendaftar = DataPendaftaran::create($validated);
         return response()->json([
-            'message' => 'Data berhasil disimpan.',
-            'data' => $peserta
+            'message' => 'Data pendaftar berhasil disimpan.',
+            'data' => $pendaftar
         ], 201);
     }
-    
-    public function update(Request $request, $nik)
+    /**
+     * Menerima peserta pendaftar tunggal
+     */
+    public function accept($id)
     {
-        $data = DataPendaftaran::where('nik', $nik)->firstOrFail();
-        $validated = $request->validate([
-            'nama' => 'required|string|max:255',
-            'nik' => 'required|string|max:255',
-            'jenis_bimtek' => 'required|string|max:255',
-            'tanggal_kegiatan_dimulai' => 'required|date',
-            'tanggal_kegiatan_berakhir' => 'required|date',
-            'tempat_kegiatan' => 'required|string|max:255',
-            'angkatan' => 'required|integer|min:1',
-            'tempat_tanggal_lahir' => 'required|string|max:255',
-            'pendidikan' => 'required|string|max:255',
-            'status' => 'required|in:kawin,lajang,janda',
-            'alamat' => 'required|string',
-            'jenis_usaha' => 'required|string|max:255',
-            'penghasilan_perbulan' => 'required|string|max:255',
-            'nomor_telefon' => 'required|string|max:255',
-        ]);
-        $data->update($validated);
-
-        return response()->json([
-            'message' => 'Data berhasil diupdate',
-            'data' => $data,
-        ]);
+        $pendaftar = DataPendaftaran::findOrFail($id);
+        $pelatihanData = $pendaftar->toArray();
+        unset($pelatihanData['id'], $pelatihanData['created_at'], $pelatihanData['updated_at']);
+        DataPelatihan::create($pelatihanData);
+        $pendaftar->delete();
+        return response()->json(['message' => 'Peserta diterima dan data telah dipindahkan.']);
     }
-
-    public function destroy($nik)
+    /**
+     * Menerima peserta pendaftar secara massal
+     */
+    public function acceptMassal(Request $request)
     {
-        $data = DataPendaftaran::where('nik', $nik)->firstOrFail();
-        $data->delete();
-        return response()->json(['message' => 'Data berhasil dihapus']);
-    }
-
-    public function destroyMassal(Request $request)
-    {
-        $niks = $request->input('niks');
-
-        if (!is_array($niks) || empty($niks)) {
-            return response()->json(['error' => 'Parameter niks tidak valid'], 422);
+        $ids = $request->input('ids', []);
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json(['message' => 'Daftar ID tidak valid atau kosong.'], 422);
         }
-        $deleted = DataPendaftaran::whereIn('nik', $niks)->delete();
-        return response()->json([
-            'message' => "Berhasil menghapus {$deleted} data Pendaftaran"
-        ]);
-    }
-
-    public function trash()
-    {
-        $data = DataPendaftaran::onlyTrashed()->get();
-        return response()->json($data);
-    }
-
-    public function restore($nik)
-    {
-        $data = DataPendaftaran::onlyTrashed()->where('nik', $nik)->first();
-        if (!$data) {
-            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        $pendaftarList = DataPendaftaran::whereIn('id', $ids)->get();
+        foreach ($pendaftarList as $pendaftar) {
+            $data = $pendaftar->toArray();
+            unset($data['id'], $data['created_at'], $data['updated_at']);
+            DataPelatihan::create($data);
+            $pendaftar->delete();
         }
-        $data->restore();
-        return response()->json(['message' => 'Data berhasil dipulihkan']);
+        return response()->json(['message' => 'Peserta massal berhasil diterima.']);
     }
-
-    public function restoreMassal(Request $request)
+    /**
+     * Menolak peserta pendaftar tunggal
+     */
+    public function reject($id)
     {
-        $niks = $request->input('niks', []);
-        if (!is_array($niks) || empty($niks)) {
-            return response()->json(['message' => 'Daftar NIK tidak valid atau kosong'], 400);
-        }
-        $restoredCount = DataPendaftaran::onlyTrashed()
-            ->whereIn('nik', $niks)
-            ->update(['deleted_at' => null]);
-        $msg = $restoredCount
-            ? "Berhasil memulihkan $restoredCount data"
-            : "Tidak ada data yang dipulihkan";
-        return response()->json(['message' => $msg], 200);
+        $pendaftar = DataPendaftaran::findOrFail($id);
+        $pendaftar->delete();
+        return response()->json(['message' => 'Peserta ditolak dan data dihapus.']);
     }
-
-    public function forceDelete($nik)
+    /**
+     * Menolak peserta pendaftar secara massal
+     */
+    public function rejectMassal(Request $request)
     {
-        $data = DataPendaftaran::onlyTrashed()->where('nik', $nik)->first();
-        if (!$data) {
-            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        $ids = $request->input('ids', []);
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json(['message' => 'Daftar ID tidak valid atau kosong.'], 422);
         }
-        $data->forceDelete();
-        return response()->json(['message' => 'Data berhasil dihapus permanen']);
+        $deletedCount = DataPendaftaran::whereIn('id', $ids)->delete();
+        return response()->json([ 'message' => "Berhasil menolak {$deletedCount} peserta." ]);
     }
-
-    public function forceDeleteMassal(Request $request)
-    {
-        $niks = $request->input('niks', []);
-        if (!is_array($niks) || empty($niks)) {
-            return response()
-                ->json(['message' => 'Daftar NIK tidak valid atau kosong'], 400);
-        }
-        $deletedCount = DataPendaftaran::onlyTrashed()
-            ->whereIn('nik', $niks)
-            ->forceDelete(); 
-        $msg = $deletedCount
-            ? "Berhasil menghapus permanen $deletedCount data"
-            : "Tidak ada data yang dihapus permanen";
-
-        return response()->json(['message' => $msg], 200);
-    }
-    public function impor(Request $request)
+    /**
+     * Mengimpor data pendaftar dari file Excel
+     */
+    public function import(Request $request)
     {
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls',
         ]);
-
         try {
-            // Gunakan langsung dari UploadedFile tanpa getRealPath untuk performa
             Excel::import(new PendaftaranImport, $request->file('file'));
-
             return response()->json([
-                'message' => 'Data Pendaftaran berhasil diimpor',
+                'message' => 'Data pendaftar berhasil diimpor.'
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'Gagal mengimpor data: ' . $e->getMessage(),
+                'message' => 'Gagal mengimpor data: ' . $e->getMessage()
             ], 500);
         }
     }

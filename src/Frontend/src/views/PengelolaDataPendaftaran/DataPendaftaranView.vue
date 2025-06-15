@@ -1,14 +1,14 @@
 <template>
   <!-- Form pop up -->
   <DefaultLayout>
-    <FormSortingDataPendaftaran
+    <FormSortingDatapendaftaran
       v-if="showSort"
       :visible="showSort"
       :columns="filterableColumns"
       :data="tableData"
       @update:visible="showSort = $event"
     />
-    <FormFilterDataPendaftaran
+    <FormFilterDatapendaftaran
       v-model="showFilter"  :columns="filterableColumns"
       v-model:active-filters="activeFilters"
     />
@@ -16,21 +16,20 @@
       v-if="showTambah"
       @close="showTambah = false" 
     />
-    <FormEditDataPendaftaran
+    <FormEditDatapendaftaran
       v-if="showEdit && editData" 
       :initialData="editData" 
       @close="showEdit = false" 
     />
-    <FormExportDataPendaftaran
+    <FormExportDatapendaftaran
       v-if="showExport" 
       :data="pagedData" 
       @close="showExport = false" 
     />
-    <FormImportDataPeltihan
-      v-if="showImport" 
-      @close="showImport = false" 
-    />
     <!-- pagination atas-->
+    <h1 class="h3 fw-bold text-secondary border-bottom pb-2 mb-4">
+      Data pendaftaran
+    </h1>
     <div class="table-header">
       <div class="left-controls">
         <div class="show-wrapper">
@@ -75,9 +74,6 @@
         <button class="button" @click="showExport = true">
           <img src="/table/export.svg" alt="Export" />
         </button>
-        <button class="button" @click="showImport = true">
-          <img src="/table/import.svg" alt="Import" />
-        </button>
         <button class="button" @click="onExportClick">
           <img src="/table/sampah.svg" alt="Sampah" />
         </button>
@@ -100,6 +96,7 @@
       v-loading="loading"
       style="width: 100%"
       @selection-change="onSelectionChange"
+      @row-click="goToDetail"
       :header-cell-style="headerCellStyle"
       :row-style="rowStyle"
     >
@@ -128,20 +125,15 @@
           </el-tooltip>
         </template>
       </el-table-column>
-
-      <el-table-column prop="kegiatan_dimulai" show-overflow-tooltip>
+      
+      <el-table-column label="Tanggal Kegiatan" show-overflow-tooltip>
         <template #header>
-          <el-tooltip content="Kegiatan dimulai" placement="top">
-            <span class="header-tooltip-text">Kegiatan dimulai</span>
+          <el-tooltip content="Tanggal Kegiatan" placement="top">
+            <span class="header-tooltip-text">Tanggal Kegiatan</span>
           </el-tooltip>
         </template>
-      </el-table-column>
-
-      <el-table-column prop="kegiatan_berakhir" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="Kegiatan berakhir" placement="top">
-            <span class="header-tooltip-text">Kegiatan berakhir</span>
-          </el-tooltip>
+        <template #default="{ row }">
+          <span>{{ formatTanggalKegiatan(row.kegiatan_dimulai, row.kegiatan_berakhir) }}</span>
         </template>
       </el-table-column>
 
@@ -152,7 +144,6 @@
           </el-tooltip>
         </template>
       </el-table-column>
-
       <el-table-column prop="angkatan" show-overflow-tooltip>
         <template #header>
           <el-tooltip content="Angkatan" placement="top">
@@ -276,13 +267,28 @@
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import api from "../../api.js";
 import DefaultLayout from "../../layouts/DefaultLayout.vue";
-import FormExportDataPendaftaran from "../../components/KelolaDataPendaftaran/FormExportDataPendaftaran.vue";
-import FormImportDataPeltihan from "../../components/KelolaDataPendaftaran/FormImportDataPendaftaran.vue";
-import FormEditDataPendaftaran from "../../components/KelolaDataPendaftaran/FormEditDataPendaftaran.vue";
-import FormTambahDataPeltihan from "../../components/KelolaDataPendaftaran/FormTambahDataPendaftaran.vue";
-import FormFilterDataPendaftaran from "../../components/KelolaDataPendaftaran/FormFilterDataPendaftaran.vue";
-import FormSortingDataPendaftaran from "../../components/KelolaDataPendaftaran/FormSortingDataPendaftaran.vue";
+import FormExportDatapendaftaran from "../../components/KelolaDatapendaftaran/FormExportDatapendaftaran.vue";
+import FormEditDatapendaftaran from "../../components/KelolaDatapendaftaran/FormEditDatapendaftaran.vue";
+import FormTambahDataPeltihan from "../../components/KelolaDatapendaftaran/FormTambahDatapendaftaran.vue";
+import FormFilterDatapendaftaran from "../../components/KelolaDatapendaftaran/FormFilterDatapendaftaran.vue";
+import FormSortingDatapendaftaran from "../../components/KelolaDatapendaftaran/FormSortingDatapendaftaran.vue";
 import { ElNotification } from 'element-plus';
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goToDetail = (row: any, column: any, event: MouseEvent) => {
+  // Abaikan klik jika berasal dari kolom selection (checkbox) atau kolom Aksi
+  if (column.type === 'selection' || column.label === 'Aksi') {
+    return
+  }
+
+  // Arahkan ke detail jika bukan dari kolom aksi/checkbox
+  router.push({ name: 'DetailPeserta', params: { id: row.id } })
+}
+
+
+
 
 interface Peserta {
   id: number;
@@ -312,7 +318,6 @@ const itemsPerPage = ref<number | string>(10);
 const currentPage = ref(1);
 const dropdownOpen = ref(false);
 const showExport = ref(false)
-const showImport = ref(false)
 const showEdit = ref(false)
 const showTambah = ref(false)
 const showSort = ref(false)
@@ -335,6 +340,34 @@ function changeItemsPerPage(option: number | string) {
   currentPage.value = 1;
   dropdownOpen.value = false;
 }
+function formatTanggalKegiatan(mulai: string, berakhir: string): string {
+  if (!mulai || !berakhir) return '-'
+
+  const tanggalMulai = new Date(mulai)
+  const tanggalBerakhir = new Date(berakhir)
+
+  const optionsBulan = { month: 'long' } as const
+  const optionsTahun = { year: 'numeric' } as const
+
+  const hariMulai = tanggalMulai.getDate()
+  const hariBerakhir = tanggalBerakhir.getDate()
+
+  const bulanMulai = tanggalMulai.toLocaleDateString('id-ID', optionsBulan)
+  const bulanBerakhir = tanggalBerakhir.toLocaleDateString('id-ID', optionsBulan)
+
+  const tahunMulai = tanggalMulai.toLocaleDateString('id-ID', optionsTahun)
+  const tahunBerakhir = tanggalBerakhir.toLocaleDateString('id-ID', optionsTahun)
+
+  if (bulanMulai === bulanBerakhir && tahunMulai === tahunBerakhir) {
+    // Contoh: 25 - 30 Juni 2025
+    return `${hariMulai} - ${hariBerakhir} ${bulanMulai} ${tahunMulai}`
+  } else {
+    // Contoh: 25 Mei 2025 - 2 Juni 2025
+    return `${hariMulai} ${bulanMulai} ${tahunMulai} - ${hariBerakhir} ${bulanBerakhir} ${tahunBerakhir}`
+  }
+}
+
+
 
 // Inisialisasi activeFilters (baru ditambahkan)
 const activeFilters = ref<{ [key: string]: string | number | null }>({});
@@ -439,7 +472,7 @@ async function onMassDeleteClick() {
 
   try {
     const niks = selected.value.map(p => p.nik);
-    await api.delete('/kelola/Pendaftaran', {
+    await api.delete('/kelola/pendaftaran', {
       data: { niks }
     });
     await fetchData();
@@ -465,16 +498,16 @@ async function onMassDeleteClick() {
 }
 
 
-// Sampah route → GET /data/Pendaftaran/sampah
+// Sampah route → GET /data/pendaftaran/sampah
 async function onExportClick() {
-  window.location.href = '/data/Pendaftaran/sampah';
+  window.location.href = '/data/pendaftaran/sampah';
 }
 
-// Single delete → DELETE /kelola/Pendaftaran/{nik}
+// Single delete → DELETE /kelola/pendaftaran/{nik}
 async function onDelete(row: Peserta) {
   loading.value = true;
   try { // Ditambahkan try-catch
-    await api.delete(`/kelola/Pendaftaran/${row.nik}`);
+    await api.delete(`/kelola/pendaftaran/${row.id}`);
     await fetchData();
     ElNotification({ // Notifikasi sukses (sudah ada)
       title: 'Berhasil',
@@ -497,7 +530,7 @@ async function onDelete(row: Peserta) {
 
 async function fetchData() {
   try { // Ditambahkan try-catch
-    const res = await api.get('/kelola/Pendaftaran');
+    const res = await api.get('/kelola/pendaftaran');
     tableData.value = Array.isArray(res) ? res : res.data || [];
   } catch (error) { // Notifikasi error (BARU)
     console.error('Error fetching data:', error);

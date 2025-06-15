@@ -1,4 +1,5 @@
 <?php
+// database/migrations/2025_06_10_000001_create_data_pendaftaran_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -10,6 +11,7 @@ return new class extends Migration {
     {
         Schema::create('data_pendaftaran', function (Blueprint $table) {
             $table->id();
+            $table->string('photo')->nullable();
             $table->string('nama');
             $table->string('nik');
             $table->string('jenis_bimtek');
@@ -19,7 +21,7 @@ return new class extends Migration {
             $table->unsignedInteger('angkatan');
             $table->string('tempat_tanggal_lahir');
             $table->string('pendidikan');
-            $table->enum('status', ['kawin', 'lajang', 'janda']);
+            $table->string('status');
             $table->text('alamat');
             $table->string('jenis_usaha');
             $table->string('penghasilan_perbulan');
@@ -27,19 +29,16 @@ return new class extends Migration {
             $table->softDeletes();
             $table->timestamps();
 
-            // Index untuk mempercepat pengecekan nik di trigger
             $table->index('nik');
         });
 
-        // Trigger: Setelah insert ke data_pendaftaran, sinkron ke users_masyarakat
+        // Trigger AFTER INSERT (sudah ada sebelumnya)…
         DB::unprepared(<<<'SQL'
 CREATE TRIGGER trg_after_insert_data_pendaftaran
 AFTER INSERT ON data_pendaftaran
 FOR EACH ROW
 BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM users_masyarakat WHERE nik = NEW.nik
-  ) THEN
+  IF NOT EXISTS (SELECT 1 FROM users_masyarakat WHERE nik = NEW.nik) THEN
     INSERT INTO users_masyarakat (
       nama, nik, jenis_bimtek, kegiatan_dimulai,
       kegiatan_berakhir, tempat_kegiatan, angkatan,
@@ -58,7 +57,7 @@ END;
 SQL
         );
 
-        // Trigger: Setelah delete di data_pendaftaran, hapus di users_masyarakat
+        // **Trigger AFTER DELETE**: hapus user jika record data_pendaftaran dihapus
         DB::unprepared(<<<'SQL'
 CREATE TRIGGER trg_after_delete_data_pendaftaran
 AFTER DELETE ON data_pendaftaran
@@ -73,7 +72,7 @@ SQL
 
     public function down(): void
     {
-        // Hapus trigger sebelum drop tabel
+        // Hapus kedua trigger sebelum drop tabel
         DB::unprepared('DROP TRIGGER IF EXISTS trg_after_insert_data_pendaftaran;');
         DB::unprepared('DROP TRIGGER IF EXISTS trg_after_delete_data_pendaftaran;');
         Schema::dropIfExists('data_pendaftaran');

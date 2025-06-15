@@ -46,12 +46,13 @@ export default {
           nik: this.nik,
           nama: this.nama,
         });
-
+        const userId = response.id;
         // Simpan status login dan inputan untuk autocomplete
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('savedNIK', this.nik);
         localStorage.setItem('savedName', this.nama);
         localStorage.setItem('role', 'masyarakat');
+        localStorage.setItem('userId', userId);
 
         // Redirect setelah sedikit delay
         setTimeout(() => {

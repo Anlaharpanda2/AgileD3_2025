@@ -83,7 +83,7 @@
                   <div :key="currentNewsItem.id" class="news-slide-item">
                     <div class="news-slide-image-wrapper">
                       <img
-                        :src="`http://127.0.0.1:8000/storage/berita_foto/${currentNewsItem.foto.split('/').pop()}`"
+                        :src="STORAGE_URL + currentNewsItem.foto"
                         :alt="currentNewsItem.judul"
                         class="img-fluid rounded"
                       />
@@ -241,11 +241,9 @@ import DefaultLayout from '../../layouts/DefaultLayout.vue';
 import Slider from '../../components/Home/Slider.vue';
 import { ElMessage } from 'element-plus';
 import api from '@/api.js';
-import { getCurrentInstance } from 'vue';
-const internalInstance = getCurrentInstance();
-const getFotoUrl = internalInstance?.appContext.config.globalProperties.$getFotoUrl;
+import {STORAGE_URL} from '@/api.js';
 
-// Static data for service cards (unchanged)
+
 const image = '/Home/1.jpeg';
 const title = 'Layanan Desain Grafis';
 const description =

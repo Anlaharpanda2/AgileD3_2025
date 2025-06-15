@@ -16,7 +16,8 @@ class DataPendaftaran extends Model
         'nama',
         'nik',
         'jenis_bimtek',
-        'tanggal_kegiatan',
+        'kegiatan_dimulai',
+        'kegiatan_berakhir',
         'tempat_kegiatan',
         'angkatan',
         'tempat_tanggal_lahir',
@@ -26,12 +27,23 @@ class DataPendaftaran extends Model
         'jenis_usaha',
         'penghasilan_perbulan',
         'nomor_telefon',
+        'photo',
     ];
 
     protected $dates = [
-        'tanggal_kegiatan',
         'deleted_at',
         'created_at',
         'updated_at',
     ];
+    
+    protected $appends = ['photo_url'];
+
+    public function getPhotoUrlAttribute(): ?string
+    {
+        if (!$this->photo) {
+            return null;
+        }
+
+        return asset('storage/' . $this->photo);
+    }
 }

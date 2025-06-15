@@ -1,11 +1,10 @@
 <template>
-  <div class="form-overlay">
+  <div class="form-overlay"@click.self="$emit('close')">
     <transition name="popup">
       <div class="form-popup">
         <div class="form-header background text-center text-white py-3 rounded-top">
-          <h3 class="mb-0">Form Data Pendaftaran</h3>
+          <h3 class="mb-0">Form Data Pelatihan</h3>
         </div>
-
         <div class="form-body">
           <el-form
             :model="form"
@@ -26,10 +25,8 @@
                 <el-form-item
                   :label="field.label"
                   :prop="field.key"
-                  required
                 >
                   <component
-                    v-if="field.key !== 'status'"
                     :is="field.component"
                     v-model="form[field.key]"
                     :type="field.type"
@@ -38,15 +35,16 @@
                     :name="field.key"
                     clearable
                     class="form-control"
+                    v-if="field.component !== 'el-select'"
                   />
                   <el-select
-                    v-else
+                    v-else-if="field.key === 'status'"
                     v-model="form.status"
                     placeholder="Pilih Status"
                     :id="field.key"
                     :name="field.key"
                     clearable
-                    class="w-100"
+                    class="w-100 form-control-select"
                   >
                     <el-option
                       v-for="option in statusOptions"
@@ -58,7 +56,6 @@
                 </el-form-item>
               </el-col>
             </el-row>
-
             <el-form-item class="d-flex justify-content-end gap-3 mt-4">
               <el-button @click="$emit('close')" class="btn-cancel">Batal</el-button>
               <el-button type="primary" @click="submitForm" class="btn-submit">Simpan</el-button>
@@ -69,117 +66,156 @@
     </transition>
   </div>
 </template>
-
 <style scoped>
-/* Latar belakang gelap */
-.background{
-    background: #69C5C2;
-}
+/* Latar belakang gelap untuk overlay */
 .form-overlay {
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(4px); /* Efek blur yang lebih kuat */
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1050;
   padding: 1rem;
 }
-
 /* Kontainer popup form */
 .form-popup {
   width: 100%;
-  max-width: 850px;
+  max-width: 900px; /* Sedikit lebih lebar untuk modernitas */
   max-height: 95vh;
-  background-color: #ffffff;
-  border-radius: 1rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(145deg, #ffffff, #f0f2f5); /* Gradien lembut */
+  border-radius: 1.25rem; /* Sudut lebih membulat */
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.5) inset; /* Bayangan lebih dalam dengan inner shadow */
   display: flex;
   flex-direction: column;
-  animation: popupIn 0.3s ease;
+  animation: popupIn 0.4s ease-out; /* Animasi sedikit lebih lambat */
   overflow: hidden;
+  transform: scale(1); /* Pastikan skala awal adalah 1 */
+  transition: transform 0.3s ease-out; /* Transisi untuk skala saat interaksi */
+}
+/* Header form */
+.form-header {
+  background: linear-gradient(45deg, #69C5C2, #4CAF50); /* Gradien hijau yang menarik */
+  color: white;
+  padding: 1.5rem; /* Padding lebih banyak */
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  font-weight: 600; /* Tebal sedikit */
+  letter-spacing: 0.5px; /* Spasi huruf */
 }
 /* Bagian isi form scrollable */
 .form-body {
   overflow-y: auto;
-  padding: 1rem;
+  padding: 2rem; /* Padding lebih banyak */
 }
-
-/* Tombol dengan warna hijau */
+/* Styling untuk el-input dan el-date-picker */
+.form-control {
+  width: 100%;
+  border-radius: 0.5rem; /* Sudut membulat */
+  border: 1px solid #e0e0e0;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Bayangan dalam lembut */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.form-control:focus-within {
+  border-color: #69C5C2;
+  box-shadow: 0 0 0 3px rgba(105, 197, 194, 0.25), inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Bayangan fokus yang modern */
+}
+/* Styling khusus untuk el-select */
+.form-control-select .el-input__wrapper {
+  border-radius: 0.5rem !important; /* Sudut membulat */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+.form-control-select.is-focus .el-input__wrapper {
+  border-color: #69C5C2 !important;
+  box-shadow: 0 0 0 3px rgba(105, 197, 194, 0.25), inset 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+/* Tombol Submit */
 .btn-submit {
-  background-color: #69C5C2;
+  background: linear-gradient(45deg, #69C5C2, #4CAF50); /* Gradien yang sama dengan header */
   border: none;
   color: white;
-  padding: 0.5rem 1.5rem;
-  border-radius: 6px;
-  transition: background-color 0.2s ease;
+  padding: 0.75rem 2rem; /* Padding lebih besar */
+  border-radius: 0.75rem; /* Sudut lebih membulat */
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3); /* Bayangan yang serasi */
+  transition: all 0.3s ease;
 }
 .btn-submit:hover {
-  background-color: #1e8e86;
+  background: linear-gradient(45deg, #4CAF50, #69C5C2); /* Gradien terbalik saat hover */
+  box-shadow: 0 6px 15px rgba(76, 175, 80, 0.45); /* Bayangan lebih kuat */
+  transform: translateY(-2px); /* Efek angkat */
 }
-
+.btn-submit:active {
+  transform: translateY(0); /* Kembali ke posisi semula saat diklik */
+  box-shadow: 0 2px 5px rgba(76, 175, 80, 0.2);
+}
+/* Tombol Batal */
 .btn-cancel {
-  background-color: #eeeeee;
-  color: #333;
-  padding: 0.5rem 1.2rem;
-  border-radius: 6px;
-  transition: background-color 0.2s ease;
+  background-color: #f0f2f5; /* Warna latar belakang abu-abu terang */
+  color: #555;
+  padding: 0.75rem 2rem;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 .btn-cancel:hover {
-  background-color: #dddddd;
+  background-color: #e0e0e0;
+  color: #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
-
+.btn-cancel:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
 /* Animasi masuk */
 @keyframes popupIn {
   from {
     opacity: 0;
-    transform: scale(0.92);
+    transform: translateY(20px) scale(0.9);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0) scale(1);
   }
 }
 </style>
-
 <script setup>
-import { reactive, ref, watch } from 'vue'
-import api from '@/api.js';
+import { reactive, ref, watch, onMounted } from 'vue'
 import { ElNotification } from 'element-plus'
-
+import api from '../../api.js'; 
 const props = defineProps({
-  initialData: Object,
+  initialData: Object, 
 })
-
-const emit = defineEmits(['close'])
-
-const formRef = ref(null)
-
-const statusOptions = ['kawin', 'lajang', 'janda']
-
+const emit = defineEmits(['close']) 
+const formRef = ref(null) 
+const statusOptions = ['kawin', 'lajang', 'janda'] 
 const fields = [
   { key: 'nama', label: 'Nama', component: 'el-input', type: 'text' },
   { key: 'nik', label: 'NIK', component: 'el-input', type: 'text' },
   { key: 'jenis_bimtek', label: 'Jenis Bimtek', component: 'el-input', type: 'text' },
-  { key: 'tanggal_kegiatan', label: 'Tanggal Kegiatan', component: 'el-date-picker', type: 'date' },
+  { key: 'kegiatan_dimulai', label: 'Kegiatan Dimulai', component: 'el-date-picker', type: 'date' },
+  { key: 'kegiatan_berakhir', label: 'Kegiatan Berakhir', component: 'el-date-picker', type: 'date' },
   { key: 'tempat_kegiatan', label: 'Tempat Kegiatan', component: 'el-input', type: 'text' },
-  { key: 'angkatan', label: 'Angkatan', component: 'el-input', type: 'text' },
+  { key: 'angkatan', label: 'Angkatan', component: 'el-input', type: 'number' },
   { key: 'tempat_tanggal_lahir', label: 'Tempat Tanggal Lahir', component: 'el-input', type: 'text' },
   { key: 'pendidikan', label: 'Pendidikan', component: 'el-input', type: 'text' },
   { key: 'status', label: 'Status', component: 'el-select', type: '' },
-  { key: 'alamat', label: 'Alamat', component: 'el-input', type: 'text' },
+  { key: 'alamat', label: 'Alamat', component: 'el-input', type: 'textarea' },
   { key: 'jenis_usaha', label: 'Jenis Usaha', component: 'el-input', type: 'text' },
   { key: 'penghasilan_perbulan', label: 'Penghasilan Perbulan', component: 'el-input', type: 'text' },
   { key: 'nomor_telefon', label: 'Nomor Telefon', component: 'el-input', type: 'tel' },
 ]
-
-// Reactive form dengan default fallback
 const form = reactive({
   nik: '',
   nama: '',
   jenis_bimtek: '',
-  tanggal_kegiatan: null,
+  kegiatan_dimulai: null,
+  kegiatan_berakhir: null,
   tempat_kegiatan: '',
   angkatan: null,
   tempat_tanggal_lahir: '',
@@ -189,28 +225,49 @@ const form = reactive({
   jenis_usaha: '',
   penghasilan_perbulan: '',
   nomor_telefon: '',
-  ...props.initialData,
 })
-
-// Jika tanggal_kegiatan berupa string, ubah ke Date (untuk el-date-picker)
-if (form.tanggal_kegiatan && typeof form.tanggal_kegiatan === 'string') {
-  form.tanggal_kegiatan = new Date(form.tanggal_kegiatan)
-}
-
-watch(() => props.initialData, (newVal) => {
-  Object.assign(form, newVal)
-  if (form.tanggal_kegiatan && typeof form.tanggal_kegiatan === 'string') {
-    form.tanggal_kegiatan = new Date(form.tanggal_kegiatan)
+const applyInitialData = (data) => {
+  if (data) {
+    Object.assign(form, data);
+    if (form.kegiatan_dimulai && typeof form.kegiatan_dimulai === 'string') {
+      form.kegiatan_dimulai = new Date(form.kegiatan_dimulai);
+    }
+    if (form.kegiatan_berakhir && typeof form.kegiatan_berakhir === 'string') {
+      form.kegiatan_berakhir = new Date(form.kegiatan_berakhir);
+    }
+    if (form.angkatan !== null && typeof form.angkatan === 'string') {
+      form.angkatan = Number(form.angkatan);
+    }
   }
-})
-
+};
+watch(() => props.initialData, (newVal) => {
+  applyInitialData(newVal);
+}, { deep: true, immediate: true });
 const rules = {
   nama: [{ required: true, message: 'Nama wajib diisi', trigger: 'blur' }],
   nik: [{ required: true, message: 'NIK wajib diisi', trigger: 'blur' }],
   jenis_bimtek: [{ required: true, message: 'Jenis bimtek wajib diisi', trigger: 'blur' }],
-  tanggal_kegiatan: [{ type: 'date', required: true, message: 'Tanggal wajib diisi', trigger: 'change' }],
+  kegiatan_dimulai: [{ type: 'date', required: true, message: 'Tanggal Mulai Kegiatan wajib diisi', trigger: 'change' }],
+  kegiatan_berakhir: [{ type: 'date', required: true, message: 'Tanggal Berakhir Kegiatan wajib diisi', trigger: 'change' }],
   tempat_kegiatan: [{ required: true, message: 'Tempat wajib diisi', trigger: 'blur' }],
-  angkatan: [{ required: true, type: 'messege', message: 'Angkatan wajib diisi', trigger: 'change' }],
+  angkatan: [
+    { required: true, message: 'Angkatan wajib diisi', trigger: 'change' },
+    {
+      validator: (rule, value, callback) => {
+        const number = Number(value)
+        if (value === '' || value === null || value === undefined) {
+          callback(new Error('Angkatan wajib diisi'));
+        } else if (isNaN(number)) {
+          callback(new Error('Angkatan harus berupa angka'));
+        } else if (number <= 0) {
+          callback(new Error('Angkatan harus lebih besar dari 0'));
+        } else {
+          callback();
+        }
+      },
+      trigger: 'blur',
+    },
+  ],
   tempat_tanggal_lahir: [{ required: true, message: 'Tempat tanggal lahir wajib diisi', trigger: 'blur' }],
   pendidikan: [{ required: true, message: 'Pendidikan wajib diisi', trigger: 'blur' }],
   status: [{ required: true, message: 'Status wajib diisi', trigger: 'change' }],
@@ -219,50 +276,43 @@ const rules = {
   penghasilan_perbulan: [{ required: true, message: 'Penghasilan wajib diisi', trigger: 'blur' }],
   nomor_telefon: [{ required: true, message: 'Nomor telepon wajib diisi', trigger: 'blur' }],
 }
-
 const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1)
-
 const submitForm = () => {
   formRef.value.validate(async valid => {
     if (!valid) {
-      ElNotification({
-        title: 'Validasi gagal',
-        message: 'Periksa input form anda.',
-        type: 'warning',
-        duration: 3000,
-      })
-      return
+      ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });
+      return;
     }
-
+    const payload = {
+      ...form,
+      kegiatan_dimulai: form.kegiatan_dimulai instanceof Date
+        ? `${form.kegiatan_dimulai.getFullYear()}-${String(form.kegiatan_dimulai.getMonth() + 1).padStart(2, '0')}-${String(form.kegiatan_dimulai.getDate()).padStart(2, '0')}`
+        : form.kegiatan_dimulai,
+      kegiatan_berakhir: form.kegiatan_berakhir instanceof Date
+        ? `${form.kegiatan_berakhir.getFullYear()}-${String(form.kegiatan_berakhir.getMonth() + 1).padStart(2, '0')}-${String(form.kegiatan_berakhir.getDate()).padStart(2, '0')}`
+        : form.kegiatan_berakhir,
+      angkatan: Number(form.angkatan),
+    };
     try {
-      // Format tanggal menjadi string 'YYYY-MM-DD' saat submit
-      const payload = {
-        ...form,
-        tanggal_kegiatan:
-          form.tanggal_kegiatan instanceof Date
-            ? form.tanggal_kegiatan.toISOString().split('T')[0]
-            : form.tanggal_kegiatan,
-        angkatan: Number(form.angkatan),
-      }
-
-      const response = await api.post(`/kelola/Pendaftaran`, payload)
-
-      ElNotification({
-        title: 'Berhasil',
-        message: response.data.message || 'Data berhasil diupdate',
-        type: 'success',
-        duration: 3000,
-      })
-      window.location.reload()
-      emit('close')
+      console.log('Kirim JSON:', JSON.stringify(payload));
+      const response = await api.post('/kelola/pelatihan', payload);
+        ElNotification({
+          title: 'Berhasil',
+          message: response.data.message || 'Data berhasil disimpan!', 
+          type: 'success',
+          duration: 3000,
+        });
+        emit('close');
+        window.location.reload();
     } catch (error) {
+      console.error('Error submitting form:', error);
       ElNotification({
         title: 'Gagal',
-        message: error.response?.data?.message || 'Gagal memperbarui data',
+        message: error.response?.data?.message || 'Gagal menyimpan data. Terjadi kesalahan jaringan atau server.', 
         type: 'error',
-        duration: 0,
-      })
+        duration: 0, 
+      });
     }
-  })
-}
+  });
+};
 </script>

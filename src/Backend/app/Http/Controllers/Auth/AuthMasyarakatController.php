@@ -11,22 +11,29 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthMasyarakatController extends Controller
 {
-    public function login(Request $request)
-    {
-        $request->validate([
-            'nik' => 'required|string',
-            'nama' => 'required|string',
-        ]);
-        $pendaftar = UserMasyarakat::where('nik', $request->nik)
-            ->where('nama', $request->nama)
-            ->first();
-        if (!$pendaftar) {
-            return response()->json(['message' => 'NIK atau Nama tidak valid'], 401);
-        }
-        Auth::login($pendaftar);
+public function login(Request $request)
+{
+    $request->validate([
+        'nik' => 'required|string',
+        'nama' => 'required|string',
+    ]);
 
-        return response()->json(['message' => 'Login berhasil']);
+    $pendaftar = UserMasyarakat::where('nik', $request->nik)
+        ->where('nama', $request->nama)
+        ->first();
+
+    if (!$pendaftar) {
+        return response()->json(['message' => 'NIK atau Nama tidak valid'], 401);
     }
+
+    Auth::login($pendaftar);
+
+    return response()->json([
+        'message' => 'Login berhasil',
+        'id' => $pendaftar->id
+    ]);
+}
+
     public function register(Request $request)
 {
     $validator = Validator::make($request->all(), [

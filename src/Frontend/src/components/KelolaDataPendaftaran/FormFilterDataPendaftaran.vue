@@ -1,14 +1,15 @@
 <template>
   <Transition name="dialog-fade">
-    <div v-if="localDialogVisible" class="filter-dialog-overlay">
+    <!-- Overlay filter, diklik untuk menutup form. .self memastikan hanya klik pada overlay langsung yang memicu penutupan. -->
+    <div v-if="localDialogVisible" class="filter-dialog-overlay" @click.self="handleClose">
       <div class="filter-dialog">
         <div class="my-header">
           <h4>
             <i class="fa-solid fa-filter dialog-icon"></i>
-            Filter Data Pendaftaran
+            Filter Data Pelatihan
           </h4>
-          <!-- The close button now uses the primary color for consistency -->
-          <el-button class="el-button--primary-custom" circle :icon="Close" @click="handleClose" />
+          <!-- Menggunakan class el-button--close-custom yang telah disesuaikan sebelumnya -->
+          <el-button class="el-button--close-custom" circle :icon="Close" @click="handleClose" />
         </div>
         <div class="scrollable-form-container">
           <div class="filter-section filter-selection">
@@ -66,14 +67,14 @@ import { ref, watch } from 'vue';
 import { Close } from '@element-plus/icons-vue';
 
 const props = defineProps<{
-  modelValue: boolean; // Controls dialog visibility
-  columns: string[]; // List of available columns for filtering
-  initialFilters?: { [key: string]: string | number | null }; // Initial filters when dialog opens
+  modelValue: boolean;
+  columns: string[];
+  initialFilters?: { [key: string]: string | number | null };
 }>();
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void; // To update dialog visibility in parent
-  (e: 'update:activeFilters', filters: { [key: string]: string | number | null }): void; // To send active filters to parent
+  (e: 'update:modelValue', value: boolean): void;
+  (e: 'update:activeFilters', filters: { [key: string]: string | number | null }): void;
 }>();
 
 const localDialogVisible = ref(props.modelValue);
@@ -83,18 +84,18 @@ const isLoading = ref(false);
 
 watch(() => props.modelValue, (newVal) => {
   localDialogVisible.value = newVal;
-  if (newVal) { // Only reset/initialize when dialog opens
+  if (newVal) {
     if (props.initialFilters) {
       localActiveFilters.value = { ...props.initialFilters };
       localSelectedColumns.value = Object.keys(props.initialFilters).filter(
         key => props.initialFilters[key] !== null && props.initialFilters[key] !== ''
       );
     } else {
-        localActiveFilters.value = {};
-        localSelectedColumns.value = [];
+      localActiveFilters.value = {};
+      localSelectedColumns.value = [];
     }
   }
-}, { immediate: true }); // immediate: true so the watcher runs when the component is first mounted
+}, { immediate: true });
 
 watch(localDialogVisible, (newVal) => {
   emit('update:modelValue', newVal);
@@ -114,9 +115,9 @@ watch(localSelectedColumns, (newSelected, oldSelected) => {
 });
 
 const formatColumnName = (col: string): string => {
-  return col.replace(/([A-Z])/g, ' $1') // Add space before capital letters
-    .replace(/^./, str => str.toUpperCase()) // Capitalize first letter
-    .replace(/_/g, ' '); // Replace underscores with spaces
+  return col.replace(/([A-Z])/g, ' $1')
+    .replace(/^./, str => str.toUpperCase())
+    .replace(/_/g, ' ');
 };
 
 const handleClose = () => {
@@ -124,8 +125,8 @@ const handleClose = () => {
 };
 
 const handleApplyFilters = async () => {
-  isLoading.value = true; // Activate loading status
-  await new Promise(resolve => setTimeout(resolve, 800)); // 0.8 second delay
+  isLoading.value = true;
+  await new Promise(resolve => setTimeout(resolve, 800)); // Simulate async operation
   const filtersToEmit: { [key: string]: string | number | null } = {};
   for (const col of localSelectedColumns.value) {
     const value = localActiveFilters.value[col];
@@ -133,16 +134,16 @@ const handleApplyFilters = async () => {
       filtersToEmit[col] = value;
     }
   }
-  emit('update:activeFilters', filtersToEmit); // Emit cleaned filters to parent
-  localDialogVisible.value = false; // Close dialog
-  isLoading.value = false; // Deactivate loading status
+  emit('update:activeFilters', filtersToEmit);
+  localDialogVisible.value = false;
+  isLoading.value = false;
 };
 
 const handleClearFilters = () => {
-  localSelectedColumns.value = []; // Clear selected columns
-  localActiveFilters.value = {}; // Clear active filters
-  emit('update:activeFilters', {}); // Emit empty filters to parent
-  localDialogVisible.value = false; // Close dialog
+  localSelectedColumns.value = [];
+  localActiveFilters.value = {};
+  emit('update:activeFilters', {});
+  localDialogVisible.value = false;
 };
 </script>
 
@@ -150,7 +151,7 @@ const handleClearFilters = () => {
 /* Dialog transition styles */
 .dialog-fade-enter-active,
 .dialog-fade-leave-active {
-  transition: opacity 0.7s ease-in-out;
+  transition: opacity 0.4s ease-in-out;
 }
 .dialog-fade-enter-from,
 .dialog-fade-leave-to {
@@ -158,11 +159,11 @@ const handleClearFilters = () => {
 }
 .dialog-fade-enter-active .filter-dialog,
 .dialog-fade-leave-active .filter-dialog {
-  transition: transform 0.7s, opacity 0.7s ease-in-out;
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.4s ease-in-out;
 }
 .dialog-fade-enter-from .filter-dialog,
 .dialog-fade-leave-to .filter-dialog {
-  transform: translateY(50px);
+  transform: translateY(50px) scale(0.95);
   opacity: 0;
 }
 
@@ -171,155 +172,175 @@ const handleClearFilters = () => {
   display: flex;
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.65); /* Slightly darker overlay */
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 20px; /* Add padding for smaller screens */
 }
-
 .filter-dialog {
   width: 90%;
-  max-width: 650px;
-  border-radius: 12px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
-  background-color: #f8f9fa; /* Light background for the dialog content */
+  max-width: 700px; /* Slightly wider max-width */
+  border-radius: 16px; /* More rounded corners */
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15); /* Stronger shadow */
+  background-color: #ffffff; /* White background for the dialog content */
   display: flex;
   flex-direction: column;
-  max-height: 90vh;
+  max-height: 95vh; /* Allow it to take more vertical space */
+  overflow: hidden; /* Ensure content doesn't overflow rounded corners */
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .filter-dialog {
-    width: 95vw !important;
+    width: 95vw;
     margin: 10px;
+    border-radius: 12px; /* Slightly less rounded on small screens */
   }
   .column-checkboxes {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Adjust for smaller checkboxes on mobile */
+  }
+  .my-header h4 {
+    font-size: 1.3em;
+  }
+  .section-title {
+    font-size: 1.1em;
   }
 }
 
-/* Header styles (using #69C5C2 as primary color) */
+/* Header styles */
 .my-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 25px;
-  /* Updated gradient with shades of #69C5C2 */
+  padding: 20px 30px; /* More padding */
   background: linear-gradient(to right, #88D3D1, #69C5C2);
   color: white;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px 12px 0 0;
+  border-radius: 16px 16px 0 0; /* Match dialog border-radius */
   flex-shrink: 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for header */
 }
-
 .my-header h4 {
   margin: 0;
-  font-size: 1.5em;
-  font-weight: bold;
+  font-size: 1.6em; /* Slightly larger title */
+  font-weight: 700; /* Bolder font weight */
   display: flex;
   align-items: center;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2); /* More pronounced text shadow */
+  letter-spacing: 0.5px;
 }
-
 .dialog-icon {
-  margin-right: 10px;
-  font-size: 1.2em;
+  margin-right: 12px; /* More space for icon */
+  font-size: 1.3em; /* Slightly larger icon */
+  opacity: 0.9;
 }
 
 /* Scrollable form container */
 .scrollable-form-container {
   flex-grow: 1;
   overflow-y: auto;
-  padding: 20px;
-  background-color: #ffffff; /* White background for form content */
+  padding: 25px 30px; /* More padding */
+  background-color: #f8f9fa; /* Light background for form content */
 }
 
 /* Filter section styles */
 .filter-section {
-  margin-bottom: 20px;
-  background-color: #fefefe; /* Slightly off-white background */
-  padding: 20px;
-  border-radius: 10px;
+  margin-bottom: 25px; /* More space between sections */
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 12px; /* Consistent rounded corners */
   border: 1px solid #e0e0e0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Nicer shadow */
 }
 
-/* Section title (using #69C5C2 as primary color) */
+/* Section title */
 .section-title {
   margin-top: 0;
-  margin-bottom: 15px;
-  color: #69C5C2; /* Primary color for title */
-  font-size: 1.2em;
-  font-weight: 600;
-  border-bottom: 2px solid #B0E0DF; /* Lighter shade of primary for border */
-  padding-bottom: 5px;
+  margin-bottom: 20px; /* More space below title */
+  color: #69C5C2;
+  font-size: 1.35em; /* Larger title */
+  font-weight: 700; /* Bolder font weight */
+  border-bottom: 3px solid #88D3D1; /* Thicker border */
+  padding-bottom: 8px; /* More padding below border */
+  position: relative;
+  letter-spacing: 0.3px;
+}
+.section-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px; /* Align with border-bottom */
+  width: 50px; /* Short accent line */
+  height: 3px;
+  background-color: #69C5C2;
+  border-radius: 2px;
 }
 
 /* Checkbox group layout */
 .column-checkboxes {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Adjusted min-width for better spacing */
+  gap: 15px; /* More gap */
 }
 
-/* Individual checkbox styling (using #69C5C2 for themed elements) */
+/* Individual checkbox styling */
 .column-checkbox {
-  background-color: #F0FBFA; /* Very light teal background */
-  border-color: #B0E0DF; /* Light teal border */
-  border-radius: 8px;
-  padding: 10px 12px;
-  transition: all 0.3s ease;
+  background-color: #F8FCFB; /* Very light, almost white background */
+  border: 1px solid #CFE9E8; /* Lighter primary border */
+  border-radius: 10px; /* More rounded */
+  padding: 12px 15px; /* More padding */
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Softer transition */
   font-weight: 500;
   color: #333;
   cursor: pointer;
+  display: flex; /* Use flex for better alignment of text */
+  align-items: center;
 }
-
 .column-checkbox:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(105, 197, 194, 0.1); /* Primary color for hover shadow */
+  transform: translateY(-3px); /* More pronounced lift */
+  box-shadow: 0 6px 15px rgba(105, 197, 194, 0.25); /* Stronger primary shadow on hover */
+  border-color: #69C5C2;
 }
-
 .column-checkbox-label-text {
   white-space: normal;
   word-break: break-word;
-  line-height: 1.3;
+  line-height: 1.4; /* Better line height for readability */
 }
-
 .column-checkbox.is-checked {
-  background-color: #E0F5F4; /* Slightly darker light teal when checked */
-  border-color: #69C5C2; /* Primary color for border when checked */
-  box-shadow: 0 0 0 2px #69C5C2; /* Primary color for box shadow when checked */
-  color: #69C5C2; /* Primary color for text when checked */
+  background-color: #88D3D1; /* Light primary background when checked */
+  border-color: #69C5C2; /* Primary border when checked */
+  box-shadow: 0 0 0 3px #69C5C2; /* More prominent ring */
+  color: white; /* White text when checked for contrast */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Input field styling */
 .filter-input-item {
-  margin-bottom: 12px;
+  margin-bottom: 15px; /* More space between inputs */
 }
-
 .styled-input .el-input-group__prepend {
-  min-width: 120px;
+  min-width: 140px; /* Wider prepend */
   text-align: right;
-  font-weight: bold;
+  font-weight: 600; /* Bolder font */
   color: #555;
-  background-color: #f1f7f9; /* Light grey background */
-  border-right: 1px solid #dcdfe6;
+  background-color: #F5F9FB; /* Slightly off-white background */
+  border-right: 1px solid #DCE6E9;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding-right: 10px;
+  padding-right: 15px;
+  border-radius: 8px 0 0 8px; /* Match input border-radius */
 }
-
 .styled-input .el-input__wrapper {
-  border-radius: 6px;
+  border-radius: 8px; /* More rounded */
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  padding: 8px 12px; /* Adjust padding for visual balance */
 }
-
-/* Input focus style (using #69C5C2 for focus) */
+/* Input focus style */
 .styled-input .el-input__wrapper.is-focus {
-  border-color: #69C5C2; /* Primary color for border on focus */
-  box-shadow: 0 0 0 2px rgba(105, 197, 194, 0.2); /* Primary color for shadow on focus */
+  border-color: #69C5C2;
+  box-shadow: 0 0 0 3px rgba(105, 197, 194, 0.25);
 }
 
 /* Dialog footer styles */
@@ -327,63 +348,65 @@ const handleClearFilters = () => {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 12px;
-  padding: 15px 20px;
-  background-color: #f8f9fa; /* Light background for footer */
+  gap: 15px; /* More gap between buttons */
+  padding: 20px 30px; /* More padding */
+  background-color: #f8f9fa;
   border-top: 1px solid #e0e0e0;
-  border-radius: 0 0 12px 12px;
+  border-radius: 0 0 16px 16px; /* Match dialog border-radius */
   flex-shrink: 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow for footer */
 }
-
 .footer-button {
-  min-width: 140px;
-  padding: 10px 16px;
-  font-size: 1em;
+  min-width: 150px; /* Wider buttons */
+  padding: 12px 20px; /* More padding */
+  font-size: 1.05em; /* Slightly larger font */
   font-weight: bold;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  border-radius: 10px; /* More rounded */
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  text-transform: uppercase; /* Uppercase text */
+  letter-spacing: 0.5px;
 }
 
 /* Reset button styling */
 .reset-button {
-  background-color: #fef0f0; /* Light red background */
-  color: #f56c6c; /* Red text */
-  border: 1px solid #fbc4c4; /* Light red border */
+  background-color: #FEEEEE; /* Lighter red background */
+  color: #EB5757; /* Deeper red text */
+  border: 1px solid #FBCACD; /* Lighter red border */
+  box-shadow: 0 2px 8px rgba(235, 87, 87, 0.1); /* Subtle red shadow */
 }
-
 .reset-button:hover {
-  background-color: #fef7f7;
-  border-color: #f7a7a7;
-  color: #f56c6c;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(245, 108, 108, 0.2);
+  background-color: #FAEAEA;
+  border-color: #E88F92;
+  color: #D63030;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(245, 108, 108, 0.2);
 }
 
-/* Apply button styling (using #69C5C2 as primary color) */
+/* Apply button styling */
 .apply-button {
-  /* Updated gradient with shades of #69C5C2 */
   background: linear-gradient(to right, #88D3D1, #69C5C2);
   border: none;
   color: white;
+  box-shadow: 0 4px 10px rgba(105, 197, 194, 0.25); /* Initial shadow for apply button */
 }
-
 .apply-button:hover {
-  /* Darker gradient for hover state */
-  background: linear-gradient(to right, #72C3C0, #5AAEA8);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(105, 197, 194, 0.3); /* Primary color for hover shadow */
+  background: linear-gradient(to right, #69C5C2, #5AAEA8); /* Darker gradient for hover */
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(105, 197, 194, 0.25); /* Stronger shadow on hover */
 }
 
 /* Custom styling for the close button to match the primary color */
-.el-button--primary-custom {
-  background-color: #69C5C2 !important;
-  border-color: #69C5C2 !important;
+.el-button--close-custom {
+  background-color: rgba(255, 255, 255, 0.2) !important; /* Semi-transparent white */
+  border-color: rgba(255, 255, 255, 0.3) !important;
   color: white !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
-
-.el-button--primary-custom:hover,
-.el-button--primary-custom:focus {
-  background-color: #88D3D1 !important; /* Lighter shade for hover */
-  border-color: #88D3D1 !important;
+.el-button--close-custom:hover,
+.el-button--close-custom:focus {
+  background-color: rgba(255, 255, 255, 0.35) !important; /* More opaque white on hover */
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  transform: scale(1.05); /* Slight scale up */
 }
 </style>

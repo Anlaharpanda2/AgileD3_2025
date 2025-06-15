@@ -20,11 +20,9 @@ import {
   ImageRun,
 } from 'docx'
 import { ElNotification } from 'element-plus'
-
 const props = defineProps<{
   data: Array<Record<string, any>>
 }>()
-
 const exportColumns = [
   { key: "nama", label: "Nama" },
   { key: "nik", label: "NIK" },
@@ -38,14 +36,12 @@ const exportColumns = [
   { key: "pendidikan", label: "Pendidikan" },
   { key: "status", label: "Status" },
   { key: "jenis_usaha", label: "Jenis Usaha" },
-  { key: "penghasilan_perbulan", label: "Penghasilan" },
+  { key: "penghasilan_perbulan", label: "Penghasilan perbulan" },
   { key: "nomor_telefon", label: "No. Telp" },
 ]
-
 const judul = ref('')
 const showLogo1 = ref(true)
 const showLogo2 = ref(true)
-
 function getCurrentDateTime(): string {
   const now = new Date()
   return now.toLocaleString('id-ID', {
@@ -53,24 +49,20 @@ function getCurrentDateTime(): string {
     hour: '2-digit', minute: '2-digit', second: '2-digit'
   })
 }
-
 function getCurrentUrl(): string {
   return window.location.href
 }
-
 async function ExportWord(title: string, showLogo1: boolean, showLogo2: boolean) {
   const logoLeftBuffer = showLogo1
     ? await fetch("/export/logo1.png")
         .then(res => res.arrayBuffer())
         .then(buffer => new Uint8Array(buffer))
     : null
-
   const logoRightBuffer = showLogo2
     ? await fetch("/export/logo2.png")
         .then(res => res.arrayBuffer())
         .then(buffer => new Uint8Array(buffer))
     : null
-
   const rows = [
     new TableRow({
       children: exportColumns.map(col =>
@@ -98,7 +90,6 @@ async function ExportWord(title: string, showLogo1: boolean, showLogo2: boolean)
       })
     ),
   ]
-
   const header = new Header({
     children: [
       new Table({
@@ -144,22 +135,18 @@ async function ExportWord(title: string, showLogo1: boolean, showLogo2: boolean)
       }),
     ],
   })
-
   const footer = new Footer({
     children: [
       new Paragraph({ children: [new TextRun({ text: getCurrentUrl(), size: 16, color: "0000FF" })], alignment: AlignmentType.LEFT }),
       new Paragraph({ children: [new TextRun({ text: `Dicetak pada: ${getCurrentDateTime()}`, size: 16 })], alignment: AlignmentType.RIGHT }),
     ],
   })
-
   const doc = new Document({
     sections: [{ headers: { default: header }, footers: { default: footer }, properties: { page: { size: { orientation: 'landscape' } } }, children: [new Paragraph({ text: "", spacing: { after: 200 } }), new Table({ rows })] }],
   })
-
   const buffer = await Packer.toBlob(doc)
   saveAs(buffer, 'exported_data.docx')
 }
-
 async function ExportPdf(title: string, showLogo1: boolean, showLogo2: boolean) {
   async function loadImageAsDataUrlWithSize(url: string): Promise<{ dataUrl: string, width: number, height: number }> {
     return new Promise((resolve, reject) => {
@@ -179,7 +166,6 @@ async function ExportPdf(title: string, showLogo1: boolean, showLogo2: boolean) 
       img.src = url
     })
   }
-
   const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a4' })
   const pageWidth = doc.internal.pageSize.getWidth()
   const pageHeight = doc.internal.pageSize.getHeight()
@@ -187,24 +173,18 @@ async function ExportPdf(title: string, showLogo1: boolean, showLogo2: boolean) 
   const fontSize8 = 8
   const titleFontSize = 12
   const startY = 20
-
   const [logo1Data, logo2Data] = await Promise.all([
     showLogo1 ? loadImageAsDataUrlWithSize('/export/logo1.png') : null,
     showLogo2 ? loadImageAsDataUrlWithSize('/export/logo2.png') : null,
   ])
-
   const fixedImgWidth = 60
   const logo1Size = logo1Data ? { width: fixedImgWidth, height: fixedImgWidth } : { width: 0, height: 0 }
   const logo2Size = logo2Data ? { width: fixedImgWidth, height: fixedImgWidth } : { width: 0, height: 0 }
-
-
   const colWidth = pageWidth / 3
   const logo1X = colWidth / 2 - logo1Size.width / 2
   const logo2X = colWidth * 2.5 - logo2Size.width / 2
-
   if (logo1Data) doc.addImage(logo1Data.dataUrl, 'PNG', logo1X, startY, logo1Size.width, logo1Size.height)
   if (logo2Data) doc.addImage(logo2Data.dataUrl, 'PNG', logo2X, startY, logo2Size.width, logo2Size.height)
-
   doc.setFontSize(titleFontSize)
   doc.setFont(undefined, 'bold')
   const centerX = pageWidth / 2
@@ -218,13 +198,11 @@ async function ExportPdf(title: string, showLogo1: boolean, showLogo2: boolean) 
   doc.setFontSize(fontSize8)
   doc.setFont(undefined, 'normal')
   doc.text(defaultText, centerX, currentY, { align: 'center' })
-
   const minY = startY + Math.max(logo1Size.height, logo2Size.height)
   if (currentY < minY) currentY = minY
   currentY += fontSize8 * 1.5
   doc.setLineWidth(2)
   doc.line(margin, currentY, pageWidth - margin, currentY)
-
   const head = [exportColumns.map(col => col.label)]
   const body = props.data.map(row => exportColumns.map(col => row[col.key] ?? ''))
   const options: UserOptions = {
@@ -243,11 +221,9 @@ async function ExportPdf(title: string, showLogo1: boolean, showLogo2: boolean) 
       doc.text(`Dicetak pada: ${getCurrentDateTime()}`, pageWidth - margin, footerY, { align: 'right' })
     },
   }
-
   autoTable(doc, options)
   doc.save("exported_data.pdf")
 }
-
 function ExportExcel() {
   const worksheetData = [
     exportColumns.map(col => col.label),
@@ -259,7 +235,6 @@ function ExportExcel() {
   const wbout = XLSX.write(workbook, { bookType: "xlsx", type: "array" })
   saveAs(new Blob([wbout], { type: "application/octet-stream" }), "exported_data.xlsx")
 }
-
 function ExportHandler(format: 'word' | 'pdf' | 'excel') {
   if (format === 'excel') return ExportExcel()
   if (!judul.value.trim()) return ElNotification({ message: 'Judul tidak boleh kosong!', type: 'warning', duration: 3000 })
@@ -273,7 +248,6 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
     <div class="popup">
       <button class="close-btn" @click="$emit('close')">&times;</button>
       <h2 class="title">Export Data</h2>
-
       <div class="form-group">
         <label for="judul">Judul Dokumen</label>
         <input
@@ -284,12 +258,10 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
           class="input"
         />
       </div>
-
       <div class="form-group checkbox-group">
         <label><input type="checkbox" v-model="showLogo1" /> Logo Tuah Sakato</label>
         <label><input type="checkbox" v-model="showLogo2" /> Logo Padang Kota Tercinta</label>
       </div>
-
       <div class="buttons">
         <button @click="ExportHandler('excel')">Export Excel</button>
         <button @click="ExportHandler('pdf')">Export PDF</button>
@@ -298,7 +270,6 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
     </div>
   </div>
 </template>
-
 <style scoped>
 .overlay {
   position: fixed;
@@ -310,7 +281,6 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
   animation: fadeIn 0.3s ease forwards;
   z-index: 1000;
 }
-
 .popup {
   position: relative;
   background: white;
@@ -321,7 +291,6 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
   max-width: 90vw;
   animation: scaleIn 0.3s ease forwards;
 }
-
 .title {
   margin-bottom: 24px;
   font-size: 1.5rem;
@@ -329,20 +298,17 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
   color: #333;
   text-align: center;
 }
-
 .form-group {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
 }
-
 .form-group label {
   margin-bottom: 8px;
   font-weight: 500;
   font-size: 0.95rem;
   color: #555;
 }
-
 .input {
   padding: 10px 12px;
   font-size: 1rem;
@@ -351,11 +317,9 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
   outline: none;
   transition: border-color 0.2s ease;
 }
-
 .input:focus {
   border-color: #69C5C2;
 }
-
 .checkbox-group {
   display: flex;
   flex-direction: column;
@@ -364,13 +328,11 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
   font-size: 0.9rem;
   color: #444;
 }
-
 .buttons {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-
 button {
   padding: 12px;
   font-size: 1rem;
@@ -382,11 +344,9 @@ button {
   color: white;
   transition: background-color 0.2s ease;
 }
-
 button:hover {
   background-color: #4fb1ae;
 }
-
 .close-btn {
   position: absolute;
   top: 14px;
@@ -398,11 +358,9 @@ button:hover {
   cursor: pointer;
   transition: color 0.2s ease;
 }
-
 .close-btn:hover {
   color: #444;
 }
-
 /* Animations */
 @keyframes fadeIn {
   from {
@@ -412,7 +370,6 @@ button:hover {
     background-color: rgba(0, 0, 0, 0.6);
   }
 }
-
 @keyframes scaleIn {
   from {
     opacity: 0;

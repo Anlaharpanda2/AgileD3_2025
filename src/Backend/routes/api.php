@@ -47,6 +47,15 @@ Route::delete('kelola/pelatihan/{data_pelatihan}', [KelolaDataPelatihanControlle
 Route::get('/peserta/{id}', [KelolaDataPelatihanController::class, 'show']);
 Route::patch('/peserta/{id}/ubah-foto', [KelolaDataPelatihanController::class, 'ubahFoto']);
 
+//api untuk halaman kelola data Pendaftaran
+Route::post('kelola/pendaftaran/impor', [KelolaDataPendaftaranController::class, 'import']);
+Route::get('kelola/pendaftaran', [KelolaDataPendaftaranController::class, 'index']);
+Route::post('kelola/pendaftaran', [KelolaDataPendaftaranController::class, 'store']);
+Route::put('kelola/pendaftaran/accept', [KelolaDataPendaftaranController::class, 'acceptMassal']);
+Route::patch('kelola/pendaftaran/{id}/accept', [KelolaDataPendaftaranController::class, 'accept']);
+Route::delete('kelola/pendaftaran', [KelolaDataPendaftaranController::class, 'rejectMassal']);
+Route::delete('kelola/pendaftaran/{id}', [KelolaDataPendaftaranController::class, 'reject']);
+
 //Prestest Postest
 Route::get('/kelola/test', [PrePostTestController::class, 'index']);               // Semua nilai test
 Route::post('/kelola/test', [PrePostTestController::class, 'store']);              // Tambah nilai
@@ -76,19 +85,6 @@ Route::put('/kelola/berita/restore/{id}', [KelolaDataBeritaController::class, 'r
 Route::delete('/kelola/berita/permanent/{id}', [KelolaDataBeritaController::class, 'forceDelete']);
 Route::delete('/kelola/berita/{id}', [KelolaDataBeritaController::class, 'destroy']);
 Route::delete('/kelola/berita', [KelolaDataBeritaController::class, 'destroyMassal']);
-
-//api untuk halaman kelola data Pendaftaran
-Route::put('/kelola/Pendaftaran/restore', [KelolaDataPendaftaranController::class, 'restoreMassal']);
-Route::delete('/kelola/Pendaftaran/permanent', [KelolaDataPendaftaranController::class, 'forceDeleteMassal']);
-Route::get('/kelola/Pendaftaran', [KelolaDataPendaftaranController::class, 'index']);
-Route::post('/kelola/Pendaftaran', [KelolaDataPendaftaranController::class, 'store']);
-Route::put('/kelola/Pendaftaran/{nik}', [KelolaDataPendaftaranController::class, 'update']);
-Route::get('/kelola/Pendaftaran/trash', [KelolaDataPendaftaranController::class, 'trash']);
-Route::put('/kelola/Pendaftaran/restore/{nik}', [KelolaDataPendaftaranController::class, 'restore']);
-Route::delete('/kelola/Pendaftaran/permanent/{nik}', [KelolaDataPendaftaranController::class, 'forceDelete']);
-Route::delete('/kelola/Pendaftaran/{nik}', [KelolaDataPendaftaranController::class, 'destroy']);
-Route::delete('/kelola/Pendaftaran', [KelolaDataPendaftaranController::class, 'destroyMassal']);
-Route::post('kelola/Pendaftaran/impor', [KelolaDataPendaftaranController::class, 'impor']);
 
 //api untuk kelola akses
 Route::get('/kelola/akses',[KelolaAksesController::class,'index']);

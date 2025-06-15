@@ -21,6 +21,7 @@ import DataPendaftaranView from '../views/PengelolaDataPendaftaran/DataPendaftar
 import NotFound from '../views/NotFound.vue';
 import Unauthorized from '../views/Unauthorized.vue';
 import DaftarMasyarakatView from '../views/DaftarMasyarakat/DaftarMasyarakatView.vue';
+import DetailDataPelatihan from '../views/PengelolaDataPelatihan/DetailDataPelatihan.vue';
 
 const routes = [
   //halaman home
@@ -46,7 +47,8 @@ const routes = [
   {path: '/data/pelatihan',name: 'DataPelatihan',component: DataPelatihanView,meta: { requiresAuth: true, role: 'operator' }},
   {path: '/data/Pendaftaran',name: 'DataPendaftaran',component: DataPendaftaranView,meta: { requiresAuth: true, role: 'operator' }},
   {path: '/data/pelatihan/sampah',name: 'DataPelatihanSampah',component: DataPelatihanSampahView,meta: { requiresAuth: true}},
-  
+  {path: '/peserta/:id',name: 'DetailPeserta',component: DetailDataPelatihan,meta: { requiresAuth: true, role: 'operator' }},
+
   //halaman pretest postest
   {path: '/preposttest',name: 'PrePostTest',component: PrePostTestView},
   {path: '/kelolatest',name: 'KelolaTest',component: PrePostTestView},

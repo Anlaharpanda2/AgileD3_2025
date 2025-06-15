@@ -27,6 +27,7 @@ class DataPelatihan extends Model
         'jenis_usaha',
         'penghasilan_perbulan',
         'nomor_telefon',
+        'photo',
     ];
 
     protected $dates = [
@@ -34,4 +35,15 @@ class DataPelatihan extends Model
         'created_at',
         'updated_at',
     ];
+    
+    protected $appends = ['photo_url'];
+
+    public function getPhotoUrlAttribute(): ?string
+    {
+        if (!$this->photo) {
+            return null;
+        }
+
+        return asset('storage/' . $this->photo);
+    }
 }

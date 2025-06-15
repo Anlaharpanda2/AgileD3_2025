@@ -103,6 +103,7 @@
       v-loading="loading"
       style="width: 100%"
       @selection-change="onSelectionChange"
+      @row-click="goToDetail"
       :header-cell-style="headerCellStyle"
       :row-style="rowStyle"
     >
@@ -132,19 +133,16 @@
         </template>
       </el-table-column>
       
-<el-table-column label="Tanggal Kegiatan" show-overflow-tooltip>
-  <template #header>
-    <el-tooltip content="Tanggal Kegiatan" placement="top">
-      <span class="header-tooltip-text">Tanggal Kegiatan</span>
-    </el-tooltip>
-  </template>
-  <template #default="{ row }">
-    <span>{{ formatTanggalKegiatan(row.kegiatan_dimulai, row.kegiatan_berakhir) }}</span>
-  </template>
-</el-table-column>
-
-
-
+      <el-table-column label="Tanggal Kegiatan" show-overflow-tooltip>
+        <template #header>
+          <el-tooltip content="Tanggal Kegiatan" placement="top">
+            <span class="header-tooltip-text">Tanggal Kegiatan</span>
+          </el-tooltip>
+        </template>
+        <template #default="{ row }">
+          <span>{{ formatTanggalKegiatan(row.kegiatan_dimulai, row.kegiatan_berakhir) }}</span>
+        </template>
+      </el-table-column>
 
       <el-table-column prop="tempat_kegiatan" show-overflow-tooltip>
         <template #header>
@@ -153,7 +151,6 @@
           </el-tooltip>
         </template>
       </el-table-column>
-
       <el-table-column prop="angkatan" show-overflow-tooltip>
         <template #header>
           <el-tooltip content="Angkatan" placement="top">
@@ -284,6 +281,22 @@ import FormTambahDataPeltihan from "../../components/KelolaDataPelatihan/FormTam
 import FormFilterDataPelatihan from "../../components/KelolaDataPelatihan/FormFilterDataPelatihan.vue";
 import FormSortingDataPelatihan from "../../components/KelolaDataPelatihan/FormSortingDataPelatihan.vue";
 import { ElNotification } from 'element-plus';
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goToDetail = (row: any, column: any, event: MouseEvent) => {
+  // Abaikan klik jika berasal dari kolom selection (checkbox) atau kolom Aksi
+  if (column.type === 'selection' || column.label === 'Aksi') {
+    return
+  }
+
+  // Arahkan ke detail jika bukan dari kolom aksi/checkbox
+  router.push({ name: 'DetailPeserta', params: { id: row.id } })
+}
+
+
+
 
 interface Peserta {
   id: number;

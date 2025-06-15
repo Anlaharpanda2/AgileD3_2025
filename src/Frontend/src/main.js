@@ -9,11 +9,11 @@ import './assets/style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-
 const app = createApp(App);
 
 app.component('Vue3Lottie', Vue3Lottie)
 app.use(router);
 app.use(ElementPlus);
-app.use(vuetify);
+app.use(vuetify)
+
 app.mount('#app');

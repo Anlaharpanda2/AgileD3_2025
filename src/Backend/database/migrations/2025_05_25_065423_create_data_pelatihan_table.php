@@ -11,6 +11,7 @@ return new class extends Migration {
     {
         Schema::create('data_pelatihan', function (Blueprint $table) {
             $table->id();
+            $table->string('photo')->nullable();
             $table->string('nama');
             $table->string('nik');
             $table->string('jenis_bimtek');

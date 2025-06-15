@@ -51,10 +51,12 @@ Route::patch('/peserta/{id}/ubah-foto', [KelolaDataPelatihanController::class, '
 Route::post('kelola/pendaftaran/impor', [KelolaDataPendaftaranController::class, 'import']);
 Route::get('kelola/pendaftaran', [KelolaDataPendaftaranController::class, 'index']);
 Route::post('kelola/pendaftaran', [KelolaDataPendaftaranController::class, 'store']);
-Route::put('kelola/pendaftaran/accept', [KelolaDataPendaftaranController::class, 'acceptMassal']);
+Route::post('kelola/pendaftaran/accept', [KelolaDataPendaftaranController::class, 'acceptMassal']);
 Route::patch('kelola/pendaftaran/{id}/accept', [KelolaDataPendaftaranController::class, 'accept']);
 Route::delete('kelola/pendaftaran', [KelolaDataPendaftaranController::class, 'rejectMassal']);
 Route::delete('kelola/pendaftaran/{id}', [KelolaDataPendaftaranController::class, 'reject']);
+Route::get('/pendaftar/{id}', [KelolaDataPendaftaranController::class, 'show']);
+Route::patch('/pendaftar/{id}/ubah-foto', [KelolaDataPendaftaranController::class, 'ubahFoto']);
 
 //Prestest Postest
 Route::get('/kelola/test', [PrePostTestController::class, 'index']);               // Semua nilai test

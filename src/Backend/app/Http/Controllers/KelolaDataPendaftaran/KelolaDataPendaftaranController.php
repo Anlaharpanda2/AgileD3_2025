@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Imports\PendaftaranImport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+
+
 class KelolaDataPendaftaranController extends Controller
 {
     /**
@@ -36,36 +40,64 @@ class KelolaDataPendaftaranController extends Controller
     /**
      * Menerima peserta pendaftar tunggal
      */
-    public function accept($id)
+    public function accept(Request $request, $id)
     {
+        Log::info('Diterima dari frontend:', $request->all());
+        $request->validate([
+            'kegiatan_dimulai' => 'required|date',
+            'kegiatan_berakhir' => 'required|date',
+            'tempat_kegiatan' => 'required|string',
+            'angkatan' => 'required|integer|min:1',
+        ]);
+
         $pendaftar = DataPendaftaran::findOrFail($id);
+
         $pelatihanData = $pendaftar->toArray();
+
+        // Tambahkan data yang dikirim dari form
+        $pelatihanData['kegiatan_dimulai'] = $request->kegiatan_dimulai;
+        $pelatihanData['kegiatan_berakhir'] = $request->kegiatan_berakhir;
+        $pelatihanData['tempat_kegiatan'] = $request->tempat_kegiatan;
+        $pelatihanData['angkatan'] = $request->angkatan;
+
         unset($pelatihanData['id'], $pelatihanData['created_at'], $pelatihanData['updated_at']);
+
         DataPelatihan::create($pelatihanData);
         $pendaftar->delete();
+
         return response()->json(['message' => 'Peserta diterima dan data telah dipindahkan.']);
     }
-    /**
-     * Menerima peserta pendaftar secara massal
-     */
+
     public function acceptMassal(Request $request)
     {
-        $ids = $request->input('ids', []);
-        if (!is_array($ids) || empty($ids)) {
-            return response()->json(['message' => 'Daftar ID tidak valid atau kosong.'], 422);
-        }
-        $pendaftarList = DataPendaftaran::whereIn('id', $ids)->get();
-        foreach ($pendaftarList as $pendaftar) {
-            $data = $pendaftar->toArray();
-            unset($data['id'], $data['created_at'], $data['updated_at']);
-            DataPelatihan::create($data);
+        $dataList = $request->all();
+
+        foreach ($dataList as $data) {
+            $validated = Validator::make($data, [
+                'id' => 'required|exists:data_pendaftaran,id',
+                'kegiatan_dimulai' => 'required|date',
+                'kegiatan_berakhir' => 'required|date',
+                'tempat_kegiatan' => 'required|string',
+                'angkatan' => 'required|integer|min:1',
+            ])->validate();
+
+            $pendaftar = DataPendaftaran::findOrFail($validated['id']);
+            $pelatihanData = array_merge($pendaftar->toArray(), [
+                'kegiatan_dimulai' => $validated['kegiatan_dimulai'],
+                'kegiatan_berakhir' => $validated['kegiatan_berakhir'],
+                'tempat_kegiatan' => $validated['tempat_kegiatan'],
+                'angkatan' => $validated['angkatan'],
+            ]);
+
+            unset($pelatihanData['id'], $pelatihanData['created_at'], $pelatihanData['updated_at']);
+            DataPelatihan::create($pelatihanData);
             $pendaftar->delete();
         }
-        return response()->json(['message' => 'Peserta massal berhasil diterima.']);
+
+        return response()->json(['message' => 'Data berhasil diproses dan dipindahkan.']);
     }
-    /**
-     * Menolak peserta pendaftar tunggal
-     */
+
+
     public function reject($id)
     {
         $pendaftar = DataPendaftaran::findOrFail($id);
@@ -77,13 +109,19 @@ class KelolaDataPendaftaranController extends Controller
      */
     public function rejectMassal(Request $request)
     {
-        $ids = $request->input('ids', []);
-        if (!is_array($ids) || empty($ids)) {
-            return response()->json(['message' => 'Daftar ID tidak valid atau kosong.'], 422);
+        $niks = $request->input('niks', []);
+
+        if (!is_array($niks) || empty($niks)) {
+            return response()->json(['message' => 'Daftar NIK tidak valid atau kosong.'], 422);
         }
-        $deletedCount = DataPendaftaran::whereIn('id', $ids)->delete();
-        return response()->json([ 'message' => "Berhasil menolak {$deletedCount} peserta." ]);
+
+        $deletedCount = DataPendaftaran::whereIn('nik', $niks)->delete();
+
+        return response()->json([
+            'message' => "Berhasil menolak {$deletedCount} peserta."
+        ]);
     }
+
     /**
      * Mengimpor data pendaftar dari file Excel
      */
@@ -100,6 +138,97 @@ class KelolaDataPendaftaranController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Gagal mengimpor data: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    public function show($id)
+    {
+        $data = DataPendaftaran::find($id);
+
+        if (!$data) {
+            return response()->json([
+                'message' => 'Data tidak ditemukan'
+            ], 404);
+        }
+
+        return response()->json([
+            'message' => 'Data ditemukan',
+            'data' => $data
+        ]);
+    }
+    public function ubahFoto(Request $request, $id)
+    {
+        try {
+            // Debug request
+            \Log::info('Upload request:', [
+                'method' => $request->method(),
+                'has_file' => $request->hasFile('photo'),
+                'files' => $request->allFiles(),
+                'all_data' => $request->all()
+            ]);
+
+            // Cek apakah file benar-benar dikirim
+            if (!$request->hasFile('photo')) {
+                return response()->json([
+                    'message' => 'File tidak terkirim.',
+                    'debug' => [
+                        'method' => $request->method(),
+                        'content_type' => $request->header('Content-Type'),
+                        'all_data' => $request->all(),
+                        'files' => $request->allFiles()
+                    ]
+                ], 422);
+            }
+
+            // Validasi input
+            $validator = Validator::make($request->all(), [
+                'photo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120', // max 5MB
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Validasi gagal.',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            // Cari pendaftar
+            $pendaftar = DataPendaftaran::findOrFail($id);
+
+            // Hapus foto lama jika ada
+            if ($pendaftar->photo && Storage::disk('public')->exists($pendaftar->photo)) {
+                Storage::disk('public')->delete($pendaftar->photo);
+            }
+
+            // Upload foto baru
+            $file = $request->file('photo');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('photos/pendaftar', $filename, 'public');
+
+            // Update database
+            $pendaftar->update([
+                'photo' => $path
+            ]);
+
+            // Refresh model untuk mendapatkan accessor photo_url yang terbaru
+            $pendaftar->refresh();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto berhasil diperbarui.',
+                'data' => [
+                    'photo_url' => $pendaftar->photo_url,
+                    'photo_path' => $path
+                ]
+            ], 200);
+
+        } catch (\Exception $e) {
+            \Log::error('Upload photo error: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan server.',
+                'debug' => app()->environment('local') ? $e->getMessage() : []
             ], 500);
         }
     }

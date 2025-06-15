@@ -12,14 +12,15 @@
       v-model="showFilter"  :columns="filterableColumns"
       v-model:active-filters="activeFilters"
     />
-    <FormTambahDataPeltihan 
-      v-if="showTambah"
-      @close="showTambah = false" 
-    />
-    <FormEditDatapendaftaran
-      v-if="showEdit && editData" 
-      :initialData="editData" 
+    <FormTerimaDataPendaftaran
+      v-if="showEdit && TerimaData" 
+      :initialData="TerimaData" 
       @close="showEdit = false" 
+    />
+    <FormTerimaDataPendaftaranMassal
+      v-if="showEditMassal && TerimaDataMassal" 
+      :initialData="TerimaDataMassal" 
+      @close="showEditMassal = false" 
     />
     <FormExportDatapendaftaran
       v-if="showExport" 
@@ -63,7 +64,7 @@
           </button>
       </div>
 
-      <!-- export, import, sampah, hapus masal dan tambah data disiko -->
+      <!-- export, import, sampah, hapus masal dan Terima data disiko -->
       <div class="right-control">
         <button class="button1" @click="showFilter = true">
           <img src="/table/filter.svg" alt="Filter" />
@@ -74,16 +75,13 @@
         <button class="button" @click="showExport = true">
           <img src="/table/export.svg" alt="Export" />
         </button>
-        <button class="button" @click="onExportClick">
-          <img src="/table/sampah.svg" alt="Sampah" />
-        </button>
         <button class="button" @click="onMassDeleteClick">
-          <img src="/table/hapusMass.svg" alt="hapusMassal" />
-          <span class="hilang">Hapus Massal</span>
+          <img src="/table/RejectMass.svg" alt="rejectMassal" />
+          <span class="hilang">Tolak Massal</span>
         </button>
-        <button class="button" @click="showTambah = true" >
-          <img src="/table/tambah.svg" alt="Add" />
-          <span class="hilang">Tambah Data</span>
+        <button class="button" @click="openEditMassal(selected)">
+          <img src="/table/AcceptMass.svg" alt="TerimaMassal" />
+          <span class="hilang">Terima Massal</span>
         </button>
       </div>
     </div>
@@ -125,33 +123,6 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      
-      <el-table-column label="Tanggal Kegiatan" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="Tanggal Kegiatan" placement="top">
-            <span class="header-tooltip-text">Tanggal Kegiatan</span>
-          </el-tooltip>
-        </template>
-        <template #default="{ row }">
-          <span>{{ formatTanggalKegiatan(row.kegiatan_dimulai, row.kegiatan_berakhir) }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column prop="tempat_kegiatan" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="Tempat Kegiatan" placement="top">
-            <span class="header-tooltip-text">Tempat Kegiatan</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
-      <el-table-column prop="angkatan" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="Angkatan" placement="top">
-            <span class="header-tooltip-text">Angkatan</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
-
       <el-table-column prop="tempat_tanggal_lahir" show-overflow-tooltip>
         <template #header>
           <el-tooltip content="Tempat Tanggal Lahir" placement="top">
@@ -217,18 +188,18 @@
         <template #default="{ row }">
           <div class="action-buttons">
             <img
-              src="/table/edit.svg"
-              alt="Edit"
+              src="/table/Accept.svg"
+              alt="Accetp"
               class="action-icon"
               @click="openEdit(row)"
-              title="Edit"
+              title="Accept"
             />
             <img
-              src="/table/hapus.svg"
-              alt="Hapus"
+              src="/table/Reject.svg"
+              alt="Recet"
               class="action-icon"
               @click="onDelete(row)"
-              title="Hapus"
+              title="Reject"
             />
           </div>
         </template>
@@ -268,29 +239,23 @@ import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import api from "../../api.js";
 import DefaultLayout from "../../layouts/DefaultLayout.vue";
 import FormExportDatapendaftaran from "../../components/KelolaDatapendaftaran/FormExportDatapendaftaran.vue";
-import FormEditDatapendaftaran from "../../components/KelolaDatapendaftaran/FormEditDatapendaftaran.vue";
-import FormTambahDataPeltihan from "../../components/KelolaDatapendaftaran/FormTambahDatapendaftaran.vue";
+import FormTerimaDataPendaftaran from "../../components/KelolaDataPendaftaran/FormTerimaDataPendaftaran.vue";
+import FormTerimaDataPendaftaranMassal from "../../components/KelolaDataPendaftaran/FormTerimaDataPendaftaranMassal.vue";
 import FormFilterDatapendaftaran from "../../components/KelolaDatapendaftaran/FormFilterDatapendaftaran.vue";
 import FormSortingDatapendaftaran from "../../components/KelolaDatapendaftaran/FormSortingDatapendaftaran.vue";
-import { ElNotification } from 'element-plus';
+import { ElNotification, ElMessageBox } from 'element-plus';
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
 const goToDetail = (row: any, column: any, event: MouseEvent) => {
-  // Abaikan klik jika berasal dari kolom selection (checkbox) atau kolom Aksi
   if (column.type === 'selection' || column.label === 'Aksi') {
     return
   }
-
-  // Arahkan ke detail jika bukan dari kolom aksi/checkbox
-  router.push({ name: 'DetailPeserta', params: { id: row.id } })
+  router.push({ name: 'Detailpendaftar', params: { id: row.id } })
 }
 
-
-
-
-interface Peserta {
+interface pendaftar {
   id: number;
   nama: string;
   nik: string;
@@ -310,8 +275,8 @@ interface Peserta {
   updated_at?: string;
 }
 
-const tableData = ref<Peserta[]>([]);
-const selected = ref<Peserta[]>([]);
+const tableData = ref<pendaftar[]>([]);
+const selected = ref<pendaftar[]>([]);
 const search = ref("");
 const loading = ref(false);
 const itemsPerPage = ref<number | string>(10);
@@ -319,17 +284,33 @@ const currentPage = ref(1);
 const dropdownOpen = ref(false);
 const showExport = ref(false)
 const showEdit = ref(false)
-const showTambah = ref(false)
+const showEditMassal = ref(false)
+const showTerima = ref(false)
 const showSort = ref(false)
 const showFilter = ref(false)
-const editData = ref(null)
+const TerimaData = ref(null)
+const TerimaDataMassal = ref(null)
 const perPageOptions = [10, 20, 50, 100, "all"];
 
 const openEdit = (row) => {
-  editData.value = { ...row }
+  TerimaData.value = { ...row }
   showEdit.value = true
   loading.value = false;
 }
+const openEditMassal = (rows) => {
+  if (!rows.length) {
+    ElNotification({
+      title: 'Peringatan',
+      message: 'Silakan pilih data terlebih dahulu untuk diterima secara massal.',
+      type: 'warning',
+    });
+    return;
+  }
+
+  TerimaDataMassal.value = rows;
+  showEditMassal.value = true;
+};
+
 
 function toggleDropdown() {
   dropdownOpen.value = !dropdownOpen.value;
@@ -369,10 +350,10 @@ function formatTanggalKegiatan(mulai: string, berakhir: string): string {
 
 
 
-// Inisialisasi activeFilters (baru ditambahkan)
+// Inisialisasi activeFilters (baru diTerimakan)
 const activeFilters = ref<{ [key: string]: string | number | null }>({});
 
-// Perbaiki computed property filterableColumns (baru ditambahkan)
+// Perbaiki computed property filterableColumns (baru diTerimakan)
 const filterableColumns = computed(() => {
   if (!tableData.value || tableData.value.length === 0) {
     return [ /* default columns */ ];
@@ -461,75 +442,103 @@ const visiblePages = computed<(number | '...')[]>(() => {
   return pages;
 });
 
-function onSelectionChange(rows: Peserta[]) {
+function onSelectionChange(rows: pendaftar[]) {
   selected.value = rows;
 }
 
 async function onMassDeleteClick() {
   if (!selected.value.length) return;
 
-  loading.value = true;
-
   try {
-    const niks = selected.value.map(p => p.nik);
+    // Tampilkan konfirmasi kepada pengguna
+    await ElMessageBox.confirm(
+      `Yakin ingin menolak ${selected.value.length} data ini?`,
+      'Konfirmasi Tolak',
+      {
+        confirmButtonText: 'Iya, Tolak',
+        cancelButtonText: 'Batal',
+        type: 'warning',
+      }
+    );
+
+    loading.value = true;
+
+    // Ambil daftar NIK dari data yang dipilih
+    const niks = selected.value.map((item) => item.nik);
+
+    // Kirim permintaan penghapusan ke API
     await api.delete('/kelola/pendaftaran', {
-      data: { niks }
+      data: { niks },
     });
+
+    // Refresh data setelah penghapusan
     await fetchData();
+
+    // Notifikasi sukses
     ElNotification({
       title: 'Berhasil',
-      message: 'Hapus Data Massal',
+      message: 'Data berhasil ditolak secara massal.',
       type: 'success',
       duration: 3000,
     });
-  } 
-  catch (err) {
-    console.error('Gagal menghapus data:', err);
-    ElNotification({ // Notifikasi error (BARU)
-      title: 'Error',
-      message: 'Gagal menghapus data massal.',
+  } catch (err) {
+    // Notifikasi gagal
+    console.error('Gagal menolak data:', err);
+    ElNotification({
+      title: 'Gagal',
+      message: 'Terjadi kesalahan saat menolak data massal.',
       type: 'error',
       duration: 3000,
     });
-  }
-  finally {
+  } finally {
     loading.value = false;
   }
 }
 
+async function onDelete(row: pendaftar) {
+  try {
+    // Tampilkan konfirmasi penolakan
+    await ElMessageBox.confirm(
+      `Yakin ingin menolak permanen pendaftar dengan NIK ${row.nik}?`,
+      'Konfirmasi Tolak',
+      {
+        confirmButtonText: 'Iya, Tolak',
+        cancelButtonText: 'Batal',
+        type: 'warning',
+      }
+    );
 
-// Sampah route → GET /data/pendaftaran/sampah
-async function onExportClick() {
-  window.location.href = '/data/pendaftaran/sampah';
-}
+    loading.value = true;
 
-// Single delete → DELETE /kelola/pendaftaran/{nik}
-async function onDelete(row: Peserta) {
-  loading.value = true;
-  try { // Ditambahkan try-catch
+    // Kirim permintaan penghapusan ke API
     await api.delete(`/kelola/pendaftaran/${row.id}`);
+
+    // Refresh data setelah penghapusan
     await fetchData();
-    ElNotification({ // Notifikasi sukses (sudah ada)
+
+    // Notifikasi sukses
+    ElNotification({
       title: 'Berhasil',
-      message: 'Data berhasil dihapus',
+      message: 'Pendaftar berhasil ditolak.',
       type: 'success',
       duration: 3000,
     });
-  } catch (err) { // Notifikasi error (BARU)
-    console.error('Gagal menghapus data:', err);
+  } catch (err) {
+    // Notifikasi gagal
+    console.error('Gagal menolak pendaftar:', err);
     ElNotification({
-      title: 'Error',
-      message: 'Gagal menghapus data.',
+      title: 'Gagal',
+      message: 'Terjadi kesalahan saat menolak pendaftar.',
       type: 'error',
       duration: 3000,
     });
-  } finally { // Pastikan loading diatur
+  } finally {
     loading.value = false;
   }
 }
 
 async function fetchData() {
-  try { // Ditambahkan try-catch
+  try { // DiTerimakan try-catch
     const res = await api.get('/kelola/pendaftaran');
     tableData.value = Array.isArray(res) ? res : res.data || [];
   } catch (error) { // Notifikasi error (BARU)

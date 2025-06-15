@@ -8,6 +8,7 @@ return new class extends Migration {
     {
         Schema::create('users_masyarakat', function (Blueprint $table) {
             $table->id();
+            $table->string('photo')->nullable();
             $table->string('nama');
             $table->string('nik')->unique();
             $table->string('tempat_tanggal_lahir');
@@ -22,7 +23,8 @@ return new class extends Migration {
             $table->string('jenis_usaha')->nullable();
             $table->string('penghasilan_perbulan')->nullable();
             $table->string('nomor_telefon')->nullable();
-            $table->softDeletes();
+            $table->string('status_pendaftaran')->nullable();
+            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }

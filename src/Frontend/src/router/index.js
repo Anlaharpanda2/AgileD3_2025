@@ -50,7 +50,7 @@ const routes = [
   {path: '/peserta/:id',name: 'DetailPeserta',component: DetailDataPelatihan,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
   //halaman kelola pendaftaran
   {path: '/data/pendaftaran',name: 'Datapendaftaran',component: DatapendaftaranView,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
-  {path: '/pendaftar/:id',name: 'DetailPeserta',component: DetailDataPendaftaran,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
+  {path: '/pendaftar/:id',name: 'Detailpendaftar',component: DetailDataPendaftaran,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
 
   //halaman pretest postest
   {path: '/preposttest',name: 'PrePostTest',component: PrePostTestView},

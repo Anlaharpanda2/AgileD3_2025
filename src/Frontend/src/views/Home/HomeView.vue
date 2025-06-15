@@ -1,5 +1,9 @@
 <template>
   <DefaultLayout>
+    <FormTambahDataPendaftar
+      v-if="showTambah"
+      @close="showTambah = false" 
+    />
     <!-- Hero Slider Section -->
     <section class="hero-section">
       <Slider />
@@ -23,7 +27,7 @@
                 </div>
 
                 <div class="service-card-actions">
-                  <el-button type="primary" @click="handleSubmit" round class="submit-btn">
+                  <el-button type="primary" @click="showTambah" round class="submit-btn">
                     Ikut Pelatihan
                   </el-button>
                 </div>
@@ -246,6 +250,7 @@ import {STORAGE_URL} from '@/api.js';
 
 const image = '/Home/1.jpeg';
 const title = 'Layanan Desain Grafis';
+const showTambah = ref(false);
 const description =
   'Tingkatkan brand Anda dengan layanan desain grafis yang kreatif dan profesional.';
 

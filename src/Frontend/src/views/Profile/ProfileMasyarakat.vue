@@ -156,6 +156,34 @@
                 </div>
               </div>
             </div>
+            <div class="info-card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="el-icon-user"></i>
+                  Informasi Pendaftaran
+                </h3>
+              </div>
+              <div class="card-content">
+                <div class="info-item d-flex justify-between align-items-center mb-2">
+                  <span class="info-label fw-bold me-2">Status</span>
+                  <span
+                    class="info-value badge px-3 py-2 text-capitalize"
+                    :class="{
+                      'bg-success text-white': pesertaData.status_pendaftaran === 'Diterima',
+                      'bg-danger text-white': pesertaData.status_pendaftaran === 'Ditolak',
+                      'bg-warning text-dark': pesertaData.status_pendaftaran === 'Diproses',
+                    }"
+                  >
+                    {{ pesertaData.status_pendaftaran }}
+                  </span>
+                </div>
+
+                <div class="info-item full-width">
+                  <span class="info-label fw-bold">Keterangan</span>
+                  <p class="info-value mt-1 mb-0">{{ pesertaData.keterangan }}</p>
+                </div>
+              </div>
+            </div>
           </div>
         </template>
 

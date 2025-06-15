@@ -22,6 +22,7 @@ import NotFound from '../views/NotFound.vue';
 import Unauthorized from '../views/Unauthorized.vue';
 import DaftarMasyarakatView from '../views/DaftarMasyarakat/DaftarMasyarakatView.vue';
 import ProfileMasyarakat from '../views/Profile/ProfileMasyarakat.vue';
+import KelolaDataView from '../views/KelolaData/KelolaDataView.vue';
 
 const routes = [
   //halaman home
@@ -42,6 +43,9 @@ const routes = [
   {path: '/reset/otp',name: 'resetOperatorOtp',component: OtpView},
   {path: '/reset/forgot',name: 'resetOperatorForgot',component: ForgotView},
   {path: '/reset/password',name: 'resetOperatorPassword',component: ResetPassword},
+
+  //Kelola data
+  {path: '/Kelola/data',name: 'KelolaData',component: KelolaDataView,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
 
   //halaman kelola pelatihan
   {path: '/data/pelatihan',name: 'DataPelatihan',component: DataPelatihanView,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},

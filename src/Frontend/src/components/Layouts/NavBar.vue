@@ -7,7 +7,7 @@
       <li  class="hover"><a href="/data/pendaftaran"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">PENDAFTAR</span></a></li>
       <li class="hover"><a href="/data/pelatihan"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">PELATIHAN</span></a></li>
       <li class="hover"><a href="#"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">PELAPORAN</span></a></li>
-      <li class="hover"><a href="#"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">KELOLA DATA</span></a></li>
+      <li class="hover"><a href="/kelola/data"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">KELOLA DATA</span></a></li>
       <li class="hover"><a href="/kelola/akses"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">KELOLA AKSES</span></a></li>
     </ul>
   </nav>

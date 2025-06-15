@@ -292,12 +292,9 @@ const goToDetail = (row: any, column: any, event: MouseEvent) => {
   }
 
   // Arahkan ke detail jika bukan dari kolom aksi/checkbox
-  router.push({ name: 'DetailPeserta', params: { id: row.id } })
+  router.push({ name: 'DetailMasyarakat', params: { id: row.nik } })
 }
-
-
-
-
+ 
 interface Peserta {
   id: number;
   nama: string;

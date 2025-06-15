@@ -10,14 +10,14 @@
             <span>Kembali</span>
           </button>
         </div>
-        <h1 class="page-title">Detail pendaftar pendaftaran</h1>
-        <p class="page-subtitle">Informasi lengkap data pendaftar</p>
+        <h1 class="page-title">Detail Peserta Pelatihan</h1>
+        <p class="page-subtitle">Informasi lengkap data peserta</p>
       </div>
     </div>
 
     <div class="main-content">
       <div class="content-wrapper">
-        <template v-if="pendaftarData">
+        <template v-if="pesertaData">
           <!-- Profile Card -->
           <div class="profile-card">
             <div class="profile-header">
@@ -25,9 +25,9 @@
                 <div class="photo-wrapper" @click="triggerFileInput">
                   <el-avatar :size="120" class="profile-avatar">
                     <img
-                      :src="pendaftarData.photo_url || '/table/profile.svg'"
-                      alt="Foto pendaftar"
-                      class="pendaftar-photo"
+                      :src="pesertaData.photo_url || '/table/profile.svg'"
+                      alt="Foto Peserta"
+                      class="peserta-photo"
                       @error="handleImageError"
                     />
                   </el-avatar>
@@ -39,11 +39,11 @@
               </div>
               
               <div class="profile-info">
-                <h2 class="profile-name">{{ pendaftarData.nama }}</h2>
-                <p class="profile-nik">NIK: {{ pendaftarData.nik }}</p>
+                <h2 class="profile-name">{{ pesertaData.nama }}</h2>
+                <p class="profile-nik">NIK: {{ pesertaData.nik }}</p>
                 <div class="profile-badges">
-                  <span class="badge badge-primary">{{ pendaftarData.jenis_bimtek }}</span>
-                  <span class="badge badge-secondary">Angkatan {{ pendaftarData.angkatan }}</span>
+                  <span class="badge badge-primary">{{ pesertaData.jenis_bimtek }}</span>
+                  <span class="badge badge-secondary">Angkatan {{ pesertaData.angkatan }}</span>
                 </div>
               </div>
             </div>
@@ -51,34 +51,34 @@
 
           <!-- Information Cards -->
           <div class="info-grid">
-            <!-- Informasi pendaftaran -->
+            <!-- Informasi Pelatihan -->
             <div class="info-card">
               <div class="card-header">
                 <h3 class="card-title">
                   <i class="el-icon-reading"></i>
-                  Informasi pendaftaran
+                  Informasi Pelatihan
                 </h3>
               </div>
               <div class="card-content">
                 <div class="info-item">
-                  <span class="info-label">Jenis pendaftaran</span>
-                  <span class="info-value">{{ pendaftarData.jenis_bimtek }}</span>
+                  <span class="info-label">Jenis Pelatihan</span>
+                  <span class="info-value">{{ pesertaData.jenis_bimtek }}</span>
                 </div>
                 <div class="info-item">
                   <span class="info-label">Angkatan</span>
-                  <span class="info-value">{{ pendaftarData.angkatan }}</span>
+                  <span class="info-value">{{ pesertaData.angkatan }}</span>
                 </div>
                 <div class="info-item">
                   <span class="info-label">Mulai Kegiatan</span>
-                  <span class="info-value">{{ pendaftarData.kegiatan_dimulai }}</span>
+                  <span class="info-value">{{ pesertaData.kegiatan_dimulai }}</span>
                 </div>
                 <div class="info-item">
                   <span class="info-label">Berakhir</span>
-                  <span class="info-value">{{ pendaftarData.kegiatan_berakhir }}</span>
+                  <span class="info-value">{{ pesertaData.kegiatan_berakhir }}</span>
                 </div>
                 <div class="info-item">
                   <span class="info-label">Tempat Kegiatan</span>
-                  <span class="info-value">{{ pendaftarData.tempat_kegiatan }}</span>
+                  <span class="info-value">{{ pesertaData.tempat_kegiatan }}</span>
                 </div>
               </div>
             </div>
@@ -94,25 +94,25 @@
               <div class="card-content">
                 <div class="info-item">
                   <span class="info-label">Tempat, Tanggal Lahir</span>
-                  <span class="info-value">{{ pendaftarData.tempat_tanggal_lahir }}</span>
+                  <span class="info-value">{{ pesertaData.tempat_tanggal_lahir }}</span>
                 </div>
                 <div class="info-item">
                   <span class="info-label">Pendidikan</span>
-                  <span class="info-value">{{ pendaftarData.pendidikan }}</span>
+                  <span class="info-value">{{ pesertaData.pendidikan }}</span>
                 </div>
                 <div class="info-item">
                   <span class="info-label">Status</span>
-                  <span class="info-value status-badge" :class="getStatusClass(pendaftarData.status)">
-                    {{ pendaftarData.status }}
+                  <span class="info-value status-badge" :class="getStatusClass(pesertaData.status)">
+                    {{ pesertaData.status }}
                   </span>
                 </div>
                 <div class="info-item">
                   <span class="info-label">Nomor Telepon</span>
-                  <span class="info-value">{{ pendaftarData.nomor_telefon }}</span>
+                  <span class="info-value">{{ pesertaData.nomor_telefon }}</span>
                 </div>
                 <div class="info-item full-width">
                   <span class="info-label">Alamat</span>
-                  <span class="info-value">{{ pendaftarData.alamat }}</span>
+                  <span class="info-value">{{ pesertaData.alamat }}</span>
                 </div>
               </div>
             </div>
@@ -128,17 +128,17 @@
               <div class="card-content">
                 <div class="info-item">
                   <span class="info-label">Jenis Usaha</span>
-                  <span class="info-value">{{ pendaftarData.jenis_usaha }}</span>
+                  <span class="info-value">{{ pesertaData.jenis_usaha }}</span>
                 </div>
                 <div class="info-item">
                   <span class="info-label">Penghasilan/Bulan</span>
-                  <span class="info-value income-value">{{ pendaftarData.penghasilan_perbulan }}</span>
+                  <span class="info-value income-value">{{ pesertaData.penghasilan_perbulan }}</span>
                 </div>
               </div>
             </div>
 
             <!-- Metadata -->
-            <div class="info-card" v-if="pendaftarData.created_at || pendaftarData.updated_at">
+            <div class="info-card" v-if="pesertaData.created_at || pesertaData.updated_at">
               <div class="card-header">
                 <h3 class="card-title">
                   <i class="el-icon-time"></i>
@@ -146,13 +146,13 @@
                 </h3>
               </div>
               <div class="card-content">
-                <div class="info-item" v-if="pendaftarData.created_at">
+                <div class="info-item" v-if="pesertaData.created_at">
                   <span class="info-label">Dibuat Pada</span>
-                  <span class="info-value">{{ formatDate(pendaftarData.created_at) }}</span>
+                  <span class="info-value">{{ formatDate(pesertaData.created_at) }}</span>
                 </div>
-                <div class="info-item" v-if="pendaftarData.updated_at">
+                <div class="info-item" v-if="pesertaData.updated_at">
                   <span class="info-label">Diperbarui Pada</span>
-                  <span class="info-value">{{ formatDate(pendaftarData.updated_at) }}</span>
+                  <span class="info-value">{{ formatDate(pesertaData.updated_at) }}</span>
                 </div>
               </div>
             </div>
@@ -164,7 +164,7 @@
             <div class="loading-spinner">
               <div class="spinner"></div>
             </div>
-            <p class="loading-text">Memuat data pendaftar...</p>
+            <p class="loading-text">Memuat data peserta...</p>
           </div>
         </template>
       </div>
@@ -180,7 +180,7 @@ import { ElMessage } from 'element-plus'
 import api from '../../api'
 import DefaultLayout2 from "../../layouts/DefaultLayout2.vue";
 
-interface pendaftar {
+interface Peserta {
   id: number
   nama: string
   nik: string
@@ -204,23 +204,23 @@ interface pendaftar {
 
 const route = useRoute()
 const router = useRouter()
-const pendaftarData = ref<pendaftar | null>(null)
+const pesertaData = ref<Peserta | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
 const uploading = ref(false)
+const nik = route.params.id
 
 onMounted(async () => {
   try {
-    const id = route.params.id
-    const res = await api.get(`/pendaftar/${id}`)
-    pendaftarData.value = res.data
-    console.log('Data pendaftar:', res.data)
+    const res = await api.get(`/peserta/${nik}`)
+    pesertaData.value = res.data
+    console.log('Data peserta:', res.data)
   } catch (err) {
-    console.error('Gagal memuat data pendaftar:', err)
+    console.error('Gagal memuat data peserta:', err)
   }
 })
 
 const goBack = () => {
-  router.push('/data/pendaftaran')
+  router.back()
 }
 
 const handleImageError = (event: Event) => {
@@ -282,18 +282,18 @@ const uploadPhoto = async (event: Event) => {
   formData.append('_method', 'PATCH')
 
   try {
-    const id = pendaftarData.value?.id
-    const res = await api.post(`/pendaftar/${id}/ubah-foto`, formData)
+    const id = pesertaData.value?.id
+    const res = await api.post(`/peserta/${nik}/ubah-foto`, formData)
 
     ElMessage.success('Foto berhasil diperbarui')
     
     if (res?.data?.data?.photo_url) {
-      pendaftarData.value!.photo_url = res.data.data.photo_url
+      pesertaData.value!.photo_url = res.data.data.photo_url
     } else if (res?.data?.photo_url) {
-      pendaftarData.value!.photo_url = res.data.photo_url
+      pesertaData.value!.photo_url = res.data.photo_url
     } else {
-      const refreshRes = await api.get(`/pendaftar/${id}`)
-      pendaftarData.value = refreshRes.data
+      const refreshRes = await api.get(`/peserta/${id}`)
+      pesertaData.value = refreshRes.data
     }
     
     input.value = ''
@@ -496,7 +496,7 @@ const uploadPhoto = async (event: Event) => {
   transform: scale(1.1);
 }
 
-.pendaftar-photo {
+.peserta-photo {
   width: 100%;
   height: 100%;
   object-fit: cover;

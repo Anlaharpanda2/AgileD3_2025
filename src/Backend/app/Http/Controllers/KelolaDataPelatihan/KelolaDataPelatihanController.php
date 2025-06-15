@@ -4,6 +4,7 @@ namespace App\Http\Controllers\KelolaDataPelatihan;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataPelatihan;
+use App\Models\UserMasyarakat;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\imports\PelatihanImport;
@@ -175,9 +176,9 @@ class KelolaDataPelatihanController extends Controller
             ], 500);
         }
     }
-    public function show($id)
+    public function show($nik)
     {
-        $data = DataPelatihan::find($id);
+        $data = UserMasyarakat::where('nik', $nik)->first();
 
         if (!$data) {
             return response()->json([
@@ -190,80 +191,85 @@ class KelolaDataPelatihanController extends Controller
             'data' => $data
         ]);
     }
-    public function ubahFoto(Request $request, $id)
-    {
-        try {
-            // Debug request
-            \Log::info('Upload request:', [
-                'method' => $request->method(),
-                'has_file' => $request->hasFile('photo'),
-                'files' => $request->allFiles(),
-                'all_data' => $request->all()
-            ]);
 
-            // Cek apakah file benar-benar dikirim
-            if (!$request->hasFile('photo')) {
-                return response()->json([
-                    'message' => 'File tidak terkirim.',
-                    'debug' => [
-                        'method' => $request->method(),
-                        'content_type' => $request->header('Content-Type'),
-                        'all_data' => $request->all(),
-                        'files' => $request->allFiles()
-                    ]
-                ], 422);
-            }
+   public function ubahFoto(Request $request, $nik)
+{
+    try {
+        \Log::info('Upload request:', [
+            'method' => $request->method(),
+            'has_file' => $request->hasFile('photo'),
+            'files' => $request->allFiles(),
+            'all_data' => $request->all()
+        ]);
 
-            // Validasi input
-            $validator = Validator::make($request->all(), [
-                'photo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120', // max 5MB
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'message' => 'Validasi gagal.',
-                    'errors' => $validator->errors()
-                ], 422);
-            }
-
-            // Cari peserta
-            $peserta = DataPelatihan::findOrFail($id);
-
-            // Hapus foto lama jika ada
-            if ($peserta->photo && Storage::disk('public')->exists($peserta->photo)) {
-                Storage::disk('public')->delete($peserta->photo);
-            }
-
-            // Upload foto baru
-            $file = $request->file('photo');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('photos/peserta', $filename, 'public');
-
-            // Update database
-            $peserta->update([
-                'photo' => $path
-            ]);
-
-            // Refresh model untuk mendapatkan accessor photo_url yang terbaru
-            $peserta->refresh();
-
+        if (!$request->hasFile('photo')) {
             return response()->json([
-                'success' => true,
-                'message' => 'Foto berhasil diperbarui.',
-                'data' => [
-                    'photo_url' => $peserta->photo_url,
-                    'photo_path' => $path
+                'message' => 'File tidak terkirim.',
+                'debug' => [
+                    'method' => $request->method(),
+                    'content_type' => $request->header('Content-Type'),
+                    'all_data' => $request->all(),
+                    'files' => $request->allFiles()
                 ]
-            ], 200);
+            ], 422);
+        }
 
-        } catch (\Exception $e) {
-            \Log::error('Upload photo error: ' . $e->getMessage());
-            
+        $validator = Validator::make($request->all(), [
+            'photo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validasi gagal.',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Cari peserta berdasarkan nik
+        $peserta = UserMasyarakat::where('nik', $nik)->first();
+
+        if (!$peserta) {
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan server.',
-                'debug' => app()->environment('local') ? $e->getMessage() : []
-            ], 500);
+                'message' => 'Data dengan NIK tersebut tidak ditemukan.'
+            ], 404);
         }
+
+        // Hapus foto lama jika ada
+        if ($peserta->photo && Storage::disk('public')->exists($peserta->photo)) {
+            Storage::disk('public')->delete($peserta->photo);
+        }
+
+        // Upload foto baru
+        $file = $request->file('photo');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs('photos/peserta', $filename, 'public');
+
+        // Update data
+        $peserta->update([
+            'photo' => $path
+        ]);
+
+        $peserta->refresh();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Foto berhasil diperbarui.',
+            'data' => [
+                'photo_url' => $peserta->photo_url,
+                'photo_path' => $path
+            ]
+        ], 200);
+
+    } catch (\Exception $e) {
+        \Log::error('Upload photo error: ' . $e->getMessage());
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Terjadi kesalahan server.',
+            'debug' => app()->environment('local') ? $e->getMessage() : []
+        ], 500);
     }
+}
+
 }

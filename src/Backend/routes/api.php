@@ -44,8 +44,8 @@ Route::get('kelola/pelatihan', [KelolaDataPelatihanController::class, 'index']);
 Route::post('kelola/pelatihan', [KelolaDataPelatihanController::class, 'store']);
 Route::put('kelola/pelatihan/{data_pelatihan}', [KelolaDataPelatihanController::class, 'update']);
 Route::delete('kelola/pelatihan/{data_pelatihan}', [KelolaDataPelatihanController::class, 'destroy']);
-Route::get('/peserta/{id}', [KelolaDataPelatihanController::class, 'show']);
-Route::patch('/peserta/{id}/ubah-foto', [KelolaDataPelatihanController::class, 'ubahFoto']);
+Route::get('/peserta/{nik}', [KelolaDataPelatihanController::class, 'show']);
+Route::patch('/peserta/{nik}/ubah-foto', [KelolaDataPelatihanController::class, 'ubahFoto']);
 
 //api untuk halaman kelola data Pendaftaran
 Route::post('kelola/pendaftaran/impor', [KelolaDataPendaftaranController::class, 'import']);
@@ -53,10 +53,8 @@ Route::get('kelola/pendaftaran', [KelolaDataPendaftaranController::class, 'index
 Route::post('kelola/pendaftaran', [KelolaDataPendaftaranController::class, 'store']);
 Route::post('kelola/pendaftaran/accept', [KelolaDataPendaftaranController::class, 'acceptMassal']);
 Route::patch('kelola/pendaftaran/{id}/accept', [KelolaDataPendaftaranController::class, 'accept']);
-Route::delete('kelola/pendaftaran', [KelolaDataPendaftaranController::class, 'rejectMassal']);
-Route::delete('kelola/pendaftaran/{id}', [KelolaDataPendaftaranController::class, 'reject']);
-Route::get('/pendaftar/{id}', [KelolaDataPendaftaranController::class, 'show']);
-Route::patch('/pendaftar/{id}/ubah-foto', [KelolaDataPendaftaranController::class, 'ubahFoto']);
+Route::post('kelola/pendaftaran/massal', [KelolaDataPendaftaranController::class, 'rejectMassal']);
+Route::post('kelola/pendaftaran/{id}', [KelolaDataPendaftaranController::class, 'reject']);
 
 //Prestest Postest
 Route::get('/kelola/test', [PrePostTestController::class, 'index']);               // Semua nilai test

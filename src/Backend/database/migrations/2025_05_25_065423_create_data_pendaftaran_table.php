@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->string('photo')->nullable();
             $table->string('nama');
             $table->string('nik')->unique();
-            // $table->foreign('nik')->references('nik')->on('users_masyarakat')->onDelete('cascade');
+            $table->foreign('nik')->references('nik')->on('users_masyarakat')->onDelete('cascade');
             $table->string('jenis_bimtek');
             $table->date('kegiatan_dimulai')->nullable();
             $table->date('kegiatan_berakhir')->nullable();
@@ -57,25 +57,12 @@ BEGIN
   END IF;
 END;
 SQL);
-
-        // Trigger AFTER DELETE untuk hapus user jika nik dihapus dari pendaftaran
-        DB::unprepared(<<<'SQL'
-CREATE TRIGGER trg_after_delete_data_pendaftaran
-AFTER DELETE ON data_pendaftaran
-FOR EACH ROW
-BEGIN
-  DELETE FROM users_masyarakat
-  WHERE nik = OLD.nik;
-END;
-SQL);
     }
 
     public function down(): void
     {
         // Drop trigger sebelum drop table
         DB::unprepared('DROP TRIGGER IF EXISTS trg_after_insert_data_pendaftaran;');
-        DB::unprepared('DROP TRIGGER IF EXISTS trg_after_delete_data_pendaftaran;');
-
         Schema::dropIfExists('data_pendaftaran');
     }
 };

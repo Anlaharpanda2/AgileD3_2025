@@ -252,7 +252,7 @@ const goToDetail = (row: any, column: any, event: MouseEvent) => {
   if (column.type === 'selection' || column.label === 'Aksi') {
     return
   }
-  router.push({ name: 'Detailpendaftar', params: { id: row.id } })
+  router.push({ name: 'DetailMasyarakat', params: { id: row.nik } })
 }
 
 interface pendaftar {
@@ -447,34 +447,44 @@ function onSelectionChange(rows: pendaftar[]) {
 }
 
 async function onMassDeleteClick() {
-  if (!selected.value.length) return;
+  if (!selected.value.length) {
+    ElNotification({
+      title: 'Peringatan',
+      message: 'Silakan pilih data terlebih dahulu untuk ditolak.',
+      type: 'warning',
+    });
+    return;
+  }
 
   try {
-    // Tampilkan konfirmasi kepada pengguna
-    await ElMessageBox.confirm(
-      `Yakin ingin menolak ${selected.value.length} data ini?`,
-      'Konfirmasi Tolak',
+    // Tampilkan prompt untuk mengisi keterangan
+    const { value: keterangan } = await ElMessageBox.prompt(
+      `Masukkan keterangan penolakan untuk ${selected.value.length} peserta:`,
+      'Konfirmasi Tolak Massal',
       {
-        confirmButtonText: 'Iya, Tolak',
+        confirmButtonText: 'Tolak',
         cancelButtonText: 'Batal',
+        inputPlaceholder: 'Contoh: Data tidak lengkap atau tidak valid',
+        inputValidator: (value) => {
+          if (!value) return 'Keterangan wajib diisi';
+          if (value.length > 255) return 'Keterangan terlalu panjang (maks. 255 karakter)';
+          return true;
+        },
         type: 'warning',
       }
     );
 
     loading.value = true;
 
-    // Ambil daftar NIK dari data yang dipilih
     const niks = selected.value.map((item) => item.nik);
 
-    // Kirim permintaan penghapusan ke API
-    await api.delete('/kelola/pendaftaran', {
-      data: { niks },
+    await api.post('/kelola/pendaftaran/massal', {
+      niks,
+      keterangan,
     });
 
-    // Refresh data setelah penghapusan
     await fetchData();
 
-    // Notifikasi sukses
     ElNotification({
       title: 'Berhasil',
       message: 'Data berhasil ditolak secara massal.',
@@ -482,49 +492,58 @@ async function onMassDeleteClick() {
       duration: 3000,
     });
   } catch (err) {
-    // Notifikasi gagal
-    console.error('Gagal menolak data:', err);
-    ElNotification({
-      title: 'Gagal',
-      message: 'Terjadi kesalahan saat menolak data massal.',
-      type: 'error',
-      duration: 3000,
-    });
+    if (err !== 'cancel') {
+      console.error('Gagal menolak data massal:', err);
+      ElNotification({
+        title: 'Gagal',
+        message: 'Terjadi kesalahan saat menolak data massal.',
+        type: 'error',
+        duration: 3000,
+      });
+    }
   } finally {
     loading.value = false;
   }
 }
 
+
 async function onDelete(row: pendaftar) {
   try {
-    // Tampilkan konfirmasi penolakan
-    await ElMessageBox.confirm(
-      `Yakin ingin menolak permanen pendaftar dengan NIK ${row.nik}?`,
+    // Tampilkan dialog untuk input keterangan penolakan
+    const { value: keterangan } = await ElMessageBox.prompt(
+      `Masukkan keterangan penolakan untuk NIK ${row.nik}:`,
       'Konfirmasi Tolak',
       {
-        confirmButtonText: 'Iya, Tolak',
+        confirmButtonText: 'Kirim',
         cancelButtonText: 'Batal',
+        inputPlaceholder: 'Contoh: Data tidak valid atau ganda',
+        inputPattern: /.+/,
+        inputErrorMessage: 'Keterangan tidak boleh kosong.',
         type: 'warning',
       }
     );
 
     loading.value = true;
 
-    // Kirim permintaan penghapusan ke API
-    await api.delete(`/kelola/pendaftaran/${row.id}`);
+    // Kirim permintaan POST dengan keterangan
+    await api.post(`/kelola/pendaftaran/${row.id}`, {
+      keterangan: keterangan
+    });
 
-    // Refresh data setelah penghapusan
     await fetchData();
 
-    // Notifikasi sukses
     ElNotification({
       title: 'Berhasil',
-      message: 'Pendaftar berhasil ditolak.',
+      message: 'Pendaftar berhasil ditolak dengan keterangan.',
       type: 'success',
       duration: 3000,
     });
-  } catch (err) {
-    // Notifikasi gagal
+  } catch (err: any) {
+    if (err === 'cancel') {
+      // Jika user membatalkan dialog, tidak tampilkan notifikasi error
+      return;
+    }
+
     console.error('Gagal menolak pendaftar:', err);
     ElNotification({
       title: 'Gagal',
@@ -536,6 +555,7 @@ async function onDelete(row: pendaftar) {
     loading.value = false;
   }
 }
+
 
 async function fetchData() {
   try { // DiTerimakan try-catch

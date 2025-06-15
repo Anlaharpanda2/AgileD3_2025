@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\KelolaDataPendaftaran;
 use App\Http\Controllers\Controller;
 use App\Models\DataPendaftaran;
+use App\Models\UserMasyarakat;
 use App\Models\DataPelatihan;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -9,8 +10,6 @@ use App\Imports\PendaftaranImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-
-
 class KelolaDataPendaftaranController extends Controller
 {
     /**
@@ -43,6 +42,7 @@ class KelolaDataPendaftaranController extends Controller
     public function accept(Request $request, $id)
     {
         Log::info('Diterima dari frontend:', $request->all());
+
         $request->validate([
             'kegiatan_dimulai' => 'required|date',
             'kegiatan_berakhir' => 'required|date',
@@ -52,9 +52,14 @@ class KelolaDataPendaftaranController extends Controller
 
         $pendaftar = DataPendaftaran::findOrFail($id);
 
-        $pelatihanData = $pendaftar->toArray();
+        // Update status dan keterangan di user_masyarakat
+        UserMasyarakat::where('nik', $pendaftar->nik)
+            ->update([
+                'status_pendaftaran' => 'Diterima',
+                'keterangan' => 'Pendaftaran anda diterima, silahkan lihat tanggal kegiatan dimulai serta perhatikan informasi pada halaman berita dan pengumuman',
+            ]);
 
-        // Tambahkan data yang dikirim dari form
+        $pelatihanData = $pendaftar->toArray();
         $pelatihanData['kegiatan_dimulai'] = $request->kegiatan_dimulai;
         $pelatihanData['kegiatan_berakhir'] = $request->kegiatan_berakhir;
         $pelatihanData['tempat_kegiatan'] = $request->tempat_kegiatan;
@@ -82,6 +87,14 @@ class KelolaDataPendaftaranController extends Controller
             ])->validate();
 
             $pendaftar = DataPendaftaran::findOrFail($validated['id']);
+
+            // Update status dan keterangan di user_masyarakat
+            UserMasyarakat::where('nik', $pendaftar->nik)
+                ->update([
+                    'status_pendaftaran' => 'Diterima',
+                    'keterangan' => 'Pendaftaran anda diterima, silahkan lihat tanggal kegiatan dimulai serta perhatikan informasi pada halaman berita dan pengumuman',
+                ]);
+
             $pelatihanData = array_merge($pendaftar->toArray(), [
                 'kegiatan_dimulai' => $validated['kegiatan_dimulai'],
                 'kegiatan_berakhir' => $validated['kegiatan_berakhir'],
@@ -90,6 +103,7 @@ class KelolaDataPendaftaranController extends Controller
             ]);
 
             unset($pelatihanData['id'], $pelatihanData['created_at'], $pelatihanData['updated_at']);
+
             DataPelatihan::create($pelatihanData);
             $pendaftar->delete();
         }
@@ -97,31 +111,54 @@ class KelolaDataPendaftaranController extends Controller
         return response()->json(['message' => 'Data berhasil diproses dan dipindahkan.']);
     }
 
-
-    public function reject($id)
+    public function reject(Request $request, $id)
     {
+        $request->validate([
+            'keterangan' => 'required|string|max:255',
+        ]);
         $pendaftar = DataPendaftaran::findOrFail($id);
+        $keterangan = $request->input('keterangan');
+        UserMasyarakat::where('nik', $pendaftar->nik)
+            ->update([
+                'status_pendaftaran' => 'Ditolak',
+                'keterangan' => $keterangan
+            ]);
         $pendaftar->delete();
-        return response()->json(['message' => 'Peserta ditolak dan data dihapus.']);
-    }
-    /**
-     * Menolak peserta pendaftar secara massal
-     */
-    public function rejectMassal(Request $request)
-    {
-        $niks = $request->input('niks', []);
-
-        if (!is_array($niks) || empty($niks)) {
-            return response()->json(['message' => 'Daftar NIK tidak valid atau kosong.'], 422);
-        }
-
-        $deletedCount = DataPendaftaran::whereIn('nik', $niks)->delete();
-
         return response()->json([
-            'message' => "Berhasil menolak {$deletedCount} peserta."
+            'message' => 'Peserta ditolak, data dihapus, dan keterangan disimpan.'
         ]);
     }
 
+public function rejectMassal(Request $request)
+{
+    $niks = $request->input('niks', []);
+    $keterangan = $request->input('keterangan', '');
+
+    Log::info('Reject Massal Diterima:', ['niks' => $niks, 'keterangan' => $keterangan]);
+
+    if (!is_array($niks) || empty($niks)) {
+        return response()->json(['message' => 'Daftar NIK tidak valid atau kosong.'], 422);
+    }
+
+    // Debug jika tidak ada yang cocok
+    $users = UserMasyarakat::whereIn('nik', $niks)->get();
+    if ($users->isEmpty()) {
+        Log::error('Tidak ada user_masyarakat yang cocok');
+        return response()->json(['message' => 'Tidak ada pengguna yang ditemukan dengan NIK tersebut.'], 404);
+    }
+
+    UserMasyarakat::whereIn('nik', $niks)
+        ->update([
+            'status_pendaftaran' => 'Ditolak',
+            'keterangan' => $keterangan
+        ]);
+
+    $deletedCount = DataPendaftaran::whereIn('nik', $niks)->delete();
+
+    return response()->json([
+        'message' => "Berhasil menolak {$deletedCount} peserta dan menyimpan keterangan."
+    ]);
+}
     /**
      * Mengimpor data pendaftar dari file Excel
      */
@@ -144,13 +181,11 @@ class KelolaDataPendaftaranController extends Controller
     public function show($id)
     {
         $data = DataPendaftaran::find($id);
-
         if (!$data) {
             return response()->json([
                 'message' => 'Data tidak ditemukan'
             ], 404);
         }
-
         return response()->json([
             'message' => 'Data ditemukan',
             'data' => $data
@@ -159,15 +194,12 @@ class KelolaDataPendaftaranController extends Controller
     public function ubahFoto(Request $request, $id)
     {
         try {
-            // Debug request
             \Log::info('Upload request:', [
                 'method' => $request->method(),
                 'has_file' => $request->hasFile('photo'),
                 'files' => $request->allFiles(),
                 'all_data' => $request->all()
             ]);
-
-            // Cek apakah file benar-benar dikirim
             if (!$request->hasFile('photo')) {
                 return response()->json([
                     'message' => 'File tidak terkirim.',
@@ -179,40 +211,26 @@ class KelolaDataPendaftaranController extends Controller
                     ]
                 ], 422);
             }
-
-            // Validasi input
             $validator = Validator::make($request->all(), [
-                'photo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120', // max 5MB
+                'photo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120', 
             ]);
-
             if ($validator->fails()) {
                 return response()->json([
                     'message' => 'Validasi gagal.',
                     'errors' => $validator->errors()
                 ], 422);
             }
-
-            // Cari pendaftar
             $pendaftar = DataPendaftaran::findOrFail($id);
-
-            // Hapus foto lama jika ada
             if ($pendaftar->photo && Storage::disk('public')->exists($pendaftar->photo)) {
                 Storage::disk('public')->delete($pendaftar->photo);
             }
-
-            // Upload foto baru
             $file = $request->file('photo');
             $filename = time() . '_' . $file->getClientOriginalName();
             $path = $file->storeAs('photos/pendaftar', $filename, 'public');
-
-            // Update database
             $pendaftar->update([
                 'photo' => $path
             ]);
-
-            // Refresh model untuk mendapatkan accessor photo_url yang terbaru
             $pendaftar->refresh();
-
             return response()->json([
                 'success' => true,
                 'message' => 'Foto berhasil diperbarui.',
@@ -221,10 +239,8 @@ class KelolaDataPendaftaranController extends Controller
                     'photo_path' => $path
                 ]
             ], 200);
-
         } catch (\Exception $e) {
             \Log::error('Upload photo error: ' . $e->getMessage());
-            
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan server.',

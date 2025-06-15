@@ -17,12 +17,11 @@ import DataBeritaSampahView from '../views/PengelolaDataBerita/DataBeritaSampahV
 import OtpView from '../views/ResetPassword/OtpView.vue';
 import ForgotView from '../views/ResetPassword/ForgotView.vue';
 import ResetPassword from '../views/ResetPassword/ResetPassword.vue';
-import DetailDataPendaftaran from '../views/PengelolaDataPendaftaran/DetailDataPendaftaran.vue';
 import DatapendaftaranView from '../views/PengelolaDataPendaftaran/DataPendaftaranView.vue';
 import NotFound from '../views/NotFound.vue';
 import Unauthorized from '../views/Unauthorized.vue';
 import DaftarMasyarakatView from '../views/DaftarMasyarakat/DaftarMasyarakatView.vue';
-import DetailDataPelatihan from '../views/PengelolaDataPelatihan/DetailDataPelatihan.vue';
+import ProfileMasyarakat from '../views/Profile/ProfileMasyarakat.vue';
 
 const routes = [
   //halaman home
@@ -47,10 +46,12 @@ const routes = [
   //halaman kelola pelatihan
   {path: '/data/pelatihan',name: 'DataPelatihan',component: DataPelatihanView,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
   {path: '/data/pelatihan/sampah',name: 'DataPelatihanSampah',component: DataPelatihanSampahView,meta: { requiresAuth: true, role: ['operator', 'pegawai']}},
-  {path: '/peserta/:id',name: 'DetailPeserta',component: DetailDataPelatihan,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
+
+  //profile
+  {path: '/masyarakat/:id',name: 'DetailMasyarakat',component: ProfileMasyarakat,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
+  
   //halaman kelola pendaftaran
   {path: '/data/pendaftaran',name: 'Datapendaftaran',component: DatapendaftaranView,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
-  {path: '/pendaftar/:id',name: 'Detailpendaftar',component: DetailDataPendaftaran,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
 
   //halaman pretest postest
   {path: '/preposttest',name: 'PrePostTest',component: PrePostTestView},
@@ -78,7 +79,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   const userRole = localStorage.getItem('role');
-  const userId = localStorage.getItem('userId'); // pastikan disimpan saat login
+  const userId = localStorage.getItem('savedNIK'); // pastikan disimpan saat login
 
   if (to.meta.requiresAuth) {
     if (!isLoggedIn) {

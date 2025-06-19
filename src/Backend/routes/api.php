@@ -86,6 +86,21 @@ Route::delete('/kelola/berita/permanent/{id}', [KelolaDataBeritaController::clas
 Route::delete('/kelola/berita/{id}', [KelolaDataBeritaController::class, 'destroy']);
 Route::delete('/kelola/berita', [KelolaDataBeritaController::class, 'destroyMassal']);
 
+//kelola data Panitia
+Route::post('kelola/Panitia/impor', [KelolaDataPanitiaController::class, 'impor']);
+Route::get('kelola/Panitia/trash', [KelolaDataPanitiaController::class, 'trash']);
+Route::put('kelola/Panitia/restore', [KelolaDataPanitiaController::class, 'restoreMassal']);
+Route::delete('kelola/Panitia/permanent', [KelolaDataPanitiaController::class, 'forceDeleteMassal']);
+Route::delete('kelola/Panitia', [KelolaDataPanitiaController::class, 'destroyMassal']);
+Route::put('kelola/Panitia/{id}/restore', [KelolaDataPanitiaController::class, 'restore']);
+Route::delete('kelola/Panitia/{id}/permanent', [KelolaDataPanitiaController::class, 'forceDelete']);
+Route::get('kelola/Panitia', [KelolaDataPanitiaController::class, 'index']);
+Route::post('kelola/Panitia', [KelolaDataPanitiaController::class, 'store']);
+Route::put('kelola/Panitia/{data_Panitia}', [KelolaDataPanitiaController::class, 'update']);
+Route::delete('kelola/Panitia/{data_Panitia}', [KelolaDataPanitiaController::class, 'destroy']);
+Route::get('/Panitia/{nik}', [KelolaDataPanitiaController::class, 'show']);
+Route::patch('/Panitia/{nik}/ubah-foto', [KelolaDataPanitiaController::class, 'ubahFoto']);
+
 //api untuk kelola akses
 Route::get('/kelola/akses',[KelolaAksesController::class,'index']);
 Route::get('/pengaduan/user/{nik}', [PengaduanController::class, 'getByNik']);

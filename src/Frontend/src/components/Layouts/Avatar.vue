@@ -36,6 +36,7 @@
               class="mb-2 text-capitalize font-weight-regular button-hover-scale"
               block
               aria-label="Edit Akun"
+              @click="goToDetailMasyarakat"
             >
               Edit Akun
             </v-btn>
@@ -113,6 +114,17 @@ const loadUserData = () => {
 onMounted(() => {
   loadUserData();
 });
+function goToDetailMasyarakat() {
+  const savedNik = localStorage.getItem('savedNIK')
+  if (savedNik) {
+    router.push({
+      name: 'DetailMasyarakat',
+      params: { id: savedNik }
+    })
+  } else {
+    console.warn('NIK belum tersedia di localStorage')
+  }
+}
 const handleLogout = async () => {
   try {
     const currentRole = user.value.role;

@@ -1,0 +1,194 @@
+<?php
+
+namespace App\Http\Controllers\KelolaDataPanitia;
+
+use App\Http\Controllers\Controller;
+use App\Models\DataPanitia;
+use App\Models\UserMasyarakat;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\imports\PanitiaImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+
+
+class KelolaDataPanitiaController extends Controller
+{
+    public function index()
+    {
+        return DataPanitia::all();
+    }
+    public function store(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'nama' => 'required|string|max:255',
+                'nik' => 'required|string|max:255|unique:data_Panitia,nik',
+                'jenis_bimtek' => 'required|string|max:255',
+                'kegiatan_dimulai' => 'required|date',
+                'kegiatan_berakhir' => 'required|date|after_or_equal:kegiatan_dimulai',
+                'tempat_kegiatan' => 'required|string|max:255',
+                'angkatan' => 'required|integer|min:1',
+                'tempat_tanggal_lahir' => 'required|string|max:255',
+                'pendidikan' => 'required|string|max:255',
+                'status' => 'required|in:kawin,lajang,janda',
+                'alamat' => 'required|string',
+                'jenis_usaha' => 'required|string|max:255',
+                'penghasilan_perbulan' => 'required|string|max:255',
+                'nomor_telefon' => 'required|string|max:255',
+            ]);
+            $Panitia = DataPanitia::create($validated);
+            return response()->json([
+                'message' => 'Data berhasil disimpan.',
+                'data' => $Panitia
+            ], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if (isset($e->errors()['nik'])) {
+                return response()->json(['message' => 'NIK sudah terdaftar.', 'errors' => $e->errors()], 422);
+            }
+            return response()->json(['message' => 'Validasi gagal.', 'errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Gagal menyimpan data: ' . $e->getMessage()], 500);
+        }
+    }
+    public function update(Request $request, DataPanitia $dataPanitia)
+    {
+        try {
+            $validated = $request->validate([
+                'nama' => 'required|string|max:255',
+                'nik' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    Rule::unique('data_Panitia', 'nik')->ignore($dataPanitia->id),
+                ],
+                'jenis_bimtek' => 'required|string|max:255',
+                'kegiatan_dimulai' => 'required|date',
+                'kegiatan_berakhir' => 'required|date|after_or_equal:kegiatan_dimulai',
+                'tempat_kegiatan' => 'required|string|max:255',
+                'angkatan' => 'required|integer|min:1',
+                'tempat_tanggal_lahir' => 'required|string|max:255',
+                'pendidikan' => 'required|string|max:255',
+                'status' => 'required|in:kawin,lajang,janda',
+                'alamat' => 'required|string',
+                'jenis_usaha' => 'required|string|max:255',
+                'penghasilan_perbulan' => 'required|string|max:255',
+                'nomor_telefon' => 'required|string|max:255',
+            ]);
+            $dataPanitia->update($validated);
+            return response()->json([
+                'message' => 'Data berhasil diupdate',
+                'data' => $dataPanitia,
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if (isset($e->errors()['nik'])) {
+                return response()->json(['message' => 'NIK sudah terdaftar.', 'errors' => $e->errors()], 422);
+            }
+            return response()->json(['message' => 'Validasi gagal.', 'errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Gagal memperbarui data: ' . $e->getMessage()], 500);
+        }
+    }
+    public function destroy(DataPanitia $dataPanitia)
+    {
+        $dataPanitia->delete();
+        return response()->json(['message' => 'Data berhasil dihapus']);
+    }
+    public function destroyMassal(Request $request)
+    {
+        $niks = $request->input('niks');
+        if (!is_array($niks) || empty($niks)) {
+            return response()->json(['error' => 'Parameter niks tidak valid'], 422);
+        }
+        $deleted = DataPanitia::whereIn('nik', $niks)->delete();
+        return response()->json([
+            'message' => "Berhasil menghapus {$deleted} data Panitia"
+        ]);
+    }
+    public function trash()
+    {
+        $data = DataPanitia::onlyTrashed()->get();
+        return response()->json($data);
+    }
+    public function restore($id)
+    {
+        $data = DataPanitia::onlyTrashed()->find($id);
+        if (!$data) {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+        $data->restore();
+        return response()->json(['message' => 'Data berhasil dipulihkan']);
+    }
+    public function restoreMassal(Request $request)
+    {
+        $niks = $request->input('niks', []);
+        if (!is_array($niks) || empty($niks)) {
+            return response()->json(['message' => 'Daftar NIK tidak valid atau kosong'], 400);
+        }
+        $restoredCount = DataPanitia::onlyTrashed()
+            ->whereIn('nik', $niks)
+            ->update(['deleted_at' => null]);
+        $msg = $restoredCount
+            ? "Berhasil memulihkan $restoredCount data"
+            : "Tidak ada data yang dipulihkan";
+        return response()->json(['message' => $msg], 200);
+    }
+    public function forceDelete($id)
+    {
+        $data = DataPanitia::onlyTrashed()->find($id);
+        if (!$data) {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+        $data->forceDelete();
+        return response()->json(['message' => 'Data berhasil dihapus permanen']);
+    }
+    public function forceDeleteMassal(Request $request)
+    {
+        $niks = $request->input('niks', []);
+        if (!is_array($niks) || empty($niks)) {
+            return response()
+                ->json(['message' => 'Daftar NIK tidak valid atau kosong'], 400);
+        }
+        $deletedCount = DataPanitia::onlyTrashed()
+            ->whereIn('nik', $niks)
+            ->forceDelete();
+        $msg = $deletedCount
+            ? "Berhasil menghapus permanen $deletedCount data"
+            : "Tidak ada data yang dihapus permanen";
+        return response()->json(['message' => $msg], 200);
+    }
+    public function impor(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls',
+        ]);
+
+        try {
+            Excel::import(new PanitiaImport, $request->file('file'));
+
+            return response()->json([
+                'message' => 'Data Panitia berhasil diimpor',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Gagal mengimpor data: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function show($nik)
+    {
+        $data = UserMasyarakat::where('nik', $nik)->first();
+
+        if (!$data) {
+            return response()->json([
+                'message' => 'Data tidak ditemukan'
+            ], 404);
+        }
+
+        return response()->json([
+            'message' => 'Data ditemukan',
+            'data' => $data
+        ]);
+    }
+}

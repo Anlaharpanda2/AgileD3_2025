@@ -15,23 +15,24 @@
       </div>
     </div>
   </el-card>
+  <BuatPengaduanPage v-if="showForm" @close="showForm = false" />
 </template>
 
 <script lang="ts" setup>
-import { ElMessage } from 'element-plus';
-import { useRouter } from 'vue-router';
-import BuatPengaduanPage from '../../views/PengelolaPelaporanPengaduan/BuatPengaduanPage.vue';
+import { ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import BuatPengaduanPage from './BuatPengaduanPage.vue'
 
-const router = useRouter()
-
-const image = '/Home/1.jpeg';
-const title = 'Pengaduan';
+const image = '/Home/1.jpeg'
+const title = 'Pengaduan'
 const description =
-  'memfasilitasi masyarakat untuk melaporkan kasus kekerasan atau permasalahan yang dialami perempuan secara cepat dan aman.';
+  'memfasilitasi masyarakat untuk melaporkan kasus kekerasan atau permasalahan yang dialami perempuan secara cepat dan aman.'
+
+const showForm = ref(false) // ⬅️ kontrol tampil tidaknya form
 
 function handleSubmit() {
-  ElMessage.success('Layanan berhasil dipilih!');
-  router.push('/pengaduan');
+  ElMessage.success('Layanan berhasil dipilih!')
+  showForm.value = true
 }
 </script>
 

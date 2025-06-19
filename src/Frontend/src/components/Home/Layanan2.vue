@@ -20,6 +20,8 @@
 <script lang="ts" setup>
 import { ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
+import BuatPengaduanPage from '../../views/PengelolaPelaporanPengaduan/BuatPengaduanPage.vue';
+
 const router = useRouter()
 
 const image = '/Home/1.jpeg';

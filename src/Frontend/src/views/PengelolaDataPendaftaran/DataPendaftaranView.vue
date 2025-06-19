@@ -75,11 +75,11 @@
         <button class="button" @click="showExport = true">
           <img src="/table/export.svg" alt="Export" />
         </button>
-        <button class="button" @click="onMassDeleteClick">
-          <img src="/table/RejectMass.svg" alt="rejectMassal" />
+        <button class="button" @click="onMassDeleteClick" >
+          <img src="/table/RejectMass.svg" alt="rejectMassal">
           <span class="hilang">Tolak Massal</span>
         </button>
-        <button class="button" @click="openEditMassal(selected)">
+        <button class="button" @click="openEditMassal(selected)" >
           <img src="/table/AcceptMass.svg" alt="TerimaMassal" />
           <span class="hilang">Terima Massal</span>
         </button>
@@ -179,7 +179,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Aksi" width="60" fixed="right">
+      <el-table-column label="Aksi" width="60" fixed="right" >
         <template #header>
           <el-tooltip content="Aksi" placement="top">
             <span class="header-tooltip-text">Aksi</span>
@@ -281,11 +281,10 @@ const search = ref("");
 const loading = ref(false);
 const itemsPerPage = ref<number | string>(10);
 const currentPage = ref(1);
-const dropdownOpen = ref(false);
+const dropdownOpen = ref(false)
 const showExport = ref(false)
 const showEdit = ref(false)
 const showEditMassal = ref(false)
-const showTerima = ref(false)
 const showSort = ref(false)
 const showFilter = ref(false)
 const TerimaData = ref(null)

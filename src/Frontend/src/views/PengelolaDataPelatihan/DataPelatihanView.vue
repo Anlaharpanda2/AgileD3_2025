@@ -78,13 +78,13 @@
         <button class="button" @click="showExport = true">
           <img src="/table/export.svg" alt="Export" />
         </button>
-        <button class="button" @click="showImport = true">
+        <button class="button" @click="showImport = true" >
           <img src="/table/import.svg" alt="Import" />
         </button>
         <button class="button" @click="onExportClick">
           <img src="/table/sampah.svg" alt="Sampah" />
         </button>
-        <button class="button" @click="onMassDeleteClick">
+        <button class="button" @click="onMassDeleteClick" >
           <img src="/table/hapusMass.svg" alt="hapusMassal" />
           <span class="hilang">Hapus Massal</span>
         </button>
@@ -215,7 +215,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Aksi" width="60" fixed="right">
+      <el-table-column label="Aksi" width="60" fixed="right" >
         <template #header>
           <el-tooltip content="Aksi" placement="top">
             <span class="header-tooltip-text">Aksi</span>
@@ -283,13 +283,6 @@ import FormSortingDataPelatihan from "../../components/KelolaDataPelatihan/FormS
 import { ElNotification } from 'element-plus';
 import { useRouter } from 'vue-router'
 
-const router = useRouter()
-    ElNotification({
-      title: 'Berhasil',
-      message: 'Export Data',
-      type: 'success',
-      duration: 30000,
-    });
 const goToDetail = (row: any, column: any, event: MouseEvent) => {
   // Abaikan klik jika berasal dari kolom selection (checkbox) atau kolom Aksi
   if (column.type === 'selection' || column.label === 'Aksi') {

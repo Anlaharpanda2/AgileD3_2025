@@ -1,9 +1,5 @@
 <template>
   <DefaultLayout>
-    <FormTambahDataPendaftar
-      v-if="showTambah"
-      @close="showTambah = false" 
-    />
     <!-- Hero Slider Section -->
     <section class="hero-section">
       <Slider />
@@ -201,6 +197,7 @@ import Slider from '../../components/Home/Slider.vue';
 import { ElMessage } from 'element-plus';
 import api from '@/api.js';
 import {STORAGE_URL} from '@/api.js';
+import FormTambahDataPendaftaran from '../../components/Home/FormTambahDataPendaftaran.vue';
 import Layanan1 from '../../components/Home/Layanan1.vue';
 import Layanan2 from '../../components/Home/Layanan2.vue';
 import Layanan3 from '../../components/Home/Layanan3.vue';
@@ -208,7 +205,7 @@ import Layanan3 from '../../components/Home/Layanan3.vue';
 // --- News Slider Logic ---
 const latestNews = ref([]);
 const currentNewsIndex = ref(0); // Index berita yang sedang ditampilkan
-
+const showTambah = ref(false)
 // Computed property untuk berita yang sedang aktif
 const currentNewsItem = computed(() => {
   if (latestNews.value.length > 0) {

@@ -15,22 +15,30 @@
       </div>
     </div>
   </el-card>
+
+  <!-- Form Tambah Data hanya muncul jika showForm true -->
+  <FormTambahDataPendaftaran v-if="showForm" @close="showForm = false" />
 </template>
 
 <script lang="ts" setup>
-import { ElMessage } from 'element-plus';
+import { ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import FormTambahDataPendaftaran from './FormTambahDataPendaftaran.vue'
 
-const image = '/Home/1.jpeg';
-const title = 'Pelatihan';
+const image = '/Home/1.jpeg'
+const title = 'Pelatihan'
 const description =
-  'meningkatkan kualitas hidup perempuan melalui pengembangan keterampilan, pemberdayaan ekonomi, dan penguatan peran sosial';
+  'meningkatkan kualitas hidup perempuan melalui pengembangan keterampilan, pemberdayaan ekonomi, dan penguatan peran sosial'
+
+const showForm = ref(false)
 
 function handleSubmit() {
-  ElMessage.success('Layanan berhasil dipilih!');
+  showForm.value = true
 }
 </script>
 
 <style scoped>
+/* (semua style tetap sama dengan punyamu, tidak diubah) */
 .card-container {
   width: 300px;
   margin: 2.5rem auto;

@@ -66,11 +66,11 @@
         <button class="button1" @click="showSort = true">
           <img src="/table/sort.svg" alt="Sort" />
         </button>
-        <button class="button" @click="onMassDeletePermanentClick">
+        <button class="button" @click="onMassDeletePermanentClick" >
           <img src="/table/deleteForever.svg" alt="hapusPermanenMassal" />
           Hapus Permanen Massal
         </button>
-        <button class="button" @click="onMassRestoreClick">
+        <button class="button" @click="onMassRestoreClick" >
           <img src="/table/pulihkan.svg" alt="restoreMassal" />
           Pulihkan Massal
         </button>
@@ -202,7 +202,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Aksi" width="60" fixed="right">
+      <el-table-column label="Aksi" width="60" fixed="right" >
         <template #header>
           <el-tooltip content="Aksi" placement="top">
             <span class="header-tooltip-text">Aksi</span>

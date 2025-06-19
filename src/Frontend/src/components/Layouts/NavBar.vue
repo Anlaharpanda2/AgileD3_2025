@@ -2,16 +2,28 @@
   <nav class="navbar">
     <ul class="nav-items">
       <li class="hover"><a href="/"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">BERANDA</span></a></li>
-      <li class="hover"><a href="#"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">DASHBOARD</span></a></li>
+      <li class="hover" v-if="isOperator"><a href="#"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">DASHBOARD</span></a></li>
       <li class="hover"><a href="#"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">PRE/POSTTEST</span></a></li>
-      <li  class="hover"><a href="/data/pendaftaran"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">PENDAFTAR</span></a></li>
+      <li  class="hover" v-if="isOperator || isPegawai"><a href="/data/pendaftaran"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">PENDAFTAR</span></a></li>
       <li class="hover"><a href="/data/pelatihan"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">PELATIHAN</span></a></li>
       <li class="hover"><a href="#"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">PELAPORAN</span></a></li>
-      <li class="hover"><a href="/kelola/data"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">KELOLA DATA</span></a></li>
-      <li class="hover"><a href="/kelola/akses"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">KELOLA AKSES</span></a></li>
+      <li class="hover" v-if="isOperator || isPegawai"><a href="/kelola/data"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">KELOLA DATA</span></a></li>
+      <li class="hover"v-if="isOperator"><a href="/kelola/akses"><span class="icon-circle"><img src="/NavBar/Vector.svg" alt="icon" /></span><span class="hover2">KELOLA AKSES</span></a></li>
     </ul>
   </nav>
 </template>
+
+<script setup>
+import { computed } from 'vue'
+
+const userRole = localStorage.getItem('role') || ''
+
+const isOperator = computed(() => userRole === 'operator')
+const isPegawai = computed(() => userRole === 'pegawai')
+const isMasyarakat = computed(() => userRole === 'masyarakat')
+const isNotLogin = computed(() => !['operator', 'pegawai', 'masyarakat'].includes(userRole))
+</script>
+
 <style scoped>
 .navbar {
   background-color: var(--color-whitesmoke);

@@ -284,7 +284,12 @@ import { ElNotification } from 'element-plus';
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-
+    ElNotification({
+      title: 'Berhasil',
+      message: 'Export Data',
+      type: 'success',
+      duration: 30000,
+    });
 const goToDetail = (row: any, column: any, event: MouseEvent) => {
   // Abaikan klik jika berasal dari kolom selection (checkbox) atau kolom Aksi
   if (column.type === 'selection' || column.label === 'Aksi') {

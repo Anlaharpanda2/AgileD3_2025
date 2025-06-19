@@ -18,19 +18,24 @@
 </template>
 
 <script lang="ts" setup>
+import { ElMessage } from 'element-plus';
+import { useRouter } from 'vue-router';
+const router = useRouter()
+
 const image = '/Home/1.jpeg';
-const title = 'Layanan Desain Grafis';
+const title = 'Pengaduan';
 const description =
-  'Tingkatkan brand Anda dengan layanan desain grafis yang kreatif dan profesional.';
+  'memfasilitasi masyarakat untuk melaporkan kasus kekerasan atau permasalahan yang dialami perempuan secara cepat dan aman.';
 
 function handleSubmit() {
   ElMessage.success('Layanan berhasil dipilih!');
+  router.push('/pengaduan');
 }
 </script>
 
 <style scoped>
 .card-container {
-  width: 380px;
+  width: 300px;
   margin: 2.5rem auto;
   border: none;
   background: transparent;
@@ -52,7 +57,7 @@ function handleSubmit() {
 
 .card-image {
   width: 100%;
-  height: 200px;
+  height: 150px;
   object-fit: cover;
   transition: transform 0.4s ease;
 }

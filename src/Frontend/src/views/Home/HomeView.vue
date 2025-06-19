@@ -17,58 +17,13 @@
       <section class="services-section">
         <div class="row g-4 justify-content-center">
           <div class="col-md-6 col-lg-4">
-            <el-card shadow="never" class="service-card-container">
-              <div class="service-card-inner">
-                <img :src="image" class="service-card-image" alt="Layanan Desain Grafis" />
-
-                <div class="service-card-content">
-                  <h3 class="service-card-title">{{ title }}</h3>
-                  <p class="service-card-description">{{ description }}</p>
-                </div>
-
-                <div class="service-card-actions">
-                  <el-button type="primary" @click="showTambah" round class="submit-btn">
-                    Ikut Pelatihan
-                  </el-button>
-                </div>
-              </div>
-            </el-card>
+            <Layanan1></Layanan1>
           </div>
           <div class="col-md-6 col-lg-4">
-            <el-card shadow="never" class="service-card-container">
-              <div class="service-card-inner">
-                <img :src="image" class="service-card-image" alt="Layanan Desain Grafis" />
-
-                <div class="service-card-content">
-                  <h3 class="service-card-title">{{ title }}</h3>
-                  <p class="service-card-description">{{ description }}</p>
-                </div>
-
-                <div class="service-card-actions">
-                  <el-button type="primary" @click="handleSubmit" round class="submit-btn">
-                    Ikut Pelatihan
-                  </el-button>
-                </div>
-              </div>
-            </el-card>
+            <Layanan2></Layanan2>
           </div>
           <div class="col-md-6 col-lg-4">
-            <el-card shadow="never" class="service-card-container">
-              <div class="service-card-inner">
-                <img :src="image" class="service-card-image" alt="Layanan Desain Grafis" />
-
-                <div class="service-card-content">
-                  <h3 class="service-card-title">{{ title }}</h3>
-                  <p class="service-card-description">{{ description }}</p>
-                </div>
-
-                <div class="service-card-actions">
-                  <el-button type="primary" @click="handleSubmit" round class="submit-btn">
-                    Ikut Pelatihan
-                  </el-button>
-                </div>
-              </div>
-            </el-card>
+            <Layanan3></Layanan3>
           </div>
         </div>
       </section>
@@ -246,17 +201,9 @@ import Slider from '../../components/Home/Slider.vue';
 import { ElMessage } from 'element-plus';
 import api from '@/api.js';
 import {STORAGE_URL} from '@/api.js';
-
-
-const image = '/Home/1.jpeg';
-const title = 'Layanan Desain Grafis';
-const showTambah = ref(false);
-const description =
-  'Tingkatkan brand Anda dengan layanan desain grafis yang kreatif dan profesional.';
-
-function handleSubmit() {
-  ElMessage.success('Layanan berhasil dipilih!');
-}
+import Layanan1 from '../../components/Home/Layanan1.vue';
+import Layanan2 from '../../components/Home/Layanan2.vue';
+import Layanan3 from '../../components/Home/Layanan3.vue';
 
 // --- News Slider Logic ---
 const latestNews = ref([]);

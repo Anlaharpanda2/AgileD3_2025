@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\AuthPegawaiController;
 use App\Http\Controllers\KelolaDataPelatihan\KelolaDataPelatihanController;
 use App\Http\Controllers\KelolaDataPendaftaran\KelolaDataPendaftaranController;
+use App\Http\Controllers\KelolaDataPanitia\KelolaDataPanitiaController;
 use App\Http\Controllers\KelolaDataPelatihan\ImporPelatihanController;
 use App\Http\Controllers\KelolaPesan\PesanController;
 use App\Http\Controllers\KelolaPretestPostest\PrePostController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\KelolaPretestPostest\PrePostTestController;
 use App\Http\Controllers\Pengaduan\PengaduanController;
 use App\Http\Controllers\KelolaAkses\KelolaAksesController;
 use App\Http\Controllers\KelolaBerita\KelolaDataBeritaController;
+use App\Http\Controllers\KelolaStrukturPegawai\StrukturPegawaiController;
 
 //login
 Route::post('/login/masyarakat', [AuthMasyarakatController::class, 'login']);
@@ -104,3 +106,17 @@ Route::patch('/Panitia/{nik}/ubah-foto', [KelolaDataPanitiaController::class, 'u
 //api untuk kelola akses
 Route::get('/kelola/akses',[KelolaAksesController::class,'index']);
 Route::get('/pengaduan/user/{nik}', [PengaduanController::class, 'getByNik']);
+
+// api untuk kelola struktur pegawai
+Route::get('/', [StrukturPegawaiController::class, 'index']);
+Route::get('/sampah', [StrukturPegawaiController::class, 'sampah']);
+Route::post('/', [StrukturPegawaiController::class, 'store']);
+Route::put('/{id}', [StrukturPegawaiController::class, 'update']);
+Route::delete('/{id}', [StrukturPegawaiController::class, 'destroy']);
+Route::delete('/{id}/permanen', [StrukturPegawaiController::class, 'deletePermanent']);
+Route::put('/{id}/restore', [StrukturPegawaiController::class, 'restore']);
+Route::post('/restore-massal', [StrukturPegawaiController::class, 'restoreMassal']);
+Route::delete('/hapus-massal', [StrukturPegawaiController::class, 'hapusMassal']);
+Route::delete('/hapus-permanen-massal', [StrukturPegawaiController::class, 'hapusPermanenMassal']);
+Route::post('/import', [StrukturPegawaiController::class, 'import']);
+Route::get('/export', [StrukturPegawaiController::class, 'export']);

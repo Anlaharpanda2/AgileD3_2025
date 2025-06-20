@@ -108,15 +108,17 @@ Route::get('/kelola/akses',[KelolaAksesController::class,'index']);
 Route::get('/pengaduan/user/{nik}', [PengaduanController::class, 'getByNik']);
 
 // api untuk kelola struktur pegawai
-Route::get('/', [StrukturPegawaiController::class, 'index']);
-Route::get('/sampah', [StrukturPegawaiController::class, 'sampah']);
-Route::post('/', [StrukturPegawaiController::class, 'store']);
-Route::put('/{id}', [StrukturPegawaiController::class, 'update']);
-Route::delete('/{id}', [StrukturPegawaiController::class, 'destroy']);
-Route::delete('/{id}/permanen', [StrukturPegawaiController::class, 'deletePermanent']);
-Route::put('/{id}/restore', [StrukturPegawaiController::class, 'restore']);
+Route::get('/kelola/pegawai', [StrukturPegawaiController::class, 'index']);
+Route::post('/kelola/pegawai', [StrukturPegawaiController::class, 'store']);
+Route::get('/pegawai/{id}', [StrukturPegawaiController::class, 'show']);
+Route::put('kelola/pegawai/{id}', [StrukturPegawaiController::class, 'update']);
+Route::delete('kelola/pegawai/{id}', [StrukturPegawaiController::class, 'destroy']);
+    
+Route::post('/destroy-massal', [StrukturPegawaiController::class, 'destroyMassal']);
+Route::get('/trash', [StrukturPegawaiController::class, 'trash']);
+Route::post('/restore/{id}', [StrukturPegawaiController::class, 'restore']);
 Route::post('/restore-massal', [StrukturPegawaiController::class, 'restoreMassal']);
-Route::delete('/hapus-massal', [StrukturPegawaiController::class, 'hapusMassal']);
-Route::delete('/hapus-permanen-massal', [StrukturPegawaiController::class, 'hapusPermanenMassal']);
-Route::post('/import', [StrukturPegawaiController::class, 'import']);
-Route::get('/export', [StrukturPegawaiController::class, 'export']);
+Route::delete('/force-delete/{id}', [StrukturPegawaiController::class, 'forceDelete']);
+Route::post('/force-delete-massal', [StrukturPegawaiController::class, 'forceDeleteMassal']);
+    
+Route::post('/import', [StrukturPegawaiController::class, 'impor']);

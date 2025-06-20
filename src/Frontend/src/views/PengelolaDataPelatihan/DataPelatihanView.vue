@@ -78,17 +78,17 @@
         <button class="button" @click="showExport = true">
           <img src="/table/export.svg" alt="Export" />
         </button>
-        <button class="button" @click="showImport = true" >
+        <button class="button" @click="showImport = true" v-if="isOperator">
           <img src="/table/import.svg" alt="Import" />
         </button>
         <button class="button" @click="onExportClick">
           <img src="/table/sampah.svg" alt="Sampah" />
         </button>
-        <button class="button" @click="onMassDeleteClick" >
+        <button class="button" @click="onMassDeleteClick" v-if="isOperator">
           <img src="/table/hapusMass.svg" alt="hapusMassal" />
           <span class="hilang">Hapus Massal</span>
         </button>
-        <button class="button" @click="showTambah = true" >
+        <button class="button" @click="showTambah = true" v-if="isOperator">
           <img src="/table/tambah.svg" alt="Add" />
           <span class="hilang">Tambah Data</span>
         </button>
@@ -215,7 +215,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Aksi" width="60" fixed="right" >
+      <el-table-column label="Aksi" width="60" fixed="right" v-if="isOperator">
         <template #header>
           <el-tooltip content="Aksi" placement="top">
             <span class="header-tooltip-text">Aksi</span>
@@ -282,6 +282,15 @@ import FormFilterDataPelatihan from "../../components/KelolaDataPelatihan/FormFi
 import FormSortingDataPelatihan from "../../components/KelolaDataPelatihan/FormSortingDataPelatihan.vue";
 import { ElNotification } from 'element-plus';
 import { useRouter } from 'vue-router'
+
+const getUserRole = (): string => {
+  return localStorage.getItem('role') || ''
+}
+
+const isOperator = computed(() => getUserRole() === 'operator')
+const isPegawai = computed(() => getUserRole() === 'pegawai')
+const isMasyarakat = computed(() => getUserRole() === 'masyarakat')
+const isNotLogin = computed(() => !['operator', 'pegawai', 'masyarakat'].includes(getUserRole()))
 
 const router = useRouter()
 const goToDetail = (row: any, column: any, event: MouseEvent) => {

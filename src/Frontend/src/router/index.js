@@ -11,7 +11,7 @@ import DataPelatihanSampahView from '../views/PengelolaDataPelatihan/DataPelatih
 import PrePostTestView from '../views/PengelolaPretestPostest/PrePostTestView.vue';
 import PelaporanPengaduan from '../views/PengelolaPelaporanPengaduan/PelaporanPengaduan.vue';
 import StatusPengaduan from '../views/PengelolaPelaporanPengaduan/StatusPengaduan.vue';
-import BuatPengaduanPage from '../views/PengelolaPelaporanPengaduan/BuatPengaduanPage.vue';
+import BuatPengaduanPage from '../components/Home/BuatPengaduanPage.vue';
 import DataBeritaView from '../views/PengelolaDataBerita/DataBeritaView.vue';
 import DataBeritaSampahView from '../views/PengelolaDataBerita/DataBeritaSampahView.vue';
 import OtpView from '../views/ResetPassword/OtpView.vue';

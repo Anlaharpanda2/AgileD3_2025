@@ -14,7 +14,7 @@
 <script setup>
 import { ref } from 'vue'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
-import PelaporanPengaduan from './PelaporanPengaduan.vue'
+import PelaporanPengaduan from '../../views/PengelolaPelaporanPengaduan/PelaporanPengaduan.vue'
 
 const showForm = ref(false)
 </script>

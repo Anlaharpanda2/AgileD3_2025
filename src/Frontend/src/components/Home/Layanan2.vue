@@ -21,7 +21,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import BuatPengaduanPage from './BuatPengaduanPage.vue'
+import BuatPengaduanPage from '../../views/PengelolaPelaporanPengaduan/BuatPengaduanPage.vue'
 
 const image = '/Home/1.jpeg'
 const title = 'Pengaduan'

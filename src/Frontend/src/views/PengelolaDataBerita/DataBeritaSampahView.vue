@@ -23,7 +23,7 @@
       </div>
 
       <div class="right-controls">
-        <button class="button" @click="onMassDeletePermanentClick">
+        <button class="button" @click="onMassDeletePermanentClick" v-if="isOperator">
           <img src="/table/deleteForever.svg" alt="hapusPermanenMassal" />
           Hapus Permanen Massal
         </button>
@@ -103,6 +103,16 @@ import { ref, computed, onMounted } from 'vue'
 import api from '../../api.js'
 import DefaultLayout2 from '../../layouts/DefaultLayout2.vue'
 import { ElMessage } from 'element-plus';
+
+const getUserRole = (): string => {
+  return localStorage.getItem('role') || ''
+}
+
+const isOperator = computed(() => getUserRole() === 'operator')
+const isPegawai = computed(() => getUserRole() === 'pegawai')
+const isMasyarakat = computed(() => getUserRole() === 'masyarakat')
+const isNotLogin = computed(() => !['operator', 'pegawai', 'masyarakat'].includes(getUserRole()))
+
 
 interface Berita {
   id: number;

@@ -9,7 +9,7 @@ import LoginPegawai from '../views/Login/LoginPegawai.vue';
 import DataPelatihanView from '../views/PengelolaDataPelatihan/DataPelatihanView.vue';
 import DataPelatihanSampahView from '../views/PengelolaDataPelatihan/DataPelatihanSampahView.vue';
 import PrePostTestView from '../views/PengelolaPretestPostest/PrePostTestView.vue';
-import PelaporanPengaduan from '../views/PengelolaPelaporanPengaduan/PelaporanPengaduan.vue';
+import PelaporanPengaduan from '../components/Home/PelaporanPengaduan.vue';
 import StatusPengaduan from '../views/PengelolaPelaporanPengaduan/StatusPengaduan.vue';
 import BuatPengaduanPage from '../views/PengelolaPelaporanPengaduan/BuatPengaduanPage.vue';
 import DataBeritaView from '../views/PengelolaDataBerita/DataBeritaView.vue';

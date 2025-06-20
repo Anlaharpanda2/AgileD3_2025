@@ -26,7 +26,7 @@ const isNotLogin = computed(() => !['operator', 'pegawai', 'masyarakat'].include
 
 <style scoped>
 .navbar {
-  background-color: var(--color-whitesmoke);
+  background-color: #efe5e5;
   width: 100%;
   position: relative;
   padding: 0 20px;

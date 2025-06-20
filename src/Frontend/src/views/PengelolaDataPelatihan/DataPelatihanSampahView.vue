@@ -66,11 +66,11 @@
         <button class="button1" @click="showSort = true">
           <img src="/table/sort.svg" alt="Sort" />
         </button>
-        <button class="button" @click="onMassDeletePermanentClick" >
+        <button class="button" @click="onMassDeletePermanentClick" v-if="isOperator">
           <img src="/table/deleteForever.svg" alt="hapusPermanenMassal" />
           Hapus Permanen Massal
         </button>
-        <button class="button" @click="onMassRestoreClick" >
+        <button class="button" @click="onMassRestoreClick" v-if="isOperator">
           <img src="/table/pulihkan.svg" alt="restoreMassal" />
           Pulihkan Massal
         </button>
@@ -202,7 +202,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Aksi" width="60" fixed="right" >
+      <el-table-column label="Aksi" width="60" fixed="right" v-if="isOperator">
         <template #header>
           <el-tooltip content="Aksi" placement="top">
             <span class="header-tooltip-text">Aksi</span>
@@ -264,6 +264,16 @@ import DefaultLayout from "../../layouts/DefaultLayout.vue";
 import FormFilterDataPelatihan from "../../components/KelolaDataPelatihan/FormFilterDataPelatihan.vue";
 import FormSortingDataPelatihan from "../../components/KelolaDataPelatihan/FormSortingDataPelatihan.vue";
 import { ElNotification, ElMessageBox, ElMessage } from 'element-plus';
+
+const getUserRole = (): string => {
+  return localStorage.getItem('role') || ''
+}
+
+const isOperator = computed(() => getUserRole() === 'operator')
+const isPegawai = computed(() => getUserRole() === 'pegawai')
+const isMasyarakat = computed(() => getUserRole() === 'masyarakat')
+const isNotLogin = computed(() => !['operator', 'pegawai', 'masyarakat'].includes(getUserRole()))
+
 
 interface Peserta {
   id: number;

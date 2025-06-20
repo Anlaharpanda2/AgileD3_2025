@@ -10,18 +10,18 @@
 
       <div class="card-actions">
         <el-button type="primary" @click="handleSubmit" round class="submit-btn">
-          Ikut Pelatihan
+          Buat Pengaduan
         </el-button>
       </div>
     </div>
   </el-card>
-  <BuatPengaduanPage v-if="showForm" @close="showForm = false" />
+  <FormTambahDataPendaftaran v-if="showForm" @close="showForm = false" />
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import BuatPengaduanPage from './BuatPengaduanPage.vue'
+import FormTambahDataPendaftaran from './FormTambahDataPendaftaran.vue'
 
 const image = '/Home/1.jpeg'
 const title = 'Pengaduan'

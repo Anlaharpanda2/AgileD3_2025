@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\KelolaDataFasilitas\KelolaDataFasilitasController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -120,3 +121,17 @@ Route::delete('/hapus-massal', [StrukturPegawaiController::class, 'hapusMassal']
 Route::delete('/hapus-permanen-massal', [StrukturPegawaiController::class, 'hapusPermanenMassal']);
 Route::post('/import', [StrukturPegawaiController::class, 'import']);
 Route::get('/export', [StrukturPegawaiController::class, 'export']);
+
+//api untuk kelola data fasilitas
+Route::get('kelola/fasilitas', [KelolaDataFasilitasController::class, 'index']);
+Route::get('kelola/fasilitas/sampah', [KelolaDataFasilitasController::class, 'sampah']);
+Route::post('kelola/fasilitas', [KelolaDataFasilitasController::class, 'store']);
+Route::put('kelola/fasilitas/{id}', [KelolaDataFasilitasController::class, 'update']);
+Route::delete('kelola/fasilitas/{id}', [KelolaDataFasilitasController::class, 'destroy']);
+Route::delete('kelola/fasilitas/{id}/permanen', [KelolaDataFasilitasController::class, 'deletePermanent']);
+Route::put('kelola/fasilitas/{id}/restore', [KelolaDataFasilitasController::class, 'restore']);
+Route::post('kelola/fasilitas/restore-massal', [KelolaDataFasilitasController::class, 'restoreMassal']);
+Route::delete('kelola/fasilitas/hapus-massal', [KelolaDataFasilitasController::class, 'hapusMassal']);
+Route::delete('kelola/fasilitas/hapus-permanen-massal', [KelolaDataFasilitasController::class, 'hapusPermanenMassal']);
+Route::post('kelola/fasilitas/import', [KelolaDataFasilitasController::class, 'import']);
+Route::get('kelola/fasilitas/export', [KelolaDataFasilitasController::class, 'export']);

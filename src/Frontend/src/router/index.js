@@ -11,9 +11,9 @@ import DataPelatihanSampahView from '../views/PengelolaDataPelatihan/DataPelatih
 import DataKonsultasiView from '../views/PengelolaDataKonsultasi/DataKonsultasiView.vue';
 import DataKonsultasiSampahView from '../views/PengelolaDataKonsultasi/DataKonsultasiSampahView.vue';
 import PrePostTestView from '../views/PengelolaPretestPostest/PrePostTestView.vue';
-import PelaporanPengaduan from '../views/PengelolaPelaporanPengaduan/PelaporanPengaduan.vue';
+import PelaporanPengaduan from '@/views/PengelolaPelaporanPengaduan/PengelolaPelaporan.vue';
 import StatusPengaduan from '../views/PengelolaPelaporanPengaduan/StatusPengaduan.vue';
-import BuatPengaduanPage from '../views/PengelolaPelaporanPengaduan/BuatPengaduanPage.vue';
+//import BuatPengaduanPage from '../views/PengelolaPelaporanPengaduan/BuatPengaduanPage.vue';
 import DataBeritaView from '../views/PengelolaDataBerita/DataBeritaView.vue';
 import DataBeritaSampahView from '../views/PengelolaDataBerita/DataBeritaSampahView.vue';
 import OtpView from '../views/ResetPassword/OtpView.vue';
@@ -25,6 +25,8 @@ import Unauthorized from '../views/Unauthorized.vue';
 import DaftarMasyarakatView from '../views/DaftarMasyarakat/DaftarMasyarakatView.vue';
 import ProfileMasyarakat from '../views/Profile/ProfileMasyarakat.vue';
 import KelolaDataView from '../views/KelolaData/KelolaDataView.vue';
+import DataStrukturPegawaiView from '../views/KelolaStrukturPegawai/DataStrukturPegawaiView.vue';
+import DataStrukturPegawaiSampahView from '../views/kelolaStrukturPegawai/DataStrukturPegawaiSampahView.vue';
 
 const routes = [
   //halaman home
@@ -66,7 +68,7 @@ const routes = [
   // halaman pelaporan pengaduan
   {path: '/pengaduan',name: 'PelaporanPengaduan',component: PelaporanPengaduan},
   {path: '/pengaduan/status',name: 'StatusPengaduan',component: StatusPengaduan},
-  {path: '/pengaduan/buat',name: 'BuatPengaduan',component: BuatPengaduanPage},
+  //{path: '/pengaduan/buat',name: 'BuatPengaduan',component: BuatPengaduanPage},
   
   // halaman data berita
   {path: '/data/berita/sampah',name: 'DataBeritaSampah',component: DataBeritaSampahView,meta: { requiresAuth: true }},
@@ -87,6 +89,10 @@ const routes = [
 },
 
   
+  // halaman kelola struktur pegawai
+  { path: '/data/strukturpegawai', name: 'DataStrukturPegawai', component: DataStrukturPegawaiView, meta: { requiresAuth: true, role: ['operator'] } },
+  { path: '/data/strukturpegawai/sampah', name: 'DataStrukturPegawaiSampah', component: DataStrukturPegawaiSampahView, meta: { requiresAuth: true, role: ['operator'] } },
+
   //halaman not found dan tidak diizinkan
   {path: '/:pathMatch(.*)*',name: 'NotFound',component: NotFound},
   {path: '/unauthorized',name: 'Unauthorized',component: Unauthorized},

@@ -132,6 +132,7 @@ Route::post('/restore-massal', [StrukturPegawaiController::class, 'restoreMassal
 Route::delete('/force-delete/{id}', [StrukturPegawaiController::class, 'forceDelete']);
 Route::post('/force-delete-massal', [StrukturPegawaiController::class, 'forceDeleteMassal']);
     
+<<<<<<< Updated upstream
 Route::post('/import', [StrukturPegawaiController::class, 'impor']);
 // Konsultasi Data Management
 Route::post('kelola/konsultasi/impor', [KelolaDataKonsultasiController::class, 'impor']);
@@ -147,3 +148,6 @@ Route::put('kelola/konsultasi/{data_konsultasi}', [KelolaDataKonsultasiControlle
 Route::delete('kelola/konsultasi/{data_konsultasi}', [KelolaDataKonsultasiController::class, 'destroy']);
 Route::get('/konsultasi/{id_konsultasi}', [KelolaDataKonsultasiController::class, 'show']);
 Route::patch('/konsultasi/{id_konsultasi}/ubah-foto', [KelolaDataKonsultasiController::class, 'ubahFoto']);
+=======
+Route::post('/import', [StrukturPegawaiController::class, 'impor']);
+>>>>>>> Stashed changes

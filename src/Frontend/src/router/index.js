@@ -11,7 +11,7 @@ import DataPelatihanSampahView from '../views/PengelolaDataPelatihan/DataPelatih
 import PrePostTestView from '../views/PengelolaPretestPostest/PrePostTestView.vue';
 import PelaporanPengaduan from '../components/Home/PelaporanPengaduan.vue';
 import StatusPengaduan from '../views/PengelolaPelaporanPengaduan/StatusPengaduan.vue';
-//import BuatPengaduanPage from '../views/PengelolaPelaporanPengaduan/BuatPengaduanPage.vue';
+import BuatPengaduanPage from '../views/PengelolaPelaporanPengaduan/BuatPengaduanPage.vue';
 import DataBeritaView from '../views/PengelolaDataBerita/DataBeritaView.vue';
 import DataBeritaSampahView from '../views/PengelolaDataBerita/DataBeritaSampahView.vue';
 import OtpView from '../views/ResetPassword/OtpView.vue';
@@ -66,7 +66,7 @@ const routes = [
   // halaman pelaporan pengaduan
   {path: '/pengaduan',name: 'PelaporanPengaduan',component: PelaporanPengaduan},
   {path: '/pengaduan/status',name: 'StatusPengaduan',component: StatusPengaduan},
-  //{path: '/pengaduan/buat',name: 'BuatPengaduan',component: BuatPengaduanPage},
+  {path: '/pengaduan/buat',name: 'BuatPengaduan',component: BuatPengaduanPage},
   
   // halaman data berita
   {path: '/data/berita/sampah',name: 'DataBeritaSampah',component: DataBeritaSampahView,meta: { requiresAuth: true }},

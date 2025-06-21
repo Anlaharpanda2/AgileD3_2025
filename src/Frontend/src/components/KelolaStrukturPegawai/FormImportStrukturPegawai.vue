@@ -136,7 +136,7 @@ const resetAndSelectNewFile = () => {
 </script>
 
 <style scoped>
-@import './FormImportSharedStyle.css'; /* opsional: gunakan jika style dipisah */
+/*@import './FormImportSharedStyle.css'; */
 
 .primary-color {
   color: #69C5C2;

@@ -1,11 +1,17 @@
 <template>
   <DefaultLayout>
-    <h1 class="h3 fw-bold text-secondary border-bottom pb-2 mb-4">
-      Data Struktur Pegawai
-    </h1>
+    <!-- Komponen Form Tambah/Edit/Export/Import -->
+    <FormTambahStrukturPegawai v-if="showTambah" @close="showTambah = false" />
+    <FormEditStrukturPegawai v-if="showEdit && editData" :initialData="editData" @close="showEdit = false" />
+    <FormExportStrukturPegawai v-if="showExport" :data="pagedData" @close="showExport = false" />
+    <FormImportStrukturPegawai v-if="showImport" @close="showImport = false" />
 
+    <h1 class="h3 fw-bold text-secondary border-bottom pb-2 mb-4">Data Struktur Pegawai</h1>
+
+    <!-- Header Tabel -->
     <div class="table-header">
       <div class="left-controls">
+        <!-- Show per halaman -->
         <div class="show-wrapper">
           <div class="select-box" @click.stop="toggleDropdown">
             <span>{{ itemsPerPage === Infinity ? 'All' : itemsPerPage }}</span>
@@ -17,40 +23,68 @@
             </ul>
           </div>
         </div>
+
+        <!-- Search -->
         <div class="search-box">
           <input type="text" placeholder="Cari Nama Pegawai" v-model="search" />
           <img src="/table/cari.svg" alt="Search" />
         </div>
       </div>
+
+      <!-- Kontrol kanan -->
+      <div class="right-control">
+        <button class="button" @click="showExport = true">
+          <img src="/table/export.svg" alt="Export" />
+        </button>
+        <button class="button" @click="showImport = true">
+          <img src="/table/import.svg" alt="Import" />
+        </button>
+        <button class="button" @click="onMassDeleteClick">
+          <img src="/table/hapusMass.svg" alt="Hapus Massal" />
+          <span class="hilang">Hapus Massal</span>
+        </button>
+        <button class="button" @click="showTambah = true">
+          <img src="/table/tambah.svg" alt="Tambah" />
+          <span class="hilang">Tambah Data</span>
+        </button>
+      </div>
     </div>
 
+    <!-- Tabel -->
     <div class="table-wrapper">
       <el-table
+        ref="elTable"
         :data="pagedData"
         v-loading="loading"
         style="width: 100%"
+        @selection-change="onSelectionChange"
         :header-cell-style="headerCellStyle"
         :row-style="rowStyle"
       >
+        <el-table-column type="selection" width="40" fixed="left" />
+        <el-table-column prop="idPegawai" label="ID Pegawai" show-overflow-tooltip />
         <el-table-column prop="nama" label="Nama" show-overflow-tooltip />
-        <el-table-column prop="nip" label="NIP" show-overflow-tooltip />
+        <el-table-column prop="alamat" label="Alamat" show-overflow-tooltip />
+        <el-table-column prop="email" label="Email" show-overflow-tooltip />
         <el-table-column prop="jabatan" label="Jabatan" show-overflow-tooltip />
-        <el-table-column prop="unit_kerja" label="Unit Kerja" show-overflow-tooltip />
+        <el-table-column prop="noHp" label="No HP" show-overflow-tooltip />
+        <el-table-column prop="status" label="Status" show-overflow-tooltip />
 
-        <el-table-column label="Aksi" width="60" fixed="right">
+        <el-table-column label="Aksi" width="80" fixed="right">
           <template #default="{ row }">
             <div class="action-buttons">
-              <img src="/table/edit.svg" alt="Edit" class="action-icon" @click="editData(row)" title="Edit" />
-              <img src="/table/hapus.svg" alt="Hapus" class="action-icon" @click="deleteData(row)" title="Hapus" />
+              <img src="/table/edit.svg" alt="Edit" class="action-icon" @click="openEdit(row)" title="Edit" />
+              <img src="/table/hapus.svg" alt="Hapus" class="action-icon" @click="onDelete(row)" title="Hapus" />
             </div>
           </template>
         </el-table-column>
       </el-table>
     </div>
 
+    <!-- Pagination -->
     <div class="pagination">
       <button class="page-btn" :disabled="currentPage === 1" @click="prevPage">
-        <img src="/table/sebelum.svg" alt="prev">
+        <img src="/table/sebelum.svg" alt="prev" />
       </button>
 
       <template v-for="item in visiblePages" :key="String(item)">
@@ -64,7 +98,7 @@
       </template>
 
       <button class="page-btn" :disabled="currentPage === totalPages" @click="nextPage">
-        <img src="/table/next.svg" alt="next">
+        <img src="/table/next.svg" alt="next" />
       </button>
     </div>
   </DefaultLayout>
@@ -72,25 +106,39 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import api from '../../api.js'
-import DefaultLayout from '../../layouts/DefaultLayout.vue'
+import api from '@/api'
+import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import { ElNotification } from 'element-plus'
 
+import FormTambahStrukturPegawai from '@/components/KelolaStrukturPegawai/FormTambahStrukturPegawai.vue'
+import FormEditStrukturPegawai from '@/components/KelolaStrukturPegawai/FormEditStrukturPegawai.vue'
+import FormExportStrukturPegawai from '@/components/KelolaStrukturPegawai/FormExportStrukturPegawai.vue'
+import FormImportStrukturPegawai from '@/components/KelolaStrukturPegawai/FormImportStrukturPegawai.vue'
+
 interface Pegawai {
-  id: number
+  idPegawai: number
   nama: string
-  nip: string
+  alamat: string
+  email: string
   jabatan: string
-  unit_kerja: string
+  noHp: string
+  status: 'aktif' | 'nonaktif' | 'cuti'
 }
 
 const tableData = ref<Pegawai[]>([])
-const search = ref('')
 const loading = ref(false)
+const search = ref('')
 const currentPage = ref(1)
 const itemsPerPage = ref<number | string>(10)
 const perPageOptions = [10, 20, 50, 100, 'all']
 const dropdownOpen = ref(false)
+const selectedRows = ref<Pegawai[]>([])
+
+const showTambah = ref(false)
+const showEdit = ref(false)
+const showExport = ref(false)
+const showImport = ref(false)
+const editData = ref<Pegawai | null>(null)
 
 function toggleDropdown() {
   dropdownOpen.value = !dropdownOpen.value
@@ -110,7 +158,6 @@ const pagedData = computed(() => {
   const start = (currentPage.value - 1) * perPage
   return filteredData.value.slice(start, start + perPage)
 })
-
 const visiblePages = computed<(number | '...')[]>(() => {
   const total = totalPages.value
   const current = currentPage.value
@@ -147,34 +194,46 @@ function goToPage(page: number) {
   currentPage.value = page
 }
 
+function openEdit(row: Pegawai) {
+  editData.value = row
+  showEdit.value = true
+}
+function onSelectionChange(val: Pegawai[]) {
+  selectedRows.value = val
+}
+async function onDelete(row: Pegawai) {
+  loading.value = true
+  try {
+    await api.delete(`/struktur-pegawai/${row.idPegawai}`)
+    await fetchData()
+    ElNotification({ title: 'Sukses', message: 'Data dihapus.', type: 'success' })
+  } catch (err) {
+    ElNotification({ title: 'Error', message: 'Gagal menghapus.', type: 'error' })
+  } finally {
+    loading.value = false
+  }
+}
+async function onMassDeleteClick() {
+  if (selectedRows.value.length === 0) return
+  loading.value = true
+  try {
+    const ids = selectedRows.value.map(p => p.idPegawai)
+    await api.post('/struktur-pegawai/delete-massal', { ids })
+    await fetchData()
+    ElNotification({ title: 'Sukses', message: 'Data terpilih dihapus.', type: 'success' })
+  } catch (err) {
+    ElNotification({ title: 'Error', message: 'Gagal menghapus massal.', type: 'error' })
+  } finally {
+    loading.value = false
+  }
+}
 async function fetchData() {
   loading.value = true
   try {
     const res = await api.get('/struktur-pegawai')
     tableData.value = res.data
   } catch (err) {
-    ElNotification({
-      title: 'Error',
-      message: 'Gagal memuat data struktur pegawai.',
-      type: 'error'
-    })
-  } finally {
-    loading.value = false
-  }
-}
-
-function editData(row: Pegawai) {
-  ElNotification({ title: 'Edit', message: `Edit ${row.nama}`, type: 'info' })
-}
-
-async function deleteData(row: Pegawai) {
-  loading.value = true
-  try {
-    await api.delete(`/struktur-pegawai/${row.id}`)
-    await fetchData()
-    ElNotification({ title: 'Sukses', message: 'Data dihapus.', type: 'success' })
-  } catch (err) {
-    ElNotification({ title: 'Error', message: 'Gagal menghapus.', type: 'error' })
+    ElNotification({ title: 'Error', message: 'Gagal memuat data.', type: 'error' })
   } finally {
     loading.value = false
   }

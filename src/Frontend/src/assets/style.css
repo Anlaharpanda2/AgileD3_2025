@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=SF+Compact+Rounded:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+
+body {
+  	margin: 0; line-height: normal;
+}
+:root {
+	/* Color */
+	--color-whitesmoke: #f4f4f4;
+	--color-black: #000;
+	--color-mediumturquoise: #69c5c2;
+	--color-darkslategray: #3f3f3f;
+  	--color-dimgray: #626262;
+  	--color-white: #fff;
+  	--color-gray-100: #2a223f;
+  	--color-gray-200: rgba(255, 255, 255, 0.8);
+  	--color-black: #000;
+  	
+  	/* Gap */
+  	--gap-18: 18px;
+  	
+  	/* Font */
+	--font-roboto: Roboto;
+  	--font-manrope: Manrope;
+  	--font-sf-compact-rounded: SF Compact Rounded;
+  	--font-inter: Inter;
+  	
+}

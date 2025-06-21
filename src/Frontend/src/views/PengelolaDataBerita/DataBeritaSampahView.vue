@@ -16,6 +16,7 @@
           </div>
         </div>
 
+
         <div class="search-box">
           <input type="text" placeholder="Cari Judul atau Jenis Konten" v-model="search" />
           <img src="/table/cari.svg" alt="Search" />
@@ -103,16 +104,6 @@ import { ref, computed, onMounted } from 'vue'
 import api from '../../api.js'
 import DefaultLayout2 from '../../layouts/DefaultLayout2.vue'
 import { ElMessage } from 'element-plus';
-
-const getUserRole = (): string => {
-  return localStorage.getItem('role') || ''
-}
-
-const isOperator = computed(() => getUserRole() === 'operator')
-const isPegawai = computed(() => getUserRole() === 'pegawai')
-const isMasyarakat = computed(() => getUserRole() === 'masyarakat')
-const isNotLogin = computed(() => !['operator', 'pegawai', 'masyarakat'].includes(getUserRole()))
-
 
 interface Berita {
   id: number;

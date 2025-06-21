@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
+
+
 use App\Http\Controllers\Auth\AuthMasyarakatController;
 use App\Http\Controllers\Auth\AuthOperatorController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -12,13 +14,16 @@ use App\Http\Controllers\KelolaDataPelatihan\KelolaDataPelatihanController;
 use App\Http\Controllers\KelolaDataPendaftaran\KelolaDataPendaftaranController;
 use App\Http\Controllers\KelolaDataPanitia\KelolaDataPanitiaController;
 use App\Http\Controllers\KelolaDataPelatihan\ImporPelatihanController;
-use App\Http\Controllers\KelolaPesan\PesanController;
+
 use App\Http\Controllers\KelolaPretestPostest\PrePostController;
 use App\Http\Controllers\KelolaPretestPostest\PrePostTestController;
 use App\Http\Controllers\Pengaduan\PengaduanController;
 use App\Http\Controllers\KelolaAkses\KelolaAksesController;
 use App\Http\Controllers\KelolaBerita\KelolaDataBeritaController;
 use App\Http\Controllers\KelolaStrukturPegawai\StrukturPegawaiController;
+use App\Http\Controllers\KelolaDataKonsultasi\KelolaDataKonsultasiController;
+
+
 
 //login
 Route::post('/login/masyarakat', [AuthMasyarakatController::class, 'login']);
@@ -27,6 +32,12 @@ Route::post('/login/operator', [AuthOperatorController::class, 'login']);
 
 //daftar masyarakat
 Route::post('/daftar/masyarakat', [AuthMasyarakatController::class, 'register']);
+
+//reset password
+Route::post('/email/check', [ResetPasswordController::class, 'checkEmail']);
+Route::post('/password/forgot', [ResetPasswordController::class, 'sendOtp']);
+Route::post('/otp/confirm', [ResetPasswordController::class, 'confirmOtp']);
+Route::patch('/password/reset', [ResetPasswordController::class, 'resetPassword']);
 
 //reset password
 Route::post('/email/check', [ResetPasswordController::class, 'checkEmail']);
@@ -122,3 +133,17 @@ Route::delete('/force-delete/{id}', [StrukturPegawaiController::class, 'forceDel
 Route::post('/force-delete-massal', [StrukturPegawaiController::class, 'forceDeleteMassal']);
     
 Route::post('/import', [StrukturPegawaiController::class, 'impor']);
+// Konsultasi Data Management
+Route::post('kelola/konsultasi/impor', [KelolaDataKonsultasiController::class, 'impor']);
+Route::get('kelola/konsultasi/trash', [KelolaDataKonsultasiController::class, 'trash']);
+Route::put('kelola/konsultasi/restore', [KelolaDataKonsultasiController::class, 'restoreMassal']);
+Route::delete('kelola/konsultasi/permanent', [KelolaDataKonsultasiController::class, 'forceDeleteMassal']);
+Route::delete('kelola/konsultasi', [KelolaDataKonsultasiController::class, 'destroyMassal']);
+Route::put('kelola/konsultasi/{id}/restore', [KelolaDataKonsultasiController::class, 'restore']);
+Route::delete('kelola/konsultasi/{id}/permanent', [KelolaDataKonsultasiController::class, 'forceDelete']);
+Route::get('kelola/konsultasi', [KelolaDataKonsultasiController::class, 'index']);
+Route::post('kelola/konsultasi', [KelolaDataKonsultasiController::class, 'store']);
+Route::put('kelola/konsultasi/{data_konsultasi}', [KelolaDataKonsultasiController::class, 'update']);
+Route::delete('kelola/konsultasi/{data_konsultasi}', [KelolaDataKonsultasiController::class, 'destroy']);
+Route::get('/konsultasi/{id_konsultasi}', [KelolaDataKonsultasiController::class, 'show']);
+Route::patch('/konsultasi/{id_konsultasi}/ubah-foto', [KelolaDataKonsultasiController::class, 'ubahFoto']);

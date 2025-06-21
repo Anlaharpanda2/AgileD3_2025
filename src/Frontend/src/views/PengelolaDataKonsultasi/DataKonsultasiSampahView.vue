@@ -1,30 +1,26 @@
 <template>
-  <!-- Form pop up -->
   <DefaultLayout>
-    <FormSortingDataPelatihan
+    <FormSortingDataKonsultasi
       v-if="showSort"
       :visible="showSort"
       :columns="filterableColumns"
       :data="tableData"
       @update:visible="showSort = $event"
     />
-    <FormFilterDataPelatihan
-      v-model="showFilter"  :columns="filterableColumns"
+    <FormFilterDataKonsultasi
+      v-model="showFilter"
+      :columns="filterableColumns"
       v-model:active-filters="activeFilters"
     />
-    <a href="/data/pelatihan" class="d-inline-flex align-items-center text-decoration-none mb-2">
+    <a href="/data/konsultasi" class="d-inline-flex align-items-center text-decoration-none mb-2">
       <img src="/arrow.svg" alt="Kembali" width="25" height="25" class="me-2" />
-      <span class="h6 text-grey pt-2">Kembali ke Data Pelatihan</span>
+      <span class="h6 text-grey pt-2">Kembali ke Data Konsultasi</span>
     </a>
-    <div class="d-flex justify-content-between align-items-center border-bottom  pb-2 mb-4">
-      <h1 class="h3 fw-bold text-secondary">
-        Data Pelatihan Sampah
-      </h1>
-      <span class="h6 text-muted pt-2">
-        Data akan terhapus otomatis dalam 15 hari
-      </span>
+    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-4">
+      <h1 class="h3 fw-bold text-secondary">Data Konsultasi Sampah</h1>
+      <span class="h6 text-muted pt-2">Data akan terhapus otomatis dalam 15 hari</span>
     </div>
-    <!-- pagination atas-->
+    <!-- pagination atas -->
     <div class="table-header">
       <div class="left-controls">
         <div class="show-wrapper">
@@ -50,185 +46,139 @@
         </div>
 
         <!-- filter dan sorting -->
-          <button class="button2" @click="showFilter = true">
-            <img src="/table/filter.svg" alt="Filter" />
-          </button>
-          <button class="button2" @click="showSort = true">
-            <img src="/table/sort.svg" alt="Sort" />
-          </button>
+        <button class="button2" @click="showFilter = true">
+          <img src="/table/filter.svg" alt="Filter" />
+        </button>
+        <button class="button2" @click="showSort = true">
+          <img src="/table/sort.svg" alt="Sort" />
+        </button>
       </div>
 
       <!-- export, import, sampah, hapus masal dan tambah data disiko -->
       <div class="right-control">
-        <button class="button1" @click="showFilter = true">
-          <img src="/table/filter.svg" alt="Filter" />
-        </button>
-        <button class="button1" @click="showSort = true">
-          <img src="/table/sort.svg" alt="Sort" />
-        </button>
-        <button class="button" @click="onMassDeletePermanentClick" >
-          <img src="/table/deleteForever.svg" alt="hapusPermanenMassal" />
+        <button class="button" @click="onMassDeletePermanentClick">
+          <img src="/table/deleteForever.svg" alt="Hapus Permanen Massal" />
           Hapus Permanen Massal
         </button>
-        <button class="button" @click="onMassRestoreClick" >
-          <img src="/table/pulihkan.svg" alt="restoreMassal" />
+        <button class="button" @click="onMassRestoreClick">
+          <img src="/table/pulihkan.svg" alt="Pulihkan Massal" />
           Pulihkan Massal
         </button>
       </div>
     </div>
 
-    <!-- sturktur tabel -->
-  <div class="table-wrapper">
-    <el-table
-      ref="elTable"
-      :data="pagedData"
-      v-loading="loading"
-      style="width: 100%"
-      @selection-change="onSelectionChange"
-      :header-cell-style="headerCellStyle"
-      :row-style="rowStyle"
-    >
-      <el-table-column type="selection" width="40" fixed="left" show-overflow-tooltip />
+    <!-- struktur tabel -->
+    <div class="table-wrapper">
+      <el-table
+        ref="elTable"
+        :data="pagedData"
+        v-loading="loading"
+        style="width: 100%"
+        @selection-change="onSelectionChange"
+        :header-cell-style="headerCellStyle"
+        :row-style="rowStyle"
+      >
+        <el-table-column type="selection" width="40" fixed="left" show-overflow-tooltip />
 
-      <el-table-column prop="nama" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="Nama" placement="top">
-            <span class="header-tooltip-text">Nama</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
+        <el-table-column prop="nama" show-overflow-tooltip>
+          <template #header>
+            <el-tooltip content="Nama" placement="top">
+              <span class="header-tooltip-text">Nama</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
 
-      <el-table-column prop="nik" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="NIK" placement="top">
-            <span class="header-tooltip-text">NIK</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
+        <el-table-column prop="nik" show-overflow-tooltip>
+          <template #header>
+            <el-tooltip content="NIK" placement="top">
+              <span class="header-tooltip-text">NIK</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
 
-      <el-table-column prop="jenis_bimtek" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="Jenis Bimtek" placement="top">
-            <span class="header-tooltip-text">Jenis Bimtek</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
+        <el-table-column prop="jenis_kelamin" show-overflow-tooltip>
+          <template #header>
+            <el-tooltip content="Jenis Kelamin" placement="top">
+              <span class="header-tooltip-text">Jenis Kelamin</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
 
-      <el-table-column prop="kegiatan_dimulai" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="Kegiatan dimulai" placement="top">
-            <span class="header-tooltip-text">Kegiatan dimulai</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
+        <el-table-column prop="kasus" show-overflow-tooltip>
+          <template #header>
+            <el-tooltip content="Kasus" placement="top">
+              <span class="header-tooltip-text">Kasus</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
 
-      <el-table-column prop="kegiatan_berakhir" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="Kegiatan berakhir" placement="top">
-            <span class="header-tooltip-text">Kegiatan berakhir</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
+        <el-table-column prop="alamat" show-overflow-tooltip>
+          <template #header>
+            <el-tooltip content="Alamat" placement="top">
+              <span class="header-tooltip-text">Alamat</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
 
-      <el-table-column prop="tempat_kegiatan" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="Tempat Kegiatan" placement="top">
-            <span class="header-tooltip-text">Tempat Kegiatan</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
+        <el-table-column prop="umur" show-overflow-tooltip>
+          <template #header>
+            <el-tooltip content="Umur" placement="top">
+              <span class="header-tooltip-text">Umur</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
 
-      <el-table-column prop="angkatan" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="Angkatan" placement="top">
-            <span class="header-tooltip-text">Angkatan</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
+        <el-table-column prop="no_hp" show-overflow-tooltip>
+          <template #header>
+            <el-tooltip content="No. HP" placement="top">
+              <span class="header-tooltip-text">No. HP</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
 
-      <el-table-column prop="tempat_tanggal_lahir" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="Tempat Tanggal Lahir" placement="top">
-            <span class="header-tooltip-text">Tempat Tanggal Lahir</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
+        <el-table-column prop="saksi" show-overflow-tooltip>
+          <template #header>
+            <el-tooltip content="Saksi" placement="top">
+              <span class="header-tooltip-text">Saksi</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
 
-      <el-table-column prop="pendidikan" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="Pendidikan" placement="top">
-            <span class="header-tooltip-text">Pendidikan</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
+        <el-table-column prop="status" show-overflow-tooltip>
+          <template #header>
+            <el-tooltip content="Status" placement="top">
+              <span class="header-tooltip-text">Status</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
 
-      <el-table-column prop="status" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="Status" placement="top">
-            <span class="header-tooltip-text">Status</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
-
-      <el-table-column prop="alamat" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="Alamat" placement="top">
-            <span class="header-tooltip-text">Alamat</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
-
-      <el-table-column prop="jenis_usaha" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="Jenis Usaha" placement="top">
-            <span class="header-tooltip-text">Jenis Usaha</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
-
-      <el-table-column prop="penghasilan_perbulan" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="Penghasilan per bulan" placement="top">
-            <span class="header-tooltip-text">Penghasilan per bulan</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
-
-      <el-table-column prop="nomor_telefon" show-overflow-tooltip>
-        <template #header>
-          <el-tooltip content="No. Telp" placement="top">
-            <span class="header-tooltip-text">No. Telp</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="Aksi" width="60" fixed="right" >
-        <template #header>
-          <el-tooltip content="Aksi" placement="top">
-            <span class="header-tooltip-text">Aksi</span>
-          </el-tooltip>
-        </template>
-        <template #default="{ row }">
-          <div class="action-buttons">
+        <el-table-column label="Aksi" width="60" fixed="right">
+          <template #header>
+            <el-tooltip content="Aksi" placement="top">
+              <span class="header-tooltip-text">Aksi</span>
+            </el-tooltip>
+          </template>
+          <template #default="{ row }">
+            <div class="action-buttons">
               <img
                 src="/table/pulihkan2.svg"
                 alt="Restore"
                 class="action-icon"
                 @click="onRestoreClick(row)"
-                title="pulihkan data"
+                title="Pulihkan data"
               />
               <img
                 src="/table/deleteForever2.svg"
-                alt="HapusSelamanya"
+                alt="Hapus Selamanya"
                 class="action-icon"
                 @click="onDeletePermanentClick(row)"
                 title="Hapus Selamanya"
               />
             </div>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
 
     <!-- pagination bawah -->
     <div class="pagination">
@@ -258,35 +208,31 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed, onMounted } from "vue";
 import api from "../../api.js";
 import DefaultLayout from "../../layouts/DefaultLayout.vue";
-import FormFilterDataPelatihan from "../../components/KelolaDataPelatihan/FormFilterDataPelatihan.vue";
-import FormSortingDataPelatihan from "../../components/KelolaDataPelatihan/FormSortingDataPelatihan.vue";
+import FormFilterDataKonsultasi from "../../components/KelolaDataKonsultasi/FormFilterDataKonsultasi.vue";
+import FormSortingDataKonsultasi from "../../components/KelolaDataKonsultasi/FormSortingDataKonsultasi.vue";
 import { ElNotification, ElMessageBox, ElMessage } from 'element-plus';
 
-interface Peserta {
+interface Konsultasi {
   id: number;
   nama: string;
+  nama_korban: string;
   nik: string;
-  jenis_bimtek: string;
-  kegiatan_dimulai: string;
-  kegiatan_berakhir: string;
-  tempat_kegiatan: string;
-  angkatan: number;
-  tempat_tanggal_lahir: string;
-  pendidikan: string;
-  status: "kawin" | "lajang" | "janda";
+  jenis_kelamin: string;
+  kasus: string;
   alamat: string;
-  jenis_usaha: string;
-  penghasilan_perbulan: string;
-  nomor_telefon: string;
+  umur: number;
+  no_hp: string;
+  saksi: string;
+  status: "pending" | "selesai" | "ditolak";
   created_at?: string;
   updated_at?: string;
 }
 
-const tableData = ref<Peserta[]>([]);
-const selected = ref<Peserta[]>([]);
+const tableData = ref<Konsultasi[]>([]);
+const selected = ref<Konsultasi[]>([]);
 const search = ref("");
 const loading = ref(false);
 const itemsPerPage = ref<number | string>(10);
@@ -295,7 +241,6 @@ const dropdownOpen = ref(false);
 const showSort = ref(false);
 const showFilter = ref(false);
 const perPageOptions = [10, 20, 50, 100, "all"];
-
 
 function toggleDropdown() {
   dropdownOpen.value = !dropdownOpen.value;
@@ -307,13 +252,11 @@ function changeItemsPerPage(option: number | string) {
   dropdownOpen.value = false;
 }
 
-// Inisialisasi activeFilters (baru ditambahkan)
 const activeFilters = ref<{ [key: string]: string | number | null }>({});
 
-// Perbaiki computed property filterableColumns (baru ditambahkan)
 const filterableColumns = computed(() => {
   if (!tableData.value || tableData.value.length === 0) {
-    return [ /* default columns */ ];
+    return [];
   }
   const exclude = ['id', 'created_at', 'updated_at'];
   return Object.keys(tableData.value[0] || {}).filter(key => !exclude.includes(key));
@@ -328,7 +271,6 @@ const filteredData = computed(() => {
     );
   }
 
-  // Logika filter berdasarkan activeFilters (BARU)
   for (const key in activeFilters.value) {
     const filterValue = activeFilters.value[key];
 
@@ -377,32 +319,25 @@ const visiblePages = computed<(number | '...')[]>(() => {
   if (total < 1) return pages;
   pages.push(1);
 
-  let left = current - delta;
-  let right = current + delta;
-
-  if (left < 2) {
-    right += (2 - left);
-    left = 2;
+  if (current > 2) {
+    pages.push('...');
   }
-  if (right > total - 1) {
-    left -= (right - (total - 1));
-    right = total - 1;
-  }
-  left = Math.max(left, 2);
-  right = Math.min(right, total - 1);
 
-  if (left > 2) pages.push('...');
-  for (let i = left; i <= right; i++) pages.push(i);
-  if (right < total - 1) pages.push('...');
-  if (total > 1) pages.push(total);
+  for (let i = Math.max(2, current - delta); i <= Math.min(total - 1, current + delta); i++) {
+    pages.push(i);
+  }
+
+  if (current < total - 1) {
+    pages.push('...');
+    pages.push(total);
+  }
 
   return pages;
 });
 
-function onSelectionChange(rows: Peserta[]) {
+function onSelectionChange(rows: Konsultasi[]) {
   selected.value = rows;
 }
-
 
 // Permanent delete (mass/single)
 async function onMassDeletePermanentClick() {
@@ -421,7 +356,7 @@ async function onMassDeletePermanentClick() {
 
     loading.value = true;
     const niks = selected.value.map(p => p.nik);
-    await api.delete('/kelola/pelatihan/permanent', {
+    await api.delete('/kelola/konsultasi/permanent', {
       data: { niks },
     });
     await fetchData();
@@ -433,7 +368,7 @@ async function onMassDeletePermanentClick() {
   }
 }
 
-async function onDeletePermanentClick(row: Peserta) {
+async function onDeletePermanentClick(row: Konsultasi) {
   try {
     await ElMessageBox.confirm(
       `Yakin ingin menghapus permanen peserta dengan NIK ${row.nik}?`,
@@ -446,7 +381,7 @@ async function onDeletePermanentClick(row: Peserta) {
     );
 
     loading.value = true;
-    await api.delete(`/kelola/pelatihan/${row.id}/permanent`);
+    await api.delete(`/kelola/konsultasi/${row.id}/permanent`);
     await fetchData();
     ElMessage.success('Peserta berhasil dihapus permanen.');
   } catch (err) {
@@ -463,9 +398,7 @@ async function onMassRestoreClick() {
 
   try {
     const niks = selected.value.map(p => p.nik);
-    // Satu request massal ke backend
-    const res = await api.put('/kelola/pelatihan/restore', { niks });
-    // interceptor api.js return response.data
+    const res = await api.put('/kelola/konsultasi/restore', { niks });
     await fetchData();
   } catch (err) {
     console.error('Gagal memulihkan data:', err);
@@ -475,16 +408,17 @@ async function onMassRestoreClick() {
   }
 }
 
-async function onRestoreClick(row:Peserta){ loading.value=true;
-  await api.put(`/kelola/pelatihan/${row.id}/restore`);
-  await fetchData(); loading.value=false }
-
+async function onRestoreClick(row: Konsultasi) {
+  loading.value = true;
+  await api.put(`/kelola/konsultasi/${row.id}/restore`);
+  await fetchData();
+}
 
 async function fetchData() {
-  try { // Ditambahkan try-catch
-    const res = await api.get('/kelola/pelatihan/trash');
+  try {
+    const res = await api.get('/kelola/konsultasi/trash');
     tableData.value = Array.isArray(res) ? res : res.data || [];
-  } catch (error) { // Notifikasi error (BARU)
+  } catch (error) {
     console.error('Error fetching data:', error);
     ElNotification({
       title: 'Error',
@@ -496,19 +430,9 @@ async function fetchData() {
 }
 
 onMounted(async () => {
-  document.addEventListener('click', (e) => {
-    const path = (e as MouseEvent).composedPath() as HTMLElement[];
-    if (!path.some((el) => el.classList?.contains('select-box'))) {
-      dropdownOpen.value = false;
-    }
-  });
   loading.value = true;
   await fetchData();
   loading.value = false;
-});
-
-onBeforeUnmount(() => {
-  document.removeEventListener('click', () => {});
 });
 
 const headerCellStyle = {
@@ -523,7 +447,6 @@ function rowStyle() {
 </script>
 
 <style>
-
 .header-tooltip-text {
   display: inline-block;
   max-width: 100%;
@@ -611,7 +534,7 @@ function rowStyle() {
   padding: 6px;
   flex: 1;
 }
-.icon-group .img{
+.icon-group .img {
   width: 34px;
   height: 34px;
   cursor: pointer;
@@ -752,30 +675,30 @@ function rowStyle() {
 .action-icon:hover {
   transform: scale(1.1);
 }
-.button:hover{
+.button:hover {
   transform: scale(1.05);
   background: #549b98;
 }
-.button1:hover{
+.button1:hover {
   transform: scale(1.05);
   background: #549b98;
 }
-.button2:hover{
+.button2:hover {
   transform: scale(1.05);
   background: #549b98;
 }
 
-@media(max-width:700px){
-  .hilang{
+@media(max-width:700px) {
+  .hilang {
     display: none;
   }
-  .search-box{
+  .search-box {
     width: 79%;
   }
   .table-header {
     flex-wrap: none;
   }
-  .button2{
+  .button2 {
     display: none;
   }
   .button1 {
@@ -795,24 +718,24 @@ function rowStyle() {
     cursor: pointer;
     transition: transform 0.2s;
   }
-  .right-control{
+  .right-control {
     gap: 12px;
   }
-  .left-controls{
+  .left-controls {
     width: 100%;
   }
 }
-@media(max-width:365px){
-  .hilang{
+@media(max-width:365px) {
+  .hilang {
     display: none;
   }
-  .search-box{
+  .search-box {
     width: 75%;
   }
   .table-header {
     flex-wrap: none;
   }
-  .button2{
+  .button2 {
     display: none;
   }
   .button1 {
@@ -832,7 +755,7 @@ function rowStyle() {
     cursor: pointer;
     transition: transform 0.2s;
   }
-  .right-control{
+  .right-control {
     gap: 5px;
   }
 }

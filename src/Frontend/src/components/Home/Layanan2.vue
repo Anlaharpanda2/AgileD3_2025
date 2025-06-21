@@ -19,20 +19,25 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { ElMessage } from 'element-plus'
-import FormTambahDataPendaftaran from './FormTambahDataPendaftaran.vue'
+import { ref } from 'vue';
+import { ElMessage } from 'element-plus';
+import FormTambahDataPendaftaran from './FormTambahDataPendaftaran.vue';
+import { useRouter } from 'vue-router';
 
-const image = '/Home/1.jpeg'
-const title = 'Pengaduan'
+const router = useRouter();
+
+const image = '/Home/1.jpeg';
+const title = 'Pengaduan';
 const description =
-  'memfasilitasi masyarakat untuk melaporkan kasus kekerasan atau permasalahan yang dialami perempuan secara cepat dan aman.'
+  'Memfasilitasi masyarakat untuk melaporkan kasus kekerasan atau permasalahan yang dialami perempuan secara cepat dan aman.';
 
-const showForm = ref(false) // ⬅️ kontrol tampil tidaknya form
+const showForm = ref(false); // Kontrol tampil tidaknya form
 
 function handleSubmit() {
-  ElMessage.success('Layanan berhasil dipilih!')
-  showForm.value = true
+  ElMessage.success('Layanan berhasil dipilih!');
+  showForm.value = true;
+  // Jika ingin mengarahkan ke halaman lain, uncomment baris berikut
+  // router.push('/pengaduan');
 }
 </script>
 

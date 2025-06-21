@@ -10,7 +10,7 @@
 
       <div class="card-actions">
         <el-button type="primary" @click="handleSubmit" round class="submit-btn">
-          Hubungi
+          Ikut Pelatihan
         </el-button>
       </div>
     </div>

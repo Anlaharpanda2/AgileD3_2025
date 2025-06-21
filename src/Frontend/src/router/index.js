@@ -11,7 +11,7 @@ import DataPelatihanSampahView from '../views/PengelolaDataPelatihan/DataPelatih
 import DataKonsultasiView from '../views/PengelolaDataKonsultasi/DataKonsultasiView.vue';
 import DataKonsultasiSampahView from '../views/PengelolaDataKonsultasi/DataKonsultasiSampahView.vue';
 import PrePostTestView from '../views/PengelolaPretestPostest/PrePostTestView.vue';
-import PelaporanPengaduan from '@/views/PengelolaPelaporanPengaduan/PengelolaPelaporan.vue';
+import PelaporanPengaduan from '../views/PengelolaPelaporanPengaduan/BuatPengaduanPage.vue';
 import StatusPengaduan from '../views/PengelolaPelaporanPengaduan/StatusPengaduan.vue';
 //import BuatPengaduanPage from '../views/PengelolaPelaporanPengaduan/BuatPengaduanPage.vue';
 import DataBeritaView from '../views/PengelolaDataBerita/DataBeritaView.vue';
@@ -75,18 +75,8 @@ const routes = [
   {path: '/data/berita',name: 'DataBerita',component: DataBeritaView,meta: { requiresAuth: true }},
 
   //halaman kelola konsultasi
-{ 
-  path: '/data/konsultasi', 
-  name: 'DataKonsultasi', 
-  component: DataKonsultasiView, 
-  meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
-},
-{ 
-  path: '/data/konsultasi/sampah', 
-  name: 'DataKonsultasiSampah', 
-  component: DataKonsultasiSampahView, 
-  meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
-},
+  {path: '/data/konsultasi', name: 'DataKonsultasi', component: DataKonsultasiView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
+  { path: '/data/konsultasi/sampah', name: 'DataKonsultasiSampah', component: DataKonsultasiSampahView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
 
   
   // halaman kelola struktur pegawai

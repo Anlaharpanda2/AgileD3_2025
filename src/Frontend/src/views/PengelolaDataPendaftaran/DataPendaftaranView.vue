@@ -75,11 +75,11 @@
         <button class="button" @click="showExport = true">
           <img src="/table/export.svg" alt="Export" />
         </button>
-        <button class="button" @click="onMassDeleteClick" v-if="isOperator">
+        <button class="button" @click="onMassDeleteClick" >
           <img src="/table/RejectMass.svg" alt="rejectMassal">
           <span class="hilang">Tolak Massal</span>
         </button>
-        <button class="button" @click="openEditMassal(selected)" v-if="isOperator">
+        <button class="button" @click="openEditMassal(selected)" >
           <img src="/table/AcceptMass.svg" alt="TerimaMassal" />
           <span class="hilang">Terima Massal</span>
         </button>
@@ -179,7 +179,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Aksi" width="60" fixed="right" v-if="isOperator">
+      <el-table-column label="Aksi" width="60" fixed="right" >
         <template #header>
           <el-tooltip content="Aksi" placement="top">
             <span class="header-tooltip-text">Aksi</span>
@@ -245,14 +245,6 @@ import FormFilterDatapendaftaran from "../../components/KelolaDatapendaftaran/Fo
 import FormSortingDatapendaftaran from "../../components/KelolaDatapendaftaran/FormSortingDatapendaftaran.vue";
 import { ElNotification, ElMessageBox } from 'element-plus';
 import { useRouter } from 'vue-router'
-const getUserRole = (): string => {
-  return localStorage.getItem('role') || ''
-}
-
-const isOperator = computed(() => getUserRole() === 'operator')
-const isPegawai = computed(() => getUserRole() === 'pegawai')
-const isMasyarakat = computed(() => getUserRole() === 'masyarakat')
-const isNotLogin = computed(() => !['operator', 'pegawai', 'masyarakat'].includes(getUserRole()))
 
 const router = useRouter()
 

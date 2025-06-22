@@ -14,19 +14,23 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    // agar Vitest mem‑compile Element Plus & Popper
-    deps: {
-      inline: ['element-plus', '@popperjs/core']
-    },
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'html'],
-      all: true,
-      include: ['src/**/*.{js,ts,vue}'],
-      exclude: ['node_modules', 'test']
+test: {
+  globals: true,
+  environment: 'jsdom',
+  deps: {
+    optimizer: {
+      web: {
+        include: ['element-plus', '@popperjs/core']
+      }
     }
+  },
+  coverage: {
+    provider: 'v8',
+    reporter: ['text', 'html'],
+    all: true,
+    include: ['src/**/*.{js,ts,vue}'],
+    exclude: ['node_modules', 'test']
   }
+}
+
 })

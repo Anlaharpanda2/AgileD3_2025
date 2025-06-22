@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\KelolaDataFasilitas\KelolaDataFasilitasController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -129,6 +130,26 @@ Route::post('/destroy-massal', [StrukturPegawaiController::class, 'destroyMassal
 Route::get('/trash', [StrukturPegawaiController::class, 'trash']);
 Route::post('/restore/{id}', [StrukturPegawaiController::class, 'restore']);
 Route::post('/restore-massal', [StrukturPegawaiController::class, 'restoreMassal']);
+<<<<<<< HEAD
+Route::delete('/hapus-massal', [StrukturPegawaiController::class, 'hapusMassal']);
+Route::delete('/hapus-permanen-massal', [StrukturPegawaiController::class, 'hapusPermanenMassal']);
+Route::post('/import', [StrukturPegawaiController::class, 'import']);
+Route::get('/export', [StrukturPegawaiController::class, 'export']);
+
+//api untuk kelola data fasilitas
+Route::get('kelola/fasilitas', [KelolaDataFasilitasController::class, 'index']);
+Route::get('kelola/fasilitas/sampah', [KelolaDataFasilitasController::class, 'sampah']);
+Route::post('kelola/fasilitas', [KelolaDataFasilitasController::class, 'store']);
+Route::put('kelola/fasilitas/{id}', [KelolaDataFasilitasController::class, 'update']);
+Route::delete('kelola/fasilitas/{id}', [KelolaDataFasilitasController::class, 'destroy']);
+Route::delete('kelola/fasilitas/{id}/permanen', [KelolaDataFasilitasController::class, 'deletePermanent']);
+Route::put('kelola/fasilitas/{id}/restore', [KelolaDataFasilitasController::class, 'restore']);
+Route::post('kelola/fasilitas/restore-massal', [KelolaDataFasilitasController::class, 'restoreMassal']);
+Route::delete('kelola/fasilitas/hapus-massal', [KelolaDataFasilitasController::class, 'hapusMassal']);
+Route::delete('kelola/fasilitas/hapus-permanen-massal', [KelolaDataFasilitasController::class, 'hapusPermanenMassal']);
+Route::post('kelola/fasilitas/import', [KelolaDataFasilitasController::class, 'import']);
+Route::get('kelola/fasilitas/export', [KelolaDataFasilitasController::class, 'export']);
+=======
 Route::delete('/force-delete/{id}', [StrukturPegawaiController::class, 'forceDelete']);
 Route::post('/force-delete-massal', [StrukturPegawaiController::class, 'forceDeleteMassal']);
     
@@ -147,3 +168,4 @@ Route::put('kelola/konsultasi/{data_konsultasi}', [KelolaDataKonsultasiControlle
 Route::delete('kelola/konsultasi/{data_konsultasi}', [KelolaDataKonsultasiController::class, 'destroy']);
 Route::get('/konsultasi/{id_konsultasi}', [KelolaDataKonsultasiController::class, 'show']);
 Route::patch('/konsultasi/{id_konsultasi}/ubah-foto', [KelolaDataKonsultasiController::class, 'ubahFoto']);
+>>>>>>> c163eee9482a348e4733b3dd63d92f06b6928dcf

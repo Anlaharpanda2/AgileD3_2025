@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://192.168.173.83:8000/api',
+    baseURL: 'http://127.0.0.1:8000/api',
 });
 
 api.interceptors.response.use(
@@ -22,5 +22,5 @@ api.interceptors.response.use(
     }
 );
 
-export const STORAGE_URL = 'http://192.168.173.83:8000/storage/';
+export const STORAGE_URL = 'http://127.0.0.1:8000/storage/';
 export default api;

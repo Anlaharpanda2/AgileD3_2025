@@ -1,9 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
-Route::get('/', function () {
-    return view('welcome');
-});
 Route::get('/seeder', function () {
     $directory = database_path('seeders');
     $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory));
@@ -26,7 +23,8 @@ Route::get('/seeder', function () {
 });
 Route::get('/', function () {
     $allRoutes = Route::getRoutes();
-    $tmp = [];
+    $apiRoutes = [];
+    $totalApiCount = 0;
     foreach ($allRoutes as $route) {
         $uri = $route->uri();
         if (Str::startsWith($uri, 'api/')) {
@@ -34,24 +32,34 @@ Route::get('/', function () {
                 if (in_array($method, ['HEAD', 'OPTIONS'])) {
                     continue;
                 }
-                $tmp[$uri][] = $method;
+                $totalApiCount++;
+                if (!isset($apiRoutes[$uri])) {
+                    $apiRoutes[$uri] = [
+                        'GET' => false,
+                        'POST' => false,
+                        'PUT' => false,
+                        'PATCH' => false,
+                        'DELETE' => false,
+                    ];
+                }
+                $apiRoutes[$uri][$method] = true;
             }
         }
     }
     $rows = [];
-    foreach ($tmp as $uri => $methods) {
+    foreach ($apiRoutes as $uri => $methods) {
         $rows[] = [
-            'uri'    => '/'.$uri,
-            'GET'    => in_array('GET', $methods),
-            'POST'   => in_array('POST', $methods),
-            'PUT'    => in_array('PUT', $methods),
-            'PATCH'  => in_array('PATCH', $methods),
-            'DELETE' => in_array('DELETE', $methods),
+            'uri' => '/' . $uri,
+            'GET' => $methods['GET'],
+            'POST' => $methods['POST'],
+            'PUT' => $methods['PUT'],
+            'PATCH' => $methods['PATCH'],
+            'DELETE' => $methods['DELETE'],
         ];
     }
-    $count = count($rows);
     return view('api', [
-        'rows'  => $rows,
-        'count' => $count,
+        'rows' => $rows,
+        'totalEndpoints' => $totalApiCount, 
+        'totalUris' => count($rows), 
     ]);
 });

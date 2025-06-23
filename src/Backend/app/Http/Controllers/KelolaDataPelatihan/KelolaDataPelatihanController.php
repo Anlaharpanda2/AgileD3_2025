@@ -12,7 +12,6 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-
 class KelolaDataPelatihanController extends Controller
 {
     public function index()
@@ -176,100 +175,4 @@ class KelolaDataPelatihanController extends Controller
             ], 500);
         }
     }
-    public function show($nik)
-    {
-        $data = UserMasyarakat::where('nik', $nik)->first();
-
-        if (!$data) {
-            return response()->json([
-                'message' => 'Data tidak ditemukan'
-            ], 404);
-        }
-
-        return response()->json([
-            'message' => 'Data ditemukan',
-            'data' => $data
-        ]);
-    }
-
-   public function ubahFoto(Request $request, $nik)
-{
-    try {
-        \Log::info('Upload request:', [
-            'method' => $request->method(),
-            'has_file' => $request->hasFile('photo'),
-            'files' => $request->allFiles(),
-            'all_data' => $request->all()
-        ]);
-
-        if (!$request->hasFile('photo')) {
-            return response()->json([
-                'message' => 'File tidak terkirim.',
-                'debug' => [
-                    'method' => $request->method(),
-                    'content_type' => $request->header('Content-Type'),
-                    'all_data' => $request->all(),
-                    'files' => $request->allFiles()
-                ]
-            ], 422);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'photo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Validasi gagal.',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        // Cari peserta berdasarkan nik
-        $peserta = UserMasyarakat::where('nik', $nik)->first();
-
-        if (!$peserta) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Data dengan NIK tersebut tidak ditemukan.'
-            ], 404);
-        }
-
-        // Hapus foto lama jika ada
-        if ($peserta->photo && Storage::disk('public')->exists($peserta->photo)) {
-            Storage::disk('public')->delete($peserta->photo);
-        }
-
-        // Upload foto baru
-        $file = $request->file('photo');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $path = $file->storeAs('photos/peserta', $filename, 'public');
-
-        // Update data
-        $peserta->update([
-            'photo' => $path
-        ]);
-
-        $peserta->refresh();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Foto berhasil diperbarui.',
-            'data' => [
-                'photo_url' => $peserta->photo_url,
-                'photo_path' => $path
-            ]
-        ], 200);
-
-    } catch (\Exception $e) {
-        \Log::error('Upload photo error: ' . $e->getMessage());
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Terjadi kesalahan server.',
-            'debug' => app()->environment('local') ? $e->getMessage() : []
-        ], 500);
-    }
-}
-
 }

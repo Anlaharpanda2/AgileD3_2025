@@ -18,9 +18,9 @@
           <div class="col-md-6 col-lg-4">
             <Layanan2></Layanan2>
           </div>
-          <div class="col-md-6 col-lg-4">
+          <!-- <div class="col-md-6 col-lg-4">
             <Layanan3></Layanan3>
-          </div>
+          </div> -->
         </div>
       </section>
     </div>
@@ -189,76 +189,6 @@
     </section>
   </DefaultLayout>
 </template>
-
-<script setup>
-import { computed, ref, onMounted } from 'vue';
-import DefaultLayout from '../../layouts/DefaultLayout.vue';
-import Slider from '../../components/Home/Slider.vue';
-import { ElMessage } from 'element-plus';
-import api from '@/api.js';
-import {STORAGE_URL} from '@/api.js';
-import FormTambahDataPendaftaran from '../../components/Home/FormTambahDataPendaftaran.vue';
-import Layanan1 from '../../components/Home/Layanan1.vue';
-import Layanan2 from '../../components/Home/Layanan2.vue';
-import Layanan3 from '../../components/Home/Layanan3.vue';
-
-// --- News Slider Logic ---
-const latestNews = ref([]);
-const currentNewsIndex = ref(0); // Index berita yang sedang ditampilkan
-const showTambah = ref(false)
-// Computed property untuk berita yang sedang aktif
-const currentNewsItem = computed(() => {
-  if (latestNews.value.length > 0) {
-    return latestNews.value[currentNewsIndex.value];
-  }
-  return null;
-});
-
-// Fungsi untuk menampilkan berita berikutnya
-const showNextNews = () => {
-  if (latestNews.value.length > 1) {
-    currentNewsIndex.value = (currentNewsIndex.value + 1) % latestNews.value.length;
-  }
-};
-
-// Fungsi untuk menampilkan berita sebelumnya
-const showPrevNews = () => {
-  if (latestNews.value.length > 1) {
-    currentNewsIndex.value = (currentNewsIndex.value - 1 + latestNews.value.length) % latestNews.value.length;
-  }
-};
-
-const fetchLatestNews = async () => {
-  try {
-    const response = await api.get('/kelola/berita');
-
-    const data = Array.isArray(response) ? response : response?.data;
-
-    if (Array.isArray(data)) {
-      latestNews.value = data.slice(0, 5); // 5 berita terbaru
-    } else {
-      console.warn('Struktur data tidak sesuai ekspektasi:', response);
-      latestNews.value = [];
-    }
-  } catch (error) {
-    console.error('Gagal fetch berita:', error);
-    ElMessage.error('Gagal memuat berita terbaru.');
-    latestNews.value = [];
-  }
-};
-
-
-// Format date function
-const formatDate = (dateString) => {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString('id-ID', options);
-};
-
-// Fetch news when component is mounted
-onMounted(() => {
-  fetchLatestNews();
-});
-</script>
 
 <style scoped>
 body {
@@ -958,3 +888,73 @@ body {
   background: #5B9B98; /* Thumb lebih gelap saat hover */
 }
 </style>
+
+<script setup>
+import { computed, ref, onMounted } from 'vue';
+import DefaultLayout from '../../layouts/DefaultLayout.vue';
+import Slider from '../../components/Home/Slider.vue';
+import { ElMessage } from 'element-plus';
+import api from '@/api.js';
+import {STORAGE_URL} from '@/api.js';
+import FormTambahDataPendaftaran from '../../components/Home/FormTambahDataPendaftaran.vue';
+import Layanan1 from '../../components/Home/Layanan1.vue';
+import Layanan2 from '../../components/Home/Layanan2.vue';
+import Layanan3 from '../../components/Home/Layanan3.vue';
+
+// --- News Slider Logic ---
+const latestNews = ref([]);
+const currentNewsIndex = ref(0); // Index berita yang sedang ditampilkan
+const showTambah = ref(false)
+// Computed property untuk berita yang sedang aktif
+const currentNewsItem = computed(() => {
+  if (latestNews.value.length > 0) {
+    return latestNews.value[currentNewsIndex.value];
+  }
+  return null;
+});
+
+// Fungsi untuk menampilkan berita berikutnya
+const showNextNews = () => {
+  if (latestNews.value.length > 1) {
+    currentNewsIndex.value = (currentNewsIndex.value + 1) % latestNews.value.length;
+  }
+};
+
+// Fungsi untuk menampilkan berita sebelumnya
+const showPrevNews = () => {
+  if (latestNews.value.length > 1) {
+    currentNewsIndex.value = (currentNewsIndex.value - 1 + latestNews.value.length) % latestNews.value.length;
+  }
+};
+
+const fetchLatestNews = async () => {
+  try {
+    const response = await api.get('/kelola/berita');
+
+    const data = Array.isArray(response) ? response : response?.data;
+
+    if (Array.isArray(data)) {
+      latestNews.value = data.slice(0, 5); // 5 berita terbaru
+    } else {
+      console.warn('Struktur data tidak sesuai ekspektasi:', response);
+      latestNews.value = [];
+    }
+  } catch (error) {
+    console.error('Gagal fetch berita:', error);
+    ElMessage.error('Gagal memuat berita terbaru.');
+    latestNews.value = [];
+  }
+};
+
+
+// Format date function
+const formatDate = (dateString) => {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(dateString).toLocaleDateString('id-ID', options);
+};
+
+// Fetch news when component is mounted
+onMounted(() => {
+  fetchLatestNews();
+});
+</script>

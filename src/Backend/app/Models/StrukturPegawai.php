@@ -9,10 +9,7 @@ class StrukturPegawai extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'struktur_pegawais'; // nama tabel sesuai aslinya
-    protected $primaryKey = 'idPegawai';    // sesuai ERD
-    public $incrementing = false;           // karena idPegawai bukan auto-increment
-    protected $keyType = 'int';
+    protected $table = 'struktur_pegawais';
 
     protected $fillable = [
         'idPegawai',
@@ -22,5 +19,11 @@ class StrukturPegawai extends Model
         'jabatan',
         'noHp',
         'status',
+    ];
+
+    protected $dates = [
+        'deleted_at',
+        'created_at',
+        'updated_at',
     ];
 }

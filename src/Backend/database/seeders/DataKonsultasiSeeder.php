@@ -3,55 +3,30 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\DataKonsultasi; // Make sure to create this model
+use App\Models\DataKonsultasi;
 use Faker\Factory as Faker;
 
 class DataKonsultasiSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
-     *
-     * @return void
+     * Jalankan seeder.
      */
-    public function run()
+    public function run(int $total = 10): void
     {
-        $faker = Faker::create('id_ID');
+        $faker = Faker::create();
 
-        $kasusList = [
-            'Kekerasan dalam rumah tangga',
-            'Kekerasan Seksual',
-            'Perundungan (Bullying)',
-            'Kekerasan Pada Anak',
-            'Eksploitasi Anak',
-        ];
-
-        $saksiList = [
-            'Tetangga',
-            'Keluarga',
-            'Teman',
-            'Dokter',
-            'Psikolog',
-        ];
-
-        $statusList = [
-            'pending',
-            'selesai',
-            'ditolak',
-        ];
-
-        for ($i = 0; $i < 500; $i++) {
+        for ($i = 0; $i < $total; $i++) {
             DataKonsultasi::create([
-                'alamat' => $faker->address,
-                'deskripsi_data_konsultasi' => $faker->text(200),
-                'id_konsultasi' => $i + 1, // Assuming this is a sequential id
-                'jenis_kelamin' => $faker->randomElement(['L', 'P']),
-                'kasus' => $faker->randomElement($kasusList),
-                'nama' => $faker->name,
-                'nama_korban' => $faker->name,
-                'no_hp' => $faker->numerify('##########'), // Assuming no_hp is an int
-                'saksi' => $faker->randomElement($saksiList),
-                'status' => $faker->randomElement($statusList),
-                'umur' => $faker->numberBetween(18, 65),
+                'nama_pelapor' => $faker->name(),
+                'nama_korban' => $faker->name(),
+                'deskripsi' => $faker->sentence(10),
+                'alamat' => $faker->address(),
+                'waktu_kejadian' => $faker->dateTimeBetween('-1 month', 'now'),
+                'kasus' => $faker->randomElement(['KDRT', 'Pelecehan', 'Penelantaran']),
+                'no_hp' => $faker->phoneNumber(),
+                'saksi' => $faker->name(),
+                'status' => $faker->randomElement(['diproses', 'selesai']),
+                'lampiran' => 'lampiran/contoh' . $faker->numberBetween(1, 5) . '.jpg',
             ]);
         }
     }

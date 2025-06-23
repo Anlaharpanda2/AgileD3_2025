@@ -23,6 +23,7 @@ import NavBar from '@/components/layouts/NavBar.vue'
   min-height: 100vh;
 }
 .layout-content {
+  background-color: #ffffff;
   flex: 1;
   padding: 20px;
 }

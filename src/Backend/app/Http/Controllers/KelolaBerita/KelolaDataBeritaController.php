@@ -5,6 +5,10 @@ namespace App\Http\Controllers\KelolaBerita;
 use App\Http\Controllers\Controller;
 use App\Models\DataBerita;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\BeritaImport;
 
 class KelolaDataBeritaController extends Controller
 {
@@ -15,59 +19,99 @@ class KelolaDataBeritaController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'judul' => 'required|string|max:255',
-            'isi' => 'required|string',
-            'jenis_konten' => 'required|string|max:100',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+        try {
+            $validated = $request->validate([
+                'judul' => 'required|string|max:255',
+                'isi' => 'required|string',
+                'jenis_konten' => 'nullable|string|max:255',
+                'foto' => 'nullable|image|max:2048', // max 2MB
+            ]);
 
-        if ($request->hasFile('foto')) {
-            $validated['foto'] = $request->file('foto')->store('berita_foto', 'public');
+            if ($request->hasFile('foto')) {
+                $validated['foto'] = $request->file('foto')->store('berita', 'public');
+            }
+
+            $dataBerita = DataBerita::create($validated);
+
+            return response()->json([
+                'message' => 'Data berita berhasil disimpan.',
+                'data' => $dataBerita,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Gagal menyimpan data: ' . $e->getMessage()], 500);
         }
-
-        $berita = DataBerita::create($validated);
-
-        return response()->json([
-            'message' => 'Berita berhasil disimpan.',
-            'data' => $berita
-        ], 201);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, DataBerita $dataBerita)
     {
-        $data = DataBerita::findOrFail($id);
+        try {
+            $validated = $request->validate([
+                'judul' => 'required|string|max:255',
+                'isi' => 'required|string',
+                'jenis_konten' => 'nullable|string|max:255',
+                'foto' => 'nullable|image|max:2048',
+            ]);
 
-        $validated = $request->validate([
-            'judul' => 'required|string|max:255',
-            'isi' => 'required|string',
-            'jenis_konten' => 'required|string|max:100',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+            if ($request->hasFile('foto')) {
+                // Hapus foto lama kalau ada
+                if ($dataBerita->getRawOriginal('foto')) {
+                    Storage::disk('public')->delete($dataBerita->getRawOriginal('foto'));
+                }
+                $validated['foto'] = $request->file('foto')->store('berita', 'public');
+            }
 
-        if ($request->hasFile('foto')) {
-            $validated['foto'] = $request->file('foto')->store('berita_foto', 'public');
+            $dataBerita->update($validated);
+
+            return response()->json([
+                'message' => 'Data berhasil diupdate',
+                'data' => $dataBerita,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Gagal memperbarui data: ' . $e->getMessage()], 500);
         }
-
-        $data->update($validated);
-
-        return response()->json([
-            'message' => 'Berita berhasil diupdate',
-            'data' => $data,
-        ]);
     }
 
-    public function destroy($id)
+    public function destroy(DataBerita $dataBerita)
     {
-        $data = DataBerita::findOrFail($id);
-        $data->delete();
-        return response()->json(['message' => 'Berita berhasil dihapus']);
+        $dataBerita->delete();
+        return response()->json(['message' => 'Data berhasil dihapus']);
+    }
+
+    public function trash()
+    {
+        return DataBerita::onlyTrashed()->get();
+    }
+
+    public function restore($id)
+    {
+        $data = DataBerita::onlyTrashed()->find($id);
+        if (!$data) {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+
+        $data->restore();
+        return response()->json(['message' => 'Data berhasil dipulihkan']);
+    }
+
+    public function restoreMassal(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json(['message' => 'Daftar ID tidak valid atau kosong'], 400);
+        }
+
+        $restoredCount = DataBerita::onlyTrashed()
+            ->whereIn('id', $ids)
+            ->update(['deleted_at' => null]);
+
+        return response()->json([
+            'message' => "Berhasil memulihkan {$restoredCount} data"
+        ]);
     }
 
     public function destroyMassal(Request $request)
     {
         $ids = $request->input('ids');
-
         if (!is_array($ids) || empty($ids)) {
             return response()->json(['error' => 'Parameter ids tidak valid'], 422);
         }
@@ -78,71 +122,36 @@ class KelolaDataBeritaController extends Controller
         ]);
     }
 
-    public function trash()
-    {
-        $data = DataBerita::onlyTrashed()->get();
-        return response()->json($data);
-    }
-
-    public function restore($id)
-    {
-        $data = DataBerita::onlyTrashed()->find($id);
-
-        if (!$data) {
-            return response()->json(['message' => 'Data tidak ditemukan'], 404);
-        }
-
-        $data->restore();
-        return response()->json(['message' => 'Berita berhasil dipulihkan']);
-    }
-
-    public function restoreMassal(Request $request)
-    {
-        $ids = $request->input('ids', []);
-
-        if (!is_array($ids) || empty($ids)) {
-            return response()->json(['message' => 'Daftar ID tidak valid atau kosong'], 400);
-        }
-
-        $restoredCount = DataBerita::onlyTrashed()
-            ->whereIn('id', $ids)
-            ->restore();
-
-        $msg = $restoredCount
-            ? "Berhasil memulihkan $restoredCount data"
-            : "Tidak ada data yang dipulihkan";
-
-        return response()->json(['message' => $msg], 200);
-    }
-
     public function forceDelete($id)
     {
         $data = DataBerita::onlyTrashed()->find($id);
-
         if (!$data) {
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
         }
 
+        if ($data->getRawOriginal('foto')) {
+            Storage::disk('public')->delete($data->getRawOriginal('foto'));
+        }
+
         $data->forceDelete();
-        return response()->json(['message' => 'Berita berhasil dihapus permanen']);
+        return response()->json(['message' => 'Data berhasil dihapus permanen']);
     }
 
     public function forceDeleteMassal(Request $request)
     {
         $ids = $request->input('ids', []);
-
         if (!is_array($ids) || empty($ids)) {
             return response()->json(['message' => 'Daftar ID tidak valid atau kosong'], 400);
         }
 
-        $deletedCount = DataBerita::onlyTrashed()
-            ->whereIn('id', $ids)
-            ->forceDelete();
+        $items = DataBerita::onlyTrashed()->whereIn('id', $ids)->get();
+        foreach ($items as $item) {
+            if ($item->getRawOriginal('foto')) {
+                Storage::disk('public')->delete($item->getRawOriginal('foto'));
+            }
+            $item->forceDelete();
+        }
 
-        $msg = $deletedCount
-            ? "Berhasil menghapus permanen $deletedCount data"
-            : "Tidak ada data yang dihapus permanen";
-
-        return response()->json(['message' => $msg], 200);
+        return response()->json(['message' => 'Data berhasil dihapus permanen']);
     }
 }

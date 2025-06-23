@@ -1,41 +1,35 @@
 <?php
-
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Support\Facades\Storage; 
 class DataBerita extends Model
 {
     use HasFactory, SoftDeletes;
-
-    protected $table = 'beritas';
-
+    protected $table = 'data_berita';
     protected $fillable = [
         'judul',
         'isi',
         'jenis_konten',
         'foto',
     ];
-
     protected $dates = ['deleted_at'];
-
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
-
-    // Example relationship (if needed)
-    // public function user()
-    // {
-    //     return $this->belongsTo(User::class);
-    // }
-
-    // Example scope (if needed)
-    // public function scopePublished($query)
-    // {
-    //     return $query->whereNotNull('published_at');
-    // }
+    /**
+     * Get the URL for the news photo.
+     *
+     * @return string|null
+     */
+    public function getFotoAttribute($value)
+    {
+        if ($value) {
+            return asset('storage/' . $value);
+        }
+        return null;
+    }
 }

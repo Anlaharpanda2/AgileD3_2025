@@ -330,7 +330,7 @@ const handleLogout = () => {
 
 @media (max-width: 480px) {
   .sidebar-container {
-    width: 100vw;
+    width: 70vw;
   }
 }
 </style>

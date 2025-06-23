@@ -1,49 +1,27 @@
 <?php
-
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+use Illuminate\Support\Facades\Storage;
 class DataPanitia extends Model
 {
-    use HasFactory, SoftDeletes;
-
-    protected $table = 'data_pelatihan';
-
+    use SoftDeletes;
+    protected $table = 'data_panitia';
     protected $fillable = [
-        'nama',
-        'nik',
-        'jenis_bimtek',
-        'kegiatan_dimulai',
-        'kegiatan_berakhir',
-        'tempat_kegiatan',
-        'angkatan',
-        'tempat_tanggal_lahir',
-        'pendidikan',
-        'status',
-        'alamat',
-        'jenis_usaha',
-        'penghasilan_perbulan',
-        'nomor_telefon',
-        'photo',
+        'email',
+        'jabatan',
+        'nama_panitia',
+        'no_hp',
+        'foto',
     ];
-
     protected $dates = [
         'deleted_at',
         'created_at',
         'updated_at',
     ];
-    
-    protected $appends = ['photo_url'];
-
-    public function getPhotoUrlAttribute(): ?string
+    protected $appends = ['foto_url'];
+    public function getFotoUrlAttribute()
     {
-        if (!$this->photo) {
-            return null;
-        }
-
-        return asset('storage/' . $this->photo);
+        return $this->foto ? Storage::disk('public')->url($this->foto) : null;
     }
 }

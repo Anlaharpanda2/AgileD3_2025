@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\KelolaDataKonsultasi;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use App\Imports\KonsultasiImport;
 use App\Models\DataKonsultasi;
-use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class KelolaDataKonsultasiController extends Controller
 {
@@ -20,117 +19,141 @@ class KelolaDataKonsultasiController extends Controller
     {
         try {
             $validated = $request->validate([
-                'nama' => 'required|string|max:100',
-                'nama_korban' => 'required|string|max:100',
-                'nik' => 'required|string|size:16|unique:konsultasi,nik',
-                'jenis_kelamin' => 'required|string|max:10',
-                'kasus' => 'required|string|max:255',
+                'nama_pelapor' => 'required|string|max:255',
+                'nama_korban' => 'required|string|max:255',
+                'deskripsi' => 'required|string',
                 'alamat' => 'required|string',
-                'no_hp' => 'required|integer',
+                'waktu_kejadian' => 'required|date',
+                'kasus' => 'required|string|max:255',
+                'no_hp' => 'required|string|max:20',
                 'saksi' => 'nullable|string|max:255',
-                'status' => ['required', 'string', Rule::in(['active', 'inactive'])],
-                'umur' => 'required|integer',
-                'deskripsi_data_konsultasi' => 'required|string',
+                'status' => 'required|in:diproses,selesai',
+                'lampiran' => 'nullable|image|max:2048',
             ]);
 
-            $konsultasi = DataKonsultasi::create($validated);
-            
-            return response()->json([
-                'message' => 'Data konsultasi berhasil disimpan.',
-                'data' => $konsultasi
-            ], 201);
+            if ($request->hasFile('lampiran')) {
+                $validated['lampiran'] = $request->file('lampiran')->store('Konsultasi', 'public');
+            }
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
+            $data = DataKonsultasi::create($validated);
+
             return response()->json([
-                'message' => 'Validasi gagal.',
-                'errors' => $e->errors()
-            ], 422);
+                'message' => 'Data Konsultasi berhasil disimpan.',
+                'data' => $data,
+            ], 201);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Gagal menyimpan data: ' . $e->getMessage()
-            ], 500);
+            return response()->json(['message' => 'Gagal menyimpan data: ' . $e->getMessage()], 500);
         }
     }
 
-    public function update(Request $request, DataKonsultasi $konsultasi)
+    public function update(Request $request, DataKonsultasi $dataKonsultasi)
     {
         try {
             $validated = $request->validate([
-                'nama' => 'required|string|max:100',
-                'nama_korban' => 'required|string|max:100',
-                'nik' => [
-                    'required',
-                    'string',
-                    'size:16',
-                    Rule::unique('konsultasi', 'nik')->ignore($konsultasi->id),
-                ],
-                'jenis_kelamin' => 'required|string|max:10',
-                'kasus' => 'required|string|max:255',
+                'nama_pelapor' => 'required|string|max:255',
+                'nama_korban' => 'required|string|max:255',
+                'deskripsi' => 'required|string',
                 'alamat' => 'required|string',
-                'no_hp' => 'required|integer',
+                'waktu_kejadian' => 'required|date',
+                'kasus' => 'required|string|max:255',
+                'no_hp' => 'required|string|max:20',
                 'saksi' => 'nullable|string|max:255',
-                'status' => ['required', 'string', Rule::in(['active', 'inactive'])],
-                'umur' => 'required|integer',
-                'deskripsi_data_konsultasi' => 'required|string',
+                'status' => 'required|in:diproses,selesai',
+                'lampiran' => 'nullable|image|max:2048',
             ]);
 
-            $konsultasi->update($validated);
-            
-            return response()->json([
-                'message' => 'Data konsultasi berhasil diupdate',
-                'data' => $konsultasi
-            ]);
+            if ($request->hasFile('lampiran')) {
+                if ($dataKonsultasi->getRawOriginal('lampiran')) {
+                    Storage::disk('public')->delete($dataKonsultasi->getRawOriginal('lampiran'));
+                }
+                $validated['lampiran'] = $request->file('lampiran')->store('Konsultasi', 'public');
+            }
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
+            $dataKonsultasi->update($validated);
+
             return response()->json([
-                'message' => 'Validasi gagal.',
-                'errors' => $e->errors()
-            ], 422);
+                'message' => 'Data berhasil diupdate',
+                'data' => $dataKonsultasi,
+            ]);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Gagal memperbarui data: ' . $e->getMessage()
-            ], 500);
+            return response()->json(['message' => 'Gagal memperbarui data: ' . $e->getMessage()], 500);
         }
     }
 
-    public function destroy(DataKonsultasi $konsultasi)
+    public function destroy(DataKonsultasi $dataKonsultasi)
     {
-        $konsultasi->delete();
-        return response()->json(['message' => 'Data konsultasi berhasil dihapus']);
+        $dataKonsultasi->delete();
+        return response()->json(['message' => 'Data berhasil dihapus']);
     }
 
-    public function import(Request $request)
+    public function trash()
     {
-        $request->validate([
-            'file' => 'required|file|mimes:xlsx,xls'
-        ]);
-
-        try {
-            Excel::import(new KonsultasiImport, $request->file('file'));
-
-            return response()->json([
-                'message' => 'Data konsultasi berhasil diimpor',
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Gagal mengimpor data: ' . $e->getMessage(),
-            ], 500);
-        }
+        return DataKonsultasi::onlyTrashed()->get();
     }
 
-    public function show($nik)
+    public function restore($id)
     {
-        $data = DataKonsultasi::where('nik', $nik)->first();
-
+        $data = DataKonsultasi::onlyTrashed()->find($id);
         if (!$data) {
-            return response()->json([
-                'message' => 'Data tidak ditemukan'
-            ], 404);
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+        $data->restore();
+        return response()->json(['message' => 'Data berhasil dipulihkan']);
+    }
+
+    public function restoreMassal(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json(['message' => 'Daftar ID tidak valid atau kosong'], 400);
         }
 
-        return response()->json([
-            'message' => 'Data ditemukan',
-            'data' => $data
-        ]);
+        $restoredCount = DataKonsultasi::onlyTrashed()->whereIn('id', $ids)->update(['deleted_at' => null]);
+
+        return response()->json(['message' => "Berhasil memulihkan {$restoredCount} data"]);
+    }
+
+    public function destroyMassal(Request $request)
+    {
+        $ids = $request->input('ids');
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json(['error' => 'Parameter ids tidak valid'], 422);
+        }
+
+        $deleted = DataKonsultasi::whereIn('id', $ids)->delete();
+        return response()->json(['message' => "Berhasil menghapus {$deleted} data Konsultasi"]);
+    }
+
+    public function forceDelete($id)
+    {
+        $data = DataKonsultasi::onlyTrashed()->find($id);
+        if (!$data) {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+
+        if ($data->getRawOriginal('lampiran')) {
+            Storage::disk('public')->delete($data->getRawOriginal('lampiran'));
+        }
+
+        $data->forceDelete();
+        return response()->json(['message' => 'Data berhasil dihapus permanen']);
+    }
+
+    public function forceDeleteMassal(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json(['message' => 'Daftar ID tidak valid atau kosong'], 400);
+        }
+
+        $items = DataKonsultasi::onlyTrashed()->whereIn('id', $ids)->get();
+        foreach ($items as $item) {
+            if ($item->getRawOriginal('lampiran')) {
+                Storage::disk('public')->delete($item->getRawOriginal('lampiran'));
+            }
+            $item->forceDelete();
+        }
+
+        return response()->json(['message' => 'Data berhasil dihapus permanen']);
     }
 }

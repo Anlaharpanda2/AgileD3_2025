@@ -9,20 +9,19 @@ class DataKonsultasi extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'konsultasi';
+    protected $table = 'data_konsultasi';
 
     protected $fillable = [
-        'alamat',
-        'deskripsi_data_konsultasi',
-        'id_konsultasi', // Jika ini diperlukan
-        'jenis_kelamin',
-        'kasus',
-        'nama',
+        'nama_pelapor',
         'nama_korban',
+        'deskripsi',
+        'alamat',
+        'waktu_kejadian',
+        'kasus',
         'no_hp',
         'saksi',
         'status',
-        'umur',
+        'lampiran',
     ];
 
     protected $dates = [

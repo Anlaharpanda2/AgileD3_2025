@@ -11,11 +11,17 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             DataBeritaSeeder::class,
+            DataFasilitasSeeder::class,
+            DataKonsultasiSeeder::class,
             DataPelatihanSeeder::class,
             Masyarakat::class,
-            PengaduanSeeder::class,
-            UserSeeder::class,
             StrukturPegawaiSeeder::class,
+            DataNilaiSeeder::class,
+            DataTestSeeder::class,
+            UserSeeder::class,
+            DataPengaduanSeeder::class,
+            DataKonsultasiSeeder::class,
+            DataPanitiaSeeder::class,
         ]);
     }
 }

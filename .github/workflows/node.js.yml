@@ -12,27 +12,26 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22.x]
+        node-version: [22.x]  # sesuai Node kamu versi 22.14.0
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: src/frontend/package-lock.json
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: src/frontend/package-lock.json
 
-    - name: Install Dependencies
-      run: npm ci
-      working-directory: ./src/frontend
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./src/frontend
 
-    - name: Build App
-      run: npm run build --if-present
-      working-directory: ./src/frontend
+      - name: Build project
+        run: npm run build
+        working-directory: ./src/frontend
 
-    # Hapus atau aktifkan bagian berikut jika kamu punya test
-    #- name: Run Unit Tests
-    #  run: npm run test:unit
-    #  working-directory: ./src/frontend
+      - name: Run Integration Tests
+        run: npm run test:integration
+        working-directory: ./src/frontend

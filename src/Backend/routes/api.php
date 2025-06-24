@@ -24,6 +24,7 @@ use App\Http\Controllers\KelolaDataPelatihan\KelolaDataPelatihanController;
 //Profile
 use App\Http\Controllers\Profile\ProfileMasyarakatController;
 
+use App\Http\Controllers\KelolaLokasi\KelolaLokasiController;
 
 //Api auth
 
@@ -168,4 +169,10 @@ Route::prefix('profile/masyarakat')->group(function () {
     Route::get('{nik}', [ProfileMasyarakatController::class, 'show']);
     Route::post('{nik}/ubah-foto', [ProfileMasyarakatController::class, 'ubahFoto']);
 });
+
+
+
+//Tambahan
+Route::post('/data/lokasi', [KelolaLokasiController::class, 'storeOrReplace']);
+Route::get('/data/lokasi', [KelolaLokasiController::class, 'index']);
 

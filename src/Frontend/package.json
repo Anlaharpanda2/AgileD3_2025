@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@lottiefiles/vue-lottie-player": "^1.1.0",
+    "@vueuse/motion": "^3.0.3",
+    "aos": "^2.3.4",
     "axios": "^1.8.4",
     "bootstrap": "^5.3.6",
     "datatables.net": "^2.3.0",

@@ -1,576 +1,449 @@
-<script setup lang="ts">
-import { markRaw, ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import {
-  ElMenu,
-  ElMenuItem,
-  ElButton,
-  ElIcon,
-  ElDrawer
-} from 'element-plus'
-import {
-  House,
-  DataBoard,
-  Document,
-  User,
-  Trophy,
-  Files,
-  DataLine,
-  Lock,
-  Menu as MenuIcon
-} from '@element-plus/icons-vue'
-import { useWindowScroll, useDark } from '@vueuse/core'
-
-// Router Vue untuk navigasi
-const router = useRouter()
-
-// State reaktif untuk menu aktif dan visibilitas sidebar
-const activeIndex = ref('1')
-const sidebarVisible = ref(false)
-const { y: scrollY } = useWindowScroll() // Mendapatkan posisi scroll Y
-const isDark = useDark() // Mengelola mode gelap (opsional, dari useDark)
-
-// Properti terhitung untuk menentukan apakah halaman sudah discroll
-const isScrolled = computed(() => scrollY.value > 50)
-
-// Data menu navigasi
-const menuItems = ref([
-  { index: '1', label: 'BERANDA', icon: markRaw(House), route: '/' },
-  { index: '2', label: 'DASHBOARD', icon: markRaw(DataBoard), route: '/dashboard' },
-  { index: '3', label: 'PRE/POSTTEST', icon: markRaw(Document), route: '/preposttest' },
-  { index: '4', label: 'PENDAFTAR', icon: markRaw(User), route: '/pendaftar' },
-  { index: '5', label: 'PELATIHAN', icon: markRaw(Trophy), route: '/pelatihan' },
-  { index: '6', label: 'PELAPORAN', icon: markRaw(Files), route: '/pelaporan' },
-  { index: '7', label: 'KELOLA DATA', icon: markRaw(DataLine), route: '/kelola-data' },
-  { index: '8', label: 'KELOLA AKSES', icon: markRaw(Lock), route: '/kelola-akses' }
-])
-
-// Metode untuk menangani pemilihan item menu
-const handleSelect = (key: string) => {
-  activeIndex.value = key
-  const menuItem = menuItems.value.find(item => item.index === key)
-  if (menuItem?.route) {
-    router.push(menuItem.route) // Navigasi ke rute yang sesuai
-  }
-}
-
-// Metode untuk mengaktifkan/menonaktifkan sidebar mobile
-const toggleSidebar = () => {
-  sidebarVisible.value = !sidebarVisible.value
-}
-</script>
-
 <template>
-  <div class="layout-container">
-    <!-- Navbar (Header) -->
-    <header class="navbar-container" :class="{ 'scrolled': isScrolled }">
-      <div class="navbar-content">
-        <div class="logo">
-          <h2>DP3AP2KB</h2>
-          <span class="logo-subtitle">Pemberdayaan Perempuan</span>
-        </div>
+  <div class="min-h-screen flex flex-col bg-white font-sans">
+    <!-- Header -->
+    <header 
+      class="sticky top-0 z-50 transition-all duration-300 ease-in-out"
+      :class="isScrolled ? 'bg-white/95 backdrop-blur-xl shadow-lg shadow-slate-200/50' : 'bg-white/95 backdrop-blur-xl'"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <!-- Logo -->
+          <div class="flex items-center space-x-2">
+            <div class="flex flex-col">
+              <h1 class="text-xl font-black text-pink-500 leading-tight">DP3AP2KB</h1>
+              <span class="text-xs text-slate-500 font-medium -mt-1">Pemberdayaan Perempuan</span>
+            </div>
+          </div>
 
-        <!-- Menu Desktop -->
-        <ElMenu
-          :default-active="activeIndex"
-          mode="horizontal"
-          @select="handleSelect"
-          class="navbar-menu desktop-menu"
-        >
-          <ElMenuItem
-            v-for="item in menuItems"
-            :key="item.index"
-            :index="item.index"
+          <!-- Desktop Navigation -->
+          <nav class="hidden md:flex items-center space-x-1">
+            <div 
+              v-for="item in menuItems" 
+              :key="item.index"
+              class="relative group"
+            >
+              <button
+                class="flex items-center px-4 py-2 text-sm font-medium text-slate-600 hover:text-pink-500 hover:bg-pink-50 rounded-lg transition-all duration-200 ease-in-out group-hover:bg-pink-50"
+                :class="{ 'text-pink-500 bg-pink-50': activeIndex === item.index }"
+                @click="handleSelect(item.index)"
+              >
+                <component :is="item.icon" class="w-4 h-4 mr-2" />
+                {{ item.label }}
+                <svg 
+                  v-if="item.dropdown" 
+                  class="w-4 h-4 ml-1 transition-transform duration-200 group-hover:rotate-180" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              <!-- Dropdown Menu -->
+              <div 
+                v-if="item.dropdown"
+                class="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-xl shadow-slate-200/50 border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-in-out transform translate-y-2 group-hover:translate-y-0"
+              >
+                <div class="py-2">
+                  <a
+                    v-for="subItem in item.dropdown"
+                    :key="subItem.name"
+                    :href="subItem.href"
+                    class="flex items-center px-4 py-3 text-sm text-slate-700 hover:text-pink-500 hover:bg-pink-50 transition-colors duration-150"
+                  >
+                    <component :is="subItem.icon" class="w-4 h-4 mr-3 text-slate-400" />
+                    <div>
+                      <div class="font-medium">{{ subItem.name }}</div>
+                      <div class="text-xs text-slate-500 mt-0.5">{{ subItem.description }}</div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </nav>
+
+          <!-- Mobile menu button -->
+          <button
+            @click="toggleSidebar"
+            class="md:hidden p-2 rounded-lg text-slate-600 hover:text-pink-500 hover:bg-pink-50 transition-colors duration-200"
           >
-            <ElIcon><component :is="item.icon" /></ElIcon>
-            <span>{{ item.label }}</span>
-          </ElMenuItem>
-        </ElMenu>
-
-        <!-- Tombol Menu Mobile -->
-        <ElButton
-          class="mobile-menu-btn"
-          @click="toggleSidebar"
-          :icon="MenuIcon"
-          size="large"
-          text
-        />
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
       </div>
     </header>
 
-    <!-- Sidebar Mobile -->
-    <ElDrawer
-      v-model="sidebarVisible"
-      title="Menu Navigasi"
-      size="280px"
-      direction="ltr"
+    <!-- Mobile Sidebar -->
+    <div 
+      v-if="sidebarVisible"
+      class="fixed inset-0 z-50 md:hidden"
+      @click="sidebarVisible = false"
     >
-      <ElMenu
-        :default-active="activeIndex"
-        @select="handleSelect"
-        class="sidebar-menu"
-      >
-        <ElMenuItem
-          v-for="item in menuItems"
-          :key="item.index"
-          :index="item.index"
-          @click="sidebarVisible = false"
-        >
-          <ElIcon><component :is="item.icon" /></ElIcon>
-          <span>{{ item.label }}</span>
-        </ElMenuItem>
-      </ElMenu>
-    </ElDrawer>
+      <div class="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
+      <div class="fixed left-0 top-0 h-full w-80 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out">
+        <div class="flex items-center justify-between p-4 border-b border-slate-200">
+          <div class="flex flex-col">
+            <h2 class="text-lg font-black text-pink-500">DP3AP2KB</h2>
+            <span class="text-xs text-slate-500 font-medium">Menu Navigasi</span>
+          </div>
+          <button
+            @click="sidebarVisible = false"
+            class="p-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors duration-200"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        
+        <nav class="p-4 space-y-2">
+          <div v-for="item in menuItems" :key="item.index">
+            <button
+              class="w-full flex items-center px-4 py-3 text-sm font-medium text-slate-700 hover:text-pink-500 hover:bg-pink-50 rounded-lg transition-all duration-200"
+              :class="{ 'text-pink-500 bg-pink-50': activeIndex === item.index }"
+              @click="toggleMobileDropdown(item.index)"
+            >
+              <component :is="item.icon" class="w-5 h-5 mr-3" />
+              {{ item.label }}
+              <svg 
+                v-if="item.dropdown"
+                class="w-4 h-4 ml-auto transition-transform duration-200"
+                :class="{ 'rotate-180': mobileDropdownOpen === item.index }"
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            
+            <!-- Mobile Dropdown -->
+            <div 
+              v-if="item.dropdown && mobileDropdownOpen === item.index"
+              class="ml-4 mt-2 space-y-1 border-l-2 border-pink-100 pl-4"
+            >
+              <a
+                v-for="subItem in item.dropdown"
+                :key="subItem.name"
+                :href="subItem.href"
+                class="flex items-center px-3 py-2 text-sm text-slate-600 hover:text-pink-500 hover:bg-pink-50 rounded-lg transition-colors duration-150"
+                @click="sidebarVisible = false"
+              >
+                <component :is="subItem.icon" class="w-4 h-4 mr-3 text-slate-400" />
+                <div>
+                  <div class="font-medium">{{ subItem.name }}</div>
+                  <div class="text-xs text-slate-500">{{ subItem.description }}</div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
 
-    <!-- Slot untuk konten yang akan dimasukkan dari komponen parent (Home.vue) -->
-    <main class="content-area">
+    <!-- Main Content -->
+    <main class="flex-1">
       <slot />
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
-      <div class="container">
-        <div class="footer-content">
-          <div class="footer-brand">
-            <h3>DP3AP2KB</h3>
-            <p>Dinas Pemberdayaan Perempuan, Perlindungan Anak dan Keluarga Berencana</p>
-            <p class="footer-motto">
-              "Membangun Indonesia yang Adil Gender dan Ramah Anak"
-            </p>
+    <footer class="bg-slate-800 text-slate-300 mt-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <!-- Main Footer Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-12">
+          <!-- Brand Section -->
+          <div class="lg:col-span-2">
+            <div class="mb-6">
+              <h3 class="text-2xl font-black text-pink-400 mb-3">DP3AP2KB</h3>
+              <p class="text-slate-300 text-base leading-relaxed mb-4">
+                Dinas Pemberdayaan Perempuan, Perlindungan Anak dan Keluarga Berencana
+              </p>
+              <p class="text-pink-300 italic text-sm font-medium">
+                "Membangun Indonesia yang Adil Gender dan Ramah Anak"
+              </p>
+            </div>
+            
+            <!-- Social Media -->
+            <div class="flex space-x-4">
+              <a 
+                v-for="social in socialLinks" 
+                :key="social.name"
+                :href="social.href"
+                class="w-10 h-10 bg-slate-700 hover:bg-pink-500 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110"
+              >
+                <component :is="social.icon" class="w-5 h-5" />
+              </a>
+            </div>
           </div>
-          <div class="footer-links">
-            <div class="footer-column">
-              <h4>Layanan</h4>
-              <ul>
-                <li><a href="/pelatihan">Program Pelatihan</a></li>
-                <li><a href="/pengaduan">Pengaduan Online</a></li>
-                <li><a href="/konsultasi">Konsultasi</a></li>
-                <li><a href="/pendampingan">Pendampingan</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Informasi</h4>
-              <ul>
-                <li><a href="/berita">Berita</a></li>
-                <li><a href="/pengumuman">Pengumuman</a></li>
-                <li><a href="/agenda">Agenda Kegiatan</a></li>
-                <li><a href="/galeri">Galeri</a></li>
-              </ul>
-            </div>
-            <div class="footer-column">
-              <h4>Dukungan</h4>
-              <ul>
-                <li><a href="/bantuan">Pusat Bantuan</a></li>
-                <li><a href="/faq">FAQ</a></li>
-                <li><a href="/kontak">Hubungi Kami</a></li>
-                <li><a href="/feedback">Feedback</a></li>
+
+          <!-- Quick Links -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 lg:col-span-2">
+            <div v-for="column in footerColumns" :key="column.title">
+              <h4 class="text-white font-bold text-lg mb-6 relative">
+                {{ column.title }}
+                <span class="absolute bottom-0 left-0 w-8 h-0.5 bg-pink-400 rounded-full"></span>
+              </h4>
+              <ul class="space-y-3">
+                <li v-for="link in column.links" :key="link.name">
+                  <a 
+                    :href="link.href"
+                    class="text-slate-400 hover:text-pink-300 transition-colors duration-200 flex items-center group"
+                  >
+                    <svg class="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                    {{ link.name }}
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
         </div>
-        <div class="footer-bottom">
-          <p>&copy; 2025 DP3AP2KB. Semua hak dilindungi undang-undang.</p>
-          <p class="footer-credit">Dikembangkan dengan ❤️ untuk Indonesia yang lebih baik</p>
+
+        <!-- Contact Info -->
+        <div class="border-t border-slate-700 pt-8 mb-8">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-white font-semibold">Alamat</p>
+                <p class="text-slate-400 text-sm">Jl. Contoh No. 123, Jakarta</p>
+              </div>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-white font-semibold">Telepon</p>
+                <p class="text-slate-400 text-sm">(021) 1234-5678</p>
+              </div>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-white font-semibold">Email</p>
+                <p class="text-slate-400 text-sm">info@dp3ap2kb.go.id</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Footer -->
+        <div class="border-t border-slate-700 pt-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          <p class="text-slate-400 text-sm">
+            &copy; 2025 DP3AP2KB. Semua hak dilindungi undang-undang.
+          </p>
+          <p class="text-slate-400 text-sm flex items-center">
+            Dikembangkan dengan 
+            <svg class="w-4 h-4 mx-1 text-pink-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            untuk Indonesia yang lebih baik
+          </p>
         </div>
       </div>
     </footer>
   </div>
 </template>
 
-<style scoped>
-/* Reset dasar */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+
+// Reactive state
+const isScrolled = ref(false)
+const sidebarVisible = ref(false)
+const activeIndex = ref('1')
+const mobileDropdownOpen = ref(null)
+
+// Menu items dengan dropdown
+const menuItems = ref([
+  {
+    index: '1',
+    label: 'Beranda',
+    icon: 'HomeIcon',
+    dropdown: null
+  },
+  {
+    index: '2',
+    label: 'Profil',
+    icon: 'UserGroupIcon',
+    dropdown: [
+      {
+        name: 'Tentang Kami',
+        description: 'Sejarah dan visi misi',
+        href: '/tentang',
+        icon: 'InformationCircleIcon'
+      },
+      {
+        name: 'Struktur Organisasi',
+        description: 'Susunan pengurus',
+        href: '/struktur',
+        icon: 'UserGroupIcon'
+      },
+      {
+        name: 'Tugas & Fungsi',
+        description: 'Peran dan tanggung jawab',
+        href: '/tugas',
+        icon: 'ClipboardDocumentListIcon'
+      }
+    ]
+  },
+  {
+    index: '3',
+    label: 'Layanan',
+    icon: 'CogIcon',
+    dropdown: [
+      {
+        name: 'Program Pelatihan',
+        description: 'Pelatihan pemberdayaan',
+        href: '/pelatihan',
+        icon: 'AcademicCapIcon'
+      },
+      {
+        name: 'Pengaduan Online',
+        description: 'Layanan pengaduan',
+        href: '/pengaduan',
+        icon: 'ExclamationTriangleIcon'
+      },
+      {
+        name: 'Konsultasi',
+        description: 'Konsultasi gratis',
+        href: '/info/konsultasi',
+        icon: 'ChatBubbleLeftRightIcon'
+      },
+      {
+        name: 'Pendampingan',
+        description: 'Pendampingan kasus',
+        href: '/pendampingan',
+        icon: 'HandRaisedIcon'
+      }
+    ]
+  },
+  {
+    index: '4',
+    label: 'Informasi',
+    icon: 'NewspaperIcon',
+    dropdown: [
+      {
+        name: 'Berita',
+        description: 'Berita terkini',
+        href: '/berita',
+        icon: 'NewspaperIcon'
+      },
+      {
+        name: 'Pengumuman',
+        description: 'Pengumuman resmi',
+        href: '/pengumuman',
+        icon: 'SpeakerWaveIcon'
+      },
+      {
+        name: 'Agenda Kegiatan',
+        description: 'Jadwal kegiatan',
+        href: '/agenda',
+        icon: 'CalendarDaysIcon'
+      },
+      {
+        name: 'Galeri',
+        description: 'Dokumentasi kegiatan',
+        href: '/galeri',
+        icon: 'PhotoIcon'
+      }
+    ]
+  },
+  {
+    index: '5',
+    label: 'Kontak',
+    icon: 'PhoneIcon',
+    dropdown: null
+  }
+])
+
+// Footer data
+const footerColumns = ref([
+  {
+    title: 'Layanan',
+    links: [
+      { name: 'Program Pelatihan', href: '/pelatihan' },
+      { name: 'Pengaduan Online', href: '/pengaduan' },
+      { name: 'Konsultasi', href: '/info/konsultasi' },
+      { name: 'Pendampingan', href: '/pendampingan' }
+    ]
+  },
+  {
+    title: 'Dukungan',
+    links: [
+      { name: 'Pusat Bantuan', href: '/bantuan' },
+      { name: 'FAQ', href: '/faq' },
+      { name: 'Hubungi Kami', href: '/kontak' },
+      { name: 'Feedback', href: '/feedback' }
+    ]
+  }
+])
+
+const socialLinks = ref([
+  {
+    name: 'Facebook',
+    href: '#',
+    icon: 'FacebookIcon'
+  },
+  {
+    name: 'Twitter',
+    href: '#',
+    icon: 'TwitterIcon'
+  },
+  {
+    name: 'Instagram',
+    href: '#',
+    icon: 'InstagramIcon'
+  },
+  {
+    name: 'YouTube',
+    href: '#',
+    icon: 'YouTubeIcon'
+  }
+])
+
+// Methods
+const handleScroll = () => {
+  isScrolled.value = window.scrollY > 10
 }
 
-.layout-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background-color: #ffffff;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  line-height: 1.6;
+const handleSelect = (index) => {
+  activeIndex.value = index
+  // Add navigation logic here
 }
 
-.content-area {
-  flex-grow: 1; /* Memastikan konten utama memenuhi sisa ruang */
+const toggleSidebar = () => {
+  sidebarVisible.value = !sidebarVisible.value
 }
 
-/* Gaya Navbar */
-.navbar-container {
-  position: sticky;
-  top: 0;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid #f1f5f9;
-  z-index: 1000;
-  transition: all 0.3s ease;
+const toggleMobileDropdown = (index) => {
+  mobileDropdownOpen.value = mobileDropdownOpen.value === index ? null : index
 }
 
-.navbar-container.scrolled {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-.navbar-content {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 2rem;
-  height: 70px;
-}
-
-.logo {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.logo h2 {
-  color: #ec4899;
-  font-weight: 800;
-  font-size: 1.5rem;
-  line-height: 1;
-}
-
-.logo-subtitle {
-  color: #64748b;
-  font-size: 0.75rem;
-  font-weight: 500;
-  margin-top: -2px;
-}
-
-.desktop-menu {
-  border-bottom: none;
-  flex: 1;
-  justify-content: center;
-  max-width: 900px;
-}
-
-.navbar-menu .el-menu-item {
-  color: #64748b;
-  font-weight: 600;
-  font-size: 0.875rem;
-  padding: 0 1rem;
-  transition: all 0.3s ease;
-  border-radius: 8px;
-  margin: 0 2px;
-}
-
-.navbar-menu .el-menu-item:hover,
-.navbar-menu .el-menu-item.is-active {
-  color: #ec4899;
-  background-color: rgba(236, 72, 153, 0.08);
-}
-
-.navbar-menu .el-menu-item span {
-  margin-left: 0.5rem;
-}
-
-.mobile-menu-btn {
-  display: none; /* Sembunyikan secara default untuk desktop */
-  color: #64748b;
-}
-
-/* Gaya Sidebar Mobile */
-.sidebar-menu {
-  border-right: none;
-}
-
-.sidebar-menu .el-menu-item {
-  color: #64748b;
-  font-weight: 500;
-  padding: 1rem 1.5rem;
-  transition: all 0.3s ease;
-}
-
-.sidebar-menu .el-menu-item:hover,
-.sidebar-menu .el-menu-item.is-active {
-  color: #ec4899;
-  background-color: rgba(236, 72, 153, 0.08);
-}
-
-/* Gaya Footer */
-.footer {
-  background-color: #1e293b;
-  color: #cbd5e1;
-  padding: 4rem 0 2rem 0;
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
-  margin-top: 4rem; /* Memberikan jarak dari konten di atasnya */
-}
-
-.footer-content {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 2rem;
-  margin-bottom: 3rem;
-}
-
-.footer-brand {
-  flex: 1;
-  min-width: 250px;
-}
-
-.footer-brand h3 {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #ec4899;
-  margin-bottom: 1rem;
-}
-
-.footer-brand p {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin-bottom: 0.75rem;
-}
-
-.footer-motto {
-  font-style: italic;
-  font-size: 0.85rem;
-  color: #94a3b8;
-}
-
-.footer-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem 4rem;
-}
-
-.footer-column {
-  min-width: 150px;
-}
-
-.footer-column h4 {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 1rem;
-}
-
-.footer-column ul {
-  list-style: none;
-}
-
-.footer-column ul li {
-  margin-bottom: 0.75rem;
-}
-
-.footer-column ul li a {
-  color: #cbd5e1;
-  text-decoration: none;
-  font-size: 0.95rem;
-  transition: color 0.3s ease;
-}
-
-.footer-column ul li a:hover {
-  color: #ec4899;
-}
-
-.footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 2rem;
-  text-align: center;
-  font-size: 0.85rem;
-  color: #94a3b8;
-}
-
-.footer-bottom p {
-  margin-bottom: 0.5rem;
-}
-
-.footer-credit {
-  font-style: italic;
-}
-
-/* Media Queries untuk Responsif */
-@media (max-width: 1024px) {
-  .desktop-menu {
-    display: none;
-  }
-
-  .mobile-menu-btn {
-    display: block;
-  }
-
-  .navbar-content {
-    padding: 0 1.5rem;
-  }
-
-  .hero-content {
-    grid-template-columns: 1fr;
-    text-align: center;
-    gap: 2rem;
-    padding: 0 1.5rem;
-  }
-
-  .hero-text {
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-  .hero-title {
-    font-size: 2.5rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1.1rem;
-  }
-
-  .hero-illustration {
-    height: 350px;
-  }
-
-  .floating-card.main-card {
-    padding: 2.5rem 2rem;
-  }
-
-  .floating-card {
-    padding: 1.5rem;
-  }
-
-  .floating-card p {
-    font-size: 0.8rem;
-  }
-
-  .floating-card[style] {
-    position: absolute !important; /* Override inline styles */
-    top: auto !important;
-    left: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    transform: none !important;
-  }
-
-  .features-section,
-  .about-section,
-  .services-section,
-  .news-section,
-  .announcements-section,
-  .testimonials-section,
-  .contact-section {
-    padding: 4rem 0;
-  }
-
-  .container {
-    padding: 0 1.5rem;
-  }
-
-  .section-title {
-    font-size: 2rem;
-  }
-
-  .section-subtitle {
-    font-size: 1rem;
-  }
-
-  .about-content {
-    padding-right: 0;
-  }
-
-  .about-illustration {
-    margin-top: 3rem;
-  }
-
-  .stats-grid {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 1rem;
-  }
-
-  .footer-content {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .footer-links {
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1rem;
-  }
-
-  .cta-button,
-  .secondary-button {
-    font-size: 1rem;
-    padding: 0.8rem 1.8rem;
-  }
-
-  .section-title {
-    font-size: 1.8rem;
-  }
-
-  .section-subtitle {
-    font-size: 0.95rem;
-  }
-
-  .feature-card {
-    padding: 2.5rem 1.5rem;
-  }
-
-  .feature-title {
-    font-size: 1.3rem;
-  }
-
-  .feature-description {
-    font-size: 0.9rem;
-  }
-
-  .service-card {
-    padding: 2rem 1.5rem;
-  }
-
-  .service-title {
-    font-size: 1.1rem;
-  }
-
-  .service-description {
-    font-size: 0.85rem;
-  }
-
-  .news-card {
-    margin-bottom: 1.5rem;
-  }
-
-  .announcement-card {
-    flex-direction: column;
-    text-align: center;
-    gap: 0.75rem;
-  }
-
-  .announcement-icon {
-    margin-bottom: 0.5rem;
-  }
-
-  .contact-item {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .contact-text {
-    margin-left: 0;
-    margin-top: 0.5rem;
-  }
-
-  .footer-brand h3 {
-    font-size: 1.75rem;
-  }
-
-  .footer-brand p {
-    font-size: 0.85rem;
-  }
-}
-</style>
+// Lifecycle
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+</script>

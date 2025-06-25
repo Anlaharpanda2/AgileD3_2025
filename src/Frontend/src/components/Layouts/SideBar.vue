@@ -28,6 +28,7 @@
         </el-menu-item>
 
         <!-- DASHBOARD -->
+        <!-- Catatan: Route '/dashboard' tidak ada di index.js Anda. Ini adalah placeholder. -->
         <el-menu-item index="2" @click="navigate('#')">
           <el-icon><DataBoard /></el-icon>
           <span>DASHBOARD</span>
@@ -63,7 +64,8 @@
           </template>
           <el-menu-item index="6-1" @click="navigate('/pengaduan')">Pelaporan Pengaduan</el-menu-item>
           <el-menu-item index="6-2" @click="navigate('/pengaduan/status')">Status Pengaduan</el-menu-item>
-          <el-menu-item index="6-3" @click="navigate('/pengaduan/buat')">Buat Pengaduan</el-menu-item>
+          <!-- Mengarahkan 'Buat Pengaduan' ke '/pengaduan' karena di index.js, BuatPengaduanPage ada di '/pengaduan' -->
+          <el-menu-item index="6-3" @click="navigate('/pengaduan')">Buat Pengaduan</el-menu-item>
         </el-sub-menu>
 
         <!-- KELOLA DATA -->
@@ -75,6 +77,11 @@
           <el-menu-item index="7-1" @click="navigate('/Kelola/data')">Kelola Data Utama</el-menu-item>
           <el-menu-item index="7-2" @click="navigate('/data/berita')">Data Berita</el-menu-item>
           <el-menu-item index="7-3" @click="navigate('/data/berita/sampah')">Data Berita Sampah</el-menu-item>
+          <!-- Menambahkan Data Konsultasi -->
+          <el-menu-item index="7-4" @click="navigate('/data/konsultasi')">Data Konsultasi</el-menu-item>
+          <el-menu-item index="7-5" @click="navigate('/data/konsultasi/sampah')">Data Konsultasi Sampah</el-menu-item>
+          <el-menu-item index="7-6-1" @click="navigate('/data/strukturpegawai')">Data Struktur Pegawai</el-menu-item>
+          <el-menu-item index="7-6-2" @click="navigate('/data/strukturpegawai/sampah')">Data Struktur Pegawai Sampah</el-menu-item>
         </el-sub-menu>
 
         <!-- KELOLA AKSES -->
@@ -87,7 +94,8 @@
         <div class="menu-divider"></div>
 
         <!-- Profile (jika diperlukan) -->
-        <el-menu-item index="9" @click="navigate('#')" v-if="showProfile">
+        <!-- Menggunakan fungsi navigateProfile untuk menangani ID pengguna -->
+        <el-menu-item index="9" @click="navigateProfile" v-if="showProfile">
           <el-icon><User /></el-icon>
           <span>PROFILE</span>
         </el-menu-item>
@@ -103,7 +111,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router'; // Import useRouter
+
 import {
   Document,
   Menu as IconMenu,
@@ -115,11 +125,13 @@ import {
   School,
   FolderOpened,
   User,
-  SwitchButton
-} from '@element-plus/icons-vue'
+  SwitchButton,
+  Avatar // Menambahkan ikon Avatar untuk Struktur Pegawai
+} from '@element-plus/icons-vue';
 
-const isSidebarVisible = ref(false)
-const isCollapse = ref(false)
+const isSidebarVisible = ref(false);
+const isCollapse = ref(false);
+const router = useRouter(); // Dapatkan instance router
 
 // Props untuk menentukan role user
 const props = defineProps({
@@ -127,54 +139,63 @@ const props = defineProps({
     type: String,
     default: 'masyarakat'
   }
-})
+});
 
 // Computed untuk menampilkan profile berdasarkan role
 const showProfile = computed(() => {
-  return props.userRole === 'masyarakat'
-})
+  return props.userRole === 'masyarakat';
+});
 
 const handleOpen = (key: string, keyPath: string[]) => {
-  console.log('open', key, keyPath)
-}
+  console.log('open', key, keyPath);
+};
 
 const handleClose = (key: string, keyPath: string[]) => {
-  console.log('close', key, keyPath)
-}
+  console.log('close', key, keyPath);
+};
 
 const openSidebar = () => {
-  isSidebarVisible.value = true
-}
+  isSidebarVisible.value = true;
+};
 
 const closeSidebar = () => {
-  isSidebarVisible.value = false
-}
+  isSidebarVisible.value = false;
+};
 
+// Menggunakan router.push untuk navigasi
 const navigate = (url: string) => {
   if (url === '#') {
-    console.log('Navigation not implemented for this route')
-    return
+    console.log('Navigation not implemented for this route, or it is a placeholder.');
+    closeSidebar();
+    return;
   }
-  
-  // Tutup sidebar setelah navigasi
-  closeSidebar()
-  
-  // Navigate menggunakan Vue Router jika tersedia
-  if (window.location.pathname !== url) {
-    window.location.href = url
+  closeSidebar();
+  router.push(url); // Menggunakan router.push
+};
+
+// Fungsi navigasi khusus untuk Profile
+const navigateProfile = () => {
+  closeSidebar();
+  const userId = localStorage.getItem('savedNIK'); // Ambil ID pengguna dari localStorage
+  if (userId) {
+    router.push(`/masyarakat/${userId}`);
+  } else {
+    console.warn('User ID not found for profile navigation. Redirecting to login.');
+    router.push('/login/masyarakat'); // Redirect ke halaman login jika ID tidak ditemukan
   }
-}
+};
 
 const handleLogout = () => {
   // Implementasi logout
-  localStorage.removeItem('isLoggedIn')
-  localStorage.removeItem('role')
-  localStorage.removeItem('savedNIK')
-  
-  // Redirect ke halaman login
-  window.location.href = '/login/masyarakat'
-}
+  localStorage.removeItem('isLoggedIn');
+  localStorage.removeItem('role');
+  localStorage.removeItem('savedNIK');
+
+  // Redirect ke halaman login menggunakan router.push
+  router.push('/login/masyarakat');
+};
 </script>
+
 
 <style scoped>
 .toggle-button {

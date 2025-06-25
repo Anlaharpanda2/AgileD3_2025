@@ -226,40 +226,56 @@ const updateLocationFromClick = async (latlng) => {
 }
 
 // Function to fetch location data from backend
+// Fungsi baru: menyesuaikan format response berupa array
 const fetchLocation = async () => {
   isLoading.value = true;
   try {
-    const response = await api.get('/data/lokasi');
-    const data = response?.data?.data; // aman dari error "undefined"
+    // 1. Panggil API
+    const result = await api.get('/data/lokasi');
+    // Jika result adalah objek penuh axios: 
+    //    const resp = result.data;
+    // Jika result sudah data array (wrapper): 
+    //    const resp = result;
+    const resp = Array.isArray(result) ? result : result.data ?? [];
 
-    if (data) {
-      locationInfo.value.name = data.nama_lokasi;
-      locationInfo.value.address = data.alamat;
-      locationInfo.value.lat = parseFloat(data.latitude);
-      locationInfo.value.lng = parseFloat(data.longitude);
+    console.log('🛠️ [fetchLocation] resp =', resp);
 
-      if (map && marker) {
-        marker.setLatLng([locationInfo.value.lat, locationInfo.value.lng]);
-        map.setView([locationInfo.value.lat, locationInfo.value.lng], 15);
-      }
+    // 2. Tangani response berupa array
+    const arr = Array.isArray(resp) ? resp : [];
 
-      ElMessage.success('Location data loaded successfully.');
-    } else {
-      ElMessage.warning('Location data dari API tidak ditemukan.');
+    if (arr.length === 0) {
+      console.warn('⚠️ [fetchLocation] Array lokasi kosong:', arr);
+      ElMessage.warning('Data lokasi dari API kosong.');
+      return;
     }
-  } catch (error) {
-    console.error('Error fetching location data:', error);
-    if (error.response && error.response.status === 422) {
-      ElMessage.error(
-        'Gagal mengambil data lokasi: server butuh parameter aneh pada GET. Pastikan endpoint /data/lokasi tidak perlu body.'
-      );
+
+    // 3. Ambil item pertama
+    const item = arr[0];
+    locationInfo.value.name    = item.nama_lokasi;
+    locationInfo.value.address = item.alamat;
+    locationInfo.value.lat     = parseFloat(item.latitude);
+    locationInfo.value.lng     = parseFloat(item.longitude);
+
+    // 4. Update map & marker jika sudah inisialisasi
+    if (map && marker) {
+      marker.setLatLng([locationInfo.value.lat, locationInfo.value.lng]);
+      map.setView([locationInfo.value.lat, locationInfo.value.lng], 15);
+    }
+    
+  } catch (err: any) {
+    // Tangani semua error (HTTP/CORS/parsing) di sini
+    console.error('❌ [fetchLocation] error =', err);
+    if (err.response) {
+      ElMessage.error(`Gagal mengambil data lokasi: server respons ${err.response.status}.`);
     } else {
-      ElMessage.error('Gagal mengambil data lokasi dari server.');
+      ElMessage.error(`Error saat memproses data lokasi: ${err.message}`);
     }
   } finally {
     isLoading.value = false;
   }
 };
+
+
 
 
 // Function to save location data to backend

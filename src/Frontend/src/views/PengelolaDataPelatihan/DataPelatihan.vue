@@ -1,1270 +1,1354 @@
 <template>
-  <div class="crud-container">
+  <!-- Form pop up -->
+  <Layout>
+    <FormSortingDataPelatihan
+      v-if="showSort"
+      :visible="showSort"
+      :columns="filterableColumns"
+      :data="tableData"
+      @update:visible="showSort = $event"
+    />
+    <FormFilterDataPelatihan
+      v-model="showFilter"  :columns="filterableColumns"
+      v-model:active-filters="activeFilters"
+    />
+    <FormTambahDataPeltihan 
+      v-if="showTambah"
+      @close="showTambah = false" 
+    />
+    <FormEditDataPelatihan
+      v-if="showEdit && editData" 
+      :initialData="editData" 
+      @close="showEdit = false" 
+    />
+    <FormExportDataPelatihan
+      v-if="showExport" 
+      :data="pagedData" 
+      @close="showExport = false" 
+    />
+    <FormImportDataPeltihan
+      v-if="showImport" 
+      @close="showImport = false" 
+    />
+    
     <!-- Header Section -->
-    <div class="header-section">
-      <div class="header-content">
-        <h1 class="main-title">
-          <el-icon class="title-icon"><UserFilled /></el-icon>
-          Manajemen Karyawan
-        </h1>
-        <p class="subtitle">Sistem CRUD dengan Vue 3 & Element Plus</p>
-      </div>
-      <div class="header-stats">
-        <div class="stat-card">
-          <div class="stat-number">{{ employees.length }}</div>
-          <div class="stat-label">Total Karyawan</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">{{ activeEmployees }}</div>
-          <div class="stat-label">Aktif</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">{{ inactiveEmployees }}</div>
-          <div class="stat-label">Tidak Aktif</div>
-        </div>
-      </div>
+    <div class="page-header">
+      <h1 class="page-title">Data Pelatihan</h1>
+      <div class="header-divider"></div>
     </div>
 
     <!-- Controls Section -->
-    <div class="controls-section">
-      <div class="search-section">
-        <el-input
-          v-model="searchQuery"
-          placeholder="Cari karyawan..."
-          size="large"
-          clearable
-          class="search-input"
-        >
-          <template #prefix>
-            <el-icon><Search /></el-icon>
-          </template>
-        </el-input>
-      </div>
-      
-      <div class="action-buttons">
-        <el-button
-          type="primary"
-          size="large"
-          @click="showAddDialog"
-          class="add-btn"
-        >
-          <el-icon><Plus /></el-icon>
-          Tambah Karyawan
-        </el-button>
-        
-        <el-dropdown @command="handleBulkAction" class="bulk-dropdown">
-          <el-button size="large">
-            Aksi Massal
-            <el-icon class="el-icon--right"><ArrowDown /></el-icon>
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="export">
-                <el-icon><Download /></el-icon>
-                Export Data
-              </el-dropdown-item>
-              <el-dropdown-item command="delete" divided>
-                <el-icon><Delete /></el-icon>
-                Hapus Terpilih
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </div>
-    </div>
+    <div class="controls-container">
+      <div class="left-controls">
+        <!-- Items per page selector -->
+        <div class="items-per-page">
+          <span class="control-label">Tampilkan:</span>
+          <div class="select-wrapper" @click.stop="toggleDropdown">
+            <div class="custom-select">
+              <span class="select-value">{{ itemsPerPage === Infinity ? 'Semua' : itemsPerPage }}</span>
+              <svg class="select-arrow" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <ul class="dropdown-menu" v-show="dropdownOpen">
+              <li
+                v-for="option in perPageOptions"
+                :key="option"
+                @click="changeItemsPerPage(option)"
+                class="dropdown-item"
+              >
+                {{ option === 'all' ? 'Semua' : option }}
+              </li>
+            </ul>
+          </div>
+        </div>
 
-    <!-- Filters Section -->
-    <div class="filters-section">
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <el-select
-            v-model="filters.department"
-            placeholder="Filter Departemen"
-            clearable
-            size="default"
-            style="width: 100%"
-          >
-            <el-option
-              v-for="dept in departments"
-              :key="dept"
-              :label="dept"
-              :value="dept"
+        <!-- Search box -->
+        <div class="search-container">
+          <div class="search-input-wrapper">
+            <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+            </svg>
+            <input 
+              type="text" 
+              placeholder="Cari nama peserta..." 
+              v-model="search"
+              class="search-input"
             />
-          </el-select>
-        </el-col>
-        <el-col :span="6">
-          <el-select
-            v-model="filters.status"
-            placeholder="Filter Status"
-            clearable
-            size="default"
-            style="width: 100%"
-          >
-            <el-option label="Aktif" value="active" />
-            <el-option label="Tidak Aktif" value="inactive" />
-          </el-select>
-        </el-col>
-        <el-col :span="6">
-          <el-date-picker
-            v-model="filters.dateRange"
-            type="daterange"
-            range-separator="s/d"
-            start-placeholder="Tanggal Mulai"
-            end-placeholder="Tanggal Akhir"
-            size="default"
-            style="width: 100%"
-          />
-        </el-col>
-        <el-col :span="6">
-          <el-button @click="clearFilters" size="default" style="width: 100%">
-            <el-icon><RefreshLeft /></el-icon>
-            Reset Filter
-          </el-button>
-        </el-col>
-      </el-row>
+          </div>
+        </div>
+
+        <!-- Mobile filter/sort buttons -->
+        <div class="mobile-controls">
+          <button class="control-btn secondary" @click="showFilter = true">
+            <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+            </svg>
+            <span class="btn-text">Filter</span>
+          </button>
+          <button class="control-btn secondary" @click="showSort = true">
+            <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 8a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 12a1 1 0 011-1h4a1 1 0 110 2H4a1 1 0 01-1-1z" />
+            </svg>
+            <span class="btn-text">Urutkan</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="action-controls">
+        <!-- Desktop filter/sort buttons -->
+        <div class="desktop-controls">
+          <button class="control-btn secondary" @click="showFilter = true" title="Filter Data">
+            <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          <button class="control-btn secondary" @click="showSort = true" title="Urutkan Data">
+            <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 8a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 12a1 1 0 011-1h4a1 1 0 110 2H4a1 1 0 01-1-1z" />
+            </svg>
+          </button>
+        </div>
+
+        <button class="control-btn primary" @click="showExport = true" title="Export Data">
+          <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+          <span class="btn-text">Export</span>
+        </button>
+        
+        <button class="control-btn primary" @click="showImport = true" title="Import Data">
+          <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 11-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+          </svg>
+          <span class="btn-text">Import</span>
+        </button>
+        
+        <button class="control-btn danger" @click="onExportClick" title="Hapus ke Sampah">
+          <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" clip-rule="evenodd" />
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+          <span class="btn-text">Sampah</span>
+        </button>
+        
+        <button class="control-btn danger" @click="onMassDeleteClick" title="Hapus Massal">
+          <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" clip-rule="evenodd" />
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          <span class="btn-text">Hapus Massal</span>
+        </button>
+        
+        <button class="control-btn accent" @click="showTambah = true" title="Tambah Data Baru">
+          <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+          </svg>
+          <span class="btn-text">Tambah Data</span>
+        </button>
+      </div>
     </div>
 
     <!-- Table Section -->
-    <div class="table-section">
+    <div class="table-container">
       <el-table
-        :data="filteredEmployees"
+        ref="elTable"
+        :data="pagedData"
         v-loading="loading"
-        stripe
-        highlight-current-row
-        @selection-change="handleSelectionChange"
-        class="main-table"
-        :row-class-name="tableRowClassName"
+        class="data-table"
+        @selection-change="onSelectionChange"
+        @row-click="goToDetail"
+        :header-cell-style="headerCellStyle"
+        :row-style="rowStyle"
       >
-        <el-table-column type="selection" width="55" />
-        <el-table-column type="index" label="No" width="60" />
-        
-        <el-table-column prop="name" label="Nama" min-width="150" sortable>
-          <template #default="{ row }">
-            <div class="employee-info">
-              <el-avatar :size="32" :src="row.avatar" class="employee-avatar">
-                {{ row.name.charAt(0) }}
-              </el-avatar>
-              <div class="employee-details">
-                <div class="employee-name">{{ row.name }}</div>
-                <div class="employee-position">{{ row.position }}</div>
-              </div>
-            </div>
+        <el-table-column type="selection" width="50" fixed="left" show-overflow-tooltip />
+
+        <el-table-column prop="nama" show-overflow-tooltip min-width="150">
+          <template #header>
+            <el-tooltip content="Nama Peserta" placement="top">
+              <span class="header-text">Nama</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="nik" show-overflow-tooltip min-width="120">
+          <template #header>
+            <el-tooltip content="Nomor Induk Kependudukan" placement="top">
+              <span class="header-text">NIK</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="jenis_bimtek" show-overflow-tooltip min-width="140">
+          <template #header>
+            <el-tooltip content="Jenis Bimbingan Teknis" placement="top">
+              <span class="header-text">Jenis Bimtek</span>
+            </el-tooltip>
           </template>
         </el-table-column>
         
-        <el-table-column prop="email" label="Email" min-width="200" sortable />
-        
-        <el-table-column prop="department" label="Departemen" width="130" sortable>
+        <el-table-column label="Tanggal Kegiatan" show-overflow-tooltip min-width="160">
+          <template #header>
+            <el-tooltip content="Tanggal Mulai - Berakhir Kegiatan" placement="top">
+              <span class="header-text">Tanggal Kegiatan</span>
+            </el-tooltip>
+          </template>
           <template #default="{ row }">
-            <el-tag :type="getDepartmentTagType(row.department)" size="small">
-              {{ row.department }}
-            </el-tag>
+            <span class="date-range">{{ formatTanggalKegiatan(row.kegiatan_dimulai, row.kegiatan_berakhir) }}</span>
           </template>
         </el-table-column>
-        
-        <el-table-column prop="salary" label="Gaji" width="120" sortable>
-          <template #default="{ row }">
-            <span class="salary-text">
-              {{ formatCurrency(row.salary) }}
-            </span>
+
+        <el-table-column prop="tempat_kegiatan" show-overflow-tooltip min-width="140">
+          <template #header>
+            <el-tooltip content="Lokasi Pelaksanaan Kegiatan" placement="top">
+              <span class="header-text">Tempat Kegiatan</span>
+            </el-tooltip>
           </template>
         </el-table-column>
-        
-        <el-table-column prop="joinDate" label="Tanggal Bergabung" width="140" sortable>
-          <template #default="{ row }">
-            {{ formatDate(row.joinDate) }}
+
+        <el-table-column prop="angkatan" show-overflow-tooltip min-width="100">
+          <template #header>
+            <el-tooltip content="Angkatan Pelatihan" placement="top">
+              <span class="header-text">Angkatan</span>
+            </el-tooltip>
           </template>
         </el-table-column>
-        
-        <el-table-column prop="status" label="Status" width="100">
-          <template #default="{ row }">
-            <el-switch
-              v-model="row.status"
-              active-value="active"
-              inactive-value="inactive"
-              @change="updateStatus(row)"
-              :loading="row.statusLoading"
-            />
+
+        <el-table-column prop="tempat_tanggal_lahir" show-overflow-tooltip min-width="160">
+          <template #header>
+            <el-tooltip content="Tempat dan Tanggal Lahir" placement="top">
+              <span class="header-text">Tempat Tanggal Lahir</span>
+            </el-tooltip>
           </template>
         </el-table-column>
-        
-        <el-table-column label="Aksi" width="140" fixed="right">
+
+        <el-table-column prop="pendidikan" show-overflow-tooltip min-width="120">
+          <template #header>
+            <el-tooltip content="Tingkat Pendidikan" placement="top">
+              <span class="header-text">Pendidikan</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="status" show-overflow-tooltip min-width="100">
+          <template #header>
+            <el-tooltip content="Status Peserta" placement="top">
+              <span class="header-text">Status</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="alamat" show-overflow-tooltip min-width="180">
+          <template #header>
+            <el-tooltip content="Alamat Lengkap" placement="top">
+              <span class="header-text">Alamat</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="jenis_usaha" show-overflow-tooltip min-width="140">
+          <template #header>
+            <el-tooltip content="Jenis Usaha yang Dijalankan" placement="top">
+              <span class="header-text">Jenis Usaha</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="penghasilan_perbulan" show-overflow-tooltip min-width="150">
+          <template #header>
+            <el-tooltip content="Penghasilan Rata-rata per Bulan" placement="top">
+              <span class="header-text">Penghasilan/Bulan</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="nomor_telefon" show-overflow-tooltip min-width="130">
+          <template #header>
+            <el-tooltip content="Nomor Telepon/WhatsApp" placement="top">
+              <span class="header-text">No. Telepon</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="Aksi" width="100" fixed="right">
+          <template #header>
+            <el-tooltip content="Aksi yang Tersedia" placement="top">
+              <span class="header-text">Aksi</span>
+            </el-tooltip>
+          </template>
           <template #default="{ row }">
-            <div class="action-buttons-cell">
-              <el-tooltip content="Edit" placement="top">
-                <el-button
-                  type="primary"
-                  size="small"
-                  circle
-                  @click="editEmployee(row)"
-                  :icon="Edit"
-                />
-              </el-tooltip>
-              <el-tooltip content="Hapus" placement="top">
-                <el-button
-                  type="danger"
-                  size="small"
-                  circle
-                  @click="deleteEmployee(row)"
-                  :icon="Delete"
-                />
-              </el-tooltip>
+            <div class="action-buttons">
+              <button
+                class="action-btn edit"
+                @click.stop="openEdit(row)"
+                title="Edit Data"
+              >
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                </svg>
+              </button>
+              <button
+                class="action-btn delete"
+                @click.stop="onDelete(row)"
+                title="Hapus Data"
+              >
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+              </button>
             </div>
           </template>
         </el-table-column>
       </el-table>
-
-      <!-- Pagination -->
-      <div class="pagination-section">
-        <el-pagination
-          v-model:current-page="currentPage"
-          v-model:page-size="pageSize"
-          :page-sizes="[10, 20, 50, 100]"
-          :total="filteredEmployees.length"
-          layout="total, sizes, prev, pager, next, jumper"
-          background
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
-      </div>
     </div>
 
-    <!-- Add/Edit Dialog -->
-    <el-dialog
-      v-model="dialogVisible"
-      :title="dialogTitle"
-      width="600px"
-      :before-close="handleClose"
-      class="employee-dialog"
-    >
-      <el-form
-        ref="employeeForm"
-        :model="currentEmployee"
-        :rules="formRules"
-        label-width="120px"
-        label-position="left"
-      >
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="Nama" prop="name">
-              <el-input
-                v-model="currentEmployee.name"
-                placeholder="Masukkan nama lengkap"
-                clearable
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="Email" prop="email">
-              <el-input
-                v-model="currentEmployee.email"
-                placeholder="email@example.com"
-                clearable
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
+    <!-- Pagination Section -->
+    <div class="pagination-container">
+      <nav class="pagination-nav">
+        <button 
+          class="pagination-btn prev" 
+          :disabled="currentPage === 1" 
+          @click="prevPage"
+          title="Halaman Sebelumnya"
+        >
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+          <span class="sr-only">Previous</span>
+        </button>
 
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="Posisi" prop="position">
-              <el-input
-                v-model="currentEmployee.position"
-                placeholder="Jabatan/Posisi"
-                clearable
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="Departemen" prop="department">
-              <el-select
-                v-model="currentEmployee.department"
-                placeholder="Pilih departemen"
-                style="width: 100%"
-              >
-                <el-option
-                  v-for="dept in departments"
-                  :key="dept"
-                  :label="dept"
-                  :value="dept"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="Gaji" prop="salary">
-              <el-input-number
-                v-model="currentEmployee.salary"
-                :min="0"
-                :step="100000"
-                controls-position="right"
-                style="width: 100%"
-                placeholder="0"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="Tanggal Masuk" prop="joinDate">
-              <el-date-picker
-                v-model="currentEmployee.joinDate"
-                type="date"
-                placeholder="Pilih tanggal"
-                style="width: 100%"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-form-item label="Status" prop="status">
-          <el-radio-group v-model="currentEmployee.status">
-            <el-radio value="active">Aktif</el-radio>
-            <el-radio value="inactive">Tidak Aktif</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="dialogVisible = false" size="large">
-            Batal
-          </el-button>
-          <el-button
-            type="primary"
-            @click="saveEmployee"
-            :loading="saveLoading"
-            size="large"
-          >
-            {{ isEditing ? 'Update' : 'Simpan' }}
-          </el-button>
+        <div class="pagination-numbers">
+          <template v-for="item in visiblePages" :key="String(item)">
+            <button
+              v-if="item === '...'"
+              class="pagination-btn ellipsis"
+              disabled
+            >
+              <span>…</span>
+            </button>
+            <button
+              v-else
+              class="pagination-btn number"
+              :class="{ active: item === currentPage }"
+              @click="goToPage(item)"
+            >
+              {{ item }}
+            </button>
+          </template>
         </div>
-      </template>
-    </el-dialog>
-  </div>
+
+        <button 
+          class="pagination-btn next" 
+          :disabled="currentPage === totalPages" 
+          @click="nextPage"
+          title="Halaman Selanjutnya"
+        >
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+          </svg>
+          <span class="sr-only">Next</span>
+        </button>
+      </nav>
+    </div>
+  </Layout>
 </template>
 
-<script setup>
-import { ref, reactive, computed, onMounted, nextTick } from 'vue'
-import {
-  ElMessage,
-  ElMessageBox,
-  ElNotification
-} from 'element-plus'
-import {
-  UserFilled,
-  Search,
-  Plus,
-  ArrowDown,
-  Download,
-  Delete,
-  RefreshLeft,
-  Edit
-} from '@element-plus/icons-vue'
-
-// Reactive data
-const employees = ref([])
-const searchQuery = ref('')
-const loading = ref(false)
-const dialogVisible = ref(false)
-const isEditing = ref(false)
-const currentEmployee = ref({})
-const selectedEmployees = ref([])
-const saveLoading = ref(false)
-const currentPage = ref(1)
-const pageSize = ref(10)
-
-// Filters
-const filters = reactive({
-  department: '',
-  status: '',
-  dateRange: null
-})
-
-// Form reference
-const employeeForm = ref(null)
-
-// Departments list
-const departments = ref([
-  'IT', 'HR', 'Finance', 'Marketing', 'Operations', 'Sales'
-])
-
-// Form validation rules
-const formRules = {
-  name: [
-    { required: true, message: 'Nama harus diisi', trigger: 'blur' },
-    { min: 2, max: 50, message: 'Nama harus 2-50 karakter', trigger: 'blur' }
-  ],
-  email: [
-    { required: true, message: 'Email harus diisi', trigger: 'blur' },
-    { type: 'email', message: 'Format email tidak valid', trigger: 'blur' }
-  ],
-  position: [
-    { required: true, message: 'Posisi harus diisi', trigger: 'blur' }
-  ],
-  department: [
-    { required: true, message: 'Departemen harus dipilih', trigger: 'change' }
-  ],
-  salary: [
-    { required: true, message: 'Gaji harus diisi', trigger: 'blur' },
-    { type: 'number', min: 1, message: 'Gaji harus lebih dari 0', trigger: 'blur' }
-  ],
-  joinDate: [
-    { required: true, message: 'Tanggal masuk harus diisi', trigger: 'change' }
-  ]
-}
-
-// Computed properties
-const dialogTitle = computed(() => {
-  return isEditing.value ? 'Edit Karyawan' : 'Tambah Karyawan Baru'
-})
-
-const activeEmployees = computed(() => {
-  return employees.value.filter(emp => emp.status === 'active').length
-})
-
-const inactiveEmployees = computed(() => {
-  return employees.value.filter(emp => emp.status === 'inactive').length
-})
-
-const filteredEmployees = computed(() => {
-  let filtered = employees.value
-
-  // Search filter
-  if (searchQuery.value) {
-    const query = searchQuery.value.toLowerCase()
-    filtered = filtered.filter(emp =>
-      emp.name.toLowerCase().includes(query) ||
-      emp.email.toLowerCase().includes(query) ||
-      emp.position.toLowerCase().includes(query)
-    )
-  }
-
-  // Department filter
-  if (filters.department) {
-    filtered = filtered.filter(emp => emp.department === filters.department)
-  }
-
-  // Status filter
-  if (filters.status) {
-    filtered = filtered.filter(emp => emp.status === filters.status)
-  }
-
-  // Date range filter
-  if (filters.dateRange && filters.dateRange.length === 2) {
-    const [startDate, endDate] = filters.dateRange
-    filtered = filtered.filter(emp => {
-      const joinDate = new Date(emp.joinDate)
-      return joinDate >= startDate && joinDate <= endDate
-    })
-  }
-
-  return filtered
-})
-
-// Methods
-const initializeData = () => {
-  // Sample data
-  employees.value = [
-    {
-      id: 1,
-      name: 'Ahmad Wijaya',
-      email: 'ahmad.wijaya@company.com',
-      position: 'Senior Developer',
-      department: 'IT',
-      salary: 15000000,
-      joinDate: '2022-01-15',
-      status: 'active',
-      avatar: 'https://i.pravatar.cc/150?img=1'
-    },
-    {
-      id: 2,
-      name: 'Siti Nurhaliza',
-      email: 'siti.nurhaliza@company.com',
-      position: 'HR Manager',
-      department: 'HR',
-      salary: 12000000,
-      joinDate: '2021-03-20',
-      status: 'active',
-      avatar: 'https://i.pravatar.cc/150?img=2'
-    },
-    {
-      id: 3,
-      name: 'Budi Santoso',
-      email: 'budi.santoso@company.com',
-      position: 'Marketing Specialist',
-      department: 'Marketing',
-      salary: 8000000,
-      joinDate: '2023-05-10',
-      status: 'inactive',
-      avatar: 'https://i.pravatar.cc/150?img=3'
-    },
-    {
-      id: 4,
-      name: 'Maya Sari',
-      email: 'maya.sari@company.com',
-      position: 'Finance Analyst',
-      department: 'Finance',
-      salary: 10000000,
-      joinDate: '2022-08-01',
-      status: 'active',
-      avatar: 'https://i.pravatar.cc/150?img=4'
-    },
-    {
-      id: 5,
-      name: 'Rizki Pratama',
-      email: 'rizki.pratama@company.com',
-      position: 'Sales Executive',
-      department: 'Sales',
-      salary: 7500000,
-      joinDate: '2023-02-14',
-      status: 'active',
-      avatar: 'https://i.pravatar.cc/150?img=5'
-    }
-  ]
-}
-
-const showAddDialog = () => {
-  isEditing.value = false
-  currentEmployee.value = {
-    name: '',
-    email: '',
-    position: '',
-    department: '',
-    salary: 0,
-    joinDate: '',
-    status: 'active'
-  }
-  dialogVisible.value = true
-}
-
-const editEmployee = (employee) => {
-  isEditing.value = true
-  currentEmployee.value = { ...employee }
-  dialogVisible.value = true
-}
-
-const saveEmployee = async () => {
-  if (!employeeForm.value) return
-
-  try {
-    await employeeForm.value.validate()
-    saveLoading.value = true
-
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-
-    if (isEditing.value) {
-      const index = employees.value.findIndex(emp => emp.id === currentEmployee.value.id)
-      if (index !== -1) {
-        employees.value[index] = { ...currentEmployee.value }
-        ElNotification({
-          title: 'Berhasil',
-          message: 'Data karyawan berhasil diupdate',
-          type: 'success'
-        })
-      }
-    } else {
-      const newEmployee = {
-        ...currentEmployee.value,
-        id: Date.now(),
-        avatar: `https://i.pravatar.cc/150?img=${employees.value.length + 1}`
-      }
-      employees.value.push(newEmployee)
-      ElNotification({
-        title: 'Berhasil',
-        message: 'Karyawan baru berhasil ditambahkan',
-        type: 'success'
-      })
-    }
-
-    dialogVisible.value = false
-    saveLoading.value = false
-  } catch (error) {
-    saveLoading.value = false
-    ElMessage.error('Mohon lengkapi semua field yang required')
-  }
-}
-
-const deleteEmployee = (employee) => {
-  ElMessageBox.confirm(
-    `Apakah Anda yakin ingin menghapus ${employee.name}?`,
-    'Konfirmasi Hapus',
-    {
-      confirmButtonText: 'Hapus',
-      cancelButtonText: 'Batal',
-      type: 'warning'
-    }
-  ).then(() => {
-    const index = employees.value.findIndex(emp => emp.id === employee.id)
-    if (index !== -1) {
-      employees.value.splice(index, 1)
-      ElNotification({
-        title: 'Berhasil',
-        message: `${employee.name} berhasil dihapus`,
-        type: 'success'
-      })
-    }
-  }).catch(() => {
-    ElMessage.info('Penghapusan dibatalkan')
-  })
-}
-
-const updateStatus = async (employee) => {
-  employee.statusLoading = true
-  
-  // Simulate API call
-  await new Promise(resolve => setTimeout(resolve, 500))
-  
-  employee.statusLoading = false
-  ElMessage.success(`Status ${employee.name} berhasil diubah`)
-}
-
-const handleSelectionChange = (selection) => {
-  selectedEmployees.value = selection
-}
-
-const handleBulkAction = (command) => {
-  if (command === 'export') {
-    exportData()
-  } else if (command === 'delete') {
-    bulkDelete()
-  }
-}
-
-const exportData = () => {
-  const csvContent = generateCSV(filteredEmployees.value)
-  downloadCSV(csvContent, 'data-karyawan.csv')
-  ElMessage.success('Data berhasil diexport')
-}
-
-const bulkDelete = () => {
-  if (selectedEmployees.value.length === 0) {
-    ElMessage.warning('Pilih karyawan yang ingin dihapus')
-    return
-  }
-
-  ElMessageBox.confirm(
-    `Apakah Anda yakin ingin menghapus ${selectedEmployees.value.length} karyawan?`,
-    'Konfirmasi Hapus Massal',
-    {
-      confirmButtonText: 'Hapus',
-      cancelButtonText: 'Batal',
-      type: 'warning'
-    }
-  ).then(() => {
-    const idsToDelete = selectedEmployees.value.map(emp => emp.id)
-    employees.value = employees.value.filter(emp => !idsToDelete.includes(emp.id))
-    ElNotification({
-      title: 'Berhasil',
-      message: `${selectedEmployees.value.length} karyawan berhasil dihapus`,
-      type: 'success'
-    })
-    selectedEmployees.value = []
-  })
-}
-
-const clearFilters = () => {
-  filters.department = ''
-  filters.status = ''
-  filters.dateRange = null
-  searchQuery.value = ''
-  ElMessage.success('Filter berhasil direset')
-}
-
-const handleClose = (done) => {
-  if (saveLoading.value) {
-    ElMessage.warning('Sedang menyimpan data, mohon tunggu...')
-    return
-  }
-  done()
-}
-
-const handleSizeChange = (size) => {
-  pageSize.value = size
-  currentPage.value = 1
-}
-
-const handleCurrentChange = (page) => {
-  currentPage.value = page
-}
-
-const tableRowClassName = ({ rowIndex }) => {
-  return rowIndex % 2 === 0 ? 'even-row' : 'odd-row'
-}
-
-const getDepartmentTagType = (department) => {
-  const types = {
-    'IT': 'primary',
-    'HR': 'success',
-    'Finance': 'warning',
-    'Marketing': 'danger',
-    'Operations': 'info',
-    'Sales': ''
-  }
-  return types[department] || ''
-}
-
-const formatCurrency = (amount) => {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-    minimumFractionDigits: 0
-  }).format(amount)
-}
-
-const formatDate = (date) => {
-  return new Date(date).toLocaleDateString('id-ID', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  })
-}
-
-const generateCSV = (data) => {
-  const headers = ['Nama', 'Email', 'Posisi', 'Departemen', 'Gaji', 'Tanggal Masuk', 'Status']
-  const csvData = [headers.join(',')]
-  
-  data.forEach(emp => {
-    const row = [
-      emp.name,
-      emp.email,
-      emp.position,
-      emp.department,
-      emp.salary,
-      emp.joinDate,
-      emp.status
-    ]
-    csvData.push(row.join(','))
-  })
-  
-  return csvData.join('\n')
-}
-
-const downloadCSV = (content, filename) => {
-  const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' })
-  const link = document.createElement('a')
-  const url = URL.createObjectURL(blob)
-  link.setAttribute('href', url)
-  link.setAttribute('download', filename)
-  link.style.visibility = 'hidden'
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-}
-
-// Lifecycle
-onMounted(() => {
-  initializeData()
-  loading.value = false
-})
-</script>
-
 <style scoped>
-.crud-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
+/* Color Variables */
+
+/* Page Header */
+.page-header {
+  margin-bottom: 2rem;
 }
 
-.header-section {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  border-radius: 20px 20px 0 0;
-  padding: 40px;
-  color: white;
-  margin-bottom: 0;
-  position: relative;
-  overflow: hidden;
-}
-
-.header-section::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-  animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(180deg); }
-}
-
-.header-content {
-  text-align: center;
-  position: relative;
-  z-index: 2;
-}
-
-.main-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-.title-icon {
-  font-size: 2.5rem;
-}
-
-.subtitle {
-  font-size: 1.1rem;
-  margin: 10px 0 0 0;
-  opacity: 0.9;
-}
-
-.header-stats {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  margin-top: 30px;
-  position: relative;
-  z-index: 2;
-}
-
-.stat-card {
-  background: rgba(255,255,255,0.2);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  padding: 20px;
-  text-align: center;
-  min-width: 120px;
-  border: 1px solid rgba(255,255,255,0.3);
-}
-
-.stat-number {
+.page-title {
   font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 5px;
+  font-weight: 700;
+  color: var(--color-gray-800);
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
 }
 
-.stat-label {
-  font-size: 0.9rem;
-  opacity: 0.9;
+.header-divider {
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-pink-500) 0%, var(--color-pink-300) 50%, var(--color-gray-200) 100%);
+  border-radius: 2px;
 }
 
-.controls-section {
-  background: white;
-  padding: 30px;
+/* Controls Container */
+.controls-container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: var(--color-white);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-gray-200);
 }
 
-.search-section {
+.left-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.action-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Items Per Page */
+.items-per-page {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.control-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-gray-700);
+  white-space: nowrap;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.custom-select {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--color-white);
+  border: 2px solid var(--color-gray-300);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-gray-700);
+  transition: all 0.2s ease;
+  min-width: 80px;
+}
+
+.custom-select:hover {
+  border-color: var(--color-pink-400);
+  background: var(--color-pink-50);
+}
+
+.custom-select:focus-within {
+  border-color: var(--color-pink-500);
+  box-shadow: 0 0 0 3px var(--color-pink-100);
+}
+
+.select-value {
+  flex: 1;
+}
+
+.select-arrow {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-gray-500);
+  transition: transform 0.2s ease;
+}
+
+.custom-select:hover .select-arrow {
+  color: var(--color-pink-500);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  right: 0;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+  z-index: 50;
+  overflow: hidden;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dropdown-item {
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--color-gray-700);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border-bottom: 1px solid var(--color-gray-100);
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background: var(--color-pink-50);
+  color: var(--color-pink-700);
+}
+
+/* Search Container */
+.search-container {
   flex: 1;
   max-width: 400px;
 }
 
-.search-input {
-  border-radius: 25px;
-}
-
-.search-input :deep(.el-input__inner) {
-  border-radius: 25px;
-  border: 2px solid #e4e7ed;
-  transition: all 0.3s ease;
-}
-
-.search-input :deep(.el-input__inner:focus) {
-  border-color: #409eff;
-  box-shadow: 0 0 10px rgba(64, 158, 255, 0.3);
-}
-
-.action-buttons {
-  display: flex;
-  gap: 15px;
-}
-
-.add-btn {
-  border-radius: 25px;
-  padding: 12px 25px;
-  font-weight: 600;
-  box-shadow: 0 4px 15px rgba(64, 158, 255, 0.3);
-  transition: all 0.3s ease;
-}
-
-.add-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(64, 158, 255, 0.4);
-}
-
-.filters-section {
-  background: white;
-  padding: 20px 30px;
-  border-top: 1px solid #f0f0f0;
-}
-
-.table-section {
-  background: white;
-  padding: 0 30px 30px;
-  border-radius: 0 0 20px 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-
-.main-table {
-  margin-bottom: 20px;
-}
-
-.main-table :deep(.el-table__header) {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-}
-
-.main-table :deep(.el-table__header th) {
-  background: transparent;
-  color: #495057;
-  font-weight: 600;
-  border-bottom: 2px solid #dee2e6;
-}
-
-.main-table :deep(.even-row) {
-  background-color: #f8f9ff;
-}
-
-.main-table :deep(.odd-row) {
-  background-color: white;
-}
-
-.main-table :deep(.el-table__row:hover) {
-  background-color: #e3f2fd !important;
-  transform: scale(1.01);
-  transition: all 0.3s ease;
-}
-
-.employee-info {
+.search-input-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
 }
 
-.employee-avatar {
-  border: 2px solid #e4e7ed;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-gray-400);
+  pointer-events: none;
+  z-index: 1;
 }
 
-.employee-details {
+.search-input {
+  width: 100%;
+  padding: 0.625rem 0.75rem 0.625rem 2.5rem;
+  border: 2px solid var(--color-gray-300);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: var(--color-gray-700);
+  background: var(--color-white);
+  transition: all 0.2s ease;
+}
+
+.search-input::placeholder {
+  color: var(--color-gray-400);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--color-pink-500);
+  box-shadow: 0 0 0 3px var(--color-pink-100);
+}
+
+.search-input:focus + .search-icon {
+  color: var(--color-pink-500);
+}
+
+/* Control Buttons */
+.control-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+}
+
+.btn-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Button Variants */
+.control-btn.primary {
+  background: var(--color-gray-600);
+  color: var(--color-white);
+}
+
+.control-btn.primary:hover:not(:disabled) {
+  background: var(--color-gray-700);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.control-btn.secondary {
+  background: var(--color-gray-100);
+  color: var(--color-gray-700);
+  border: 1px solid var(--color-gray-300);
+}
+
+.control-btn.secondary:hover:not(:disabled) {
+  background: var(--color-gray-200);
+  border-color: var(--color-gray-400);
+  transform: translateY(-1px);
+}
+
+.control-btn.accent {
+  background: var(--color-pink-500);
+  color: var(--color-white);
+}
+
+.control-btn.accent:hover:not(:disabled) {
+  background: var(--color-pink-600);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.control-btn.danger {
+  background: var(--color-red-500);
+  color: var(--color-white);
+}
+
+.control-btn.danger:hover:not(:disabled) {
+  background: var(--color-red-600);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Mobile/Desktop Controls */
+.mobile-controls {
+  display: none;
+}
+
+.desktop-controls {
   display: flex;
-  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.employee-name {
+/* Table Container */
+.table-container {
+  background: var(--color-white);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-gray-200);
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+/* Table Styling */
+.data-table {
+  width: 100% !important;
+  font-size: 0.875rem;
+}
+
+/* Header Styling */
+.data-table :deep(.el-table__header-wrapper) {
+  background: var(--color-gray-50);
+}
+
+.data-table :deep(.el-table__header-wrapper .el-table__header) {
+  background: var(--color-gray-50);
+}
+
+.data-table :deep(.el-table__header-wrapper th) {
+  background: var(--color-gray-50) !important;
+  border-bottom: 2px solid var(--color-gray-200);
+  color: var(--color-gray-700);
   font-weight: 600;
-  color: #303133;
-  margin-bottom: 2px;
+  font-size: 0.875rem;
+  padding: 1rem 0.75rem;
 }
 
-.employee-position {
-  font-size: 0.85rem;
-  color: #909399;
+.data-table :deep(.el-table__header-wrapper th:first-child) {
+  border-top-left-radius: 12px;
 }
 
-.salary-text {
+.data-table :deep(.el-table__header-wrapper th:last-child) {
+  border-top-right-radius: 12px;
+}
+
+.header-text {
+  color: var(--color-gray-700);
   font-weight: 600;
-  color: #67c23a;
+  font-size: 0.875rem;
 }
 
-.action-buttons-cell {
+/* Body Styling */
+.data-table :deep(.el-table__body-wrapper .el-table__body tr) {
+  transition: all 0.2s ease;
+}
+
+.data-table :deep(.el-table__body-wrapper .el-table__body tr:hover) {
+  background: var(--color-pink-50) !important;
+}
+
+.data-table :deep(.el-table__body-wrapper .el-table__body tr td) {
+  background: var(--color-white);
+  border-bottom: 1px solid var(--color-gray-100);
+  color: var(--color-gray-700);
+  font-size: 0.875rem;
+  padding: 0.875rem 0.75rem;
+}
+
+.data-table :deep(.el-table__body-wrapper .el-table__body tr:nth-child(even) td) {
+  background: var(--color-gray-50);
+}
+
+.data-table :deep(.el-table__body-wrapper .el-table__body tr:hover td) {
+  background: var(--color-pink-50) !important;
+}
+
+/* Selection Column */
+.data-table :deep(.el-table-column--selection .el-checkbox) {
+  --el-checkbox-checked-bg-color: var(--color-pink-500);
+  --el-checkbox-checked-border-color: var(--color-pink-500);
+}
+
+.data-table :deep(.el-table-column--selection .el-checkbox__input.is-checked .el-checkbox__inner) {
+  background-color: var(--color-pink-500);
+  border-color: var(--color-pink-500);
+}
+
+.data-table :deep(.el-table-column--selection .el-checkbox__input.is-indeterminate .el-checkbox__inner) {
+  background-color: var(--color-pink-500);
+  border-color: var(--color-pink-500);
+}
+
+.data-table :deep(.el-table-column--selection .el-checkbox__input:hover .el-checkbox__inner) {
+  border-color: var(--color-pink-400);
+}
+
+/* Date Range Styling */
+.date-range {
+  color: var(--color-gray-600);
+  font-weight: 500;
+}
+
+/* Action Buttons */
+.action-buttons {
   display: flex;
-  gap: 8px;
+  gap: 0.5rem;
   justify-content: center;
+  align-items: center;
 }
 
-.action-buttons-cell .el-button {
-  transition: all 0.3s ease;
-}
-
-.action-buttons-cell .el-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.pagination-section {
-  display: flex;
+.action-btn {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid #f0f0f0;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
 }
 
-.employee-dialog :deep(.el-dialog__header) {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  color: white;
-  padding: 20px 30px;
-  margin: 0;
-  border-radius: 8px 8px 0 0;
+.action-btn svg {
+  width: 1rem;
+  height: 1rem;
 }
 
-.employee-dialog :deep(.el-dialog__title) {
-  color: white;
-  font-weight: 600;
-  font-size: 1.2rem;
+.action-btn.edit {
+  background: var(--color-gray-100);
+  color: var(--color-gray-600);
 }
 
-.employee-dialog :deep(.el-dialog__close) {
-  color: white;
-}
-
-.employee-dialog :deep(.el-dialog__body) {
-  padding: 30px;
-}
-
-.employee-dialog :deep(.el-form-item__label) {
-  font-weight: 600;
-  color: #303133;
-}
-
-.dialog-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 15px;
-  padding: 20px 30px;
-  background: #f8f9fa;
-  margin: 0 -30px -30px;
-  border-radius: 0 0 8px 8px;
-}
-
-.dialog-footer .el-button {
-  padding: 12px 25px;
-  border-radius: 25px;
-  font-weight: 600;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .crud-container {
-    padding: 10px;
-  }
-  
-  .header-section {
-    padding: 20px;
-    border-radius: 15px 15px 0 0;
-  }
-  
-  .main-title {
-    font-size: 1.8rem;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .header-stats {
-    flex-direction: column;
-    gap: 15px;
-    align-items: center;
-  }
-  
-  .stat-card {
-    min-width: 100px;
-  }
-  
-  .controls-section {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 15px;
-    padding: 20px;
-  }
-  
-  .search-section {
-    max-width: none;
-  }
-  
-  .action-buttons {
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  
-  .table-section {
-    padding: 0 15px 20px;
-  }
-  
-  .main-table :deep(.el-table__body-wrapper) {
-    overflow-x: auto;
-  }
-  
-  .employee-dialog {
-    width: 95% !important;
-    margin: 0 auto;
-  }
-}
-
-/* Custom Scrollbar */
-:deep(.el-table__body-wrapper::-webkit-scrollbar) {
-  height: 8px;
-}
-
-:deep(.el-table__body-wrapper::-webkit-scrollbar-track) {
-  background: #f1f1f1;
-  border-radius: 4px;
-}
-
-:deep(.el-table__body-wrapper::-webkit-scrollbar-thumb) {
-  background: #c1c1c1;
-  border-radius: 4px;
-}
-
-:deep(.el-table__body-wrapper::-webkit-scrollbar-thumb:hover) {
-  background: #a8a8a8;
-}
-
-/* Loading Animation */
-.main-table :deep(.el-loading-mask) {
-  background-color: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(5px);
-}
-
-/* Form Animations */
-.employee-dialog :deep(.el-form-item) {
-  margin-bottom: 20px;
-  transition: all 0.3s ease;
-}
-
-.employee-dialog :deep(.el-input__inner:focus),
-.employee-dialog :deep(.el-textarea__inner:focus) {
-  border-color: #4facfe;
-  box-shadow: 0 0 10px rgba(79, 172, 254, 0.3);
-}
-
-/* Tag Animations */
-.main-table :deep(.el-tag) {
-  transition: all 0.3s ease;
-  cursor: default;
-}
-
-.main-table :deep(.el-tag:hover) {
+.action-btn.edit:hover {
+  background: var(--color-pink-100);
+  color: var(--color-pink-600);
   transform: scale(1.05);
 }
 
-/* Switch Styling */
-.main-table :deep(.el-switch) {
-  transition: all 0.3s ease;
+.action-btn.delete {
+  background: var(--color-red-50);
+  color: var(--color-red-500);
 }
 
-.main-table :deep(.el-switch:hover) {
-  transform: scale(1.1);
+.action-btn.delete:hover {
+  background: var(--color-red-100);
+  color: var(--color-red-600);
+  transform: scale(1.05);
 }
 
-/* Button Hover Effects */
-.bulk-dropdown :deep(.el-button:hover) {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
-
-/* Pagination Styling */
-.pagination-section :deep(.el-pagination) {
+/* Pagination Container */
+.pagination-container {
   display: flex;
   justify-content: center;
+  margin-top: 2rem;
+}
+
+.pagination-nav {
+  display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.5rem;
+  background: var(--color-white);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-gray-200);
 }
 
-.pagination-section :deep(.el-pager li:hover) {
-  color: #4facfe;
-  transform: scale(1.1);
+.pagination-numbers {
+  display: flex;
+  gap: 0.25rem;
 }
 
-.pagination-section :deep(.el-pager li.is-active) {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  color: white;
-  border-radius: 50%;
-}
-
-/* Notification Customization */
-:deep(.el-notification) {
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  backdrop-filter: blur(10px);
-}
-
-/* Message Box Customization */
-:deep(.el-message-box) {
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-}
-
-:deep(.el-message-box__header) {
-  padding: 20px 30px 10px;
-}
-
-:deep(.el-message-box__content) {
-  padding: 10px 30px 20px;
-}
-
-:deep(.el-message-box__btns) {
-  padding: 10px 30px 20px;
-}
-
-/* Table Row Hover Animation */
-@keyframes rowHighlight {
-  0% { background-color: transparent; }
-  50% { background-color: #e3f2fd; }
-  100% { background-color: #e3f2fd; }
-}
-
-.main-table :deep(.el-table__row:hover td) {
-  animation: rowHighlight 0.3s ease;
-}
-
-/* Loading Spinner Customization */
-:deep(.el-loading-spinner) {
-  margin-top: -25px;
-}
-
-:deep(.el-loading-spinner .circular) {
-  width: 50px;
-  height: 50px;
-}
-
-/* Form Input Focus Effects */
-.employee-dialog :deep(.el-input__inner),
-.employee-dialog :deep(.el-select .el-input__inner),
-.employee-dialog :deep(.el-date-editor .el-input__inner) {
-  transition: all 0.3s ease;
+.pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.5rem;
+  border: none;
   border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--color-gray-700);
+  background: var(--color-white);
 }
 
-.employee-dialog :deep(.el-input__inner:focus),
-.employee-dialog :deep(.el-select:hover .el-input__inner),
-.employee-dialog :deep(.el-date-editor:hover .el-input__inner) {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(79, 172, 254, 0.2);
+.pagination-btn:hover:not(:disabled) {
+  background: var(--color-gray-100);
+  color: var(--color-gray-900);
 }
 
-/* Success Animation */
-@keyframes successPulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.el-button--primary:active {
-  animation: successPulse 0.3s ease;
+.pagination-btn.active {
+  background: var(--color-pink-500);
+  color: var(--color-white);
 }
 
-/* Table Header Gradient */
-.main-table :deep(.el-table__header-wrapper) {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border-radius: 8px 8px 0 0;
+.pagination-btn.active:hover {
+  background: var(--color-pink-600);
 }
 
-/* Custom Selection Style */
-.main-table :deep(.el-table__row.current-row) {
-  background-color: #f0f9ff;
-  border-left: 4px solid #4facfe;
+.pagination-btn.ellipsis {
+  cursor: default;
+  background: transparent;
 }
 
-/* Tooltip Customization */
-:deep(.el-tooltip__popper) {
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+.pagination-btn.ellipsis:hover {
+  background: transparent;
+}
+
+.pagination-btn svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Loading State */
+.data-table :deep(.el-loading-mask) {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.data-table :deep(.el-loading-spinner) {
+  color: var(--color-pink-500);
+}
+
+/* Tooltip Styling */
+.data-table :deep(.el-tooltip__popper) {
+  background: var(--color-gray-800);
+  color: var(--color-white);
+  border: none;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.data-table :deep(.el-tooltip__popper .el-popper__arrow::before) {
+  background: var(--color-gray-800);
+  border: none;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .controls-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .left-controls {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .action-controls {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .btn-text {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .controls-container {
+    padding: 1rem;
+  }
+
+  .left-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .items-per-page {
+    justify-content: space-between;
+  }
+
+  .search-container {
+    max-width: none;
+  }
+
+  .mobile-controls {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .desktop-controls {
+    display: none;
+  }
+
+  .action-controls {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .control-btn {
+    padding: 0.5rem;
+    min-width: 2.5rem;
+  }
+
+  .table-container {
+    border-radius: 8px;
+    overflow-x: auto;
+  }
+
+  .data-table {
+    min-width: 800px;
+  }
+
+  .pagination-nav {
+    padding: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .pagination-btn {
+    min-width: 2rem;
+    height: 2rem;
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .controls-container {
+    padding: 0.75rem;
+  }
+
+  .page-title {
+    font-size: 1.25rem;
+  }
+
+  .pagination-numbers {
+    gap: 0.125rem;
+  }
+
+  .pagination-btn {
+    min-width: 1.75rem;
+    height: 1.75rem;
+    font-size: 0.75rem;
+  }
+
+  .action-controls {
+    gap: 0.25rem;
+  }
+
+  .control-btn {
+    padding: 0.375rem;
+    min-width: 2rem;
+  }
+
+  .btn-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+/* Focus States for Accessibility */
+.control-btn:focus,
+.pagination-btn:focus,
+.action-btn:focus,
+.search-input:focus,
+.custom-select:focus {
+  outline: 2px solid var(--color-pink-500);
+  outline-offset: 2px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .data-table :deep(.el-table__body-wrapper .el-table__body tr:hover td) {
+    background: var(--color-gray-200) !important;
+  }
+  
+  .control-btn.accent {
+    border: 2px solid var(--color-pink-700);
+  }
+  
+  .pagination-btn.active {
+    border: 2px solid var(--color-pink-700);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
 </style>
+
+<script lang="ts" setup>
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import api from "../../api.js";
+import Layout from "../../layouts/Layout.vue";
+import FormExportDataPelatihan from "../../components/KelolaDataPelatihan/FormExportDataPelatihan.vue";
+import FormImportDataPeltihan from "../../components/KelolaDataPelatihan/FormImportDataPelatihan.vue";
+import FormEditDataPelatihan from "../../components/KelolaDataPelatihan/FormEditDataPelatihan.vue";
+import FormTambahDataPeltihan from "../../components/KelolaDataPelatihan/FormTambahDataPelatihan.vue";
+import FormFilterDataPelatihan from "../../components/KelolaDataPelatihan/FormFilterDataPelatihan.vue";
+import FormSortingDataPelatihan from "../../components/KelolaDataPelatihan/FormSortingDataPelatihan.vue";
+import { ElNotification } from 'element-plus';
+import { useRouter } from 'vue-router'
+
+ const router = useRouter()
+
+const goToDetail = (row: any, column: any, event: MouseEvent) => {
+  // Abaikan klik jika berasal dari kolom selection (checkbox) atau kolom Aksi
+  if (column.type === 'selection' || column.label === 'Aksi') {
+    return
+  }
+
+  // Arahkan ke detail jika bukan dari kolom aksi/checkbox
+  router.push({ name: 'DetailMasyarakat', params: { id: row.nik } })
+}
+ 
+interface Peserta {
+  id: number;
+  nama: string;
+  nik: string;
+  jenis_bimtek: string;
+  kegiatan_dimulai: string;
+  kegiatan_berakhir: string;
+  tempat_kegiatan: string;
+  angkatan: number;
+  tempat_tanggal_lahir: string;
+  pendidikan: string;
+  status: "kawin" | "lajang" | "janda";
+  alamat: string;
+  jenis_usaha: string;
+  penghasilan_perbulan: string;
+  nomor_telefon: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+const tableData = ref<Peserta[]>([]);
+const selected = ref<Peserta[]>([]);
+const search = ref("");
+const loading = ref(false);
+const itemsPerPage = ref<number | string>(10);
+const currentPage = ref(1);
+const dropdownOpen = ref(false);
+const showExport = ref(false)
+const showImport = ref(false)
+const showEdit = ref(false)
+const showTambah = ref(false)
+const showSort = ref(false)
+const showFilter = ref(false)
+const editData = ref(null)
+const perPageOptions = [10, 20, 50, 100, "all"];
+
+const openEdit = (row) => {
+  editData.value = { ...row }
+  showEdit.value = true
+  loading.value = false;
+}
+
+function toggleDropdown() {
+  dropdownOpen.value = !dropdownOpen.value;
+}
+
+function changeItemsPerPage(option: number | string) {
+  itemsPerPage.value = option === "all" ? filteredData.value.length : option;
+  currentPage.value = 1;
+  dropdownOpen.value = false;
+}
+function formatTanggalKegiatan(mulai: string, berakhir: string): string {
+  if (!mulai || !berakhir) return '-'
+
+  const tanggalMulai = new Date(mulai)
+  const tanggalBerakhir = new Date(berakhir)
+
+  const optionsBulan = { month: 'long' } as const
+  const optionsTahun = { year: 'numeric' } as const
+
+  const hariMulai = tanggalMulai.getDate()
+  const hariBerakhir = tanggalBerakhir.getDate()
+
+  const bulanMulai = tanggalMulai.toLocaleDateString('id-ID', optionsBulan)
+  const bulanBerakhir = tanggalBerakhir.toLocaleDateString('id-ID', optionsBulan)
+
+  const tahunMulai = tanggalMulai.toLocaleDateString('id-ID', optionsTahun)
+  const tahunBerakhir = tanggalBerakhir.toLocaleDateString('id-ID', optionsTahun)
+
+  if (bulanMulai === bulanBerakhir && tahunMulai === tahunBerakhir) {
+    // Contoh: 25 - 30 Juni 2025
+    return `${hariMulai} - ${hariBerakhir} ${bulanMulai} ${tahunMulai}`
+  } else {
+    // Contoh: 25 Mei 2025 - 2 Juni 2025
+    return `${hariMulai} ${bulanMulai} ${tahunMulai} - ${hariBerakhir} ${bulanBerakhir} ${tahunBerakhir}`
+  }
+}
+
+
+
+// Inisialisasi activeFilters (baru ditambahkan)
+const activeFilters = ref<{ [key: string]: string | number | null }>({});
+
+// Perbaiki computed property filterableColumns (baru ditambahkan)
+const filterableColumns = computed(() => {
+  if (!tableData.value || tableData.value.length === 0) {
+    return [ /* default columns */ ];
+  }
+  const exclude = ['id', 'created_at', 'updated_at'];
+  return Object.keys(tableData.value[0] || {}).filter(key => !exclude.includes(key));
+});
+
+const filteredData = computed(() => {
+  let data = tableData.value;
+
+  if (search.value) {
+    data = data.filter(item =>
+      item.nama.toLowerCase().includes(search.value.toLowerCase())
+    );
+  }
+
+  // Logika filter berdasarkan activeFilters (BARU)
+  for (const key in activeFilters.value) {
+    const filterValue = activeFilters.value[key];
+
+    if (filterValue !== null && filterValue !== '') {
+      data = data.filter(item => {
+        const itemValue = (item as any)[key];
+        if (itemValue === null || itemValue === undefined) {
+          return false;
+        }
+        return String(itemValue).toLowerCase().includes(String(filterValue).toLowerCase());
+      });
+    }
+  }
+  return data;
+});
+
+const totalPages = computed(() =>
+  Math.ceil(
+    filteredData.value.length /
+      (typeof itemsPerPage.value === "number" ? itemsPerPage.value : 1)
+  )
+);
+
+const pagedData = computed(() => {
+  const perPage = typeof itemsPerPage.value === "number" ? itemsPerPage.value : 1;
+  const start = (currentPage.value - 1) * perPage;
+  return filteredData.value.slice(start, start + perPage);
+});
+
+function prevPage() {
+  if (currentPage.value > 1) currentPage.value--;
+}
+function nextPage() {
+  if (currentPage.value < totalPages.value) currentPage.value++;
+}
+function goToPage(page: number) {
+  currentPage.value = page;
+}
+
+const visiblePages = computed<(number | '...')[]>(() => {
+  const total = totalPages.value;
+  const current = currentPage.value;
+  const delta = 2;
+  const pages: (number | '...')[] = [];
+
+  if (total < 1) return pages;
+  pages.push(1);
+
+  let left = current - delta;
+  let right = current + delta;
+
+  if (left < 2) {
+    right += (2 - left);
+    left = 2;
+  }
+  if (right > total - 1) {
+    left -= (right - (total - 1));
+    right = total - 1;
+  }
+  left = Math.max(left, 2);
+  right = Math.min(right, total - 1);
+
+  if (left > 2) pages.push('...');
+  for (let i = left; i <= right; i++) pages.push(i);
+  if (right < total - 1) pages.push('...');
+  if (total > 1) pages.push(total);
+
+  return pages;
+});
+
+function onSelectionChange(rows: Peserta[]) {
+  selected.value = rows;
+}
+
+async function onMassDeleteClick() {
+  if (!selected.value.length) return;
+
+  loading.value = true;
+
+  try {
+    const niks = selected.value.map(p => p.nik);
+    await api.delete('/kelola/pelatihan', {
+      data: { niks }
+    });
+    await fetchData();
+    ElNotification({
+      title: 'Berhasil',
+      message: 'Hapus Data Massal',
+      type: 'success',
+      duration: 3000,
+    });
+  } 
+  catch (err) {
+    console.error('Gagal menghapus data:', err);
+    ElNotification({ // Notifikasi error (BARU)
+      title: 'Error',
+      message: 'Gagal menghapus data massal.',
+      type: 'error',
+      duration: 3000,
+    });
+  }
+  finally {
+    loading.value = false;
+  }
+}
+
+
+// Sampah route → GET /data/pelatihan/sampah
+async function onExportClick() {
+  window.location.href = '/data/pelatihan/sampah';
+}
+
+// Single delete → DELETE /kelola/pelatihan/{nik}
+async function onDelete(row: Peserta) {
+  loading.value = true;
+  try { // Ditambahkan try-catch
+    await api.delete(`/kelola/pelatihan/${row.id}`);
+    await fetchData();
+    ElNotification({ // Notifikasi sukses (sudah ada)
+      title: 'Berhasil',
+      message: 'Data berhasil dihapus',
+      type: 'success',
+      duration: 3000,
+    });
+  } catch (err) { // Notifikasi error (BARU)
+    console.error('Gagal menghapus data:', err);
+    ElNotification({
+      title: 'Error',
+      message: 'Gagal menghapus data.',
+      type: 'error',
+      duration: 3000,
+    });
+  } finally { // Pastikan loading diatur
+    loading.value = false;
+  }
+}
+
+async function fetchData() {
+  try { // Ditambahkan try-catch
+    const res = await api.get('/kelola/pelatihan');
+    tableData.value = Array.isArray(res) ? res : res.data || [];
+  } catch (error) { // Notifikasi error (BARU)
+    console.error('Error fetching data:', error);
+    ElNotification({
+      title: 'Error',
+      message: 'Gagal memuat data dari server.',
+      type: 'error',
+      duration: 3000,
+    });
+  }
+}
+
+onMounted(async () => {
+  document.addEventListener('click', (e) => {
+    const path = (e as MouseEvent).composedPath() as HTMLElement[];
+    if (!path.some((el) => el.classList?.contains('select-box'))) {
+      dropdownOpen.value = false;
+    }
+  });
+  loading.value = true;
+  await fetchData();
+  loading.value = false;
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', () => {});
+});
+
+const headerCellStyle = {
+  backgroundImage: 'linear-gradient(to top, #FB9CB1, #FE6B99)',
+  color: 'white',
+  whiteSpace: 'nowrap',
+  textAlign: 'left',
+};
+function rowStyle() {
+  return { backgroundColor: '#F7F6FE' };
+}
+</script>

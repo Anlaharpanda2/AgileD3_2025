@@ -239,41 +239,6 @@ onMounted(() => {
       </div>
     </section>
 
-    <!-- Bagian Layanan -->
-    <section class="services-section">
-      <div class="container">
-        <div class="section-header" data-aos="fade-up">
-          <h2 class="section-title">Layanan & Program</h2>
-          <p class="section-subtitle">
-            Berbagai layanan terintegrasi untuk mendukung pemberdayaan dan perlindungan
-          </p>
-        </div>
-        <ElRow :gutter="24">
-          <ElCol
-            :xs="24"
-            :sm="12"
-            :lg="6"
-            v-for="(service, index) in services"
-            :key="index"
-            data-aos="fade-up"
-            :data-aos-delay="index * 100"
-          >
-            <ElCard class="service-card" shadow="hover">
-              <div class="service-icon" :style="{ color: service.color }">
-                <ElIcon size="40" :component="service.icon" />
-              </div>
-              <h3 class="service-title">{{ service.title }}</h3>
-              <p class="service-description">{{ service.description }}</p>
-              <ElButton text class="service-link">
-                Pelajari Lebih Lanjut
-                <ElIcon class="ml-1"><ArrowRight /></ElIcon>
-              </ElButton>
-            </ElCard>
-          </ElCol>
-        </ElRow>
-      </div>
-    </section>
-
     <!-- Bagian Berita Terbaru (menggunakan komponen BeritaTerbaru) -->
     <BeritaTerbaru />
 
@@ -664,56 +629,6 @@ onMounted(() => {
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.05); }
-}
-
-/* Gaya Bagian Layanan */
-.services-section {
-  padding: 6rem 0;
-  background: #fafafa;
-}
-
-.service-card {
-  padding: 2.5rem 2rem;
-  border-radius: 20px;
-  border: none;
-  text-align: center;
-  height: 100%;
-  transition: all 0.3s ease;
-}
-
-.service-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
-}
-
-.service-icon {
-  width: 80px;
-  height: 80px;
-  background: rgba(236, 72, 153, 0.1);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1.5rem auto;
-}
-
-.service-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 1rem;
-}
-
-.service-description {
-  color: #64748b;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-.service-link {
-  color: #ec4899;
-  font-weight: 600;
 }
 
 /* Gaya Bagian Pengumuman & Lokasi (container untuk keduanya) */

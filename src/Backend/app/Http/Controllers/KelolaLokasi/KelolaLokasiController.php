@@ -21,12 +21,8 @@ class KelolaLokasiController extends Controller
             'longitude' => 'required|numeric|between:-180,180',
         ]);
 
-        // Cek apakah sudah ada data dengan nama lokasi yang sama
-        $existing = DataLokasi::where('nama_lokasi', $request->nama_lokasi)->first();
-
-        if ($existing) {
-            $existing->delete(); // Hapus data lama
-        }
+        // Hapus semua data di tabel
+        DataLokasi::truncate(); // atau DataLokasi::query()->delete();
 
         // Tambahkan data baru
         $lokasi = DataLokasi::create([
@@ -37,7 +33,7 @@ class KelolaLokasiController extends Controller
         ]);
 
         return response()->json([
-            'message' => $existing ? 'Data diperbarui' : 'Data ditambahkan',
+            'message' => 'Data berhasil diperbarui',
             'data' => $lokasi
         ], 201);
     }

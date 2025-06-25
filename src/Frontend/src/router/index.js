@@ -27,6 +27,7 @@ import ProfileMasyarakat from '../views/Profile/ProfileMasyarakat.vue';
 import KelolaDataView from '../views/KelolaData/KelolaDataView.vue';
 import DataStrukturPegawaiView from '../views/KelolaStrukturPegawai/DataStrukturPegawaiView.vue';
 import DataStrukturPegawaiSampahView from '../views/kelolaStrukturPegawai/DataStrukturPegawaiSampahView.vue';
+import Konsultasi from '../views/Footer/Konsultasi.vue';
 
 const routes = [
   //halaman home
@@ -82,10 +83,14 @@ const routes = [
   // halaman kelola struktur pegawai
   { path: '/data/strukturpegawai', name: 'DataStrukturPegawai', component: DataStrukturPegawaiView, meta: { requiresAuth: true, role: ['operator'] } },
   { path: '/data/strukturpegawai/sampah', name: 'DataStrukturPegawaiSampah', component: DataStrukturPegawaiSampahView, meta: { requiresAuth: true, role: ['operator'] } },
-
+  
+  
   //halaman not found dan tidak diizinkan
   {path: '/:pathMatch(.*)*',name: 'NotFound',component: NotFound},
   {path: '/unauthorized',name: 'Unauthorized',component: Unauthorized},
+  
+  //footer
+  { path: '/info/konsultasi', name: 'infoKonsultasi', component: Konsultasi, meta: { requiresAuth: true, role: ['operator'] } },
 ];
 
 

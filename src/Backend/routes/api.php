@@ -170,8 +170,6 @@ Route::prefix('profile/masyarakat')->group(function () {
     Route::post('{nik}/ubah-foto', [ProfileMasyarakatController::class, 'ubahFoto']);
 });
 
-
-
 //Tambahan
 Route::post('/data/lokasi', [KelolaLokasiController::class, 'storeOrReplace']);
 Route::get('/data/lokasi', [KelolaLokasiController::class, 'index']);

@@ -2,7 +2,10 @@
 export default {
   content: [
     "./index.html",
-    "./src/**/*.{vue,js,ts,jsx,tsx}"
+    "./src/components/**/*.{vue,js,ts}",
+    "./src/views/**/*.{vue,js,ts}",
+    "./src/App.vue",
+    "./src/main.ts"
   ],
   theme: {
     extend: {},

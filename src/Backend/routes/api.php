@@ -65,6 +65,7 @@ Route::prefix('kelola/berita')->group(function () {
     Route::post('/', [KelolaDataBeritaController::class, 'store']);
     Route::put('/{dataBerita}', [KelolaDataBeritaController::class, 'update']);
     Route::delete('/{dataBerita}', [KelolaDataBeritaController::class, 'destroy']);
+    Route::get('/{dataBerita}', [KelolaDataBeritaController::class, 'show']);
 });
 //3. pengelola pengaduan
 Route::prefix('kelola/pengaduan')->group(function () {

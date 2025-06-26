@@ -28,6 +28,7 @@ import KelolaDataView from '../views/KelolaData/KelolaDataView.vue';
 import DataStrukturPegawaiView from '../views/KelolaStrukturPegawai/DataStrukturPegawaiView.vue';
 import DataStrukturPegawaiSampahView from '../views/kelolaStrukturPegawai/DataStrukturPegawaiSampahView.vue';
 import Konsultasi from '../views/Footer/Konsultasi.vue';
+import DetailDataBeritaView from '../views/PengelolaDataBerita/DetailDataBeritaView.vue';
 
 const routes = [
   //halaman home
@@ -61,7 +62,7 @@ const routes = [
   
   //halaman kelola pendaftaran
   {path: '/data/pendaftaran',name: 'Datapendaftaran',component: DatapendaftaranView,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
-
+  
   //halaman pretest postest
   {path: '/preposttest',name: 'PrePostTest',component: PrePostTestView},
   {path: '/kelolatest',name: 'KelolaTest',component: PrePostTestView},
@@ -74,6 +75,7 @@ const routes = [
   // halaman data berita
   {path: '/data/berita/sampah',name: 'DataBeritaSampah',component: DataBeritaSampahView,meta: { requiresAuth: true }},
   {path: '/data/berita',name: 'DataBerita',component: DataBeritaView,meta: { requiresAuth: true }},
+  {path: '/berita/:id',name: 'DetailBerita',component: DetailDataBeritaView},
 
   //halaman kelola konsultasi
   {path: '/data/konsultasi', name: 'DataKonsultasi', component: DataKonsultasiView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
@@ -97,7 +99,18 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  // --- TAMBAHKAN BAGIAN scrollBehavior INI ---
+  scrollBehavior(to, from, savedPosition) {
+    // Jika ada savedPosition (misal dari tombol back/forward browser), gunakan itu
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      // Gulir ke bagian atas halaman untuk rute baru
+      return { top: 0, behavior: 'smooth' }; // 'smooth' untuk animasi gulir yang halus
+    }
+  },
+  // ------------------------------------------
 });
 
 router.beforeEach((to, from, next) => {

@@ -27,9 +27,13 @@ class DataBerita extends Model
      */
     public function getFotoAttribute($value)
     {
-        if ($value) {
+        $path = public_path('storage/' . $value);
+
+        if ($value && file_exists($path)) {
             return asset('storage/' . $value);
         }
+
         return null;
     }
+
 }

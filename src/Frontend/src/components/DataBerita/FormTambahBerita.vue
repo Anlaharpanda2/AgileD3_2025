@@ -161,7 +161,7 @@ const submitForm = () => {
       payload.append('judul', form.judul)
       payload.append('isi', form.isi)
       payload.append('jenis_konten', form.jenis_konten)
-      if (form.gambar) payload.append('gambar', form.gambar)
+      if (form.gambar) payload.append('foto', form.gambar)
 
       const response = await api.post('/kelola/berita', payload, {
         headers: {

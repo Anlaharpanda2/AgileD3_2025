@@ -1060,7 +1060,7 @@ import FormSortingDataPelatihan from "../../components/KelolaDataPelatihan/FormS
 import { ElNotification } from 'element-plus';
 import { useRouter } from 'vue-router'
 
- const router = useRouter()
+const router = useRouter()
 
 const goToDetail = (row: any, column: any, event: MouseEvent) => {
   // Abaikan klik jika berasal dari kolom selection (checkbox) atau kolom Aksi

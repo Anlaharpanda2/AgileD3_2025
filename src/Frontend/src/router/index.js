@@ -11,9 +11,12 @@ import DataPelatihanSampahView from '../views/PengelolaDataPelatihan/DataPelatih
 import DataKonsultasiView from '../views/PengelolaDataKonsultasi/DataKonsultasiView.vue';
 import DataKonsultasiSampahView from '../views/PengelolaDataKonsultasi/DataKonsultasiSampahView.vue';
 import PrePostTestView from '../views/PengelolaPretestPostest/PrePostTestView.vue';
-import PelaporanPengaduan from '../views/PengelolaPelaporanPengaduan/BuatPengaduanPage.vue';
-import StatusPengaduan from '../views/PengelolaPelaporanPengaduan/StatusPengaduan.vue';
-//import BuatPengaduanPage from '../views/PengelolaPelaporanPengaduan/BuatPengaduanPage.vue';
+
+//pengaduan
+import BuatPengaduanView from '../views/PengelolaPengaduan/BuatPengaduanView.vue';
+import KonfirmasiPengaduanView from '../views/PengelolaPengaduan/KonfirmasiPengaduanView.vue';
+import StatusPengaduan from '../views/PengelolaPengaduan/StatusPengaduan.vue';
+
 import DataBeritaView from '../views/PengelolaDataBerita/DataBeritaView.vue';
 import DataBeritaSampahView from '../views/PengelolaDataBerita/DataBeritaSampahView.vue';
 import OtpView from '../views/ResetPassword/OtpView.vue';
@@ -68,9 +71,9 @@ const routes = [
   {path: '/kelolatest',name: 'KelolaTest',component: PrePostTestView},
 
   // halaman pelaporan pengaduan
-  {path: '/pengaduan',name: 'PelaporanPengaduan',component: PelaporanPengaduan},
-  {path: '/pengaduan/status',name: 'StatusPengaduan',component: StatusPengaduan},
-  //{path: '/pengaduan/buat',name: 'BuatPengaduan',component: BuatPengaduanPage},
+  {path: '/pengaduan/buat',name: 'BuatPengaduan',component: BuatPengaduanView},
+  {path: '/pengaduan/konfirmasi',name: 'KonfirmasiPengaduan',component: KonfirmasiPengaduanView},
+  {path: '/pengaduan/status/:id',name: 'StatusPengaduan',component: StatusPengaduan},
   
   // halaman data berita
   {path: '/data/berita/sampah',name: 'DataBeritaSampah',component: DataBeritaSampahView,meta: { requiresAuth: true }},

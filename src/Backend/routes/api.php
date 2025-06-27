@@ -79,6 +79,7 @@ Route::prefix('kelola/pengaduan')->group(function () {
     Route::post('/', [KelolaDataPengaduanController::class, 'store']);
     Route::put('/{dataPengaduan}', [KelolaDataPengaduanController::class, 'update']);
     Route::delete('/{dataPengaduan}', [KelolaDataPengaduanController::class, 'destroy']);
+    Route::get('/{id}', [KelolaDataPengaduanController::class, 'show']);
 });
 //4. pengelola konsultasi
 Route::prefix('kelola/Konsultasi')->group(function () {

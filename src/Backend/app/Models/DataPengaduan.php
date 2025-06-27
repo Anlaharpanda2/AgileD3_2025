@@ -29,4 +29,12 @@ class DataPengaduan extends Model
         'created_at',
         'updated_at',
     ];
+    
+    protected $appends = ['lampiran_url'];
+
+    public function getLampiranUrlAttribute()
+    {
+        if (!$this->lampiran) return null;
+        return asset('storage/' . $this->lampiran);
+    }
 }

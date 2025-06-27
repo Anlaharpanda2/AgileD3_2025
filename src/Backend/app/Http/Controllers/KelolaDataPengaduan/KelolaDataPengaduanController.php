@@ -156,4 +156,15 @@ class KelolaDataPengaduanController extends Controller
 
         return response()->json(['message' => 'Data berhasil dihapus permanen']);
     }
+    public function show($id)
+    {
+        $data = DataPengaduan::find($id);
+
+        if (!$data) {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+
+        return response()->json(['data' => $data]);
+    }
+
 }

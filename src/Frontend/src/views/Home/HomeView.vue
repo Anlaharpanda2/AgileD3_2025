@@ -54,7 +54,7 @@ const mainFeatures = ref([
     icon: Lock,
     color: '#8b5cf6',
     bgColor: 'rgba(139, 92, 246, 0.1)',
-    route: '/pengaduan'
+    route: '/pengaduan/buat'
   }
 ])
 
@@ -157,7 +157,7 @@ onMounted(() => {
     <section class="features-section">
       <div class="container">
         <div class="section-header" data-aos="fade-up">
-          <h2 class="section-title">Fitur Utama</h2>
+          <h2 class="section-title">Layanan</h2>
           <p class="section-subtitle">
             Akses langsung ke layanan utama untuk pemberdayaan dan perlindungan
           </p>

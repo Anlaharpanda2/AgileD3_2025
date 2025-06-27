@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import KelolaAksesView from '../views/KelolaAkses/KelolaAksesView.vue';
-import def2 from '../layouts/DefaultLayout2.vue';
+import def2 from '../layouts/Layout2.vue';
 import FormSortingDataPelatihan from '../components/KelolaDataPelatihan/FormSortingDataPelatihan.vue';
 import HomeView from '../views/Home/HomeView.vue';
 import LoginMasyarakat from '../views/Login/LoginMasyarakat.vue';

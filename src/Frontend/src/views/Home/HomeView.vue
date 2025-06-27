@@ -26,7 +26,7 @@ import AOS from 'aos'
 import 'aos/dist/aos.css' // Impor CSS AOS
 
 // Impor komponen Layout dari folder layouts
-import Layout from '../../layouts/Layout.vue'
+import Layout2 from '../../layouts/Layout2.vue'
 // Impor komponen Lokasi dari folder components/Home
 import Lokasi from '../../components/Home/Lokasi.vue'
 // Impor komponen Pengumuman dari folder components/Home
@@ -112,19 +112,19 @@ onMounted(() => {
 </script>
 
 <template>
-  <Layout>
-    <!-- Hero Section -->
+  <Layout2>
     <section class="hero-section">
       <div class="hero-content" data-aos="fade-up">
         <div class="hero-text">
           <h1 class="hero-title">
-            Dinas Pemberdayaan Perempuan,
-            <span class="text-accent">Perlindungan Anak</span>
-            dan Keluarga Berencana
+            DP3AP2KB
+            <div class="text-accent">Sumatera Barat</div>
+            <div class="hero-title2">
+              Peningkatan Ekonomi Perempuan Rentan Berspektif Gender
+            </div>
           </h1>
           <p class="hero-subtitle">
-            Membangun masa depan yang lebih baik melalui pemberdayaan perempuan,
-            perlindungan anak, dan program keluarga berencana yang berkelanjutan.
+            Pemberdayaan Perempuan Demi Meningkatkan Penghasilan Dan Kemandirian Ekonomi Melalui Pelatihan, Pendampingan Dan Pendekatan Berbasis Kesetaraan Gender.
           </p>
           <div class="hero-actions">
             <ElButton type="primary" size="large" class="cta-button">
@@ -145,9 +145,9 @@ onMounted(() => {
             <ElIcon size="48" color="#8b5cf6"><Lock /></ElIcon>
             <p>Perlindungan<br>Anak</p>
           </div>
-          <div class="floating-card" style="top: 20%; right: 10%;">
+          <div class="floating-card" style="top: 10%; right: 15%;">
             <ElIcon size="48" color="#10b981"><Trophy /></ElIcon>
-            <p>Program<br>Unggulan</p>
+            <p>Kesetaraan<br>Gender</p>
           </div>
         </div>
       </div>
@@ -312,7 +312,7 @@ onMounted(() => {
         </ElRow>
       </div>
     </section>
-  </Layout>
+  </Layout2>
 </template>
 
 <style scoped>
@@ -367,7 +367,7 @@ onMounted(() => {
   align-items: center;
   position: relative;
   overflow: hidden;
-  padding: 2rem 0;
+  padding: 5rem 0;
 }
 
 .hero-section::before {
@@ -407,6 +407,14 @@ onMounted(() => {
   margin-bottom: 1rem;
 }
 
+.hero-title2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.1;
+  margin-top: 1rem;
+}
+
 .text-accent {
   color: #ec4899;
   background: linear-gradient(135deg, #ec4899, #8b5cf6);
@@ -420,7 +428,7 @@ onMounted(() => {
   color: #64748b;
   font-weight: 400;
   max-width: 600px;
-  line-height: 1.7;
+  line-height: 1.2;
 }
 
 .hero-actions {
@@ -759,6 +767,9 @@ onMounted(() => {
 }
 
 @media (max-width: 768px) {
+  .hero-illustration {
+    display: none;
+  }
   .hero-title {
     font-size: 2rem;
   }

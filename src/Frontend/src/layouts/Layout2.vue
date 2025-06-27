@@ -1,6 +1,7 @@
 <template>
   <div class="layout">
-    <Header /> 
+    <Header />
+    <!-- <SideBar /> -->
     <main class="layout-content">
       <slot /> 
     </main>
@@ -12,6 +13,7 @@
 <script setup>
 import Header from '@/components/layouts/Header.vue'
 import Footer from '@/components/layouts/Footer.vue'
+import SideBar from '../components/Layouts/SideBar.vue';
 </script>
 
 <style scoped>

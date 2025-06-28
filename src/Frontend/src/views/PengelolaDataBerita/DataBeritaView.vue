@@ -1,5 +1,5 @@
 <template>
-  <Layout>
+  <Layout2>
     <!-- Form Popups -->
     <FormTambahBerita 
       v-if="showTambah && TambahData" 
@@ -380,14 +380,14 @@
         </div>
       </div>
     </div>
-  </Layout>
+  </Layout2>
 </template>
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import api from "../../api.js";
-import Layout from "../../layouts/Layout.vue";
+import Layout2 from "../../layouts/Layout2.vue";
 import FormEditBerita from '../../components/DataBerita/FormEditDataBerita.vue'; 
 import FormTambahBerita from '../../components/DataBerita/FormTambahBerita.vue';
 import { ElNotification } from 'element-plus';

@@ -13,7 +13,6 @@
 <script setup>
 import Header from '@/components/layouts/Header.vue'
 import Footer from '@/components/layouts/Footer.vue'
-import SideBar from '../components/Layouts/SideBar.vue';
 </script>
 
 <style scoped>

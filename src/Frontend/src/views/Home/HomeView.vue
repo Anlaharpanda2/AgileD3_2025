@@ -367,7 +367,9 @@ onMounted(() => {
   align-items: center;
   position: relative;
   overflow: hidden;
-  padding: 5rem 0;
+  padding-top: 5rem;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .hero-section::before {

@@ -101,7 +101,7 @@
 
 <script setup>
 import { reactive, ref, watch, computed } from 'vue'
-import api from '@/api.js';
+import api from '../../api.js';
 import { ElNotification } from 'element-plus'
 
 const props = defineProps({

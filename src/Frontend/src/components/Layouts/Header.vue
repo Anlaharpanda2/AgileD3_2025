@@ -176,7 +176,7 @@ import {
   Pencil, ClipboardCheck, Database, FileQuestion,
   MessageCircle, Users2, UserCog
 } from 'lucide-vue-next'
-import Avatar from '@/components/layouts/Avatar.vue'
+import Avatar from './layouts/Avatar.vue'
 
 const route = useRoute()
 

@@ -70,7 +70,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { ElNotification } from 'element-plus'
-import api from '@/api'
+import api from '../../api'
 
 const emit = defineEmits(['close'])
 const formRef = ref(null)

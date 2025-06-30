@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import FormSortingDataPelatihan from '@/components/KelolaDataPelatihan/FormSortingDataPelatihan.vue'
+import FormSortingDataPelatihan from '../../src/components/KelolaDataPelatihan/FormSortingDataPelatihan.vue'
 
 const stubs = {
   'el-form': true,

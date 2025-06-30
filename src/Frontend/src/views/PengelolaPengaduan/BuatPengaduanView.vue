@@ -233,7 +233,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import Layout from '../../layouts/Layout.vue'
-import api from '@/api.js'
+import api from '../../api.js'
 import { ElNotification } from 'element-plus'
 import { useRouter } from 'vue-router'
 

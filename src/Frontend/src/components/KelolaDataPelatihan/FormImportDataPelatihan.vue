@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ElMessage, ElNotification } from 'element-plus'
-import api from '@/api.js'
+import api from '../../api.js'
 
 const fileList = ref<File[]>([])
 const loading = ref(false)

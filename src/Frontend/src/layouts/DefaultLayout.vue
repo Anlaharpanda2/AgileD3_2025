@@ -11,9 +11,9 @@
 </template>
 
 <script setup>
-import Header from '@/components/layouts/Header.vue'
-import Footer from '@/components/layouts/Footer.vue'
-import NavBar from '@/components/layouts/NavBar.vue'
+import Header from '../../components/layouts/Header.vue'
+import Footer from '../../components/layouts/Footer.vue'
+import NavBar from '../../components/layouts/NavBar.vue'
 </script>
 
 <style scoped>

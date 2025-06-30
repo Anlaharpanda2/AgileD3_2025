@@ -68,7 +68,7 @@
 
         <!-- Navigation -->
         <nav class="hidden lg:block max-w-screen-xl">
-          <ul class="flex justify-center space-x-2">
+          <ul class="flex justify-center space-x-2" style="padding-right: 170px;">
             <template v-for="item in navigationMenu" :key="item.name">
               <!-- Single Item -->
               <li

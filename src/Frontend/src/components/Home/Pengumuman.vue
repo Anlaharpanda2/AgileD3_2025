@@ -32,63 +32,147 @@
       </div>
 
       <!-- Announcements List -->
-      <div v-else class="max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="200">
-        <div 
-          class="h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-pink-300 scrollbar-track-gray-100 space-y-4 pr-3 py-1 scroll-left"
-        >
-          <ElCard
-            v-for="(announcement, index) in announcements"
-            :key="announcement.id"
-            class="border-0 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 rounded-2xl cursor-pointer"
-            shadow="never"
-            data-aos="slide-right"
-            :data-aos-delay="index * 100"
+      <div v-else data-aos="fade-up" data-aos-delay="200">
+        <!-- Desktop Layout (unchanged) -->
+        <div class="hidden md:block max-w-2xl mx-auto">
+          <div 
+            class="h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-pink-300 scrollbar-track-gray-100 space-y-4 pr-3 py-1 scroll-left"
           >
-            <div>
-              <div class="flex items-start justify-between gap-4">
-                <!-- Icon Placeholder -->
-                <div class="flex-shrink-0 mt-1">
-                  <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center">
-                    <ElIcon class="text-xl text-pink-500"><Bell /></ElIcon>
+            <ElCard
+              v-for="(announcement, index) in announcements"
+              :key="announcement.id"
+              class="border-0 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 rounded-2xl cursor-pointer"
+              shadow="never"
+              data-aos="slide-right"
+              :data-aos-delay="index * 100"
+              @click="goToAnnouncementDetail(announcement.id)"
+            >
+              <div>
+                <div class="flex items-start justify-between gap-4">
+                  <!-- Icon Placeholder -->
+                  <div class="flex-shrink-0 mt-1">
+                    <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center">
+                      <ElIcon class="text-xl text-pink-500"><Bell /></ElIcon>
+                    </div>
+                  </div>
+
+                  <!-- Announcement Content -->
+                  <div class="flex-grow min-w-0">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-1 leading-tight">
+                      {{ announcement.judul }}
+                    </h4>
+                    <p class="text-gray-600 text-sm mb-2 line-clamp-2">
+                      {{ announcement.isi }}
+                    </p>
+                    <span class="text-sm text-gray-500">
+                      {{ formatDate(announcement.created_at) }}
+                    </span>
+                  </div>
+
+                  <!-- Tag -->
+                  <div class="flex-shrink-0 mt-1">
+                    <ElTag 
+                      :type="getAnnouncementType(announcement.created_at)"
+                      class="font-medium px-3 py-1 rounded-full text-xs"
+                      size="small"
+                    >
+                      {{ getAnnouncementLabel(announcement.created_at) }}
+                    </ElTag>
                   </div>
                 </div>
-
-                <!-- Announcement Content -->
-                <div class="flex-grow min-w-0">
-                  <h4 class="text-lg font-semibold text-gray-900 mb-1 leading-tight">
-                    {{ announcement.judul }}
-                  </h4>
-                  <p class="text-gray-600 text-sm mb-2 line-clamp-2">
-                    {{ announcement.isi }}
-                  </p>
-                  <span class="text-sm text-gray-500">
-                    {{ formatDate(announcement.created_at) }}
-                  </span>
-                </div>
-
-                <!-- Tag -->
-                <div class="flex-shrink-0 mt-1">
-                  <ElTag 
-                    :type="getAnnouncementType(announcement.created_at)"
-                    class="font-medium px-3 py-1 rounded-full text-xs"
-                    size="small"
-                  >
-                    {{ getAnnouncementLabel(announcement.created_at) }}
-                  </ElTag>
-                </div>
               </div>
-            </div>
-          </ElCard>
+            </ElCard>
+          </div>
+          
+          <!-- Desktop Scroll Hint -->
+          <div v-if="announcements.length > 3" class="text-center mt-6">
+            <p class="text-sm text-gray-500 flex items-center justify-center gap-2">
+              <span>Gulir untuk melihat pengumuman lainnya</span>
+              <svg class="w-5 h-5 text-gray-400 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+              </svg>
+            </p>
+          </div>
         </div>
-        
-        <!-- Scroll Hint -->
-        <div v-if="announcements.length > 3" class="text-center mt-6">
-          <p class="text-sm text-gray-500 flex items-center justify-center gap-2">
-            <span>Gulir untuk melihat pengumuman lainnya</span>
-            <svg class="w-5 h-5 text-gray-400 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-            </svg>
-          </p>
+
+        <!-- Mobile Layout (swipe horizontal) -->
+        <div class="md:hidden">
+          <div 
+            ref="swipeContainer"
+            class="flex overflow-x-auto gap-4 pb-4 px-1 snap-x snap-mandatory scrollbar-hide touch-pan-x"
+            @touchstart="handleTouchStart"
+            @touchmove="handleTouchMove"
+            @touchend="handleTouchEnd"
+          >
+            <div
+              v-for="(announcement, index) in announcements"
+              :key="announcement.id"
+              class="flex-none w-[85vw] max-w-sm snap-center"
+              data-aos="fade-up"
+              :data-aos-delay="index * 100"
+            >
+              <ElCard
+                class="border-0 shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl cursor-pointer h-full"
+                shadow="never"
+                @click="goToAnnouncementDetail(announcement.id)"
+              >
+                <div class="h-full">
+                  <div class="flex flex-col h-full gap-3">
+                    <!-- Header with Icon and Tag -->
+                    <div class="flex items-center justify-between">
+                      <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center">
+                        <ElIcon class="text-xl text-pink-500"><Bell /></ElIcon>
+                      </div>
+                      <ElTag 
+                        :type="getAnnouncementType(announcement.created_at)"
+                        class="font-medium px-3 py-1 rounded-full text-xs"
+                        size="small"
+                      >
+                        {{ getAnnouncementLabel(announcement.created_at) }}
+                      </ElTag>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="flex-grow">
+                      <h4 class="text-lg font-semibold text-gray-900 mb-2 leading-tight">
+                        {{ announcement.judul }}
+                      </h4>
+                      <p class="text-gray-600 text-sm mb-3 line-clamp-3">
+                        {{ announcement.isi }}
+                      </p>
+                    </div>
+
+                    <!-- Date -->
+                    <div class="pt-2 border-t border-gray-100">
+                      <span class="text-xs text-gray-500">
+                        {{ formatDate(announcement.created_at) }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </ElCard>
+            </div>
+          </div>
+
+          <!-- Mobile Indicators -->
+          <div v-if="announcements.length > 1" class="flex justify-center mt-4 gap-2">
+            <div
+              v-for="(announcement, index) in announcements"
+              :key="index"
+              class="w-2 h-2 rounded-full transition-all duration-300"
+              :class="currentSlide === index ? 'bg-pink-500 w-6' : 'bg-gray-300'"
+            ></div>
+          </div>
+
+          <!-- Mobile Swipe Hint -->
+          <div v-if="announcements.length > 1" class="text-center mt-4">
+            <p class="text-sm text-gray-500 flex items-center justify-center gap-2">
+              <span>Geser untuk melihat pengumuman lainnya</span>
+              <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -96,140 +180,216 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, nextTick } from 'vue'; // Import nextTick
+import { onMounted, nextTick, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { ElCard, ElIcon, ElTag } from 'element-plus';
 import { Bell } from '@element-plus/icons-vue';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 // Impor composable dan service
-import { useAnnouncements } from '../../services/useAnnouncements'; // Menggunakan path relatif sesuai kode Anda
-import { formatDate, getAnnouncementType, getAnnouncementLabel } from '../../services/dateFormatter'; // Menggunakan path relatif sesuai kode Anda
+import { useAnnouncements } from '../../services/useAnnouncements';
+import { formatDate, getAnnouncementType, getAnnouncementLabel } from '../../services/dateFormatter';
+
+// Router untuk navigasi
+const router = useRouter();
 
 // Menggunakan composable
 const { announcements, loading, error, fetchAnnouncements } = useAnnouncements();
 
-// Lifecycle hook: saat komponen dimount
+// Mobile swipe functionality
+const swipeContainer = ref<HTMLElement | null>(null);
+const currentSlide = ref(0);
+
+// Touch handling variables
+let startX = 0;
+let scrollLeft = 0;
+let isScrolling = false;
+
+// Function untuk navigasi ke detail pengumuman
+const goToAnnouncementDetail = (announcementId: number | string) => {
+  router.push(`/pengumuman/${announcementId}`);
+};
+
+const handleTouchStart = (e: TouchEvent) => {
+  if (!swipeContainer.value) return;
+  startX = e.touches[0].clientX;
+  scrollLeft = swipeContainer.value.scrollLeft;
+  isScrolling = true;
+};
+
+const handleTouchMove = (e: TouchEvent) => {
+  if (!isScrolling || !swipeContainer.value) return;
+  const currentX = e.touches[0].clientX;
+  const diff = startX - currentX;
+  swipeContainer.value.scrollLeft = scrollLeft + diff;
+};
+
+const handleTouchEnd = () => {
+  if (!swipeContainer.value) return;
+  isScrolling = false;
+  
+  // Calculate which slide we're closest to
+  const containerWidth = swipeContainer.value.clientWidth;
+  const scrollLeft = swipeContainer.value.scrollLeft;
+  const slideWidth = containerWidth * 0.85; // 85vw
+  
+  currentSlide.value = Math.round(scrollLeft / slideWidth);
+  
+  // Ensure currentSlide is within bounds
+  if (currentSlide.value < 0) currentSlide.value = 0;
+  if (currentSlide.value >= announcements.value.length) {
+    currentSlide.value = announcements.value.length - 1;
+  }
+};
+
+// Watch scroll position to update current slide indicator
+const updateCurrentSlide = () => {
+  if (!swipeContainer.value) return;
+  
+  const containerWidth = swipeContainer.value.clientWidth;
+  const scrollLeft = swipeContainer.value.scrollLeft;
+  const slideWidth = containerWidth * 0.85;
+  
+  currentSlide.value = Math.round(scrollLeft / slideWidth);
+};
+
+// Lifecycle hook
 onMounted(async () => {
-  // 1. Ambil data pengumuman terlebih dahulu
   await fetchAnnouncements();
 
-  // 2. Setelah data diambil dan DOM diperbarui oleh Vue,
-  //    gunakan nextTick untuk memastikan AOS diinisialisasi
-  //    atau disegarkan setelah DOM stabil.
   nextTick(() => {
     AOS.init({
-      duration: 800,       // Durasi animasi dalam ms
-      easing: 'ease-in-out', // Fungsi easing
-      once: true,          // Apakah animasi harus berjalan hanya sekali?
-      offset: 100,         // Offset (dalam px) dari posisi elemen untuk memicu animasi
-      delay: 0             // Delay umum untuk semua animasi AOS
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true,
+      offset: 100,
+      delay: 0
     });
-    // Jika AOS sudah diinisialisasi di tempat lain (misal di main.ts),
-    // Anda bisa mencoba AOS.refresh() di sini alih-alih AOS.init()
-    // atau gunakan kondisi: if (!AOS.initialized) { AOS.init() } else { AOS.refresh() }
-    // Untuk kasus ini, karena Anda memanggil AOS.init di sini, ini akan re-initialize jika dipanggil lagi,
-    // yang mungkin bukan perilaku yang ideal. Cara paling aman adalah memastikan hanya satu inisialisasi.
-    // Jika Anda memastikan AOS hanya diinisialisasi sekali di aplikasi Anda (misal di main.ts),
-    // maka di sini Anda hanya perlu memanggil AOS.refresh().
-    // Untuk demo ini, saya akan tetap menggunakan AOS.init() di sini dengan asumsi ini adalah tempat utama inisialisasi.
-    // Namun, pendekatan terbaik untuk aplikasi yang lebih besar adalah menginisialisasi AOS global sekali,
-    // lalu menggunakan AOS.refresh() di komponen dinamis.
+
+    // Add scroll listener for mobile indicator
+    if (swipeContainer.value) {
+      swipeContainer.value.addEventListener('scroll', updateCurrentSlide);
+    }
   });
 });
 </script>
 
 <style scoped>
-/*
-  Bagian STYLE tetap sama seperti yang Anda berikan,
-  dengan sedikit penyesuaian untuk konsistensi dan readability.
-*/
-
-/* Custom styles untuk line-clamp jika tidak tersedia di Tailwind
-   Ini memastikan teks tidak melebihi 2 baris dan menampilkan elipsis. */
+/* Existing styles */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis; /* Menambahkan elipsis */
+  text-overflow: ellipsis;
 }
 
-/* Hover effects untuk card ElCard */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .el-card:hover {
-  border-color: rgba(236, 72, 153, 0.2); /* Border pink saat hover */
+  border-color: rgba(236, 72, 153, 0.2);
 }
 
-/* Custom scrollbar styles untuk browser berbasis WebKit (Chrome, Safari) */
 .scrollbar-thin {
-  scrollbar-width: thin; /* Untuk Firefox */
+  scrollbar-width: thin;
 }
 
 .scroll-left::-webkit-scrollbar {
-  width: 8px; /* Lebar scrollbar */
+  width: 8px;
 }
 
 .scroll-left::-webkit-scrollbar-track {
-  background: #f3f4f6; /* Warna latar belakang track */
-  border-radius: 4px; /* Sudut membulat track */
+  background: #f3f4f6;
+  border-radius: 4px;
 }
 
 .scroll-left::-webkit-scrollbar-thumb {
-  background: #f9a8d4; /* Warna thumb (penggulir) */
-  border-radius: 4px; /* Sudut membulat thumb */
-  border: 1px solid #f3f4f6; /* Border tipis pada thumb */
+  background: #f9a8d4;
+  border-radius: 4px;
+  border: 1px solid #f3f4f6;
 }
 
 .scroll-left::-webkit-scrollbar-thumb:hover {
-  background: #f472b6; /* Warna thumb saat hover */
+  background: #f472b6;
 }
 
-/* Memaksa scrollbar muncul di sisi kiri pada elemen dengan direction: rtl */
 .scroll-left {
-  direction: rtl; /* Mengatur arah teks menjadi kanan-ke-kiri untuk menempatkan scrollbar di kiri */
+  direction: rtl;
 }
 
 .scroll-left > * {
-  direction: ltr; /* Mengatur kembali arah teks di dalam elemen konten menjadi kiri-ke-kanan */
+  direction: ltr;
 }
 
-/* Custom tag colors untuk konsistensi dengan tema pink */
-/* Menggunakan :deep() untuk menargetkan kelas internal dari komponen Element Plus */
+/* Hide scrollbar for mobile swipe */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Smooth scrolling for snap */
+.snap-x {
+  scroll-snap-type: x mandatory;
+}
+
+.snap-center {
+  scroll-snap-align: center;
+}
+
+/* Touch optimization */
+.touch-pan-x {
+  touch-action: pan-x;
+}
+
 :deep(.el-tag--success) {
-  background-color: rgba(34, 197, 94, 0.1); /* bg-green-100 */
-  border-color: rgba(34, 197, 94, 0.2); /* border-green-200 */
-  color: rgb(22, 163, 74); /* text-green-700 */
+  background-color: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.2);
+  color: rgb(22, 163, 74);
 }
 
 :deep(.el-tag--warning) {
-  background-color: rgba(245, 158, 11, 0.1); /* bg-yellow-100 */
-  border-color: rgba(245, 158, 11, 0.2); /* border-yellow-200 */
-  color: rgb(217, 119, 6); /* text-yellow-700 */
+  background-color: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.2);
+  color: rgb(217, 119, 6);
 }
 
 :deep(.el-tag--info) {
-  background-color: rgba(236, 72, 153, 0.1); /* custom pink-100 */
-  border-color: rgba(236, 72, 153, 0.2); /* custom pink-200 */
-  color: rgb(219, 39, 119); /* custom pink-700 */
+  background-color: rgba(236, 72, 153, 0.1);
+  border-color: rgba(236, 72, 153, 0.2);
+  color: rgb(219, 39, 119);
 }
 
-/* Smooth scroll behavior untuk elemen dengan overflow-y-auto */
 .overflow-y-auto {
   scroll-behavior: smooth;
 }
 
-/* Firefox scrollbar styling */
-/* Ini diperlukan karena Firefox menggunakan properti scrollbar-color yang berbeda */
 .scrollbar-thin {
   scrollbar-width: thin;
-  scrollbar-color: #f9a8d4 #f3f4f6; /* thumb color track color */
+  scrollbar-color: #f9a8d4 #f3f4f6;
 }
 
-/* Enhanced card animation dalam scroll container untuk pengalaman pengguna yang lebih baik */
 @media (prefers-reduced-motion: no-preference) {
   .el-card:hover {
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important; /* Contoh shadow-xl yang lebih menonjol */
-    transform: translateY(-4px) !important; /* Mengangkat sedikit kartu */
-    transition: all 0.1s ease-in-out !important; /* Transisi cepat untuk efek responsif */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(-4px) !important;
+    transition: all 0.1s ease-in-out !important;
+  }
+}
+
+/* Mobile specific optimizations */
+@media (max-width: 767px) {
+  .el-card:hover {
+    transform: none !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
   }
 }
 </style>

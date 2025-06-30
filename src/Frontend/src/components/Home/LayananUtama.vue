@@ -22,12 +22,13 @@ const router = useRouter()
 // Data untuk fitur utama
 const mainFeatures = ref([
   {
-    title: 'Ikut Pelatihan',
+    title: 'Pelatihan',
     description: 'Bergabunglah dalam program pelatihan pemberdayaan perempuan untuk meningkatkan keterampilan dan kemampuan diri.',
     icon: GraduationCap,
     color: '#ec4899',
     bgColor: 'rgba(236, 72, 153, 0.1)',
-    route: '/pelatihan'
+    route: '/pelatihan',
+    button:'Ikut Pelatihan'
   },
   {
     title: 'Pengaduan',
@@ -35,7 +36,8 @@ const mainFeatures = ref([
     icon: Shield,
     color: '#8b5cf6',
     bgColor: 'rgba(139, 92, 246, 0.1)',
-    route: '/pengaduan/buat'
+    route: '/pengaduan/buat',
+    button:'Buat Pengaduan'
   }
 ])
 
@@ -98,7 +100,7 @@ const navigateToFeature = (route: string) => {
             <!-- Button -->
             <div class="flex-shrink-0">
               <button class="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-semibold py-2 sm:py-3 px-4 sm:px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg text-xs sm:text-sm md:text-base flex items-center justify-center gap-2">
-                Mulai Sekarang
+                {{ feature.button }}
                 <ElIcon class="text-sm sm:text-base"><ArrowRight /></ElIcon>
               </button>
             </div>

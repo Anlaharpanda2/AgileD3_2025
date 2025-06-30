@@ -91,11 +91,11 @@
                 'transition-all duration-700 ease-out transform-gpu',
                 {
                   // Left card
-                  'shadow-lg opacity-90 scale-90 -rotate-2 translate-x-4 z-10': newsItem.position === 'left',
+                  'shadow-[0_0_20px_rgba(0,0,0,0.2)] opacity-90 scale-90 -rotate-2 translate-x-4 z-10': newsItem.position === 'left',
                   // Center card (featured)
                   'opacity-100 scale-105 translate-y-[-20px] z-30 shadow-2xl': newsItem.position === 'center',
                   // Right card
-                  'shadow-lg opacity-80 scale-90 rotate-2 -translate-x-4 z-10': newsItem.position === 'right',
+                  'shadow-[0_0_20px_rgba(0,0,0,0.2)] opacity-80 scale-90 rotate-2 -translate-x-4 z-10': newsItem.position === 'right',
                 }
               ]"
             >
@@ -255,7 +255,7 @@
                 'px-2 text-gray-400 cursor-default': item.type === 'ellipsis'
               }
             ]"
-            @click="item.type === 'page' ? goToIndex(item.value) : null"
+            @click="item.type === 'page' ? goToIndex(Number(item.value)) : null"
             :disabled="isAnimating"
           >
             <span v-if="item.type === 'ellipsis'">{{ item.value }}</span>
@@ -580,7 +580,6 @@ onMounted(async () => {
 
 .line-clamp-2 {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -588,7 +587,6 @@ onMounted(async () => {
 
 .line-clamp-3 {
   display: -webkit-box;
-  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;

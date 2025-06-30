@@ -7,7 +7,8 @@ import {
 } from 'element-plus'
 import {
   Female,
-  Lock,
+  Male,
+  User,
   Trophy,
   ArrowRight
 } from '@element-plus/icons-vue'
@@ -34,6 +35,7 @@ onMounted(() => {
 <template>
   <Layout2>
     <section class="hero-section">
+      <div class="hero-ball"></div>
       <div class="hero-content" data-aos="fade-up">
         <div class="hero-text">
           <h1 class="hero-title">
@@ -62,11 +64,23 @@ onMounted(() => {
             <p>Pemberdayaan<br>Perempuan</p>
           </div>
           <div class="floating-card" style="top: 60%; left: 15%;">
-            <ElIcon size="48" color="#8b5cf6"><Lock /></ElIcon>
-            <p>Perlindungan<br>Anak</p>
+            <ElIcon size="48" color="#8b5cf6"><User /></ElIcon>
+            <p>Pengendalian<br>Penduduk</p>
           </div>
-          <div class="floating-card" style="top: 10%; right: 15%;">
-            <ElIcon size="48" color="#10b981"><Trophy /></ElIcon>
+          <div class="floating-card" style="top: 10%; right: 13%;">
+            <ElIcon size="48" color="#10b981">
+              <div class="relative w-10 h-10">
+                <ElIcon class="text-pink-500 text-xl">
+                  <Female />
+                </ElIcon>
+                <ElIcon
+                  class="text-xl absolute"
+                  style="top: -67px; left: 5px;"
+                >
+                  <Male />
+                </ElIcon>
+              </div>
+            </ElIcon>
             <p>Kesetaraan<br>Gender</p>
           </div>
         </div>
@@ -134,7 +148,7 @@ onMounted(() => {
   margin: 0 auto;
 }
 .hero-section {
-  min-height: 90vh;
+  min-height: 600px;
   background: linear-gradient(135deg, #fef7ff 0%, #f3e8ff 25%, #fdf2f8 50%, #fff1f2 100%);
   display: flex;
   align-items: center;
@@ -153,6 +167,16 @@ onMounted(() => {
   height: 200%;
   background: radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, transparent 70%);
   animation: float 6s ease-in-out infinite;
+}
+.hero-ball {
+  position: absolute;
+  top: -280px;       /* Setengah di luar layar atas */
+  right: -200px;     /* Setengah di luar layar kanan */
+  width: 550px;
+  height: 550px;
+  background-color: #ec489a57; /* Tailwind pink-500 */
+  border-radius: 50%;
+  z-index: 1;
 }
 .hero-content {
   max-width: 1400px;
@@ -331,6 +355,13 @@ onMounted(() => {
   }
 }
 @media (max-width: 768px) {
+  .hero-ball{
+    left: 200px;
+    background-color: #ec489a2e;
+  }
+  .hero-section{
+    min-height: 620px;
+  }
   .hero-illustration {
     display: none;
   }
@@ -368,6 +399,14 @@ onMounted(() => {
   .el-col {
     padding-left: 0.5rem !important;
     padding-right: 0.5rem !important;
+  }
+  .cta-button {
+    padding: 0.8rem 1rem;
+    font-size: 0.8rem;
+  }
+  .secondary-button {
+    padding: 0.8rem 1rem;
+    font-size: 0.8rem;
   }
 }
 </style>

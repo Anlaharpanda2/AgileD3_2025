@@ -20,12 +20,12 @@ import {
             <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
               Tentang Kami
             </h2>
-            <p class="text-lg text-gray-600 mb-6 leading-relaxed">
-              Dinas Pemberdayaan Perempuan, Perlindungan Anak dan Keluarga Berencana (DP3AP2KB)
+            <p class="text-lg text-gray-600 mb-6 leading-relaxed text-justify">
+              Dinas Pemberdayaan Perempuan dan Perlindungan Anak, Pengendalian Penduduk dan Keluarga Berencana (DP3AP2KB)
               berkomitmen untuk menciptakan masyarakat yang adil gender, melindungi hak-hak anak,
               dan mendukung program keluarga berencana yang berkelanjutan.
             </p>
-            <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+            <p class="text-lg text-gray-600 mb-8 leading-relaxed text-justify">
               Melalui berbagai program inovatif dan pelayanan terintegrasi, kami berupaya
               memberdayakan perempuan untuk berperan aktif dalam pembangunan, melindungi
               anak dari segala bentuk kekerasan, dan mendukung keluarga Indonesia yang sejahtera.

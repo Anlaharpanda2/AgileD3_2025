@@ -29,7 +29,7 @@ import DaftarMasyarakatView from '../views/DaftarMasyarakat/DaftarMasyarakatView
 import ProfileMasyarakat from '../views/Profile/ProfileMasyarakat.vue';
 import KelolaDataView from '../views/KelolaData/KelolaDataView.vue';
 import DataStrukturPegawaiView from '../views/KelolaStrukturPegawai/DataStrukturPegawaiView.vue';
-import DataStrukturPegawaiSampahView from '../views/kelolaStrukturPegawai/DataStrukturPegawaiSampahView.vue';
+import DataStrukturPegawaiSampahView from '@/views/KelolaStrukturPegawai/DataStrukturPegawaiSampahView.vue';
 import Konsultasi from '../views/Footer/Konsultasi.vue';
 import DetailDataBeritaView from '../views/PengelolaDataBerita/DetailDataBeritaView.vue';
 

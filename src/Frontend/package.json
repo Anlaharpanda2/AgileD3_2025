@@ -11,6 +11,7 @@
     "test:integration:ui": "vitest --ui"
   },
   "dependencies": {
+    "typescript": "^5.8.3",
     "@element-plus/icons-vue": "^2.3.1",
     "@heroicons/vue": "^2.2.0",
     "@lottiefiles/vue-lottie-player": "^1.1.0",

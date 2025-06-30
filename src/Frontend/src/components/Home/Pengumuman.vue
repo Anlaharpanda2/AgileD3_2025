@@ -1,208 +1,235 @@
-<script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import {
-  ElCard,
-  ElIcon,
-  ElTag
-} from 'element-plus'
-import { Bell } from '@element-plus/icons-vue'
-import AOS from 'aos'
-import 'aos/dist/aos.css' // Impor CSS AOS
-
-// Data untuk pengumuman
-const announcements = ref([
-  {
-    id: 1,
-    title: 'Pendaftaran Pelatihan Batch 2 Dibuka',
-    date: '2025-06-25',
-    type: 'info'
-  },
-  {
-    id: 2,
-    title: 'Maintenance Sistem Tanggal 30 Juni 2025',
-    date: '2025-06-30',
-    type: 'warning'
-  },
-  {
-    id: 3,
-    title: 'Webinar Gratis: Pemberdayaan Ekonomi Perempuan',
-    date: '2025-07-05',
-    type: 'success'
-  }
-])
-
-// Metode untuk memformat tanggal
-const formatDate = (dateString: string) => {
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  }
-  return new Date(dateString).toLocaleDateString('id-ID', options)
-}
-
-// Lifecycle hook: saat komponen dimount
-onMounted(() => {
-  AOS.init({
-    duration: 800, // Durasi animasi
-    easing: 'ease-in-out', // Fungsi easing
-    once: true, // Animasi hanya berjalan sekali
-    offset: 100, // Offset pemicu animasi
-    delay: 0 // Penundaan animasi
-  })
-})
-</script>
-
 <template>
-  <div class="announcements-container">
-    <div class="section-header" data-aos="fade-up">
-      <h2 class="section-title">Pengumuman</h2>
-      <p class="section-subtitle">
-        Informasi penting dan jadwal kegiatan terkini
-      </p>
-    </div>
-    <div class="announcements-list" data-aos="fade-up" data-aos-delay="200">
-      <ElCard
-        v-for="(announcement, index) in announcements"
-        :key="announcement.id"
-        class="announcement-card"
-        shadow="hover"
-        data-aos="slide-right"
-        :data-aos-delay="index * 100"
-      >
-        <div class="announcement-content">
-          <ElIcon class="announcement-icon"><Bell /></ElIcon>
-          <div class="announcement-text">
-            <h4>{{ announcement.title }}</h4>
-            <span class="announcement-date">{{ formatDate(announcement.date) }}</span>
-          </div>
-          <ElTag :type="announcement.type" class="announcement-tag">
-            {{ announcement.type === 'info' ? 'Info' :
-               announcement.type === 'warning' ? 'Penting' : 'Baru' }}
-          </ElTag>
+  <div class="bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header Section -->
+      <div class="text-center mb-15 md:mb-16" data-aos="fade-up">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          Pengumuman
+        </h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Informasi penting dan jadwal kegiatan terkini
+        </p>
+      </div>
+
+      <!-- Loading State -->
+      <div v-if="loading" class="flex justify-center items-center py-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500"></div>
+      </div>
+
+      <!-- Error State -->
+      <div v-else-if="error" class="text-center py-12">
+        <div class="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto shadow-sm">
+          <p class="text-red-600 font-medium">{{ error }}</p>
         </div>
-      </ElCard>
+      </div>
+
+      <!-- No Announcements State -->
+      <div v-else-if="announcements.length === 0" class="text-center py-12">
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-8 max-w-md mx-auto shadow-sm">
+          <ElIcon class="text-5xl text-gray-400 mb-4 opacity-75"><Bell /></ElIcon>
+          <p class="text-gray-600 font-medium">Belum ada pengumuman tersedia saat ini.</p>
+        </div>
+      </div>
+
+      <!-- Announcements List -->
+      <div v-else class="max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+        <div 
+          class="h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-pink-300 scrollbar-track-gray-100 space-y-4 pr-3 py-1 scroll-left"
+        >
+          <ElCard
+            v-for="(announcement, index) in announcements"
+            :key="announcement.id"
+            class="border-0 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 rounded-2xl cursor-pointer"
+            shadow="never"
+            data-aos="slide-right"
+            :data-aos-delay="index * 100"
+          >
+            <div>
+              <div class="flex items-start justify-between gap-4">
+                <!-- Icon Placeholder -->
+                <div class="flex-shrink-0 mt-1">
+                  <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center">
+                    <ElIcon class="text-xl text-pink-500"><Bell /></ElIcon>
+                  </div>
+                </div>
+
+                <!-- Announcement Content -->
+                <div class="flex-grow min-w-0">
+                  <h4 class="text-lg font-semibold text-gray-900 mb-1 leading-tight">
+                    {{ announcement.judul }}
+                  </h4>
+                  <p class="text-gray-600 text-sm mb-2 line-clamp-2">
+                    {{ announcement.isi }}
+                  </p>
+                  <span class="text-sm text-gray-500">
+                    {{ formatDate(announcement.created_at) }}
+                  </span>
+                </div>
+
+                <!-- Tag -->
+                <div class="flex-shrink-0 mt-1">
+                  <ElTag 
+                    :type="getAnnouncementType(announcement.created_at)"
+                    class="font-medium px-3 py-1 rounded-full text-xs"
+                    size="small"
+                  >
+                    {{ getAnnouncementLabel(announcement.created_at) }}
+                  </ElTag>
+                </div>
+              </div>
+            </div>
+          </ElCard>
+        </div>
+        
+        <!-- Scroll Hint -->
+        <div v-if="announcements.length > 3" class="text-center mt-6">
+          <p class="text-sm text-gray-500 flex items-center justify-center gap-2">
+            <span>Gulir untuk melihat pengumuman lainnya</span>
+            <svg class="w-5 h-5 text-gray-400 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
+<script setup lang="ts">
+import { onMounted, nextTick } from 'vue'; // Import nextTick
+import { ElCard, ElIcon, ElTag } from 'element-plus';
+import { Bell } from '@element-plus/icons-vue';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
+// Impor composable dan service
+import { useAnnouncements } from '../../services/useAnnouncements'; // Menggunakan path relatif sesuai kode Anda
+import { formatDate, getAnnouncementType, getAnnouncementLabel } from '../../services/dateFormatter'; // Menggunakan path relatif sesuai kode Anda
+
+// Menggunakan composable
+const { announcements, loading, error, fetchAnnouncements } = useAnnouncements();
+
+// Lifecycle hook: saat komponen dimount
+onMounted(async () => {
+  // 1. Ambil data pengumuman terlebih dahulu
+  await fetchAnnouncements();
+
+  // 2. Setelah data diambil dan DOM diperbarui oleh Vue,
+  //    gunakan nextTick untuk memastikan AOS diinisialisasi
+  //    atau disegarkan setelah DOM stabil.
+  nextTick(() => {
+    AOS.init({
+      duration: 800,       // Durasi animasi dalam ms
+      easing: 'ease-in-out', // Fungsi easing
+      once: true,          // Apakah animasi harus berjalan hanya sekali?
+      offset: 100,         // Offset (dalam px) dari posisi elemen untuk memicu animasi
+      delay: 0             // Delay umum untuk semua animasi AOS
+    });
+    // Jika AOS sudah diinisialisasi di tempat lain (misal di main.ts),
+    // Anda bisa mencoba AOS.refresh() di sini alih-alih AOS.init()
+    // atau gunakan kondisi: if (!AOS.initialized) { AOS.init() } else { AOS.refresh() }
+    // Untuk kasus ini, karena Anda memanggil AOS.init di sini, ini akan re-initialize jika dipanggil lagi,
+    // yang mungkin bukan perilaku yang ideal. Cara paling aman adalah memastikan hanya satu inisialisasi.
+    // Jika Anda memastikan AOS hanya diinisialisasi sekali di aplikasi Anda (misal di main.ts),
+    // maka di sini Anda hanya perlu memanggil AOS.refresh().
+    // Untuk demo ini, saya akan tetap menggunakan AOS.init() di sini dengan asumsi ini adalah tempat utama inisialisasi.
+    // Namun, pendekatan terbaik untuk aplikasi yang lebih besar adalah menginisialisasi AOS global sekali,
+    // lalu menggunakan AOS.refresh() di komponen dinamis.
+  });
+});
+</script>
+
 <style scoped>
-/* Container untuk komponen pengumuman */
-.announcements-container {
-  /* No specific padding here, handled by parent section */
+/*
+  Bagian STYLE tetap sama seperti yang Anda berikan,
+  dengan sedikit penyesuaian untuk konsistensi dan readability.
+*/
+
+/* Custom styles untuk line-clamp jika tidak tersedia di Tailwind
+   Ini memastikan teks tidak melebihi 2 baris dan menampilkan elipsis. */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Menambahkan elipsis */
 }
 
-/* Header Bagian */
-.section-header {
-  text-align: center;
-  margin-bottom: 4rem;
+/* Hover effects untuk card ElCard */
+.el-card:hover {
+  border-color: rgba(236, 72, 153, 0.2); /* Border pink saat hover */
 }
 
-.section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 1rem;
+/* Custom scrollbar styles untuk browser berbasis WebKit (Chrome, Safari) */
+.scrollbar-thin {
+  scrollbar-width: thin; /* Untuk Firefox */
 }
 
-.section-subtitle {
-  font-size: 1.1rem;
-  color: #64748b;
-  font-weight: 400;
-  max-width: 600px;
-  margin: 0 auto;
+.scroll-left::-webkit-scrollbar {
+  width: 8px; /* Lebar scrollbar */
 }
 
-/* Gaya Bagian Pengumuman */
-.announcements-list {
-  max-width: 800px; /* Lebar maksimum untuk daftar pengumuman */
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding-bottom: 2rem; /* Jarak bawah jika hanya ada satu kolom */
+.scroll-left::-webkit-scrollbar-track {
+  background: #f3f4f6; /* Warna latar belakang track */
+  border-radius: 4px; /* Sudut membulat track */
 }
 
-.announcement-card {
-  border-radius: 16px;
-  border: none;
-  padding: 1.5rem 2rem;
-  transition: all 0.3s ease;
+.scroll-left::-webkit-scrollbar-thumb {
+  background: #f9a8d4; /* Warna thumb (penggulir) */
+  border-radius: 4px; /* Sudut membulat thumb */
+  border: 1px solid #f3f4f6; /* Border tipis pada thumb */
 }
 
-.announcement-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+.scroll-left::-webkit-scrollbar-thumb:hover {
+  background: #f472b6; /* Warna thumb saat hover */
 }
 
-.announcement-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+/* Memaksa scrollbar muncul di sisi kiri pada elemen dengan direction: rtl */
+.scroll-left {
+  direction: rtl; /* Mengatur arah teks menjadi kanan-ke-kiri untuk menempatkan scrollbar di kiri */
 }
 
-.announcement-icon {
-  font-size: 2rem;
-  color: #ec4899;
-  flex-shrink: 0;
+.scroll-left > * {
+  direction: ltr; /* Mengatur kembali arah teks di dalam elemen konten menjadi kiri-ke-kanan */
 }
 
-.announcement-text {
-  flex-grow: 1;
+/* Custom tag colors untuk konsistensi dengan tema pink */
+/* Menggunakan :deep() untuk menargetkan kelas internal dari komponen Element Plus */
+:deep(.el-tag--success) {
+  background-color: rgba(34, 197, 94, 0.1); /* bg-green-100 */
+  border-color: rgba(34, 197, 94, 0.2); /* border-green-200 */
+  color: rgb(22, 163, 74); /* text-green-700 */
 }
 
-.announcement-text h4 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 0.25rem;
+:deep(.el-tag--warning) {
+  background-color: rgba(245, 158, 11, 0.1); /* bg-yellow-100 */
+  border-color: rgba(245, 158, 11, 0.2); /* border-yellow-200 */
+  color: rgb(217, 119, 6); /* text-yellow-700 */
 }
 
-.announcement-date {
-  font-size: 0.9rem;
-  color: #94a3b8;
+:deep(.el-tag--info) {
+  background-color: rgba(236, 72, 153, 0.1); /* custom pink-100 */
+  border-color: rgba(236, 72, 153, 0.2); /* custom pink-200 */
+  color: rgb(219, 39, 119); /* custom pink-700 */
 }
 
-.announcement-tag {
-  font-weight: 600;
-  min-width: 60px;
-  text-align: center;
+/* Smooth scroll behavior untuk elemen dengan overflow-y-auto */
+.overflow-y-auto {
+  scroll-behavior: smooth;
 }
 
-/* Media Queries untuk Responsif */
-@media (max-width: 1024px) {
-  .section-title {
-    font-size: 2rem;
-  }
-
-  .section-subtitle {
-    font-size: 1rem;
-  }
-
-  .announcements-list {
-    max-width: 100%; /* Full width on smaller screens */
-    padding-bottom: 4rem; /* Add more space when stacked */
-  }
+/* Firefox scrollbar styling */
+/* Ini diperlukan karena Firefox menggunakan properti scrollbar-color yang berbeda */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #f9a8d4 #f3f4f6; /* thumb color track color */
 }
 
-@media (max-width: 768px) {
-  .section-title {
-    font-size: 1.8rem;
-  }
-
-  .section-subtitle {
-    font-size: 0.95rem;
-  }
-
-  .announcement-card {
-    flex-direction: column;
-    text-align: center;
-    gap: 0.75rem;
-  }
-
-  .announcement-icon {
-    margin-bottom: 0.5rem;
+/* Enhanced card animation dalam scroll container untuk pengalaman pengguna yang lebih baik */
+@media (prefers-reduced-motion: no-preference) {
+  .el-card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important; /* Contoh shadow-xl yang lebih menonjol */
+    transform: translateY(-4px) !important; /* Mengangkat sedikit kartu */
+    transition: all 0.1s ease-in-out !important; /* Transisi cepat untuk efek responsif */
   }
 }
 </style>

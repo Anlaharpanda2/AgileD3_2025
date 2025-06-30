@@ -11,8 +11,8 @@
 </template>
 
 <script setup>
-import Header from '@/components/Layouts/Header.vue';
-import Footer from '@/components/layouts/Footer.vue'
+import Header from '../components/Layouts/Header.vue'
+import Footer from '../components/Layouts/Footer.vue'
 </script>
 
 <style scoped>

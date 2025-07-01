@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             DataBeritaSeeder::class,
             DataFasilitasSeeder::class,
             DataKonsultasiSeeder::class,
+            DataLokasiSeeder::class,
             DataNilaiSeeder::class,
             DataPanitiaSeeder::class,
             DataPelatihanSeeder::class,

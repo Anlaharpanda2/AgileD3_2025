@@ -113,9 +113,20 @@
             <!-- Left Controls -->
             <div class="flex flex-col sm:flex-row gap-4">
               <!-- Items Per Page -->
-              <div class="relative sm:flex-1 sm:max-w-[120px]">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Tampilkan</label>
-                <div class="relative select-box">
+              <div class="relative sm:flex-1 sm:max-w-[100px]">
+                <div
+                  class="
+                    relative 
+                    flex items-center 
+                    gap-[6px] 
+                    cursor-pointer 
+                    select-none 
+                    bg-[#EC4899] 
+                    text-white 
+                    rounded-[6px] 
+                    px-[10px]
+                  "
+                >
                   <button
                     id="itemsPerPageBtn"
                     @click.stop="toggleDropdown('itemsPerPage')"
@@ -123,7 +134,7 @@
                   >
                     {{ itemsPerPage === Infinity ? 'Semua' : itemsPerPage }}
                   </button>
-                  <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <div class="absolute inset-y-0 right-4 flex items-center pr-3 pointer-events-none">
                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                     </svg>
@@ -150,7 +161,6 @@
 
               <!-- Search Box -->
               <div class="flex-1 max-w-md">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Pencarian</label>
                 <div class="relative">
                   <input
                     type="text"
@@ -180,7 +190,7 @@
                 </button>
                 <!-- Mobile Menu Dropdown -->
                 <transition name="dropdown">
-                  <div v-show="dropdownOpen === 'mobileMenu'" class="sm:hidden absolute z-30 mt-1 w-48 bg-gradient-to-b from-gray-50 to-white shadow-lg border border-gray-200 rounded-lg dropdown-container" style="right: 0;">
+                  <div v-show="dropdownOpen === 'mobileMenu'" class="sm:hidden absolute z-30 mt-1 w-48 bg-gradient-to-b from-gray-50 to-white shadow-lg border border-gray-200 rounded-lg dropdown-container" style="right: 15%; top: 20%;">
                     <div class="flex flex-col p-2">
                       <button
                         @click.stop="showFilter = true; closeAllDropdowns()"
@@ -208,7 +218,6 @@
                 <!-- Desktop Filter & Sort -->
                 <div class="hidden sm:flex sm:gap-2">
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2"> </label>
                     <button
                       @click="showFilter = true"
                       class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
@@ -220,7 +229,6 @@
                     </button>
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2"> </label>
                     <button
                       @click="showSort = true"
                       class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
@@ -250,7 +258,7 @@
                 </button>
                 <!-- Mobile Actions Dropdown -->
                 <transition name="dropdown">
-                  <div v-show="dropdownOpen === 'mobileActions'" class="sm:hidden absolute z-30 mt-1 w-48 bg-gradient-to-b from-gray-50 to-white shadow-lg border border-gray-200 rounded-lg dropdown-container" style="right: 0;">
+                  <div v-show="dropdownOpen === 'mobileActions'" class="sm:hidden absolute z-30 mt-1 w-48 bg-gradient-to-b from-gray-50 to-white shadow-lg border border-gray-200 rounded-lg dropdown-container" style="right: 15%; top: 20%;">
                     <div class="flex flex-col p-2">
                       <button
                         @click.stop="showAllColumns = !showAllColumns; closeAllDropdowns()"
@@ -281,7 +289,7 @@
                         Import Data
                       </button>
                       <button
-                        @click.stop="goToTrash; closeAllDropdowns()"
+                        @click.stop="goToTrash"
                         class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-all duration-300 touch-highlight dropdown-item"
                         :style="{ 'animation-delay': '0.3s' }"
                       >
@@ -291,7 +299,7 @@
                         Data Sampah
                       </button>
                       <button
-                        @click.stop="onMassDeleteClick; closeAllDropdowns()"
+                        @click.stop="onMassDeleteClick"
                         :disabled="selected.length === 0"
                         class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-50 hover:text-red-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed touch-highlight dropdown-item"
                         :style="{ 'animation-delay': '0.4s' }"
@@ -657,12 +665,14 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const goToDetail = (row: any, column: any, event: MouseEvent) => {
+  // Prevent navigation if the click is on the selection checkbox or action buttons
   if (column.type === 'selection' || column.label === 'Aksi' || event.target instanceof HTMLElement && event.target.closest('.action-button')) {
     return;
   }
   router.push({ name: 'DetailMasyarakat', params: { id: row.nik } });
 };
 
+// Interface for Peserta data structure
 interface Peserta {
   id: number;
   nama: string;
@@ -679,59 +689,68 @@ interface Peserta {
   jenis_usaha: string;
   penghasilan_perbulan: string;
   nomor_telefon: string;
-  created_at?: string;
-  updated_at?: string;
+  created_at?: string; // Optional: date of creation, used for sorting
+  updated_at?: string; // Optional: date of last update
 }
 
+// Reactive state variables
 const tableData = ref<Peserta[]>([]);
 const selected = ref<Peserta[]>([]);
 const search = ref("");
 const loading = ref(false);
 const itemsPerPage = ref<number | string>(10);
 const currentPage = ref(1);
-const dropdownOpen = ref<string | null>(null); // Changed to string to track which dropdown is open
+const dropdownOpen = ref<string | null>(null); // Tracks which dropdown is currently open
 const showExport = ref(false);
 const showImport = ref(false);
 const showEdit = ref(false);
 const showTambah = ref(false);
 const showSort = ref(false);
 const showFilter = ref(false);
-const showMobileMenu = ref(false);
-const showMobileActions = ref(false);
+const showMobileMenu = ref(false); // State for mobile filter/sort dropdown
+const showMobileActions = ref(false); // State for mobile actions dropdown
 const editData = ref<Peserta | null>(null);
 const perPageOptions = [10, 20, 50, 100, "all"];
-const showAllColumns = ref(false);
+const showAllColumns = ref(false); // Controls visibility of additional table columns
 
+// Function to open the edit form with selected row data
 const openEdit = (row: Peserta) => {
-  editData.value = { ...row };
+  editData.value = { ...row }; // Create a copy to avoid direct mutation
   showEdit.value = true;
-  loading.value = false;
+  // loading.value = false; // This line might be redundant here, loading is managed by fetchData
 };
 
+// Toggles the visibility of a specific dropdown menu
 function toggleDropdown(dropdownId: string) {
   dropdownOpen.value = dropdownOpen.value === dropdownId ? null : dropdownId;
+
+  // Add a bounce animation to dropdown items when opened
   if (dropdownOpen.value) {
     requestAnimationFrame(() => {
       const items = document.querySelectorAll('.dropdown-item');
       items.forEach((item, index) => {
-        item.classList.remove('bounce');
-        void item.offsetWidth; // Trigger reflow
-        item.classList.add('bounce');
+        const el = item as HTMLElement;
+        el.classList.remove('bounce');
+        void el.offsetWidth; // Trigger reflow to restart animation
+        el.classList.add('bounce');
       });
     });
   }
 }
 
+// Closes all currently open dropdown menus
 function closeAllDropdowns() {
   dropdownOpen.value = null;
 }
 
+// Changes the number of items displayed per page
 function changeItemsPerPage(option: number | string) {
   itemsPerPage.value = option === "all" ? filteredData.value.length : option;
-  currentPage.value = 1;
+  currentPage.value = 1; // Reset to first page
   closeAllDropdowns();
 }
 
+// Formats the start and end dates of an activity into a readable string
 function formatTanggalKegiatan(mulai: string, berakhir: string): string {
   if (!mulai || !berakhir) return '-';
 
@@ -750,41 +769,50 @@ function formatTanggalKegiatan(mulai: string, berakhir: string): string {
   const tahunMulai = tanggalMulai.toLocaleDateString('id-ID', optionsTahun);
   const tahunBerakhir = tanggalBerakhir.toLocaleDateString('id-ID', optionsTahun);
 
+  // If activity starts and ends in the same month and year
   if (bulanMulai === bulanBerakhir && tahunMulai === tahunBerakhir) {
     return `${hariMulai} - ${hariBerakhir} ${bulanMulai} ${tahunMulai}`;
   } else {
+    // If activity spans across different months or years
     return `${hariMulai} ${bulanMulai} ${tahunMulai} - ${hariBerakhir} ${bulanBerakhir} ${tahunBerakhir}`;
   }
 }
 
+// Reactive object to store active filter criteria
 const activeFilters = ref<{ [key: string]: string | number | null }>({});
 
+// Computed property to determine which columns can be filtered
 const filterableColumns = computed(() => {
   if (!tableData.value || tableData.value.length === 0) {
     return [];
   }
+  // Exclude 'id', 'created_at', 'updated_at' from filterable columns
   const exclude = ['id', 'created_at', 'updated_at'];
   return Object.keys(tableData.value[0] || {}).filter(key => !exclude.includes(key));
 });
 
+// Computed property to apply search and active filters to the table data
 const filteredData = computed(() => {
-  let data = tableData.value;
+  let data = tableData.value; // Use the already sorted tableData
 
+  // Apply search filter based on 'nama'
   if (search.value) {
     data = data.filter(item =>
       item.nama.toLowerCase().includes(search.value.toLowerCase())
     );
   }
 
+  // Apply dynamic filters from activeFilters
   for (const key in activeFilters.value) {
     const filterValue = activeFilters.value[key];
 
     if (filterValue !== null && filterValue !== '') {
       data = data.filter(item => {
-        const itemValue = (item as any)[key];
+        const itemValue = (item as any)[key]; // Access item property dynamically
         if (itemValue === null || itemValue === undefined) {
-          return false;
+          return false; // If item value is null/undefined, it doesn't match
         }
+        // Case-insensitive inclusion check
         return String(itemValue).toLowerCase().includes(String(filterValue).toLowerCase());
       });
     }
@@ -792,19 +820,22 @@ const filteredData = computed(() => {
   return data;
 });
 
+// Computed property for total number of pages
 const totalPages = computed(() =>
   Math.ceil(
     filteredData.value.length /
-      (typeof itemsPerPage.value === "number" ? itemsPerPage.value : 1)
+      (typeof itemsPerPage.value === "number" ? itemsPerPage.value : 1) // Handle "all" option
   )
 );
 
+// Computed property for data to display on the current page
 const pagedData = computed(() => {
   const perPage = typeof itemsPerPage.value === "number" ? itemsPerPage.value : 1;
   const start = (currentPage.value - 1) * perPage;
   return filteredData.value.slice(start, start + perPage);
 });
 
+// Pagination navigation functions
 function prevPage() {
   if (currentPage.value > 1) currentPage.value--;
 }
@@ -815,18 +846,20 @@ function goToPage(page: number) {
   currentPage.value = page;
 }
 
+// Computed property to generate visible pagination numbers
 const visiblePages = computed<(number | '...')[]>(() => {
   const total = totalPages.value;
   const current = currentPage.value;
-  const delta = 2;
+  const delta = 2; // Number of pages to show around the current page
   const pages: (number | '...')[] = [];
 
   if (total < 1) return pages;
-  pages.push(1);
+  pages.push(1); // Always include the first page
 
   let left = current - delta;
   let right = current + delta;
 
+  // Adjust left/right bounds if they go too close to the edges
   if (left < 2) {
     right += (2 - left);
     left = 2;
@@ -838,44 +871,52 @@ const visiblePages = computed<(number | '...')[]>(() => {
   left = Math.max(left, 2);
   right = Math.min(right, total - 1);
 
+  // Add '...' if there's a gap between 1 and left
   if (left > 2) pages.push('...');
+  // Add pages in the calculated range
   for (let i = left; i <= right; i++) pages.push(i);
+  // Add '...' if there's a gap between right and total
   if (right < total - 1) pages.push('...');
+  // Always include the last page if total > 1
   if (total > 1) pages.push(total);
 
   return pages;
 });
 
+// Handles selection change from El-Table (for desktop)
 function onSelectionChange(rows: Peserta[]) {
   selected.value = rows;
 }
 
+// Toggles selection for mobile card view
 function toggleSelection(row: Peserta) {
   const index = selected.value.findIndex(item => item.id === row.id);
   if (index >= 0) {
-    selected.value.splice(index, 1);
+    selected.value.splice(index, 1); // Deselect
   } else {
-    selected.value.push(row);
+    selected.value.push(row); // Select
   }
 }
 
+// Handles mass deletion of selected items
 async function onMassDeleteClick() {
-  if (!selected.value.length) return;
+  if (!selected.value.length) return; // Do nothing if no items are selected
 
-  loading.value = true;
+  loading.value = true; // Show loading indicator
 
   try {
-    const niks = selected.value.map(p => p.nik);
+    const niks = selected.value.map(p => p.nik); // Get NIKs of selected participants
     await api.delete('/kelola/pelatihan', {
-      data: { niks }
+      data: { niks } // Send NIKs in the request body for mass delete
     });
-    await fetchData();
+    await fetchData(); // Refresh data after deletion
     ElNotification({
       title: 'Berhasil',
-      message: 'Hapus Data Massal',
+      message: 'Hapus Data Massal berhasil.',
       type: 'success',
       duration: 3000,
     });
+    closeAllDropdowns(); // Close any open dropdowns
   }
   catch (err) {
     console.error('Gagal menghapus data:', err);
@@ -887,22 +928,24 @@ async function onMassDeleteClick() {
     });
   }
   finally {
-    loading.value = false;
+    loading.value = false; // Hide loading indicator
   }
 }
 
+// Navigates to the trash data page
 async function goToTrash() {
   window.location.href = '/data/pelatihan/sampah';
 }
 
+// Handles deletion of a single row
 async function onDelete(row: Peserta) {
-  loading.value = true;
+  loading.value = true; // Show loading indicator
   try {
-    await api.delete(`/kelola/pelatihan/${row.id}`);
-    await fetchData();
+    await api.delete(`/kelola/pelatihan/${row.id}`); // Delete by ID
+    await fetchData(); // Refresh data after deletion
     ElNotification({
       title: 'Berhasil',
-      message: 'Data berhasil dihapus',
+      message: 'Data berhasil dihapus.',
       type: 'success',
       duration: 3000,
     });
@@ -915,14 +958,36 @@ async function onDelete(row: Peserta) {
       duration: 3000,
     });
   } finally {
-    loading.value = false;
+    loading.value = false; // Hide loading indicator
   }
 }
 
+/**
+ * Fetches data from the API and sorts it by 'created_at' in descending order.
+ * This ensures the newest data always appears first.
+ */
 async function fetchData() {
+  loading.value = true; // Start loading indicator
   try {
     const res = await api.get('/kelola/pelatihan');
-    tableData.value = Array.isArray(res) ? res : res.data || [];
+    let fetchedData: Peserta[] = Array.isArray(res) ? res : res.data || [];
+
+    // --- START: MODIFIKASI UNTUK PENGURUTAN DATA TERBARU ---
+    // Sort the data by 'created_at' in descending order (newest first)
+    fetchedData.sort((a, b) => {
+      // Create Date objects from 'created_at' strings.
+      // If 'created_at' is missing, default to epoch (0) to handle undefined dates gracefully.
+      const dateA = a.updated_at ? new Date(a.updated_at) : new Date(0);
+      const dateB = b.updated_at ? new Date(b.updated_at) : new Date(0);
+
+      // Compare timestamps. Subtracting A from B (B - A) results in descending order.
+      // If B is more recent than A, B.getTime() will be larger, resulting in a positive number,
+      // which places B before A in the sorted array.
+      return dateB.getTime() - dateA.getTime();
+    });
+    // --- END: MODIFIKASI UNTUK PENGURUTAN DATA TERBARU ---
+
+    tableData.value = fetchedData; // Assign the sorted data to tableData
   } catch (error) {
     console.error('Error fetching data:', error);
     ElNotification({
@@ -931,27 +996,32 @@ async function fetchData() {
       type: 'error',
       duration: 3000,
     });
+  } finally {
+    loading.value = false; // Stop loading indicator
   }
 }
 
 let clickOutsideHandler: ((e: Event) => void) | null = null;
 
+// Lifecycle hook: Called after the component has mounted
 onMounted(async () => {
+  // Add a global click listener to close dropdowns when clicking outside
   clickOutsideHandler = (e: Event) => {
     const path = (e as MouseEvent).composedPath() as HTMLElement[];
+    // Check if the click occurred outside any dropdown container or its trigger buttons
     if (!path.some((el) => el.classList?.contains('select-box') || el.classList?.contains('mobile-menu') || el.classList?.contains('mobile-actions') || el.classList?.contains('dropdown-container'))) {
       closeAllDropdowns();
     }
   };
-
   document.addEventListener('click', clickOutsideHandler);
 
-  loading.value = true;
+  // Fetch data when the component is mounted
   await fetchData();
-  loading.value = false;
 });
 
+// Lifecycle hook: Called before the component is unmounted
 onBeforeUnmount(() => {
+  // Remove the global click listener to prevent memory leaks
   if (clickOutsideHandler) {
     document.removeEventListener('click', clickOutsideHandler);
     clickOutsideHandler = null;
@@ -1037,7 +1107,6 @@ onBeforeUnmount(() => {
 
 .line-clamp-2 {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -1195,7 +1264,6 @@ select:focus {
   text-transform: capitalize;
 }
 
-/* Mobile-specific styles */
 @media (max-width: 640px) {
   .full-screen {
     position: fixed;

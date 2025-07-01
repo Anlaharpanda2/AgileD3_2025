@@ -155,7 +155,7 @@ Route::prefix('kelola/pelatihan')->group(function () {
     Route::post('/impor', [KelolaDataPelatihanController::class, 'impor']);
     Route::get('/trash', [KelolaDataPelatihanController::class, 'trash']);
     Route::put('/restore', [KelolaDataPelatihanController::class, 'restoreMassal']);
-    Route::delete('/permanent', [KelolaDataPelatihanController::class, 'forceDeleteMassal']);
+    Route::post('/permanent', [KelolaDataPelatihanController::class, 'forceDeleteMassal']);
     Route::delete('/', [KelolaDataPelatihanController::class, 'destroyMassal']);
     Route::put('/{id}/restore', [KelolaDataPelatihanController::class, 'restore']);
     Route::delete('/{id}/permanent', [KelolaDataPelatihanController::class, 'forceDelete']);

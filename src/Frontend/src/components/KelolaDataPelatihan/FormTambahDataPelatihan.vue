@@ -1,50 +1,105 @@
 <template>
-  <div class="form-overlay"@click.self="$emit('close')">
-    <transition name="popup">
-      <div class="form-popup">
-        <div class="form-header background text-center text-white py-3 rounded-top">
-          <h3 class="mb-0">Form Data Pelatihan</h3>
+  <div class="fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 p-4" @click.self="$emit('close')">
+    <transition name="modal" appear>
+      <div class="bg-white rounded-xl shadow-2xl max-w-5xl w-full max-h-[95vh] flex flex-col overflow-hidden">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-pink-400 to-rose-300 px-6 py-4 sm:px-8 sm:py-6 rounded-t-xl">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <div class="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+                <!-- Icon for header (using Heroicons/Lucide-like SVG) -->
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white">Tambah Data Pelatihan</h2>
+                <p class="text-pink-100 text-xs sm:text-sm">Isi form untuk menambahkan data pelatihan baru</p>
+              </div>
+            </div>
+            <button
+              @click="$emit('close')"
+              class="p-2 hover:bg-white/20 rounded-lg transition-colors duration-200"
+              aria-label="Tutup"
+            >
+              <!-- Close icon -->
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
         </div>
-        <div class="form-body">
+
+        <!-- Form Body -->
+        <div class="flex-grow overflow-y-auto p-6 sm:p-8">
           <el-form
             :model="form"
             :rules="rules"
             ref="formRef"
-            label-width="140px"
             label-position="top"
-            class="p-4"
+            class="space-y-6"
           >
-            <el-row :gutter="20">
-              <el-col
-                v-for="field in fields"
-                :key="field.key"
-                :span="24"
-                :md="12"
-                class="mb-3"
-              >
-                <el-form-item
-                  :label="field.label"
-                  :prop="field.key"
-                >
-                  <component
-                    :is="field.component"
-                    v-model="form[field.key]"
-                    :type="field.type"
-                    :placeholder="field.label"
-                    :id="field.key"
-                    :name="field.key"
-                    clearable
-                    class="form-control"
-                    v-if="field.component !== 'el-select'"
-                  />
+            <!-- Personal Information Section -->
+            <div class="bg-gray-50 rounded-xl p-5 sm:p-6 border border-gray-100 shadow-sm">
+              <div class="flex items-center space-x-3 mb-5">
+                <div class="p-2 bg-pink-100 rounded-lg">
+                  <!-- Personal info icon -->
+                  <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                </div>
+                <h3 class="text-base sm:text-lg font-semibold text-gray-800">Informasi Personal</h3>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                <el-form-item label="Nama Lengkap" prop="nama">
+                  <el-input
+                    v-model="form.nama"
+                    placeholder="Masukkan nama lengkap"
+                    size="large"
+                    class="modern-input"
+                  >
+                    <template #prefix>
+                      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                      </svg>
+                    </template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="NIK" prop="nik">
+                  <el-input
+                    v-model="form.nik"
+                    placeholder="Masukkan NIK"
+                    size="large"
+                    class="modern-input"
+                  >
+                    <template #prefix>
+                      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V4a2 2 0 114 0v2m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/>
+                      </svg>
+                    </template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="Tempat Tanggal Lahir" prop="tempat_tanggal_lahir">
+                  <el-input
+                    v-model="form.tempat_tanggal_lahir"
+                    placeholder="Contoh: Jakarta, 15 Januari 1990"
+                    size="large"
+                    class="modern-input"
+                  >
+                    <template #prefix>
+                      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                      </svg>
+                    </template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="Status" prop="status">
                   <el-select
-                    v-else-if="field.key === 'status'"
                     v-model="form.status"
-                    placeholder="Pilih Status"
-                    :id="field.key"
-                    :name="field.key"
+                    placeholder="Pilih status"
+                    size="large"
+                    class="w-full modern-select"
                     clearable
-                    class="w-100 form-control-select"
                   >
                     <el-option
                       v-for="option in statusOptions"
@@ -54,146 +109,286 @@
                     />
                   </el-select>
                 </el-form-item>
-              </el-col>
-            </el-row>
-            <el-form-item class="d-flex justify-content-end gap-3 mt-4">
-              <el-button @click="$emit('close')" class="btn-cancel">Batal</el-button>
-              <el-button type="primary" @click="submitForm" class="btn-submit">Simpan</el-button>
-            </el-form-item>
+                <el-form-item label="Pendidikan" prop="pendidikan">
+                  <el-input
+                    v-model="form.pendidikan"
+                    placeholder="Contoh: S1 Teknik Informatika"
+                    size="large"
+                    class="modern-input"
+                  >
+                    <template #prefix>
+                      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                      </svg>
+                    </template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="Nomor Telepon" prop="nomor_telefon">
+                  <el-input
+                    v-model="form.nomor_telefon"
+                    placeholder="Contoh: 081234567890"
+                    size="large"
+                    class="modern-input"
+                  >
+                    <template #prefix>
+                      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                      </svg>
+                    </template>
+                  </el-input>
+                </el-form-item>
+              </div>
+              <el-form-item label="Alamat" prop="alamat" class="mt-4">
+                <el-input
+                  v-model="form.alamat"
+                  type="textarea"
+                  placeholder="Masukkan alamat lengkap"
+                  :rows="3"
+                  class="modern-textarea"
+                />
+              </el-form-item>
+            </div>
+
+            <!-- Training Information Section -->
+            <div class="bg-gray-50 rounded-xl p-5 sm:p-6 border border-gray-100 shadow-sm">
+              <div class="flex items-center space-x-3 mb-5">
+                <div class="p-2 bg-pink-100 rounded-lg">
+                  <!-- Training info icon -->
+                  <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                  </svg>
+                </div>
+                <h3 class="text-base sm:text-lg font-semibold text-gray-800">Informasi Pelatihan</h3>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                <el-form-item label="Jenis Bimtek" prop="jenis_bimtek">
+                  <el-input
+                    v-model="form.jenis_bimtek"
+                    placeholder="Masukkan jenis bimbingan teknis"
+                    size="large"
+                    class="modern-input"
+                  >
+                    <template #prefix>
+                      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                      </svg>
+                    </template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="Angkatan" prop="angkatan">
+                  <el-input
+                    v-model="form.angkatan"
+                    type="number"
+                    placeholder="Masukkan angkatan"
+                    size="large"
+                    class="modern-input"
+                  >
+                    <template #prefix>
+                      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/>
+                      </svg>
+                    </template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="Kegiatan Dimulai" prop="kegiatan_dimulai">
+                  <el-date-picker
+                    v-model="form.kegiatan_dimulai"
+                    type="date"
+                    placeholder="Pilih tanggal mulai"
+                    size="large"
+                    class="w-full modern-date"
+                    format="DD/MM/YYYY"
+                    value-format="YYYY-MM-DD"
+                  />
+                </el-form-item>
+                <el-form-item label="Kegiatan Berakhir" prop="kegiatan_berakhir">
+                  <el-date-picker
+                    v-model="form.kegiatan_berakhir"
+                    type="date"
+                    placeholder="Pilih tanggal berakhir"
+                    size="large"
+                    class="w-full modern-date"
+                    format="DD/MM/YYYY"
+                    value-format="YYYY-MM-DD"
+                  />
+                </el-form-item>
+                <el-form-item label="Tempat Kegiatan" prop="tempat_kegiatan" class="md:col-span-2">
+                  <el-input
+                    v-model="form.tempat_kegiatan"
+                    placeholder="Masukkan tempat kegiatan"
+                    size="large"
+                    class="modern-input"
+                  >
+                    <template #prefix>
+                      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      </svg>
+                    </template>
+                  </el-input>
+                </el-form-item>
+              </div>
+            </div>
+
+            <!-- Business Information Section -->
+            <div class="bg-gray-50 rounded-xl p-5 sm:p-6 border border-gray-100 shadow-sm">
+              <div class="flex items-center space-x-3 mb-5">
+                <div class="p-2 bg-pink-100 rounded-lg">
+                  <!-- Business info icon -->
+                  <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8"/>
+                  </svg>
+                </div>
+                <h3 class="text-base sm:text-lg font-semibold text-gray-800">Informasi Usaha</h3>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                <el-form-item label="Jenis Usaha" prop="jenis_usaha">
+                  <el-input
+                    v-model="form.jenis_usaha"
+                    placeholder="Contoh: Kuliner, Fashion, Digital Marketing"
+                    size="large"
+                    class="modern-input"
+                  >
+                    <template #prefix>
+                      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                      </svg>
+                    </template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="Penghasilan Per Bulan" prop="penghasilan_perbulan">
+                  <el-input
+                    v-model="form.penghasilan_perbulan"
+                    placeholder="Contoh: Rp 5.000.000"
+                    size="large"
+                    class="modern-input"
+                  >
+                    <template #prefix>
+                      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                      </svg>
+                    </template>
+                  </el-input>
+                </el-form-item>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 justify-end pt-6 border-t border-gray-200">
+              <button
+                @click="$emit('close')"
+                type="button"
+                class="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-xl font-medium hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 shadow-sm"
+              >
+                <div class="flex items-center justify-center space-x-2">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                  </svg>
+                  <span>Batal</span>
+                </div>
+              </button>
+              <button
+                @click="submitForm"
+                type="button"
+                class="px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-400 text-white rounded-xl font-medium hover:from-pink-600 hover:to-rose-500 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                <div class="flex items-center justify-center space-x-2">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>Simpan Data</span>
+                </div>
+              </button>
+            </div>
           </el-form>
         </div>
       </div>
     </transition>
   </div>
 </template>
+
 <style scoped>
-/* Latar belakang gelap untuk overlay */
-.form-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px); /* Efek blur yang lebih kuat */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1050;
-  padding: 1rem;
-}
-/* Kontainer popup form */
-.form-popup {
-  width: 100%;
-  max-width: 900px; /* Sedikit lebih lebar untuk modernitas */
-  max-height: 95vh;
-  background: linear-gradient(145deg, #ffffff, #f0f2f5); /* Gradien lembut */
-  border-radius: 1.25rem; /* Sudut lebih membulat */
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.5) inset; /* Bayangan lebih dalam dengan inner shadow */
-  display: flex;
-  flex-direction: column;
-  animation: popupIn 0.4s ease-out; /* Animasi sedikit lebih lambat */
-  overflow: hidden;
-  transform: scale(1); /* Pastikan skala awal adalah 1 */
-  transition: transform 0.3s ease-out; /* Transisi untuk skala saat interaksi */
-}
-/* Header form */
-.form-header {
-  background: linear-gradient(45deg, #69C5C2, #4CAF50); /* Gradien hijau yang menarik */
-  color: white;
-  padding: 1.5rem; /* Padding lebih banyak */
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
-  font-weight: 600; /* Tebal sedikit */
-  letter-spacing: 0.5px; /* Spasi huruf */
-}
-/* Bagian isi form scrollable */
-.form-body {
-  overflow-y: auto;
-  padding: 2rem; /* Padding lebih banyak */
-}
-/* Styling untuk el-input dan el-date-picker */
-.form-control {
-  width: 100%;
-  border-radius: 0.5rem; /* Sudut membulat */
-  border: 1px solid #e0e0e0;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Bayangan dalam lembut */
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-.form-control:focus-within {
-  border-color: #69C5C2;
-  box-shadow: 0 0 0 3px rgba(105, 197, 194, 0.25), inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Bayangan fokus yang modern */
-}
-/* Styling khusus untuk el-select */
-.form-control-select .el-input__wrapper {
-  border-radius: 0.5rem !important; /* Sudut membulat */
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05) !important;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
-}
-.form-control-select.is-focus .el-input__wrapper {
-  border-color: #69C5C2 !important;
-  box-shadow: 0 0 0 3px rgba(105, 197, 194, 0.25), inset 0 1px 3px rgba(0, 0, 0, 0.05) !important;
-}
-/* Tombol Submit */
-.btn-submit {
-  background: linear-gradient(45deg, #69C5C2, #4CAF50); /* Gradien yang sama dengan header */
-  border: none;
-  color: white;
-  padding: 0.75rem 2rem; /* Padding lebih besar */
-  border-radius: 0.75rem; /* Sudut lebih membulat */
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3); /* Bayangan yang serasi */
+/* Modal Transition */
+.modal-enter-active,
+.modal-leave-active {
   transition: all 0.3s ease;
 }
-.btn-submit:hover {
-  background: linear-gradient(45deg, #4CAF50, #69C5C2); /* Gradien terbalik saat hover */
-  box-shadow: 0 6px 15px rgba(76, 175, 80, 0.45); /* Bayangan lebih kuat */
-  transform: translateY(-2px); /* Efek angkat */
+
+.modal-enter-from {
+  opacity: 0;
+  transform: scale(0.9) translateY(-20px);
 }
-.btn-submit:active {
-  transform: translateY(0); /* Kembali ke posisi semula saat diklik */
-  box-shadow: 0 2px 5px rgba(76, 175, 80, 0.2);
+
+.modal-leave-to {
+  opacity: 0;
+  transform: scale(0.9) translateY(-20px);
 }
-/* Tombol Batal */
-.btn-cancel {
-  background-color: #f0f2f5; /* Warna latar belakang abu-abu terang */
-  color: #555;
-  padding: 0.75rem 2rem;
-  border-radius: 0.75rem;
-  font-weight: 500;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+
+/* Modern Input Styles */
+/* Apply styles to Element Plus input wrapper */
+:deep(.modern-input .el-input__wrapper),
+:deep(.modern-select .el-input__wrapper),
+:deep(.modern-date .el-input__wrapper),
+:deep(.modern-textarea .el-textarea__inner) {
+  border-radius: 12px; /* Rounded corners for all inputs */
+  border: 1px solid #e5e7eb; /* Light gray border */
+  transition: all 0.2s ease; /* Smooth transition for hover/focus */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  padding: 8px 12px; /* Adjust padding for a better look */
 }
-.btn-cancel:hover {
-  background-color: #e0e0e0;
-  color: #333;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
+
+/* Hover state for inputs */
+:deep(.modern-input .el-input__wrapper:hover),
+:deep(.modern-select .el-input__wrapper:hover),
+:deep(.modern-date .el-input__wrapper:hover),
+:deep(.modern-textarea .el-textarea__inner:hover) {
+  border-color: #f472b6; /* Softer pink on hover */
 }
-.btn-cancel:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+/* Focus state for inputs */
+:deep(.modern-input.is-focus .el-input__wrapper),
+:deep(.modern-select.is-focus .el-input__wrapper),
+:deep(.modern-date.is-focus .el-input__wrapper),
+:deep(.modern-textarea .el-textarea__inner:focus) {
+  border-color: #f472b6; /* Softer pink on focus */
+  box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.15); /* Softer pink ring shadow */
 }
-/* Animasi masuk */
-@keyframes popupIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+
+/* Remove Element Plus default form item margin to control spacing with Tailwind gap */
+:deep(.el-form-item) {
+  margin-bottom: 0;
+}
+
+/* Adjust label style for better spacing and appearance */
+:deep(.el-form-item__label) {
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 500; /* font-medium */
+  color: #374151; /* gray-700 */
+  margin-bottom: 0.5rem; /* space-y-2 equivalent */
+}
+
+/* Ensure full width for Element Plus components within the grid */
+:deep(.el-input),
+:deep(.el-select),
+:deep(.el-date-picker),
+:deep(.el-textarea) {
+  width: 100%;
 }
 </style>
-<script setup>
-import { reactive, ref, watch, onMounted } from 'vue'
-import { ElNotification } from 'element-plus'
-import api from '../../api.js'; 
-const props = defineProps({
-  initialData: Object, 
-})
-const emit = defineEmits(['close']) 
-const formRef = ref(null) 
-const statusOptions = ['kawin', 'lajang', 'janda'] 
+
+<script setup lang="ts">
+import { reactive, ref } from 'vue'; // Removed 'watch' and 'onMounted' as they are not used in FormTambahDataPelatihan
+import { ElNotification } from 'element-plus';
+import api from '../../api.js'; // Pastikan path ini benar
+
+// Removed props as FormTambahDataPelatihan does not use initialData
+const emit = defineEmits(['close']);
+
+const formRef = ref(null);
+const statusOptions = ['kawin', 'lajang', 'janda'];
+
+// Form fields definition (copied from FormTambahDataPelatihan.vue)
 const fields = [
   { key: 'nama', label: 'Nama', component: 'el-input', type: 'text' },
   { key: 'nik', label: 'NIK', component: 'el-input', type: 'text' },
@@ -209,7 +404,9 @@ const fields = [
   { key: 'jenis_usaha', label: 'Jenis Usaha', component: 'el-input', type: 'text' },
   { key: 'penghasilan_perbulan', label: 'Penghasilan Perbulan', component: 'el-input', type: 'text' },
   { key: 'nomor_telefon', label: 'Nomor Telefon', component: 'el-input', type: 'tel' },
-]
+];
+
+// Reactive form state (copied from FormTambahDataPelatihan.vue)
 const form = reactive({
   nik: '',
   nama: '',
@@ -225,24 +422,11 @@ const form = reactive({
   jenis_usaha: '',
   penghasilan_perbulan: '',
   nomor_telefon: '',
-})
-const applyInitialData = (data) => {
-  if (data) {
-    Object.assign(form, data);
-    if (form.kegiatan_dimulai && typeof form.kegiatan_dimulai === 'string') {
-      form.kegiatan_dimulai = new Date(form.kegiatan_dimulai);
-    }
-    if (form.kegiatan_berakhir && typeof form.kegiatan_berakhir === 'string') {
-      form.kegiatan_berakhir = new Date(form.kegiatan_berakhir);
-    }
-    if (form.angkatan !== null && typeof form.angkatan === 'string') {
-      form.angkatan = Number(form.angkatan);
-    }
-  }
-};
-watch(() => props.initialData, (newVal) => {
-  applyInitialData(newVal);
-}, { deep: true, immediate: true });
+});
+
+// Removed applyInitialData and watch as they are not relevant for a "tambah" form
+
+// Form validation rules (copied from FormTambahDataPelatihan.vue)
 const rules = {
   nama: [{ required: true, message: 'Nama wajib diisi', trigger: 'blur' }],
   nik: [{ required: true, message: 'NIK wajib diisi', trigger: 'blur' }],
@@ -253,8 +437,8 @@ const rules = {
   angkatan: [
     { required: true, message: 'Angkatan wajib diisi', trigger: 'change' },
     {
-      validator: (rule, value, callback) => {
-        const number = Number(value)
+      validator: (rule: any, value: any, callback: any) => {
+        const number = Number(value);
         if (value === '' || value === null || value === undefined) {
           callback(new Error('Angkatan wajib diisi'));
         } else if (isNaN(number)) {
@@ -275,10 +459,14 @@ const rules = {
   jenis_usaha: [{ required: true, message: 'Jenis usaha wajib diisi', trigger: 'blur' }],
   penghasilan_perbulan: [{ required: true, message: 'Penghasilan wajib diisi', trigger: 'blur' }],
   nomor_telefon: [{ required: true, message: 'Nomor telepon wajib diisi', trigger: 'blur' }],
-}
-const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1)
+};
+
+// Helper function to capitalize strings (copied from FormTambahDataPelatihan.vue)
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+// Form submission logic (copied from FormTambahDataPelatihan.vue)
 const submitForm = () => {
-  formRef.value.validate(async valid => {
+  formRef.value.validate(async (valid: boolean) => {
     if (!valid) {
       ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });
       return;
@@ -295,22 +483,22 @@ const submitForm = () => {
     };
     try {
       console.log('Kirim JSON:', JSON.stringify(payload));
-      const response = await api.post('/kelola/pelatihan', payload);
+      const response = await api.post('/kelola/pelatihan', payload); // This is the POST request for adding data
         ElNotification({
           title: 'Berhasil',
-          message: response.data.message || 'Data berhasil disimpan!', 
+          message: response.data.message || 'Data berhasil disimpan!',
           type: 'success',
           duration: 3000,
         });
         emit('close');
         window.location.reload();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting form:', error);
       ElNotification({
         title: 'Gagal',
-        message: error.response?.data?.message || 'Gagal menyimpan data. Terjadi kesalahan jaringan atau server.', 
+        message: error.response?.data?.message || 'Gagal menyimpan data. Terjadi kesalahan jaringan atau server.',
         type: 'error',
-        duration: 0, 
+        duration: 0,
       });
     }
   });

@@ -3,11 +3,11 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\UserMasyarakat;
 use App\Models\DataPendaftaran;
+use App\Models\UserMasyarakat;
 use Faker\Factory as Faker;
 
-class Masyarakat extends Seeder
+class DataPendaftaranSeeder extends Seeder
 {
     public function run(): void
     {
@@ -30,13 +30,13 @@ class Masyarakat extends Seeder
                 ]),
                 'penghasilan_perbulan' => 'Rp ' . number_format($faker->numberBetween(500000, 10000000), 0, ',', '.'),
                 'nomor_telefon' => $faker->e164PhoneNumber,
+                'status_pendaftaran' => 'Diproses',
+                'keterangan' => 'Pendaftaran sedang diproses oleh panitia, silahkan menunggu sampai waktu yang ditentukan',
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
-
-            // Simpan ke kedua tabel
-            UserMasyarakat::create($data);
             DataPendaftaran::create($data);
+            UserMasyarakat::create($data);
         }
     }
 }

@@ -37,11 +37,29 @@ class KelolaDataPelatihanController extends Controller
                 'penghasilan_perbulan' => 'required|string|max:255',
                 'nomor_telefon' => 'required|string|max:255',
             ]);
-            $peserta = DataPelatihan::create($validated);
+
+            // Tambahkan nilai default untuk status_pendaftaran dan keterangan
+            $extra = [
+                'status_pendaftaran' => 'Diterima',
+                'keterangan' => 'Pendaftaran anda diterima, silahkan lihat tanggal kegiatan dimulai serta perhatikan informasi pada halaman berita dan pengumuman',
+            ];
+
+            $fullData = array_merge($validated, $extra);
+
+            // Simpan ke data_pelatihan
+            $peserta = DataPelatihan::create($fullData);
+
+            // Simpan juga ke users_masyarakat
+            UserMasyarakat::create(array_merge($fullData, [
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]));
+
             return response()->json([
                 'message' => 'Data berhasil disimpan.',
                 'data' => $peserta
             ], 201);
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             if (isset($e->errors()['nik'])) {
                 return response()->json(['message' => 'NIK sudah terdaftar.', 'errors' => $e->errors()], 422);
@@ -51,44 +69,72 @@ class KelolaDataPelatihanController extends Controller
             return response()->json(['message' => 'Gagal menyimpan data: ' . $e->getMessage()], 500);
         }
     }
-    public function update(Request $request, DataPelatihan $dataPelatihan)
-    {
-        try {
-            $validated = $request->validate([
-                'nama' => 'required|string|max:255',
-                'nik' => [
-                    'required',
-                    'string',
-                    'max:255',
-                    Rule::unique('data_pelatihan', 'nik')->ignore($dataPelatihan->id),
-                ],
-                'jenis_bimtek' => 'required|string|max:255',
-                'kegiatan_dimulai' => 'required|date',
-                'kegiatan_berakhir' => 'required|date|after_or_equal:kegiatan_dimulai',
-                'tempat_kegiatan' => 'required|string|max:255',
-                'angkatan' => 'required|integer|min:1',
-                'tempat_tanggal_lahir' => 'required|string|max:255',
-                'pendidikan' => 'required|string|max:255',
-                'status' => 'required|in:kawin,lajang,janda',
-                'alamat' => 'required|string',
-                'jenis_usaha' => 'required|string|max:255',
-                'penghasilan_perbulan' => 'required|string|max:255',
-                'nomor_telefon' => 'required|string|max:255',
-            ]);
-            $dataPelatihan->update($validated);
-            return response()->json([
-                'message' => 'Data berhasil diupdate',
-                'data' => $dataPelatihan,
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            if (isset($e->errors()['nik'])) {
-                return response()->json(['message' => 'NIK sudah terdaftar.', 'errors' => $e->errors()], 422);
-            }
-            return response()->json(['message' => 'Validasi gagal.', 'errors' => $e->errors()], 422);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Gagal memperbarui data: ' . $e->getMessage()], 500);
+
+public function update(Request $request, DataPelatihan $dataPelatihan)
+{
+    try {
+        $validated = $request->validate([
+            'nama' => 'required|string|max:255',
+            'nik' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('data_pelatihan', 'nik')->ignore($dataPelatihan->id),
+            ],
+            'jenis_bimtek' => 'required|string|max:255',
+            'kegiatan_dimulai' => 'required|date',
+            'kegiatan_berakhir' => 'required|date|after_or_equal:kegiatan_dimulai',
+            'tempat_kegiatan' => 'required|string|max:255',
+            'angkatan' => 'required|integer|min:1',
+            'tempat_tanggal_lahir' => 'required|string|max:255',
+            'pendidikan' => 'required|string|max:255',
+            'status' => 'required|in:kawin,lajang,janda',
+            'alamat' => 'required|string',
+            'jenis_usaha' => 'required|string|max:255',
+            'penghasilan_perbulan' => 'required|string|max:255',
+            'nomor_telefon' => 'required|string|max:255',
+        ]);
+
+        $nikLama = $dataPelatihan->nik;
+
+        // Update data_pelatihan
+        $dataPelatihan->update($validated);
+
+        // Update juga users_masyarakat berdasarkan nik lama
+        UserMasyarakat::where('nik', $nikLama)->update([
+            'nama' => $validated['nama'],
+            'nik' => $validated['nik'], // pastikan nik juga ikut diupdate di sini
+            'photo' => $dataPelatihan->photo,
+            'jenis_bimtek' => $validated['jenis_bimtek'],
+            'kegiatan_dimulai' => $validated['kegiatan_dimulai'],
+            'kegiatan_berakhir' => $validated['kegiatan_berakhir'],
+            'tempat_kegiatan' => $validated['tempat_kegiatan'],
+            'angkatan' => $validated['angkatan'],
+            'tempat_tanggal_lahir' => $validated['tempat_tanggal_lahir'],
+            'pendidikan' => $validated['pendidikan'],
+            'status' => $validated['status'],
+            'alamat' => $validated['alamat'],
+            'jenis_usaha' => $validated['jenis_usaha'],
+            'penghasilan_perbulan' => $validated['penghasilan_perbulan'],
+            'nomor_telefon' => $validated['nomor_telefon'],
+            'updated_at' => now(),
+        ]);
+
+        return response()->json([
+            'message' => 'Data berhasil diupdate',
+            'data' => $dataPelatihan,
+        ]);
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        if (isset($e->errors()['nik'])) {
+            return response()->json(['message' => 'NIK sudah terdaftar.', 'errors' => $e->errors()], 422);
         }
+        return response()->json(['message' => 'Validasi gagal.', 'errors' => $e->errors()], 422);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Gagal memperbarui data: ' . $e->getMessage()], 500);
     }
+}
+
     public function destroy(DataPelatihan $dataPelatihan)
     {
         $dataPelatihan->delete();

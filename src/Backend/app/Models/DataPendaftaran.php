@@ -26,6 +26,8 @@ class DataPendaftaran extends Model
         'penghasilan_perbulan',
         'nomor_telefon',
         'photo',
+        'status_pendaftaran',
+        'keterangan', 
     ];
 
     protected $dates = [

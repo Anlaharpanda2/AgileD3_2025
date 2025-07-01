@@ -1,203 +1,262 @@
 <template>
-  <DefaultLayout2 >
-  <div class="detail-page">
-    <div class="hero-section">
-      <div class="hero-background"></div>
-      <div class="hero-content">
-        <div class="back-button-container">
-          <button @click="goBack" class="back-button">
-            <i class="el-icon-arrow-left"></i>
-            <span>Kembali</span>
-          </button>
+  <DefaultLayout2>
+    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+      <!-- Hero Section dengan Glassmorphism -->
+      <div class="relative overflow-hidden bg-gradient-to-r from-pink-500 via-pink-400 to-pink-300">
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0">
+          <div class="absolute top-0 left-0 w-72 h-72 bg-white opacity-10 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
+          <div class="absolute top-0 right-0 w-72 h-72 bg-pink-200 opacity-20 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-1000"></div>
+          <div class="absolute -bottom-8 left-20 w-72 h-72 bg-gray-200 opacity-15 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-2000"></div>
         </div>
-        <h1 class="page-title">Detail Peserta Pelatihan</h1>
-        <p class="page-subtitle">Informasi lengkap data peserta</p>
-      </div>
-    </div>
 
-    <div class="main-content">
-      <div class="content-wrapper">
-        <template v-if="pesertaData">
-          <!-- Profile Card -->
-          <div class="profile-card">
-            <div class="profile-header">
-              <div class="profile-photo-container">
-                <div class="photo-wrapper" @click="triggerFileInput">
-                  <el-avatar :size="120" class="profile-avatar">
-                    <img
-                      :src="pesertaData.photo_url || '/table/profile.svg'"
-                      alt="Foto Peserta"
-                      class="peserta-photo"
-                      @error="handleImageError"
-                    />
-                  </el-avatar>
-                  <div class="photo-hover-overlay">
-                    <img src="/table/updatedetail.svg" alt="Edit foto" class="edit-icon" />
+        <!-- Header Content -->
+        <div class="relative z-10 px-4 py-8 sm:px-6 lg:px-8">
+          <!-- Back Button -->
+          <div class="mb-8">
+            <button 
+              @click="goBack" 
+              class="group inline-flex items-center px-6 py-3 rounded-full bg-white/90 backdrop-blur-sm text-pink-600 font-semibold shadow-lg hover:bg-white hover:shadow-xl transition-all duration-300 hover:scale-105"
+            >
+              <svg class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+              Kembali
+            </button>
+          </div>
+
+          <!-- Title Section -->
+          <div class="text-center text-white">
+            <h1 class="text-4xl sm:text-5xl font-bold mb-4 drop-shadow-lg">
+              Detail Peserta Pelatihan
+            </h1>
+            <p class="text-xl text-pink-100 font-light">
+              Informasi lengkap data peserta
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="relative -mt-16 z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+          <template v-if="pesertaData">
+            <!-- Profile Card dengan Glassmorphism -->
+            <div class="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8 mb-8 hover:shadow-3xl transition-all duration-500">
+              <div class="flex flex-col lg:flex-row items-center lg:items-start gap-8">
+                <!-- Profile Photo -->
+                <div class="relative group">
+                  <div class="relative" @click="triggerFileInput">
+                    <div class="w-32 h-32 rounded-full bg-gradient-to-br from-pink-400 to-pink-600 p-1 shadow-2xl ">
+                      <img
+                        :src="pesertaData.photo_url || '/table/profile.svg'"
+                        alt="Foto Peserta"
+                        class="w-full h-full rounded-full object-cover"
+                        @error="handleImageError"
+                      />
+                    </div>
+                  </div>
+                  <input type="file" ref="fileInput" accept="image/*" class="hidden" @change="uploadPhoto" />
+                </div>
+
+                <!-- Profile Info -->
+                <div class="flex-1 text-center lg:text-left atur">
+                  <h2 class="text-3xl font-bold text-gray-800 mb-2">{{ pesertaData.nama }}</h2>
+                  <p class="text-gray-600 text-lg mb-4">NIK: {{ pesertaData.nik }}</p>
+                  
+                  <!-- Badges -->
+                  <div class="flex flex-wrap gap-3 justify-center lg:justify-start">
+                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg">
+                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                      </svg>
+                      {{ pesertaData.jenis_bimtek }}
+                    </span>
+                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-700 border border-gray-200">
+                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                      </svg>
+                      Angkatan {{ pesertaData.angkatan }}
+                    </span>
                   </div>
                 </div>
-                <input type="file" ref="fileInput" accept="image/*" class="hidden" @change="uploadPhoto" />
-              </div>
-              
-              <div class="profile-info">
-                <h2 class="profile-name">{{ pesertaData.nama }}</h2>
-                <p class="profile-nik">NIK: {{ pesertaData.nik }}</p>
-                <div class="profile-badges">
-                  <span class="badge badge-primary">{{ pesertaData.jenis_bimtek }}</span>
-                  <span class="badge badge-secondary">Angkatan {{ pesertaData.angkatan }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Information Cards -->
-          <div class="info-grid">
-            <!-- Informasi Pelatihan -->
-            <div class="info-card">
-              <div class="card-header">
-                <h3 class="card-title">
-                  <i class="el-icon-reading"></i>
-                  Informasi Pelatihan
-                </h3>
-              </div>
-              <div class="card-content">
-                <div class="info-item">
-                  <span class="info-label">Jenis Pelatihan</span>
-                  <span class="info-value">{{ pesertaData.jenis_bimtek }}</span>
-                </div>
-                <div class="info-item">
-                  <span class="info-label">Angkatan</span>
-                  <span class="info-value">{{ pesertaData.angkatan }}</span>
-                </div>
-                <div class="info-item">
-                  <span class="info-label">Mulai Kegiatan</span>
-                  <span class="info-value">{{ pesertaData.kegiatan_dimulai }}</span>
-                </div>
-                <div class="info-item">
-                  <span class="info-label">Berakhir</span>
-                  <span class="info-value">{{ pesertaData.kegiatan_berakhir }}</span>
-                </div>
-                <div class="info-item">
-                  <span class="info-label">Tempat Kegiatan</span>
-                  <span class="info-value">{{ pesertaData.tempat_kegiatan }}</span>
-                </div>
               </div>
             </div>
 
-            <!-- Data Pribadi -->
-            <div class="info-card">
-              <div class="card-header">
-                <h3 class="card-title">
-                  <i class="el-icon-user"></i>
-                  Data Pribadi
-                </h3>
+            <!-- Information Cards Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              <!-- Informasi Pelatihan -->
+              <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                <div class="bg-gradient-to-r from-pink-50 to-gray-50 px-6 py-4 border-b border-gray-100">
+                  <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-lg flex items-center justify-center mr-3">
+                      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                      </svg>
+                    </div>
+                    Informasi Pelatihan
+                  </h3>
+                </div>
+                <div class="p-6 space-y-4">
+                  <div class="flex justify-between items-start">
+                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Jenis Pelatihan</span>
+                    <span class="text-gray-800 font-semibold text-right">{{ pesertaData.jenis_bimtek }}</span>
+                  </div>
+                  <div class="flex justify-between items-start">
+                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Angkatan</span>
+                    <span class="text-gray-800 font-semibold">{{ pesertaData.angkatan }}</span>
+                  </div>
+                  <div class="flex justify-between items-start">
+                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Mulai Kegiatan</span>
+                    <span class="text-gray-800 font-semibold text-right">{{ pesertaData.kegiatan_dimulai }}</span>
+                  </div>
+                  <div class="flex justify-between items-start">
+                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Berakhir</span>
+                    <span class="text-gray-800 font-semibold text-right">{{ pesertaData.kegiatan_berakhir }}</span>
+                  </div>
+                  <div class="flex flex-col space-y-2">
+                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Tempat Kegiatan</span>
+                    <span class="text-gray-800 font-semibold">{{ pesertaData.tempat_kegiatan }}</span>
+                  </div>
+                </div>
               </div>
-              <div class="card-content">
-                <div class="info-item">
-                  <span class="info-label">Tempat, Tanggal Lahir</span>
-                  <span class="info-value">{{ pesertaData.tempat_tanggal_lahir }}</span>
-                </div>
-                <div class="info-item">
-                  <span class="info-label">Pendidikan</span>
-                  <span class="info-value">{{ pesertaData.pendidikan }}</span>
-                </div>
-                <div class="info-item">
-                  <span class="info-label">Status</span>
-                  <span class="info-value status-badge" :class="getStatusClass(pesertaData.status)">
-                    {{ pesertaData.status }}
-                  </span>
-                </div>
-                <div class="info-item">
-                  <span class="info-label">Nomor Telepon</span>
-                  <span class="info-value">{{ pesertaData.nomor_telefon }}</span>
-                </div>
-                <div class="info-item full-width">
-                  <span class="info-label">Alamat</span>
-                  <span class="info-value">{{ pesertaData.alamat }}</span>
-                </div>
-              </div>
-            </div>
 
-            <!-- Informasi Usaha -->
-            <div class="info-card">
-              <div class="card-header">
-                <h3 class="card-title">
-                  <i class="el-icon-office-building"></i>
-                  Informasi Usaha
-                </h3>
-              </div>
-              <div class="card-content">
-                <div class="info-item">
-                  <span class="info-label">Jenis Usaha</span>
-                  <span class="info-value">{{ pesertaData.jenis_usaha }}</span>
+              <!-- Data Pribadi -->
+              <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                <div class="bg-gradient-to-r from-pink-50 to-gray-50 px-6 py-4 border-b border-gray-100">
+                  <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-lg flex items-center justify-center mr-3">
+                      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                      </svg>
+                    </div>
+                    Data Pribadi
+                  </h3>
                 </div>
-                <div class="info-item">
-                  <span class="info-label">Penghasilan/Bulan</span>
-                  <span class="info-value income-value">{{ pesertaData.penghasilan_perbulan }}</span>
+                <div class="p-6 space-y-4">
+                  <div class="flex flex-col space-y-2">
+                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Tempat, Tanggal Lahir</span>
+                    <span class="text-gray-800 font-semibold">{{ pesertaData.tempat_tanggal_lahir }}</span>
+                  </div>
+                  <div class="flex justify-between items-start">
+                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Pendidikan</span>
+                    <span class="text-gray-800 font-semibold text-right">{{ pesertaData.pendidikan }}</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Status</span>
+                    <span class="px-3 py-1 rounded-full text-sm font-semibold" :class="getStatusClass(pesertaData.status)">
+                      {{ pesertaData.status }}
+                    </span>
+                  </div>
+                  <div class="flex justify-between items-start">
+                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Nomor Telepon</span>
+                    <span class="text-gray-800 font-semibold text-right">{{ pesertaData.nomor_telefon }}</span>
+                  </div>
+                  <div class="flex flex-col space-y-2">
+                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Alamat</span>
+                    <span class="text-gray-800 font-semibold">{{ pesertaData.alamat }}</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Metadata -->
-            <div class="info-card" v-if="pesertaData.created_at || pesertaData.updated_at">
-              <div class="card-header">
-                <h3 class="card-title">
-                  <i class="el-icon-time"></i>
-                  Informasi Sistem
-                </h3>
-              </div>
-              <div class="card-content">
-                <div class="info-item" v-if="pesertaData.created_at">
-                  <span class="info-label">Dibuat Pada</span>
-                  <span class="info-value">{{ formatDate(pesertaData.created_at) }}</span>
+              <!-- Informasi Usaha -->
+              <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                <div class="bg-gradient-to-r from-pink-50 to-gray-50 px-6 py-4 border-b border-gray-100">
+                  <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-lg flex items-center justify-center mr-3">
+                      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                      </svg>
+                    </div>
+                    Informasi Usaha
+                  </h3>
                 </div>
-                <div class="info-item" v-if="pesertaData.updated_at">
-                  <span class="info-label">Diperbarui Pada</span>
-                  <span class="info-value">{{ formatDate(pesertaData.updated_at) }}</span>
-                </div>
+                <div class="p-6 space-y-4">
+                  <div class="flex justify-between items-start">
+                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Jenis Usaha</span>
+                    <span class="text-gray-800 font-semibold text-right">{{ pesertaData.jenis_usaha }}</span>
+                  </div>
+                  <div class="flex justify-between items-start">
+                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Penghasilan/Bulan</span>
+                    <span class="text-pink-600 font-bold text-lg">{{ pesertaData.penghasilan_perbulan }}</span>
+                  </div>
+                </div>  
               </div>
-            </div>
-            <div class="info-card">
-              <div class="card-header">
-                <h3 class="card-title">
-                  <i class="el-icon-user"></i>
-                  Informasi Pendaftaran
-                </h3>
-              </div>
-              <div class="card-content">
-                <div class="info-item d-flex justify-between align-items-center mb-2">
-                  <span class="info-label fw-bold me-2">Status</span>
-                  <span
-                    class="info-value badge px-3 py-2 text-capitalize"
-                    :class="{
-                      'bg-success text-white': pesertaData.status_pendaftaran === 'Diterima',
-                      'bg-danger text-white': pesertaData.status_pendaftaran === 'Ditolak',
-                      'bg-warning text-dark': pesertaData.status_pendaftaran === 'Diproses',
-                    }"
-                  >
-                    {{ pesertaData.status_pendaftaran }}
-                  </span>
-                </div>
 
-                <div class="info-item full-width">
-                  <span class="info-label fw-bold">Keterangan</span>
-                  <p class="info-value mt-1 mb-0">{{ pesertaData.keterangan }}</p>
+              <!-- Informasi Pendaftaran -->
+              <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                <div class="bg-gradient-to-r from-pink-50 to-gray-50 px-6 py-4 border-b border-gray-100">
+                  <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-lg flex items-center justify-center mr-3">
+                      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                      </svg>
+                    </div>
+                    Informasi Pendaftaran
+                  </h3>
+                </div>
+                <div class="p-6 space-y-4">
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Status</span>
+                    <span class="px-4 py-2 rounded-full text-sm font-bold capitalize" :class="{
+                      'bg-green-100 text-green-800 border border-green-200': pesertaData.status_pendaftaran === 'Diterima',
+                      'bg-red-100 text-red-800 border border-red-200': pesertaData.status_pendaftaran === 'Ditolak',
+                      'bg-yellow-100 text-yellow-800 border border-yellow-200': pesertaData.status_pendaftaran === 'Diproses',
+                    }">
+                      {{ pesertaData.status_pendaftaran }}
+                    </span>
+                  </div>
+                  <div class="flex flex-col space-y-2">
+                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Keterangan</span>
+                    <p class="text-gray-800 font-medium">{{ pesertaData.keterangan }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Informasi Sistem -->
+              <div v-if="pesertaData.created_at || pesertaData.updated_at" class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                <div class="bg-gradient-to-r from-pink-50 to-gray-50 px-6 py-4 border-b border-gray-100">
+                  <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-lg flex items-center justify-center mr-3">
+                      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                    </div>
+                    Informasi Sistem
+                  </h3>
+                </div>
+                <div class="p-6 space-y-4">
+                  <div v-if="pesertaData.created_at" class="flex flex-col space-y-2">
+                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Dibuat Pada</span>
+                    <span class="text-gray-800 font-semibold">{{ formatDate(pesertaData.created_at) }}</span>
+                  </div>
+                  <div v-if="pesertaData.updated_at" class="flex flex-col space-y-2">
+                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Diperbarui Pada</span>
+                    <span class="text-gray-800 font-semibold">{{ formatDate(pesertaData.updated_at) }}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </template>
+          </template>
 
-        <template v-else>
-          <div class="loading-section">
-            <div class="loading-spinner">
-              <div class="spinner"></div>
+          <!-- Loading State -->
+          <template v-else>
+            <div class="flex flex-col items-center justify-center min-h-96 bg-white rounded-3xl shadow-2xl border border-gray-100">
+              <div class="relative">
+                <div class="w-16 h-16 border-4 border-gray-200 border-t-pink-500 rounded-full animate-spin"></div>
+                <div class="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-pink-300 rounded-full animate-spin animate-reverse delay-150"></div>
+              </div>
+              <p class="mt-6 text-gray-600 text-lg font-medium">Memuat data peserta...</p>
+              <div class="mt-2 flex space-x-1">
+                <div class="w-2 h-2 bg-pink-400 rounded-full animate-bounce"></div>
+                <div class="w-2 h-2 bg-pink-400 rounded-full animate-bounce delay-100"></div>
+                <div class="w-2 h-2 bg-pink-400 rounded-full animate-bounce delay-200"></div>
+              </div>
             </div>
-            <p class="loading-text">Memuat data peserta...</p>
-          </div>
-        </template>
+          </template>
+        </div>
       </div>
     </div>
-  </div>
   </DefaultLayout2>
 </template>
 
@@ -224,6 +283,8 @@ interface Peserta {
   jenis_usaha: string
   penghasilan_perbulan: string
   nomor_telefon: string
+  status_pendaftaran: string
+  keterangan: string
   created_at?: string
   updated_at?: string
   photo?: string
@@ -239,7 +300,7 @@ const nik = route.params.id
 
 onMounted(async () => {
   try {
-    const res = await api.get(`/peserta/${nik}`)
+    const res = await api.get(`/profile/masyarakat/${nik}`)
     pesertaData.value = res.data
     console.log('Data peserta:', res.data)
   } catch (err) {
@@ -263,23 +324,32 @@ const triggerFileInput = () => {
 
 const getStatusClass = (status: string) => {
   const statusMap: { [key: string]: string } = {
-    'kawin': 'status-married',
-    'lajang': 'status-single',
-    'janda': 'status-widow'
+    'kawin': 'bg-blue-100 text-blue-800 border border-blue-200',
+    'lajang': 'bg-green-100 text-green-800 border border-green-200',
+    'janda': 'bg-purple-100 text-purple-800 border border-purple-200'
   }
-  return statusMap[status] || 'status-default'
+  return statusMap[status] || 'bg-gray-100 text-gray-800 border border-gray-200'
 }
 
 const formatDate = (dateString: string) => {
   if (!dateString) return '-'
-  return new Date(dateString).toLocaleDateString('id-ID', {
+
+  const date = new Date(dateString)
+
+  // Konversi ke zona waktu Indonesia Barat (WIB = UTC+7)
+  const options: Intl.DateTimeFormatOptions = {
+    timeZone: 'Asia/Jakarta',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
-  })
+    minute: '2-digit',
+    hour12: false,
+  }
+
+  return date.toLocaleString('id-ID', options) + ' WIB'
 }
+
 
 const uploadPhoto = async (event: Event) => {
   const input = event.target as HTMLInputElement
@@ -311,7 +381,7 @@ const uploadPhoto = async (event: Event) => {
 
   try {
     const id = pesertaData.value?.id
-    const res = await api.post(`/peserta/${nik}/ubah-foto`, formData)
+    const res = await api.post(`/profile/masyarakat/${nik}/ubah-foto`, formData)
 
     ElMessage.success('Foto berhasil diperbarui')
     
@@ -336,475 +406,44 @@ const uploadPhoto = async (event: Event) => {
 </script>
 
 <style scoped>
-/* Global Styles */
-* {
-  box-sizing: border-box;
+.atur{
+  padding-right: 150px;
 }
-
-.detail-page {
-  min-height: 100vh;
-  background: #ffffff;
-  position: relative;
-}
-
-/* Hero Section */
-.hero-section {
-  position: relative;
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  background: linear-gradient(135deg, #69C5C2 0%, #5bb8b5 100%);
-}
-
-.hero-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: transparent;
-}
-
-.hero-background::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-  animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-
-.hero-content {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  color: white;
-  width: 100%;
-}
-
-.back-button-container {
-  padding: 20px;
-  position: absolute;
-  top: -60px;
-  left: 20px;
-  z-index: 3;
-}
-
-.back-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.9);
-  color: #69C5C2;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 25px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.back-button:hover {
-  background: white;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-}
-
-.back-button i {
-  font-size: 1.1rem;
-}
-
-.page-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin: 0 0 8px 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.page-subtitle {
-  font-size: 1.1rem;
-  margin: 0;
-  opacity: 0.9;
-  font-weight: 300;
-}
-
-/* Main Content */
-.main-content {
-  position: relative;
-  z-index: 1;
-  margin-top: -50px;
-  background: #f8f9fa;
-  min-height: calc(100vh - 150px);
-}
-
-.content-wrapper {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px 40px;
-}
-
-/* Profile Card */
-.profile-card {
-  background: white;
-  border-radius: 20px;
-  padding: 30px;
-  margin-bottom: 30px;
-  box-shadow: 0 8px 25px rgba(43, 108, 106, 0.207);
-  border: 2px solid rgba(105, 197, 194, 0.1);
-}
-
-.profile-header {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-}
-
-.profile-photo-container {
-  position: relative;
-}
-
-.photo-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
-.profile-avatar {
-  border: 4px solid #69C5C2;
-  box-shadow: 0 8px 25px rgba(105, 197, 194, 0.2);
-  transition: all 0.3s ease;
-}
-
-.profile-avatar:hover {
-  transform: scale(1.05);
-  box-shadow: 0 12px 35px rgba(105, 197, 194, 0.3);
-}
-
-.photo-wrapper:hover .photo-hover-overlay {
-  opacity: 1;
-}
-
-.photo-hover-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(105, 197, 194, 0.8);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.edit-icon {
-  width: 40px;
-  height: 40px;
-  filter: invert(1);
-  transition: transform 0.3s ease;
-}
-
-.photo-hover-overlay:hover .edit-icon {
-  transform: scale(1.1);
-}
-
-.peserta-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.profile-info {
-  flex: 1;
-}
-
-.profile-name {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #2c3e50;
-  margin: 0 0 8px 0;
-}
-
-.profile-nik {
-  font-size: 1.1rem;
-  color: #6c757d;
-  margin: 0 0 15px 0;
-  font-weight: 500;
-}
-
-.profile-badges {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.badge {
-  padding: 8px 16px;
-  border-radius: 25px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-transform: capitalize;
-}
-
-.badge-primary {
-  background: #69C5C2;
-  color: white;
-}
-
-.badge-secondary {
-  background: rgba(105, 197, 194, 0.1);
-  color: #69C5C2;
-  border: 1px solid rgba(105, 197, 194, 0.3);
-}
-
-/* Info Grid */
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 25px;
-}
-
-.info-card {
-  background: white;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(53, 95, 93, 0.382);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(105, 197, 194, 0.1);
-}
-
-.info-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(105, 197, 194, 0.15);
-  border-color: rgba(105, 197, 194, 0.2);
-}
-
-.card-header {
-  background: linear-gradient(135deg, #f8f9fa 0%, rgba(105, 197, 194, 0.05) 100%);
-  padding: 20px 25px;
-  border-bottom: 1px solid rgba(105, 197, 194, 0.1);
-}
-
-.card-title {
-  margin: 0;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #495057;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.card-title i {
-  font-size: 1.3rem;
-  color: #69C5C2;
-}
-
-.card-content {
-  padding: 25px;
-}
-
-.info-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 16px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(105, 197, 194, 0.1);
-}
-
-.info-item:last-child {
-  margin-bottom: 0;
-  padding-bottom: 0;
-  border-bottom: none;
-}
-
-.info-item.full-width {
-  flex-direction: column;
-  gap: 8px;
-}
-
-.info-label {
-  font-weight: 600;
-  color: #69C5C2;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  min-width: 140px;
-}
-
-.info-value {
-  font-weight: 500;
-  color: #2c3e50;
-  text-align: right;
-  flex: 1;
-}
-
-.full-width .info-value {
-  text-align: left;
-}
-
-.status-badge {
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: capitalize;
-}
-
-.status-married {
-  background: rgba(105, 197, 194, 0.1);
-  color: #69C5C2;
-}
-
-.status-single {
-  background: rgba(40, 167, 69, 0.1);
-  color: #28a745;
-}
-
-.status-widow {
-  background: rgba(220, 53, 69, 0.1);
-  color: #dc3545;
-}
-
-.income-value {
-  font-weight: 700;
-  color: #69C5C2;
-  font-size: 1.1em;
-}
-
-/* Loading */
-.loading-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 400px;
-  background: white;
-  border-radius: 20px;
-  margin: 20px;
-  box-shadow: 0 8px 25px rgba(105, 197, 194, 0.1);
-  border: 2px solid rgba(105, 197, 194, 0.1);
-}
-
-.loading-spinner {
-  margin-bottom: 20px;
-}
-
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid rgba(105, 197, 194, 0.1);
-  border-top: 4px solid #69C5C2;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.loading-text {
-  color: #6c757d;
-  font-size: 1.1rem;
-  margin: 0;
-}
-
-.hidden {
-  display: none;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .page-title {
-    font-size: 2rem;
+@keyframes animate-reverse {
+  from {
+    transform: rotate(360deg);
   }
-  
-  .back-button-container {
-    top: -50px;
-    left: 15px;
+  to {
+    transform: rotate(0deg);
   }
-  
-  .back-button {
-    padding: 8px 12px;
-    font-size: 0.8rem;
+}
+
+.animate-reverse {
+  animation-direction: reverse;
+}
+
+.shadow-3xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Custom hover effects */
+@media (hover: hover) {
+  .hover\:scale-105:hover {
+    transform: scale(1.05);
   }
-  
-  .profile-header {
-    flex-direction: column;
-    text-align: center;
-    gap: 20px;
+}
+@media (max-width: 1070px) {
+  .atur{
+    padding-right:0;
   }
-  
-  .profile-name {
-    font-size: 1.5rem;
-  }
-  
-  .info-grid {
+}
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .grid-cols-1.lg\:grid-cols-2.xl\:grid-cols-3 {
     grid-template-columns: 1fr;
   }
-  
-  .info-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-  }
-  
-  .info-label {
-    min-width: unset;
-  }
-  
-  .info-value {
-    text-align: left;
-  }
-  
-  .content-wrapper {
-    padding: 0 15px 30px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-section {
-    height: 150px;
-  }
-  
-  .page-title {
-    font-size: 1.5rem;
-  }
-  
-  .page-subtitle {
-    font-size: 0.9rem;
-  }
-  
-  .back-button-container {
-    top: -40px;
-    left: 10px;
-  }
-  
-  .profile-card {
-    padding: 20px;
-  }
-  
-  .card-content {
-    padding: 20px;
+  .atur{
+    padding-right:0;
   }
 }
 </style>

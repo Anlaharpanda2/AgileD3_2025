@@ -169,71 +169,9 @@ Route::prefix('kelola/pelatihan')->group(function () {
 //1. Profile masyarakat
 Route::prefix('profile/masyarakat')->group(function () {
     Route::get('{nik}', [ProfileMasyarakatController::class, 'show']);
-    Route::post('{nik}/ubah-foto', [ProfileMasyarakatController::class, 'ubahFoto']);
+    Route::patch('{nik}/ubah-foto', [ProfileMasyarakatController::class, 'ubahFoto']);
 });
 
 //Tambahan
 Route::post('/data/lokasi', [KelolaLokasiController::class, 'storeOrReplace']);
 Route::get('/data/lokasi', [KelolaLokasiController::class, 'index']);
-
-//api untuk halaman kelola data berita
-Route::put('/kelola/berita/restore', [KelolaDataBeritaController::class, 'restoreMassal']);
-Route::delete('/kelola/berita/permanent', [KelolaDataBeritaController::class, 'forceDeleteMassal']);
-Route::get('/kelola/berita', [KelolaDataBeritaController::class, 'index']);
-Route::post('/kelola/berita', [KelolaDataBeritaController::class, 'store']);
-Route::put('/kelola/berita/{id}', [KelolaDataBeritaController::class, 'update']);
-Route::get('/kelola/berita/trash', [KelolaDataBeritaController::class, 'trash']);
-Route::put('/kelola/berita/restore/{id}', [KelolaDataBeritaController::class, 'restore']);
-Route::delete('/kelola/berita/permanent/{id}', [KelolaDataBeritaController::class, 'forceDelete']);
-Route::delete('/kelola/berita/{id}', [KelolaDataBeritaController::class, 'destroy']);
-Route::delete('/kelola/berita', [KelolaDataBeritaController::class, 'destroyMassal']);
-
-//kelola data Panitia
-Route::post('kelola/Panitia/impor', [KelolaDataPanitiaController::class, 'impor']);
-Route::get('kelola/Panitia/trash', [KelolaDataPanitiaController::class, 'trash']);
-Route::put('kelola/Panitia/restore', [KelolaDataPanitiaController::class, 'restoreMassal']);
-Route::delete('kelola/Panitia/permanent', [KelolaDataPanitiaController::class, 'forceDeleteMassal']);
-Route::delete('kelola/Panitia', [KelolaDataPanitiaController::class, 'destroyMassal']);
-Route::put('kelola/Panitia/{id}/restore', [KelolaDataPanitiaController::class, 'restore']);
-Route::delete('kelola/Panitia/{id}/permanent', [KelolaDataPanitiaController::class, 'forceDelete']);
-Route::get('kelola/Panitia', [KelolaDataPanitiaController::class, 'index']);
-Route::post('kelola/Panitia', [KelolaDataPanitiaController::class, 'store']);
-Route::put('kelola/Panitia/{data_Panitia}', [KelolaDataPanitiaController::class, 'update']);
-Route::delete('kelola/Panitia/{data_Panitia}', [KelolaDataPanitiaController::class, 'destroy']);
-Route::get('/Panitia/{nik}', [KelolaDataPanitiaController::class, 'show']);
-Route::patch('/Panitia/{nik}/ubah-foto', [KelolaDataPanitiaController::class, 'ubahFoto']);
-
-//api untuk kelola akses
-Route::get('/kelola/akses',[KelolaAksesController::class,'index']);
-Route::get('/pengaduan/user/{nik}', [PengaduanController::class, 'getByNik']);
-
-// api untuk kelola struktur pegawai
-Route::get('/kelola/pegawai', [StrukturPegawaiController::class, 'index']);
-Route::post('/kelola/pegawai', [StrukturPegawaiController::class, 'store']);
-Route::get('/pegawai/{id}', [StrukturPegawaiController::class, 'show']);
-Route::put('kelola/pegawai/{id}', [StrukturPegawaiController::class, 'update']);
-Route::delete('kelola/pegawai/{id}', [StrukturPegawaiController::class, 'destroy']);
-    
-Route::post('/destroy-massal', [StrukturPegawaiController::class, 'destroyMassal']);
-Route::get('/trash', [StrukturPegawaiController::class, 'trash']);
-Route::post('/restore/{id}', [StrukturPegawaiController::class, 'restore']);
-Route::post('/restore-massal', [StrukturPegawaiController::class, 'restoreMassal']);
-Route::delete('/force-delete/{id}', [StrukturPegawaiController::class, 'forceDelete']);
-Route::post('/force-delete-massal', [StrukturPegawaiController::class, 'forceDeleteMassal']);
-    
-Route::post('/import', [StrukturPegawaiController::class, 'impor']);
-// Konsultasi Data Management
-Route::post('kelola/konsultasi/impor', [KelolaDataKonsultasiController::class, 'impor']);
-Route::get('kelola/konsultasi/trash', [KelolaDataKonsultasiController::class, 'trash']);
-Route::put('kelola/konsultasi/restore', [KelolaDataKonsultasiController::class, 'restoreMassal']);
-Route::delete('kelola/konsultasi/permanent', [KelolaDataKonsultasiController::class, 'forceDeleteMassal']);
-Route::delete('kelola/konsultasi', [KelolaDataKonsultasiController::class, 'destroyMassal']);
-Route::put('kelola/konsultasi/{id}/restore', [KelolaDataKonsultasiController::class, 'restore']);
-Route::delete('kelola/konsultasi/{id}/permanent', [KelolaDataKonsultasiController::class, 'forceDelete']);
-Route::get('kelola/konsultasi', [KelolaDataKonsultasiController::class, 'index']);
-Route::post('kelola/konsultasi', [KelolaDataKonsultasiController::class, 'store']);
-Route::put('kelola/konsultasi/{data_konsultasi}', [KelolaDataKonsultasiController::class, 'update']);
-Route::delete('kelola/konsultasi/{data_konsultasi}', [KelolaDataKonsultasiController::class, 'destroy']);
-Route::get('/konsultasi/{id_konsultasi}', [KelolaDataKonsultasiController::class, 'show']);
-Route::patch('/konsultasi/{id_konsultasi}/ubah-foto', [KelolaDataKonsultasiController::class, 'ubahFoto']);
-Route::post('/import', [StrukturPegawaiController::class, 'impor']);

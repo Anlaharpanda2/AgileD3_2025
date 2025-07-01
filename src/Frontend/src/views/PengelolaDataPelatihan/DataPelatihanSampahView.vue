@@ -30,6 +30,17 @@
     <!-- Main Container -->
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6">
       <!-- Page Header -->
+  <div class="mb-4">
+    <el-button
+      type="default"
+      @click="goBack"
+      plain
+      class="flex items-center gap-2 text-pink-600 border-pink-500 hover:bg-pink-5 hover:text-white hover:bg-pink-400 hover:border-pink-500"
+    >
+      <el-icon><ArrowLeft /></el-icon>
+      Kembali
+    </el-button>
+  </div>
       <div class="mb-6 sm:mb-8">
         <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Data Pelatihan Sampah</h1>
         <p class="text-gray-600 text-sm sm:text-base">Kelola dan pantau semua data pelatihan yang telah dihapus</p>
@@ -294,7 +305,7 @@
                   <button
                     @click="onMassRestoreClick"
                     :disabled="selected.length === 0"
-                    class="!inline-flex !items-center !px-4 !py-2.5 !border !border-green-300 !rounded-lg !text-sm !font-medium !text-green-700 bg-green-100 text-green-600 hover:bg-green-200 transition-colors !hover:bg-green-50 !focus:outline-none !focus:ring-2 !focus:ring-green-500 !transition-colors !disabled:opacity-50 !disabled:cursor-not-allowed"
+                    class="!inline-flex !items-center !px-4 !py-2.5 !border !border-green-300 !rounded-lg !text-sm !font-medium bg-green-100 text-green-600 hover:bg-green-200 !hover:bg-green-50 !focus:outline-none !focus:ring-2 !focus:ring-green-500 !transition-colors !disabled:opacity-50 !disabled:cursor-not-allowed"
                     title="Pulihkan Massal"
                   >
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -601,7 +612,14 @@ import FormFilterDataPelatihan from "../../components/KelolaDataPelatihan/FormFi
 import FormSortingDataPelatihan from "../../components/KelolaDataPelatihan/FormSortingDataPelatihan.vue";
 import { ElNotification, ElMessageBox, ElMessage } from 'element-plus';
 import { Eye, EyeOff } from 'lucide-vue-next';
+import { useRouter } from 'vue-router'
+import { ArrowLeft } from '@element-plus/icons-vue'
 
+const router = useRouter()
+
+function goBack() {
+  router.push('/data/pelatihan')
+}
 interface Peserta {
   id: number;
   nama: string;

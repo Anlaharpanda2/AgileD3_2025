@@ -13,15 +13,15 @@ class DatabaseSeeder extends Seeder
             DataBeritaSeeder::class,
             DataFasilitasSeeder::class,
             DataKonsultasiSeeder::class,
-            DataPelatihanSeeder::class,
-            Masyarakat::class,
-            StrukturPegawaiSeeder::class,
             DataNilaiSeeder::class,
-            DataTestSeeder::class,
-            UserSeeder::class,
-            DataPengaduanSeeder::class,
-            DataKonsultasiSeeder::class,
             DataPanitiaSeeder::class,
+            DataPelatihanSeeder::class,
+            DataPendaftaranSeeder::class,
+            DataPengaduanSeeder::class,
+            DataTestSeeder::class,
+            StrukturPegawaiSeeder::class,
+            UserSeeder::class,
+            UsersMasyarakat::class,
         ]);
     }
 }

@@ -52,18 +52,25 @@ class KelolaDataPendaftaranController extends Controller
 
         $pendaftar = DataPendaftaran::findOrFail($id);
 
-        // Update status dan keterangan di user_masyarakat
+        // Update status, keterangan, dan detail pelatihan ke user_masyarakat
         UserMasyarakat::where('nik', $pendaftar->nik)
             ->update([
                 'status_pendaftaran' => 'Diterima',
                 'keterangan' => 'Pendaftaran anda diterima, silahkan lihat tanggal kegiatan dimulai serta perhatikan informasi pada halaman berita dan pengumuman',
+                'kegiatan_dimulai' => $request->kegiatan_dimulai,
+                'kegiatan_berakhir' => $request->kegiatan_berakhir,
+                'tempat_kegiatan' => $request->tempat_kegiatan,
+                'angkatan' => $request->angkatan,
             ]);
 
+        // Salin data ke pelatihan + tambahkan status_pendaftaran dan keterangan
         $pelatihanData = $pendaftar->toArray();
         $pelatihanData['kegiatan_dimulai'] = $request->kegiatan_dimulai;
         $pelatihanData['kegiatan_berakhir'] = $request->kegiatan_berakhir;
         $pelatihanData['tempat_kegiatan'] = $request->tempat_kegiatan;
         $pelatihanData['angkatan'] = $request->angkatan;
+        $pelatihanData['status_pendaftaran'] = 'Diterima';
+        $pelatihanData['keterangan'] = 'Pendaftaran anda diterima, silahkan lihat tanggal kegiatan dimulai serta perhatikan informasi pada halaman berita dan pengumuman';
 
         unset($pelatihanData['id'], $pelatihanData['created_at'], $pelatihanData['updated_at']);
 
@@ -93,6 +100,10 @@ class KelolaDataPendaftaranController extends Controller
                 ->update([
                     'status_pendaftaran' => 'Diterima',
                     'keterangan' => 'Pendaftaran anda diterima, silahkan lihat tanggal kegiatan dimulai serta perhatikan informasi pada halaman berita dan pengumuman',
+                    'kegiatan_dimulai' => $validated['kegiatan_dimulai'],
+                    'kegiatan_berakhir' => $validated['kegiatan_berakhir'],
+                    'tempat_kegiatan' => $validated['tempat_kegiatan'],
+                    'angkatan' => $validated['angkatan'],
                 ]);
 
             $pelatihanData = array_merge($pendaftar->toArray(), [
@@ -100,6 +111,8 @@ class KelolaDataPendaftaranController extends Controller
                 'kegiatan_berakhir' => $validated['kegiatan_berakhir'],
                 'tempat_kegiatan' => $validated['tempat_kegiatan'],
                 'angkatan' => $validated['angkatan'],
+                'status_pendaftaran' => 'Diterima',
+                'keterangan' => 'Pendaftaran anda diterima, silahkan lihat tanggal kegiatan dimulai serta perhatikan informasi pada halaman berita dan pengumuman',
             ]);
 
             unset($pelatihanData['id'], $pelatihanData['created_at'], $pelatihanData['updated_at']);

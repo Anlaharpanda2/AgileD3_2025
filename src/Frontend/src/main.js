@@ -3,8 +3,8 @@ import { Vue3Lottie } from 'vue3-lottie';
 import App from './App.vue';
 import router from './router';
 import ElementPlus from 'element-plus';
-import vuetify from './plugins/vuetify';
 import './style.css';
+import vuetify from './plugins/vuetify';
 import 'element-plus/dist/index.css';
 import { MotionPlugin } from '@vueuse/motion'; 
 import 'leaflet/dist/leaflet.css'

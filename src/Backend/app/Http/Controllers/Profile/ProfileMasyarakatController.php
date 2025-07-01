@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use App\Models\UserMasyarakat;
 use Illuminate\Validation\Rule; 
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 
 class ProfileMasyarakatController extends Controller

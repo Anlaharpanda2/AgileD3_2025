@@ -30,7 +30,6 @@ function goToBeranda() {
 
 <style scoped>
 @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
-@import url("https://fonts.googleapis.com/css2?family=Clash+Grotesk:wght@500&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Concert+One&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=ABeeZee&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Aclonica&display=swap");

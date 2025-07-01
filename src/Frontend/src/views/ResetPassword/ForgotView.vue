@@ -1,5 +1,5 @@
 <script>
-import api from '@/api';
+import api from '../../api';
 // Import ElNotification dari Element Plus
 import { ElNotification } from 'element-plus'; 
 

@@ -12,7 +12,7 @@ class DataBeritaSeeder extends Seeder
     {
         $jenisKontenList = ['berita', 'pengumuman'];
 
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
             DataBerita::create([
                 'judul' => 'Judul ' . ucfirst($jenisKontenList[$i % 2]) . ' #' . $i,
                 'isi' => 'Ini adalah isi dari ' . $jenisKontenList[$i % 2] . ' ke-' . $i . '. ' . Str::random(100),

@@ -23,7 +23,6 @@ function goToBeranda() {
 </script>
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Clash+Grotesk:wght@500&display=swap');
 body {
   margin: 0;
   line-height: normal;

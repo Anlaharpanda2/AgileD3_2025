@@ -206,7 +206,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import api from '../../api'
-import DefaultLayout2 from "../../layouts/DefaultLayout2.vue";
+import DefaultLayout2 from "../../layouts/Layout2.vue";
 
 interface Peserta {
   id: number

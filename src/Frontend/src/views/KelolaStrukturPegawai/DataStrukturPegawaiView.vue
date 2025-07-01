@@ -106,14 +106,14 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import api from '@/api'
-import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import api from '../../api'
+import DefaultLayout from '../../layouts/DefaultLayout.vue'
 import { ElNotification } from 'element-plus'
 
-import FormTambahStrukturPegawai from '@/components/KelolaStrukturPegawai/FormTambahStrukturPegawai.vue'
-import FormEditStrukturPegawai from '@/components/KelolaStrukturPegawai/FormEditStrukturPegawai.vue'
-import FormExportStrukturPegawai from '@/components/KelolaStrukturPegawai/FormExportStrukturPegawai.vue'
-import FormImportStrukturPegawai from '@/components/KelolaStrukturPegawai/FormImportStrukturPegawai.vue'
+import FormTambahStrukturPegawai from '../../components/KelolaStrukturPegawai/FormTambahStrukturPegawai.vue'
+import FormEditStrukturPegawai from '../../components/KelolaStrukturPegawai/FormEditStrukturPegawai.vue'
+import FormExportStrukturPegawai from '../../components/KelolaStrukturPegawai/FormExportStrukturPegawai.vue'
+import FormImportStrukturPegawai from '../../components/KelolaStrukturPegawai/FormImportStrukturPegawai.vue'
 
 interface Pegawai {
   idPegawai: number

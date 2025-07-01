@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import api from '@/api'; // Pastikan path ke file API Anda benar
+import api from '../../api'; // Pastikan path ke file API Anda benar
 import { ElNotification } from 'element-plus'; // Pastikan sudah install dan import Element Plus Notification
 
 export default {

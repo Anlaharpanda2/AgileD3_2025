@@ -120,7 +120,7 @@
 
 <script setup>
 import { reactive, ref } from 'vue'
-import api from '@/api.js'
+import api from '../../api.js'
 import { ElNotification } from 'element-plus'
 
 const emit = defineEmits(['close'])

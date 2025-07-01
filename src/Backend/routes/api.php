@@ -65,6 +65,7 @@ Route::prefix('kelola/berita')->group(function () {
     Route::post('/', [KelolaDataBeritaController::class, 'store']);
     Route::put('/{dataBerita}', [KelolaDataBeritaController::class, 'update']);
     Route::delete('/{dataBerita}', [KelolaDataBeritaController::class, 'destroy']);
+    Route::get('/{dataBerita}', [KelolaDataBeritaController::class, 'show']);
 });
 //3. pengelola pengaduan
 Route::prefix('kelola/pengaduan')->group(function () {
@@ -78,6 +79,7 @@ Route::prefix('kelola/pengaduan')->group(function () {
     Route::post('/', [KelolaDataPengaduanController::class, 'store']);
     Route::put('/{dataPengaduan}', [KelolaDataPengaduanController::class, 'update']);
     Route::delete('/{dataPengaduan}', [KelolaDataPengaduanController::class, 'destroy']);
+    Route::get('/{id}', [KelolaDataPengaduanController::class, 'show']);
 });
 //4. pengelola konsultasi
 Route::prefix('kelola/Konsultasi')->group(function () {

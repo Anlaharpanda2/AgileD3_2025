@@ -1,4 +1,4 @@
-import api from '@/api';
+import api from '../../api';
 import { ElMessage } from 'element-plus';
 
 export async function useMassDelete({ endpoint, key }) {

@@ -1,180 +1,250 @@
 <template>
-  <header class="header">
-      <!-- KIRI -->
-        <SideBar/>
-        <div class="header__brand">
-          <Vue3Lottie
-            :animationLink="'/lottie/logo.json'"
-            :loop="false"
-            :autoplay="true"
-            class="panjang"
-          />
+  <header
+    class="top-0 left-0 right-0 z-50 transition-all duration-300 ease-out"
+    :class="[
+      isHomeRoute ? 'fixed' : 'relative',
+      isScrolled 
+        ? 'bg-white/95 backdrop-blur-md shadow-md border-b border-gray-100 pt-0' 
+        : 'bg-transparent pt-5'
+    ]"
+  >
+    <div class="mx-auto px-8 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo & Branding -->
+        <div class="flex items-center space-x-4 group">
+          <div class="w-10 h-10">
+            <sidebar />
+          </div>
+          <div class="flex items-center space-x-3">
+            <!-- Logo -->
+            <div class="relative">
+              <div
+                class="w-12 h-12 flex items-center justify-center rounded-2xl
+                       transform hover:scale-110 transition-all duration-500 group-hover:rotate-6
+                       bg-white shadow-lg border border-pink-400/30 hover:shadow-2xl hover:border-pink-400/50"
+                :class="isScrolled
+                  ? 'bg-white border-gray-200/50 hover:border-gray-300/50 shadow-sm'
+                  : ''"
+              >
+                <img
+                  src="/Header/Logo.png"
+                  alt="Pepsiku Burger Logo"
+                  class="w-8 h-8 object-contain relative z-20 filter
+                         hover:brightness-110 transition-all duration-300"
+                />
+                <!-- Glow effects hanya non-scroll -->
+                <div
+                  v-if="!isScrolled"
+                  class="absolute inset-0 rounded-2xl bg-gradient-to-br
+                         from-pink-400/30 to-pink-600/30 opacity-0
+                         group-hover:opacity-100 animate-pulse transition-all duration-700"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Brand Text -->
+            <div class="flex flex-col relative">
+              <h1
+                class="text-2xl font-bold tracking-tight leading-none transition-all duration-500"
+                :class="isScrolled
+                  ? 'text-gray-900 hover:text-gray-700 hover:drop-shadow-sm'
+                  : 'group-hover:text-pink-500'"
+              >
+                <span v-if="!isScrolled"
+                      class="bg-clip-text text-transparent bg-gradient-to-r
+                             from-pink-600 via-pink-500 to-pink-600 font-extrabold">
+                  PEPSIKU
+                </span>
+                <span v-else class="text-gray-900 font-extrabold">PEPSIKU</span>
+              </h1>
+              <span
+                class="text-xs font-semibold tracking-widest uppercase transition-all duration-500"
+                :class="isScrolled
+                  ? 'text-pink-500/95 group-hover:text-pink-400'
+                  : 'text-black group-hover:text-gray-600'"
+              >
+                BURGER
+              </span>
+            </div>
+          </div>
         </div>
 
-      <!-- TENGAH -->
-      <div class="header__center">
-        <span class="header__tagline">Keluarga Sejahtera, Setara, Terlindungi</span>
-        <div class="header__search-wrapper" :class="{ active: isFocused }">
-          <input
-            type="text"
-            v-model="searchQuery"
-            @focus="isFocused = true"
-            @blur="isFocused = false"
-            class="header__search-input"
-            placeholder="Pencarian..."
-          />
-          <img src="/layout/button.png" alt="Cari" class="header__search-icon" />
+        <!-- Navigation -->
+        <nav class="hidden lg:block max-w-screen-xl">
+          <ul class="flex justify-center space-x-2" style="padding-right: 170px;">
+            <template v-for="item in navigationMenu" :key="item.name">
+              <!-- Single Item -->
+              <li
+                v-if="!item.children"
+                class="relative rounded-full px-3 py-1 font-medium text-xs flex items-center h-8
+                       transition-all duration-200 ease-in-out cursor-pointer whitespace-nowrap
+                       transform hover:-translate-y-0.5 hover:shadow-md
+                       hover:bg-pink-500 hover:!text-white"
+                :class="{
+                  'text-black':      !isScrolled,
+                  'text-gray-700':    isScrolled
+                }"
+              >
+                <router-link :to="item.to" class="flex items-center w-full h-full">
+                  <component :is="item.icon" class="w-4 h-4 mr-1" />
+                  <span>{{ item.name }}</span>
+                </router-link>
+              </li>
+
+              <!-- Dropdown Item -->
+              <li
+                v-else
+                class="relative group rounded-full px-3 py-1 font-medium text-xs flex items-center h-8
+                       transition-all duration-200 ease-in-out cursor-pointer whitespace-nowrap
+                       transform hover:-translate-y-0.5 hover:shadow-md
+                       hover:bg-pink-500 hover:!text-white"
+                @mouseenter="openSubMenu(item.name)"
+                @mouseleave="closeSubMenu(item.name)"
+                :class="{
+                  'text-black':                     !isScrolled,
+                  'text-gray-700':                   isScrolled,
+                  'bg-pink-600 text-white shadow-md': isSubMenuActive(item)
+                }"
+              >
+                <div class="flex items-center w-full h-full">
+                  <component :is="item.icon" class="w-4 h-4 mr-1" />
+                  <span>{{ item.name }}</span>
+                  <svg
+                    class="ml-1 w-3 h-3 transition-transform duration-200"
+                    :class="{ 'rotate-180': openSubMenus[item.name] }"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </div>
+
+                <!-- Submenu Dropdown -->
+                <ul
+                  v-show="openSubMenus[item.name]"
+                  class="absolute top-full left-1/2 -translate-x-1/2 mt-2
+                         bg-white border border-gray-200 rounded-lg shadow-md
+                         py-1 z-50 min-w-[160px]
+                         transition-all duration-300 ease-out transform origin-top"
+                  :class="{
+                    'opacity-100 scale-y-100': openSubMenus[item.name],
+                    'opacity-0 scale-y-0 pointer-events-none': !openSubMenus[item.name]
+                  }"
+                >
+                  <li
+                    v-for="child in item.children"
+                    :key="child.name"
+                    class="px-3 py-2 text-gray-700 rounded-md transition-all duration-200 ease-in-out
+                           flex items-center text-xs hover:bg-pink-500 hover:text-white"
+                    :class="{ 'bg-pink-500 text-white': isChildActive(child, item.name) }"
+                  >
+                    <router-link :to="child.to" class="flex items-center w-full h-full">
+                      <component :is="child.icon" class="w-4 h-4 mr-1" />
+                      <span>{{ child.name }}</span>
+                    </router-link>
+                  </li>
+                </ul>
+              </li>
+            </template>
+          </ul>
+        </nav>
+
+        <!-- Avatar Button -->
+        <div class="flex items-center">
+          <button
+            class="w-9 h-9 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
+          >
+            <Avatar
+              class="w-9 h-9 rounded-full ring-1 transition-all duration-300"
+              :class="isScrolled ? 'ring-gray-200' : 'ring-white/30'"
+            />
+          </button>
         </div>
       </div>
-
-      <!-- KANAN -->
-      <div class="header__right">
-        <Avatar class="header__icon-right" />
-      </div>
+    </div>
   </header>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import Avatar from '@/components/layouts/Avatar.vue'
-import SideBar from '@/components/layouts/SideBar.vue'
-const searchQuery = ref('')
-const isFocused = ref(false)
+import { ref, onMounted, onUnmounted, shallowRef, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import sidebar from './SideBar.vue'
+import {
+  Home, FileText, BookUser, MessageSquare,
+  Pencil, ClipboardCheck, Database, FileQuestion,
+  MessageCircle, Users2, UserCog
+} from 'lucide-vue-next'
+import Avatar from './Avatar.vue'
+
+const route = useRoute()
+
+const navigationMenu = shallowRef([
+  { name: 'BERANDA', to: '/', icon: Home },
+  { name: 'TEST', icon: FileText, children: [
+    { name: 'Pretest', to: '/data/pelatihan-pretest', icon: Pencil },
+    { name: 'Posttest', to: '/posttest', icon: ClipboardCheck },
+    { name: 'Data Nilai', to: '/data-nilai', icon: Database },
+  ]},
+  { name: 'PELATIHAN', icon: BookUser, children: [
+    { name: 'Data Pendaftar', to: '/data/pendaftaran', icon: Users2 },
+    { name: 'Data Peserta', to: '/data/pelatihan', icon: UserCog },
+  ]},
+  { name: 'PENGADUAN', icon: MessageSquare, children: [
+    { name: 'Data Pengaduan', to: '/data-pengaduan', icon: FileQuestion },
+    { name: 'Data Konsultasi', to: '/data-konsultasi', icon: MessageCircle },
+  ]},
+])
+
+const isScrolled = ref(false)
+const isHomeRoute = ref(route.path === '/')
+const openSubMenus = ref({})
+let subMenuTimeout = null
+
+function openSubMenu(name) {
+  clearTimeout(subMenuTimeout)
+  Object.keys(openSubMenus.value).forEach(k => openSubMenus.value[k] = false)
+  openSubMenus.value[name] = true
+}
+
+function closeSubMenu(name) {
+  subMenuTimeout = setTimeout(() => openSubMenus.value[name] = false, 150)
+}
+
+function isSubMenuActive(item) {
+  return item.children?.some(c => route.path === c.to) || false
+}
+
+function isChildActive(child, parentName) {
+  return route.path === child.to
+}
+
+watch(() => route.path, (newPath) => {
+  isHomeRoute.value = newPath === '/'
+  isScrolled.value = newPath !== '/' || window.scrollY > 20
+})
+
+onMounted(() => {
+  isHomeRoute.value = route.path === '/'
+  isScrolled.value = route.path !== '/' || window.scrollY > 20
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => window.removeEventListener('scroll', handleScroll))
+
+function handleScroll() {
+  if (isHomeRoute.value) {
+    isScrolled.value = window.scrollY > 20
+  } else {
+    isScrolled.value = true
+  }
+}
 </script>
 
 <style scoped>
-@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
-
-* {
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-}
-
-body, html {
-  margin: 0;
-  padding: 0;
-  font-family: "Roboto", sans-serif;
-}
-
-/* HEADER */
-.header {
-  background: linear-gradient(8deg, #fb9cb1 0%, #ff5b91 100%);
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 10px;
-  padding-top: 10px;
-}
-
-/* KIRI */
-.header__brand {
-  display: flex;
-  align-items: center;
-  padding-left: 30px;
-  gap: 10px;
-}
-
-.header__logo {
-  width: 36px;
-  height: 36px;
-}
-
-.header__title {
-  font-family: "Paytone One", sans-serif;
-  font-size: 16.5px;
-  color: #ffeff6;
-}
-
-/* TENGAH */
-.header__center {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-left: auto;
-}
-
-.header__tagline {
-  font-size: 16px;
-  font-style: italic;
-  font-weight: 500;
-  color: #fff;
-}
-
-.header__search-wrapper {
-  display: flex;
-  align-items: center;
-  background-color: #ff5d92;
-  border: 1px solid #fff;
-  border-radius: 12px;
-  padding: 6px 13px;
-  gap: 8px;
-  transition: all 0.3s ease;
-  position: relative;
-  width: 120px;
-  overflow: hidden;
-}
-
-.header__search-wrapper.active {
-  width: 220px;
-}
-
-.header__search-input {
-  border: none;
-  background: transparent;
-  outline: none;
-  font-size: 12px;
-  color: #fff;
-  width: 100%;
-}
-
-.header__search-input::placeholder {
-  color: rgb(225, 225, 225);
-}
-
-.header__search-icon {
-  width: 14px;
-  height: 14px;
-}
-
-/* KANAN */
-.header__right {
-  padding-left: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  position: relative;
-}
-
-.header__icon-right {
-  width: 23px;
-  height: 22.5px;
-  object-fit: contain;
-  cursor: pointer;
-}
-.panjang{
-  width: 300px;
-}
-
-@media (max-width: 768px) {
-  .header__container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .header__center {
-    display: none;
-  }
-  .header__right {
-  padding:0px;
-  }
-}
-
-@media(max-width:361px){
-  .panjang{
-    width: 250px;
-  }
-}
+/* Semua styling sudah menggunakan Tailwind */
 </style>

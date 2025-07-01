@@ -154,4 +154,19 @@ class KelolaDataBeritaController extends Controller
 
         return response()->json(['message' => 'Data berhasil dihapus permanen']);
     }
+    Public function show($id)
+    {
+        $dataBerita = DataBerita::find($id);
+
+        if (! $dataBerita) {
+            return response()->json([
+                'message' => 'Data berita tidak ditemukan'
+            ], 404);
+        }
+
+        return response()->json([
+            'message' => 'Data berita ditemukan',
+            'data'    => $dataBerita
+        ], 200);
+    }
 }

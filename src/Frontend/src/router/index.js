@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import KelolaAksesView from '../views/KelolaAkses/KelolaAksesView.vue';
-import def2 from '../layouts/DefaultLayout2.vue';
+import def2 from '../layouts/Layout2.vue';
 import FormSortingDataPelatihan from '../components/KelolaDataPelatihan/FormSortingDataPelatihan.vue';
 import HomeView from '../views/Home/HomeView.vue';
 import LoginMasyarakat from '../views/Login/LoginMasyarakat.vue';
@@ -11,11 +11,15 @@ import DataPelatihanSampahView from '../views/PengelolaDataPelatihan/DataPelatih
 import DataKonsultasiView from '../views/PengelolaDataKonsultasi/DataKonsultasiView.vue';
 import DataKonsultasiSampahView from '../views/PengelolaDataKonsultasi/DataKonsultasiSampahView.vue';
 import PrePostTestView from '../views/PengelolaPretestPostest/PrePostTestView.vue';
-import PelaporanPengaduan from '../views/PengelolaPelaporanPengaduan/BuatPengaduanPage.vue';
-import StatusPengaduan from '../views/PengelolaPelaporanPengaduan/StatusPengaduan.vue';
-//import BuatPengaduanPage from '../views/PengelolaPelaporanPengaduan/BuatPengaduanPage.vue';
+//pengaduan
+import BuatPengaduanView from '../views/PengelolaPengaduan/BuatPengaduanView.vue';
+import KonfirmasiPengaduanView from '../views/PengelolaPengaduan/KonfirmasiPengaduanView.vue';
+import StatusPengaduan from '../views/PengelolaPengaduan/StatusPengaduan.vue';
+
 import DataBeritaView from '../views/PengelolaDataBerita/DataBeritaView.vue';
 import DataBeritaSampahView from '../views/PengelolaDataBerita/DataBeritaSampahView.vue';
+import DetailDataPengumumanView from '@/views/PengelolaDataBerita/DetailDataPengumumanView.vue';
+
 import OtpView from '../views/ResetPassword/OtpView.vue';
 import ForgotView from '../views/ResetPassword/ForgotView.vue';
 import ResetPassword from '../views/ResetPassword/ResetPassword.vue';
@@ -26,7 +30,7 @@ import DaftarMasyarakatView from '../views/DaftarMasyarakat/DaftarMasyarakatView
 import ProfileMasyarakat from '../views/Profile/ProfileMasyarakat.vue';
 import KelolaDataView from '../views/KelolaData/KelolaDataView.vue';
 import DataStrukturPegawaiView from '../views/KelolaStrukturPegawai/DataStrukturPegawaiView.vue';
-import DataStrukturPegawaiSampahView from '../views/kelolaStrukturPegawai/DataStrukturPegawaiSampahView.vue';
+import DataStrukturPegawaiSampahView from '../views/KelolaStrukturPegawai/DataStrukturPegawaiSampahView.vue';
 import Konsultasi from '../views/Footer/Konsultasi.vue';
 import ProgramPelatihan from '../views/Footer/ProgramPelatihan.vue';
 import Pendampingan from '../views/Footer/Pendampingan.vue';
@@ -34,6 +38,7 @@ import PusatBantuan from '../views/Footer/PusatBantuan.vue';
 import FAQ from '../views/Footer/FAQ.vue';
 import HubungiKami from '../views/Footer/HubungiKami.vue';
 import Feedback from '../views/Footer/Feedback.vue';
+import DetailDataBeritaView from '../views/PengelolaDataBerita/DetailDataBeritaView.vue';
 
 const routes = [
   //halaman home
@@ -67,19 +72,21 @@ const routes = [
   
   //halaman kelola pendaftaran
   {path: '/data/pendaftaran',name: 'Datapendaftaran',component: DatapendaftaranView,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
-
+  
   //halaman pretest postest
   {path: '/preposttest',name: 'PrePostTest',component: PrePostTestView},
   {path: '/kelolatest',name: 'KelolaTest',component: PrePostTestView},
 
   // halaman pelaporan pengaduan
-  {path: '/pengaduan',name: 'PelaporanPengaduan',component: PelaporanPengaduan},
-  {path: '/pengaduan/status',name: 'StatusPengaduan',component: StatusPengaduan},
-  //{path: '/pengaduan/buat',name: 'BuatPengaduan',component: BuatPengaduanPage},
+  {path: '/pengaduan/buat',name: 'BuatPengaduan',component: BuatPengaduanView},
+  {path: '/pengaduan/konfirmasi',name: 'KonfirmasiPengaduan',component: KonfirmasiPengaduanView},
+  {path: '/pengaduan/status/:id',name: 'StatusPengaduan',component: StatusPengaduan},
   
   // halaman data berita
   {path: '/data/berita/sampah',name: 'DataBeritaSampah',component: DataBeritaSampahView,meta: { requiresAuth: true }},
   {path: '/data/berita',name: 'DataBerita',component: DataBeritaView,meta: { requiresAuth: true }},
+  {path: '/berita/:id',name: 'DetailBerita',component: DetailDataBeritaView},
+  {path: '/pengumuman/:id',name: 'DetailPengumuman',component: DetailDataPengumumanView},
 
   //halaman kelola konsultasi
   {path: '/data/konsultasi', name: 'DataKonsultasi', component: DataKonsultasiView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
@@ -107,7 +114,18 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  // --- TAMBAHKAN BAGIAN scrollBehavior INI ---
+  scrollBehavior(to, from, savedPosition) {
+    // Jika ada savedPosition (misal dari tombol back/forward browser), gunakan itu
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      // Gulir ke bagian atas halaman untuk rute baru
+      return { top: 0, behavior: 'smooth' }; // 'smooth' untuk animasi gulir yang halus
+    }
+  },
+  // ------------------------------------------
 });
 
 router.beforeEach((to, from, next) => {

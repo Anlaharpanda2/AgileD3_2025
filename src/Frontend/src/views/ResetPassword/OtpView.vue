@@ -1,5 +1,5 @@
 <script>
-import api from '@/api';
+import api from '../../api';
 import { ElNotification } from 'element-plus'; // pastikan sudah install dan import
 
 export default {

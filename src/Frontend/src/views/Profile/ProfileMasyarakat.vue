@@ -61,18 +61,18 @@
 
                 <!-- Profile Info -->
                 <div class="flex-1 text-center lg:text-left atur">
-                  <h2 class="text-3xl font-bold text-gray-800 mb-2">{{ pesertaData.nama }}</h2>
+                  <h2 class="text-3xl font-bold text-gray-500 mb-2">{{ pesertaData.nama }}</h2>
                   <p class="text-gray-600 text-lg mb-4">NIK: {{ pesertaData.nik }}</p>
                   
                   <!-- Badges -->
                   <div class="flex flex-wrap gap-3 justify-center lg:justify-start">
-                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg">
+                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm  bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg">
                       <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                       </svg>
                       {{ pesertaData.jenis_bimtek }}
                     </span>
-                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-700 border border-gray-200">
+                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm  bg-gray-100 text-gray-700 border border-gray-200">
                       <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                       </svg>
@@ -88,7 +88,7 @@
               <!-- Informasi Pelatihan -->
               <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105">
                 <div class="bg-gradient-to-r from-pink-50 to-gray-50 px-6 py-4 border-b border-gray-100">
-                  <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                  <h3 class="text-lg font-bold text-gray-500 flex items-center">
                     <div class="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-lg flex items-center justify-center mr-3">
                       <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
@@ -99,24 +99,24 @@
                 </div>
                 <div class="p-6 space-y-4">
                   <div class="flex justify-between items-start">
-                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Jenis Pelatihan</span>
-                    <span class="text-gray-800 font-semibold text-right">{{ pesertaData.jenis_bimtek }}</span>
+                    <span class="text-sm font-semibold text-gray-799 uppercase tracking-wide">Jenis Pelatihan</span>
+                    <span class="text-gray-500  text-right">{{ pesertaData.jenis_bimtek }}</span>
                   </div>
                   <div class="flex justify-between items-start">
-                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Angkatan</span>
-                    <span class="text-gray-800 font-semibold">{{ pesertaData.angkatan }}</span>
+                    <span class="text-sm font-semibold text-gray-799 uppercase tracking-wide">Angkatan</span>
+                    <span class="text-gray-500 ">{{ pesertaData.angkatan }}</span>
                   </div>
                   <div class="flex justify-between items-start">
-                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Mulai Kegiatan</span>
-                    <span class="text-gray-800 font-semibold text-right">{{ pesertaData.kegiatan_dimulai }}</span>
+                    <span class="text-sm font-semibold text-gray-799 uppercase tracking-wide">Mulai Kegiatan</span>
+                    <span class="text-gray-500  text-right">{{ pesertaData.kegiatan_dimulai }}</span>
                   </div>
                   <div class="flex justify-between items-start">
-                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Berakhir</span>
-                    <span class="text-gray-800 font-semibold text-right">{{ pesertaData.kegiatan_berakhir }}</span>
+                    <span class="text-sm font-semibold text-gray-799 uppercase tracking-wide">Berakhir</span>
+                    <span class="text-gray-500  text-right">{{ pesertaData.kegiatan_berakhir }}</span>
                   </div>
                   <div class="flex flex-col space-y-2">
-                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Tempat Kegiatan</span>
-                    <span class="text-gray-800 font-semibold">{{ pesertaData.tempat_kegiatan }}</span>
+                    <span class="text-sm font-semibold text-gray-799 uppercase tracking-wide">Tempat Kegiatan</span>
+                    <span class="text-gray-500 ">{{ pesertaData.tempat_kegiatan }}</span>
                   </div>
                 </div>
               </div>
@@ -124,7 +124,7 @@
               <!-- Data Pribadi -->
               <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105">
                 <div class="bg-gradient-to-r from-pink-50 to-gray-50 px-6 py-4 border-b border-gray-100">
-                  <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                  <h3 class="text-lg font-bold text-gray-500 flex items-center">
                     <div class="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-lg flex items-center justify-center mr-3">
                       <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -135,26 +135,26 @@
                 </div>
                 <div class="p-6 space-y-4">
                   <div class="flex flex-col space-y-2">
-                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Tempat, Tanggal Lahir</span>
-                    <span class="text-gray-800 font-semibold">{{ pesertaData.tempat_tanggal_lahir }}</span>
+                    <span class="text-sm font-semibold text-gray-799 uppercase tracking-wide">Tempat, Tanggal Lahir</span>
+                    <span class="text-gray-500 ">{{ pesertaData.tempat_tanggal_lahir }}</span>
                   </div>
                   <div class="flex justify-between items-start">
-                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Pendidikan</span>
-                    <span class="text-gray-800 font-semibold text-right">{{ pesertaData.pendidikan }}</span>
+                    <span class="text-sm font-semibold text-gray-799 uppercase tracking-wide">Pendidikan</span>
+                    <span class="text-gray-500  text-right">{{ pesertaData.pendidikan }}</span>
                   </div>
                   <div class="flex justify-between items-center">
-                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Status</span>
-                    <span class="px-3 py-1 rounded-full text-sm font-semibold" :class="getStatusClass(pesertaData.status)">
+                    <span class="text-sm font-semibold text-gray-799 uppercase tracking-wide">Status</span>
+                    <span class="px-3 py-1 rounded-full text-sm " :class="getStatusClass(pesertaData.status)">
                       {{ pesertaData.status }}
                     </span>
                   </div>
                   <div class="flex justify-between items-start">
-                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Nomor Telepon</span>
-                    <span class="text-gray-800 font-semibold text-right">{{ pesertaData.nomor_telefon }}</span>
+                    <span class="text-sm font-semibold text-gray-799 uppercase tracking-wide">Nomor Telepon</span>
+                    <span class="text-gray-500  text-right">{{ pesertaData.nomor_telefon }}</span>
                   </div>
                   <div class="flex flex-col space-y-2">
-                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Alamat</span>
-                    <span class="text-gray-800 font-semibold">{{ pesertaData.alamat }}</span>
+                    <span class="text-sm font-semibold text-gray-799 uppercase tracking-wide">Alamat</span>
+                    <span class="text-gray-500 ">{{ pesertaData.alamat }}</span>
                   </div>
                 </div>
               </div>
@@ -162,7 +162,7 @@
               <!-- Informasi Usaha -->
               <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105">
                 <div class="bg-gradient-to-r from-pink-50 to-gray-50 px-6 py-4 border-b border-gray-100">
-                  <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                  <h3 class="text-lg font-bold text-gray-500 flex items-center">
                     <div class="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-lg flex items-center justify-center mr-3">
                       <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
@@ -173,11 +173,11 @@
                 </div>
                 <div class="p-6 space-y-4">
                   <div class="flex justify-between items-start">
-                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Jenis Usaha</span>
-                    <span class="text-gray-800 font-semibold text-right">{{ pesertaData.jenis_usaha }}</span>
+                    <span class="text-sm font-semibold text-gray-799 uppercase tracking-wide">Jenis Usaha</span>
+                    <span class="text-gray-500  text-right">{{ pesertaData.jenis_usaha }}</span>
                   </div>
                   <div class="flex justify-between items-start">
-                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Penghasilan/Bulan</span>
+                    <span class="text-sm font-semibold text-gray-799 uppercase tracking-wide">Penghasilan/Bulan</span>
                     <span class="text-pink-600 font-bold text-lg">{{ pesertaData.penghasilan_perbulan }}</span>
                   </div>
                 </div>  
@@ -186,7 +186,7 @@
               <!-- Informasi Pendaftaran -->
               <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105">
                 <div class="bg-gradient-to-r from-pink-50 to-gray-50 px-6 py-4 border-b border-gray-100">
-                  <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                  <h3 class="text-lg font-bold text-gray-500 flex items-center">
                     <div class="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-lg flex items-center justify-center mr-3">
                       <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -197,7 +197,7 @@
                 </div>
                 <div class="p-6 space-y-4">
                   <div class="flex justify-between items-center">
-                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Status</span>
+                    <span class="text-sm font-semibold text-gray-799 uppercase tracking-wide">Status</span>
                     <span class="px-4 py-2 rounded-full text-sm font-bold capitalize" :class="{
                       'bg-green-100 text-green-800 border border-green-200': pesertaData.status_pendaftaran === 'Diterima',
                       'bg-red-100 text-red-800 border border-red-200': pesertaData.status_pendaftaran === 'Ditolak',
@@ -207,8 +207,8 @@
                     </span>
                   </div>
                   <div class="flex flex-col space-y-2">
-                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Keterangan</span>
-                    <p class="text-gray-800 font-medium">{{ pesertaData.keterangan }}</p>
+                    <span class="text-sm font-semibold text-gray-799 uppercase tracking-wide">Keterangan</span>
+                    <p class="text-gray-500 font-medium">{{ pesertaData.keterangan }}</p>
                   </div>
                 </div>
               </div>
@@ -216,7 +216,7 @@
               <!-- Informasi Sistem -->
               <div v-if="pesertaData.created_at || pesertaData.updated_at" class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105">
                 <div class="bg-gradient-to-r from-pink-50 to-gray-50 px-6 py-4 border-b border-gray-100">
-                  <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                  <h3 class="text-lg font-bold text-gray-500 flex items-center">
                     <div class="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-lg flex items-center justify-center mr-3">
                       <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -227,12 +227,12 @@
                 </div>
                 <div class="p-6 space-y-4">
                   <div v-if="pesertaData.created_at" class="flex flex-col space-y-2">
-                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Dibuat Pada</span>
-                    <span class="text-gray-800 font-semibold">{{ formatDate(pesertaData.created_at) }}</span>
+                    <span class="text-sm font-semibold text-gray-799 uppercase tracking-wide">Dibuat Pada</span>
+                    <span class="text-gray-500 ">{{ formatDate(pesertaData.created_at) }}</span>
                   </div>
                   <div v-if="pesertaData.updated_at" class="flex flex-col space-y-2">
-                    <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Diperbarui Pada</span>
-                    <span class="text-gray-800 font-semibold">{{ formatDate(pesertaData.updated_at) }}</span>
+                    <span class="text-sm font-semibold text-gray-799 uppercase tracking-wide">Diperbarui Pada</span>
+                    <span class="text-gray-500 ">{{ formatDate(pesertaData.updated_at) }}</span>
                   </div>
                 </div>
               </div>

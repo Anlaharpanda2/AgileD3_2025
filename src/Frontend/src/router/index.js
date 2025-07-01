@@ -28,6 +28,12 @@ import KelolaDataView from '../views/KelolaData/KelolaDataView.vue';
 import DataStrukturPegawaiView from '../views/KelolaStrukturPegawai/DataStrukturPegawaiView.vue';
 import DataStrukturPegawaiSampahView from '../views/kelolaStrukturPegawai/DataStrukturPegawaiSampahView.vue';
 import Konsultasi from '../views/Footer/Konsultasi.vue';
+import ProgramPelatihan from '../views/Footer/ProgramPelatihan.vue';
+import Pendampingan from '../views/Footer/Pendampingan.vue';
+import PusatBantuan from '../views/Footer/PusatBantuan.vue';
+import FAQ from '../views/Footer/FAQ.vue';
+import HubungiKami from '../views/Footer/HubungiKami.vue';
+import Feedback from '../views/Footer/Feedback.vue';
 
 const routes = [
   //halaman home
@@ -91,9 +97,13 @@ const routes = [
   
   //footer
   { path: '/info/konsultasi', name: 'infoKonsultasi', component: Konsultasi, meta: { requiresAuth: true, role: ['operator'] } },
+  { path: '/pelatihan', name: 'infoProgramPelatihan', component: ProgramPelatihan, meta: { requiresAuth: true, role: ['operator'] } },
+  { path: '/pendampingan', name: 'infoPendampingan', component: Pendampingan, meta: { requiresAuth: true, role: ['operator'] } },
+  { path: '/bantuan', name: 'PusatBantuan', component: PusatBantuan, meta: { requiresAuth: true, role: ['operator'] } },
+  { path: '/faq', name: 'FAQ', component: FAQ, meta: { requiresAuth: true, role: ['operator'] } },
+  { path: '/kontak', name: 'HubungiKami', component: HubungiKami, meta: { requiresAuth: true, role: ['operator'] } },
+  { path: '/feedback', name: 'Feedback', component: Feedback, meta: { requiresAuth: true, role: ['operator'] } },
 ];
-
-
 
 const router = createRouter({
   history: createWebHistory(),
@@ -130,6 +140,5 @@ router.beforeEach((to, from, next) => {
 
   next();
 });
-
 
 export default router;

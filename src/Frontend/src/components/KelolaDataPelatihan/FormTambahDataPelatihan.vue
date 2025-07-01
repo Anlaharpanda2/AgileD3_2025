@@ -3,7 +3,8 @@
     <transition name="modal" appear>
       <div class="bg-white rounded-xl shadow-2xl max-w-5xl w-full max-h-[95vh] flex flex-col overflow-hidden">
         <!-- Header -->
-        <div class="bg-gradient-to-r from-pink-400 to-rose-300 px-6 py-4 sm:px-8 sm:py-6 rounded-t-xl">
+        <div class="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700
+ px-6 py-4 sm:px-8 sm:py-6 rounded-t-xl">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
               <div class="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
@@ -291,7 +292,7 @@
               <button
                 @click="submitForm"
                 type="button"
-                class="px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-400 text-white rounded-xl font-medium hover:from-pink-600 hover:to-rose-500 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                class="px-6 py-3 bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
               >
                 <div class="flex items-center justify-center space-x-2">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

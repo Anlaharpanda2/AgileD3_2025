@@ -19,6 +19,8 @@ import StatusPengaduan from '../views/PengelolaPengaduan/StatusPengaduan.vue';
 
 import DataBeritaView from '../views/PengelolaDataBerita/DataBeritaView.vue';
 import DataBeritaSampahView from '../views/PengelolaDataBerita/DataBeritaSampahView.vue';
+import DetailDataPengumumanView from '@/views/PengelolaDataBerita/DetailDataPengumumanView.vue';
+
 import OtpView from '../views/ResetPassword/OtpView.vue';
 import ForgotView from '../views/ResetPassword/ForgotView.vue';
 import ResetPassword from '../views/ResetPassword/ResetPassword.vue';
@@ -79,6 +81,7 @@ const routes = [
   {path: '/data/berita/sampah',name: 'DataBeritaSampah',component: DataBeritaSampahView,meta: { requiresAuth: true }},
   {path: '/data/berita',name: 'DataBerita',component: DataBeritaView,meta: { requiresAuth: true }},
   {path: '/berita/:id',name: 'DetailBerita',component: DetailDataBeritaView},
+  {path: '/pengumuman/:id',name: 'DetailPengumuman',component: DetailDataPengumumanView},
 
   //halaman kelola konsultasi
   {path: '/data/konsultasi', name: 'DataKonsultasi', component: DataKonsultasiView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },

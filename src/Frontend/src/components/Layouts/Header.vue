@@ -1,11 +1,14 @@
 <template>
   <header
-    class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out"
-    :class="isScrolled 
-      ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100 pt-0' 
-      : 'bg-transparent pt-5'"
+    class="top-0 left-0 right-0 z-50 transition-all duration-300 ease-out"
+    :class="[
+      isHomeRoute ? 'fixed' : 'relative',
+      isScrolled 
+        ? 'bg-white/95 backdrop-blur-md shadow-md border-b border-gray-100 pt-0' 
+        : 'bg-transparent pt-5'
+    ]"
   >
-    <div class=" mx-auto px-8 lg:px-8">
+    <div class="mx-auto px-8 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <!-- Logo & Branding -->
         <div class="flex items-center space-x-4 group">
@@ -138,7 +141,7 @@
                     :key="child.name"
                     class="px-3 py-2 text-gray-700 rounded-md transition-all duration-200 ease-in-out
                            flex items-center text-xs hover:bg-pink-500 hover:text-white"
-                    :class="{ 'bg-pink-500 text-white': $route.path === child.to }"
+                    :class="{ 'bg-pink-500 text-white': isChildActive(child, item.name) }"
                   >
                     <router-link :to="child.to" class="flex items-center w-full h-full">
                       <component :is="child.icon" class="w-4 h-4 mr-1" />
@@ -168,7 +171,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, shallowRef } from 'vue'
+import { ref, onMounted, onUnmounted, shallowRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import sidebar from './SideBar.vue'
 import {
@@ -183,13 +186,13 @@ const route = useRoute()
 const navigationMenu = shallowRef([
   { name: 'BERANDA', to: '/', icon: Home },
   { name: 'TEST', icon: FileText, children: [
-    { name: 'Pretest', to: '/data/pelatihan', icon: Pencil },
+    { name: 'Pretest', to: '/data/pelatihan-pretest', icon: Pencil },
     { name: 'Posttest', to: '/posttest', icon: ClipboardCheck },
     { name: 'Data Nilai', to: '/data-nilai', icon: Database },
   ]},
   { name: 'PELATIHAN', icon: BookUser, children: [
-    { name: 'Data Pendaftar', to: '/data-pendaftar', icon: Users2 },
-    { name: 'Data Peserta', to: '/data-peserta', icon: UserCog },
+    { name: 'Data Pendaftar', to: '/data/pendaftaran', icon: Users2 },
+    { name: 'Data Peserta', to: '/data/pelatihan', icon: UserCog },
   ]},
   { name: 'PENGADUAN', icon: MessageSquare, children: [
     { name: 'Data Pengaduan', to: '/data-pengaduan', icon: FileQuestion },
@@ -198,6 +201,7 @@ const navigationMenu = shallowRef([
 ])
 
 const isScrolled = ref(false)
+const isHomeRoute = ref(route.path === '/')
 const openSubMenus = ref({})
 let subMenuTimeout = null
 
@@ -215,12 +219,30 @@ function isSubMenuActive(item) {
   return item.children?.some(c => route.path === c.to) || false
 }
 
-function handleScroll() {
-  isScrolled.value = window.scrollY > 20
+function isChildActive(child, parentName) {
+  return route.path === child.to
 }
 
-onMounted(() => window.addEventListener('scroll', handleScroll))
+watch(() => route.path, (newPath) => {
+  isHomeRoute.value = newPath === '/'
+  isScrolled.value = newPath !== '/' || window.scrollY > 20
+})
+
+onMounted(() => {
+  isHomeRoute.value = route.path === '/'
+  isScrolled.value = route.path !== '/' || window.scrollY > 20
+  window.addEventListener('scroll', handleScroll)
+})
+
 onUnmounted(() => window.removeEventListener('scroll', handleScroll))
+
+function handleScroll() {
+  if (isHomeRoute.value) {
+    isScrolled.value = window.scrollY > 20
+  } else {
+    isScrolled.value = true
+  }
+}
 </script>
 
 <style scoped>

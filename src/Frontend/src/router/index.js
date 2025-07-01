@@ -31,6 +31,8 @@ import ProfileMasyarakat from '../views/Profile/ProfileMasyarakat.vue';
 import KelolaDataView from '../views/KelolaData/KelolaDataView.vue';
 import DataStrukturPegawaiView from '../views/KelolaStrukturPegawai/DataStrukturPegawaiView.vue';
 import DataStrukturPegawaiSampahView from '../views/KelolaStrukturPegawai/DataStrukturPegawaiSampahView.vue';
+
+//footer
 import Konsultasi from '../views/Footer/Konsultasi.vue';
 import ProgramPelatihan from '../views/Footer/ProgramPelatihan.vue';
 import Pendampingan from '../views/Footer/Pendampingan.vue';
@@ -39,6 +41,7 @@ import FAQ from '../views/Footer/FAQ.vue';
 import HubungiKami from '../views/Footer/HubungiKami.vue';
 import Feedback from '../views/Footer/Feedback.vue';
 import DetailDataBeritaView from '../views/PengelolaDataBerita/DetailDataBeritaView.vue';
+import InfoPengaduan from '@/views/Footer/InfoPengaduan.vue';
 
 const routes = [
   //halaman home
@@ -104,8 +107,9 @@ const routes = [
   
   //footer
   { path: '/info/konsultasi', name: 'infoKonsultasi', component: Konsultasi, meta: { requiresAuth: true, role: ['operator'] } },
-  { path: '/pelatihan', name: 'infoProgramPelatihan', component: ProgramPelatihan, meta: { requiresAuth: true, role: ['operator'] } },
-  { path: '/pendampingan', name: 'infoPendampingan', component: Pendampingan, meta: { requiresAuth: true, role: ['operator'] } },
+  { path: '/info/pelatihan', name: 'infoProgramPelatihan', component: ProgramPelatihan, meta: { requiresAuth: true, role: ['operator'] } },
+  { path: '/info/pendampingan', name: 'infoPendampingan', component: Pendampingan, meta: { requiresAuth: true, role: ['operator'] } },
+  { path: '/info/pengaduan', name: 'infoPengaduan', component: InfoPengaduan, meta: { requiresAuth: true, role: ['operator'] } },
   { path: '/bantuan', name: 'PusatBantuan', component: PusatBantuan, meta: { requiresAuth: true, role: ['operator'] } },
   { path: '/faq', name: 'FAQ', component: FAQ, meta: { requiresAuth: true, role: ['operator'] } },
   { path: '/kontak', name: 'HubungiKami', component: HubungiKami, meta: { requiresAuth: true, role: ['operator'] } },

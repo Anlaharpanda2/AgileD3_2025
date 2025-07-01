@@ -1,5 +1,5 @@
 <template>
-  <Layout>
+  <layout2>
     <div>
       <h1 class="p-5 text-2xl font-bold">
         FAQ (Pertanyaan Umum)
@@ -15,9 +15,9 @@
         Semua pertanyaan umum dijawab di sini untuk kemudahan masyarakat.
       </p>
     </div>
-  </Layout>
+  </layout2>
 </template>
 
 <script setup>
-import Layout from '../../layouts/Layout.vue';
+import layout2 from '../../layouts/Layout2.vue';
 </script>

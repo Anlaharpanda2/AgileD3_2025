@@ -5,7 +5,6 @@
     <main class="layout-content">
       <slot /> 
     </main>
-    
     <Footer /> 
   </div>
 </template>

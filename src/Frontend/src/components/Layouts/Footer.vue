@@ -102,10 +102,10 @@ const footerColumns = ref([
   {
     title: 'Layanan',
     links: [
-      { name: 'Program Pelatihan', href: '/pelatihan' },
-      { name: 'Pengaduan Online', href: '/pengaduan' },
+      { name: 'Program Pelatihan', href: '/info/pelatihan' },
+      { name: 'Pengaduan Online', href: '/info/pengaduan' },
       { name: 'Konsultasi', href: '/info/konsultasi' },
-      { name: 'Pendampingan', href: '/pendampingan' }
+      { name: 'Pendampingan', href: '/info/pendampingan' }
     ]
   },
   {

@@ -1,5 +1,5 @@
 <template>
-    <Layout>
+    <layout2>
         <div>
             <h1 class="p-5 text-2xl font-bold">
                 Program Pelatihan Masyarakat DP3AP2KB
@@ -75,9 +75,9 @@
 
             </div>
         </div>
-    </Layout>
+    </layout2>
 </template>
 
 <script setup>
-import Layout from '../../layouts/Layout.vue';
+import layout2 from '../../layouts/Layout2.vue';
 </script>

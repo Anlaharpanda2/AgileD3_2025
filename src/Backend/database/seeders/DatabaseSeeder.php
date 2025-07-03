@@ -14,7 +14,6 @@ class DatabaseSeeder extends Seeder
             DataFasilitasSeeder::class,
             DataKonsultasiSeeder::class,
             DataLokasiSeeder::class,
-            DataNilaiSeeder::class,
             DataPanitiaSeeder::class,
             DataPelatihanSeeder::class,
             DataPendaftaranSeeder::class,

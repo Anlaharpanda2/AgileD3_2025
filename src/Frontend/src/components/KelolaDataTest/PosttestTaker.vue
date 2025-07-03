@@ -3,12 +3,12 @@
     <el-card class="shadow-lg rounded-lg bg-white">
       <template #header>
         <div class="flex items-center justify-between mb-4">
-          <span class="text-2xl font-semibold text-gray-800">Kerjakan Pretest: {{ pretest.title }}</span>
+          <span class="text-2xl font-semibold text-gray-800">Kerjakan Posttest: {{ posttest.title }}</span>
         </div>
       </template>
 
       <div v-if="isLoading" class="text-center text-blue-500 mt-8">
-        <p class="text-lg">Memuat data pretest...</p>
+        <p class="text-lg">Memuat data posttest...</p>
       </div>
 
       <div v-else-if="!hasAccess" class="text-center text-red-500 mt-8">
@@ -21,18 +21,18 @@
         <el-button type="primary" class="mt-4 bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out" @click="$router.push({ name: 'LoginMasyarakat' })">Kembali ke Login</el-button>
       </div>
 
-      <div v-else-if="noActivePretest" class="text-center text-blue-500 mt-8">
-        <p class="text-lg">Saat ini tidak ada pretest yang aktif.</p>
+      <div v-else-if="noActivePosttest" class="text-center text-blue-500 mt-8">
+        <p class="text-lg">Saat ini tidak ada posttest yang aktif.</p>
         <el-button type="primary" class="mt-4 bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out" @click="$router.push('/')">Kembali ke Beranda</el-button>
       </div>
 
-      <div v-else-if="pretest.id">
-        <p class="mb-4 text-gray-700">{{ pretest.description }}</p>
+      <div v-else-if="posttest.id">
+        <p class="mb-4 text-gray-700">{{ posttest.description }}</p>
 
-        <el-form v-if="!isSubmitted && isMasyarakat" @submit.prevent="submitPretest">
-          <div v-for="(question) in pretest.questions" :key="question.id" class="border border-gray-200 p-4 mb-4 rounded-lg shadow-sm bg-gray-50 transition-all duration-300 ease-in-out hover:shadow-md">
+        <el-form v-if="!isSubmitted && isMasyarakat" @submit.prevent="submitPosttest">
+          <div v-for="(question) in posttest.questions" :key="question.id" class="border border-gray-200 p-4 mb-4 rounded-lg shadow-sm bg-gray-50 transition-all duration-300 ease-in-out hover:shadow-md">
             <h4 class="font-medium text-gray-800 mb-3">{{ question.order }}. {{ question.question_text }}</h4>
-            <el-radio-group v-model="userAnswers[question.id!]" class="flex flex-col space-y-2">
+            <el-radio-group v-model="userAnswers[question.id!]">
               <el-radio value="A" class="el-radio-custom">A. {{ question.option_a }}</el-radio>
               <el-radio value="B" class="el-radio-custom">B. {{ question.option_b }}</el-radio>
               <el-radio value="C" class="el-radio-custom">C. {{ question.option_c }}</el-radio>
@@ -41,8 +41,8 @@
           </div>
 
           <div class="mt-8 flex space-x-4">
-            <el-button type="success" @click="submitPretest" :disabled="isSubmitting" class="bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out">
-              {{ isSubmitting ? 'Menyimpan...' : 'Submit Pretest' }}
+            <el-button type="success" @click="submitPosttest" :disabled="isSubmitting" class="bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out">
+              {{ isSubmitting ? 'Menyimpan...' : 'Submit Posttest' }}
             </el-button>
             <el-button @click="$router.back()" class="bg-gray-200 text-gray-700 hover:bg-gray-300 border-none rounded-md transition-all duration-300 ease-in-out">
               Batal
@@ -51,16 +51,16 @@
         </el-form>
 
         <div v-else-if="isSubmitted && isMasyarakat" class="text-center mt-8 p-6 bg-green-50 rounded-lg shadow-md">
-          <h3 class="text-2xl font-bold text-green-600 mb-2">Anda telah melaksanakan pretest!</h3>
+          <h3 class="text-2xl font-bold text-green-600 mb-2">Anda telah melaksanakan posttest!</h3>
           <p class="text-lg mt-2 text-gray-700">Skor Anda: <span class="font-bold">{{ score }}%</span></p>
           <el-button type="primary" class="mt-4 bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out" @click="$router.push('/')">Kembali ke Beranda</el-button>
         </div>
 
-        <PretestPreview v-else-if="isOperatorOrPegawai" :pretest="pretest" />
+        <PosttestPreview v-else-if="isOperatorOrPegawai" :posttest="posttest" />
 
       </div>
       <div v-else class="text-center text-gray-500 mt-8">
-        Memuat pretest...
+        Memuat posttest...
       </div>
     </el-card>
   </div>
@@ -68,14 +68,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted, reactive } from 'vue';
-import PretestPreview from './PretestPreview.vue';
+import PosttestPreview from './PosttestPreview.vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
-import pretestService, { Pretest } from '@/services/pretestService';
+import posttestService, { Posttest } from '@/services/posttestService';
 
 const router = useRouter();
 
-const pretest = ref<Pretest>({ id: undefined, title: '', description: '', questions: [] });
+const posttest = ref<Posttest>({ id: undefined, title: '', description: '', questions: [] });
 const userAnswers = reactive<{ [key: number]: 'A' | 'B' | 'C' | 'D' | null }>({});
 const isSubmitted = ref(false);
 const isSubmitting = ref(false);
@@ -86,7 +86,7 @@ const userNik = ref<string | null>(null);
 const userName = ref<string | null>(null);
 
 const nikNotFound = ref(false); // Used for masyarakat role
-const noActivePretest = ref(false); // Used for masyarakat role
+const noActivePosttest = ref(false); // Used for masyarakat role
 
 const userRole = ref<string | null>(null);
 const isOperatorOrPegawai = ref(false);
@@ -102,26 +102,22 @@ onMounted(async () => {
   if (isOperatorOrPegawai.value) {
     hasAccess.value = true;
     try {
-      // For operators/pegawai, just fetch all pretests and display the first one
-      // or the one specified by route param if applicable (though current route is /pretests)
-      const allPretests = await pretestService.getAllPretests();
-      if (allPretests.length > 0) {
-        // If there's an active pretest, show that. Otherwise, show the first one.
-        // @ts-ignore
-        const activePretest = allPretests.find(p => p.is_active);
-        pretest.value = activePretest || allPretests[0];
-        totalQuestions.value = pretest.value.questions.length;
-        pretest.value.questions.forEach(q => {
+      const allPosttests = await posttestService.getAllPosttests();
+      if (allPosttests.length > 0) {
+        const activePosttest = allPosttests.find(p => p.is_active);
+        posttest.value = activePosttest || allPosttests[0];
+        totalQuestions.value = posttest.value.questions.length;
+        posttest.value.questions.forEach(q => {
           if (q.id) {
             userAnswers[q.id] = null; // Initialize answers for display
           }
         });
       } else {
-        noActivePretest.value = true; // No pretests available at all
-        ElMessage.info('Tidak ada pretest yang tersedia untuk ditampilkan.');
+        noActivePosttest.value = true; // No posttests available at all
+        ElMessage.info('Tidak ada posttest yang tersedia untuk ditampilkan.');
       }
     } catch (error) {
-      ElMessage.error('Gagal memuat data pretest.');
+      ElMessage.error('Gagal memuat data posttest.');
       console.error(error);
       hasAccess.value = false; // Revoke access if fetching fails
     } finally {
@@ -137,8 +133,7 @@ onMounted(async () => {
     }
 
     try {
-      // 1. Validasi NIK pengguna
-      const userInfo = await pretestService.getUserInfoByNik(userNik.value);
+      const userInfo = await posttestService.getUserInfoByNik(userNik.value);
       if (userInfo && userInfo.length > 0 && userInfo[0].status_pendaftaran === "Diterima") {
         userName.value = userInfo[0].nama;
       } else {
@@ -148,49 +143,45 @@ onMounted(async () => {
         return;
       }
 
-      // 2. Ambil semua pretest dan cari yang aktif
-      const allPretests = await pretestService.getAllPretests();
-      // @ts-ignore
-      const activePretest = allPretests.find(p => p.is_active);
+      const allPosttests = await posttestService.getAllPosttests();
+      const activePosttest = allPosttests.find(p => p.is_active);
 
-      if (!activePretest) {
-        noActivePretest.value = true;
-        ElMessage.warning('Saat ini tidak ada pretest yang aktif.');
+      if (!activePosttest) {
+        noActivePosttest.value = true;
+        ElMessage.warning('Saat ini tidak ada posttest yang aktif.');
         hasAccess.value = false;
         return;
       }
 
-      pretest.value = activePretest;
-      totalQuestions.value = activePretest.questions.length;
-      activePretest.questions.forEach(q => {
+      posttest.value = activePosttest;
+      totalQuestions.value = activePosttest.questions.length;
+      activePosttest.questions.forEach(q => {
         if (q.id) {
           userAnswers[q.id] = null; // Inisialisasi jawaban sebagai null
         }
       });
       hasAccess.value = true; // Access granted for masyarakat
     } catch (error) {
-      ElMessage.error('Gagal memuat data pretest atau pengguna.');
+      ElMessage.error('Gagal memuat data posttest atau pengguna.');
       console.error(error);
       hasAccess.value = false; // Revoke access if fetching fails
     } finally {
       isLoading.value = false;
     }
   } else {
-    // No valid role found
     hasAccess.value = false;
     ElMessage.error('Akses ditolak. Peran pengguna tidak dikenali.');
     isLoading.value = false;
   }
 });
 
-const submitPretest = async () => {
+const submitPosttest = async () => {
   if (isOperatorOrPegawai.value) {
-    ElMessage.info('Operator/Pegawai tidak dapat mengirim pretest.');
+    ElMessage.info('Operator/Pegawai tidak dapat mengirim posttest.');
     return;
   }
-  // Existing submit logic for masyarakat
   if (!userNik.value || !userName.value) {
-    ElMessage.error('NIK atau Nama pengguna tidak ada. Tidak dapat mengirim pretest.');
+    ElMessage.error('NIK atau Nama pengguna tidak ada. Tidak dapat mengirim posttest.');
     return;
   }
 
@@ -208,20 +199,20 @@ const submitPretest = async () => {
   }));
 
   try {
-    const result = await pretestService.submitPretestAnswers(
-      pretest.value.id!,
+    const result = await posttestService.submitPosttestAnswers(
+      posttest.value.id!,
       answersToSend,
       userNik.value,
       userName.value
     );
     score.value = result.score;
     isSubmitted.value = true;
-    ElMessage.success(result.message || 'Pretest berhasil dikirim!');
+    ElMessage.success(result.message || 'Posttest berhasil dikirim!');
   } catch (error: any) {
     if (error.response && error.response.status === 409) {
       ElMessage.warning(error.response.data.message);
     } else {
-      ElMessage.error('Gagal mengirim pretest.');
+      ElMessage.error('Gagal mengirim posttest.');
     }
     console.error(error);
   } finally {

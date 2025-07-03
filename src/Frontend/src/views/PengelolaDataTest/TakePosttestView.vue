@@ -1,10 +1,10 @@
 <template>
   <Layout2>
-    <PretestTaker />
+    <PosttestTaker />
   </Layout2>
 </template>
 
 <script setup lang="ts">
-import PretestTaker from '@/components/KelolaDataTest/PretestTaker.vue';
+import PosttestTaker from '@/components/KelolaDataTest/PosttestTaker.vue';
 import Layout2 from '@/layouts/Layout2.vue';
 </script>

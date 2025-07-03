@@ -1,17 +1,17 @@
 <template>
   <el-dialog
     v-model="dialogVisible"
-    title="Kelola Visibilitas Pretest"
+    title="Kelola Visibilitas Posttest"
     width="500px"
     @close="onClose"
     class="rounded-lg shadow-xl transition-all duration-300 ease-in-out"
   >
-    <div v-if="localPretests.length > 0" class="p-4">
+    <div v-if="localPosttests.length > 0" class="p-4">
       <p class="text-sm text-gray-600 mb-4">
-        Hanya satu pretest yang dapat aktif pada satu waktu. Mengaktifkan satu pretest akan secara otomatis menonaktifkan yang lain.
+        Hanya satu posttest yang dapat aktif pada satu waktu. Mengaktifkan satu posttest akan secara otomatis menonaktifkan yang lain.
       </p>
-      <el-table :data="localPretests" class="w-full text-gray-700 rounded-lg overflow-hidden" border stripe header-cell-class-name="bg-gray-100 text-gray-600 font-semibold" cell-class-name="py-2 px-3">
-        <el-table-column prop="title" label="Judul Pretest" />
+      <el-table :data="localPosttests" class="w-full text-gray-700 rounded-lg overflow-hidden" border stripe header-cell-class-name="bg-gray-100 text-gray-600 font-semibold" cell-class-name="py-2 px-3">
+        <el-table-column prop="title" label="Judul Posttest" />
         <el-table-column label="Aktif" width="100" align="center">
           <template #default="scope">
             <el-switch
@@ -26,7 +26,7 @@
       </el-table>
     </div>
     <div v-else class="text-center text-gray-500 p-4">
-      Tidak ada pretest yang tersedia untuk dikelola.
+      Tidak ada posttest yang tersedia untuk dikelola.
     </div>
 
     <template #footer>
@@ -45,15 +45,15 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { ElMessage } from 'element-plus';
-import pretestService, { Pretest } from '@/services/pretestService';
+import posttestService, { Posttest } from '@/services/posttestService';
 
 const props = defineProps({
   visible: {
     type: Boolean,
     required: true,
   },
-  pretestsData: {
-    type: Array as () => Pretest[],
+  posttestsData: {
+    type: Array as () => Posttest[],
     required: true,
   },
 });
@@ -61,24 +61,22 @@ const props = defineProps({
 const emit = defineEmits(['update:visible', 'saved']);
 
 const dialogVisible = ref(props.visible);
-const localPretests = ref<Pretest[]>([]);
+const localPosttests = ref<Posttest[]>([]);
 const isSaving = ref(false);
 
 watch(() => props.visible, (newVal) => {
   dialogVisible.value = newVal;
   if (newVal) {
-    // Buat salinan lokal untuk diedit agar tidak mengubah data asli secara langsung
-    localPretests.value = JSON.parse(JSON.stringify(props.pretestsData));
+    localPosttests.value = JSON.parse(JSON.stringify(props.posttestsData));
   }
 });
 
-const handleSwitchChange = (changedPretest: Pretest, newValue: boolean) => {
-  localPretests.value.forEach(pretest => {
-    if (pretest.id === changedPretest.id) {
-      pretest.is_active = newValue;
+const handleSwitchChange = (changedPosttest: Posttest, newValue: boolean) => {
+  localPosttests.value.forEach(posttest => {
+    if (posttest.id === changedPosttest.id) {
+      posttest.is_active = newValue;
     } else if (newValue) {
-      // Jika pretest lain diaktifkan, matikan yang ini
-      pretest.is_active = false;
+      posttest.is_active = false;
     }
   });
 };
@@ -86,16 +84,16 @@ const handleSwitchChange = (changedPretest: Pretest, newValue: boolean) => {
 const saveVisibility = async () => {
   isSaving.value = true;
   try {
-    const visibilityUpdates = localPretests.value.map(p => ({
+    const visibilityUpdates = localPosttests.value.map(p => ({
       id: p.id!,
       is_active: p.is_active || false,
     }));
-    await pretestService.updatePretestVisibility(visibilityUpdates);
-    ElMessage.success('Visibilitas pretest berhasil diperbarui!');
+    await posttestService.updatePosttestVisibility(visibilityUpdates);
+    ElMessage.success('Visibilitas posttest berhasil diperbarui!');
     emit('saved');
     closeDialog();
   } catch (error) {
-    ElMessage.error('Gagal memperbarui visibilitas pretest.');
+    ElMessage.error('Gagal memperbarui visibilitas posttest.');
     console.error(error);
   } finally {
     isSaving.value = false;
@@ -107,8 +105,7 @@ const closeDialog = () => {
 };
 
 const onClose = () => {
-    // Reset state when dialog is closed without saving
-    localPretests.value = JSON.parse(JSON.stringify(props.pretestsData));
+    localPosttests.value = JSON.parse(JSON.stringify(props.posttestsData));
 }
 
 </script>

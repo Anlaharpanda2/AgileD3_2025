@@ -1,7 +1,10 @@
 <template>
-  <PretestScoreTable />
+  <Layout2>
+    <CombinedScoreTable />
+  </Layout2>
 </template>
 
 <script setup lang="ts">
-import PretestScoreTable from '@/components/PretestScore/PretestScoreTable.vue';
+import CombinedScoreTable from '@/components/DataNilai/CombinedScoreTable.vue';
+import Layout2 from '@/layouts/Layout2.vue';
 </script>

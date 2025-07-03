@@ -10,7 +10,7 @@ class PretestScoreController extends Controller
 {
     public function index()
     {
-        // Mengambil semua data pretest score
-        return PretestScore::all();
+        // Mengambil semua data pretest score beserta data pengguna yang terkait
+        return PretestScore::with('user')->get();
     }
 }

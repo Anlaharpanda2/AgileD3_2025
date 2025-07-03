@@ -1,35 +1,35 @@
 <template>
-  <div class="border p-4 mb-4 rounded-lg shadow-sm bg-white">
+  <div class="border border-gray-200 p-6 rounded-lg shadow-sm bg-white transition-all duration-300 ease-in-out hover:shadow-md">
     <div class="flex justify-between items-center mb-4">
-      <h3 class="text-lg font-semibold text-gray-800">Question {{ question.order }}</h3>
-      <el-button type="danger" :icon="Delete" circle @click="$emit('remove')" />
+      <h3 class="text-lg font-semibold text-gray-800">Soal {{ question.order }}</h3>
+      <el-button type="danger" :icon="Delete" circle @click="$emit('remove')" class="bg-red-100 text-red-700 hover:bg-red-200 border-none transition-all duration-300 ease-in-out" />
     </div>
 
-    <el-form-item label="Question Text">
-      <el-input v-model="question.question_text" type="textarea" autosize placeholder="Enter question text" />
+    <el-form-item label="Teks Soal" class="mb-4">
+      <el-input v-model="question.question_text" type="textarea" autosize placeholder="Masukkan teks soal" class="w-full rounded-md border-gray-300 focus:border-pink-500 focus:ring focus:ring-pink-200 focus:ring-opacity-50" />
     </el-form-item>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-      <el-form-item label="Option A">
-        <el-input v-model="question.option_a" placeholder="Option A" />
+      <el-form-item label="Opsi A">
+        <el-input v-model="question.option_a" placeholder="Opsi A" class="w-full rounded-md border-gray-300 focus:border-pink-500 focus:ring focus:ring-pink-200 focus:ring-opacity-50" />
       </el-form-item>
-      <el-form-item label="Option B">
-        <el-input v-model="question.option_b" placeholder="Option B" />
+      <el-form-item label="Opsi B">
+        <el-input v-model="question.option_b" placeholder="Opsi B" class="w-full rounded-md border-gray-300 focus:border-pink-500 focus:ring focus:ring-pink-200 focus:ring-opacity-50" />
       </el-form-item>
-      <el-form-item label="Option C">
-        <el-input v-model="question.option_c" placeholder="Option C" />
+      <el-form-item label="Opsi C">
+        <el-input v-model="question.option_c" placeholder="Opsi C" class="w-full rounded-md border-gray-300 focus:border-pink-500 focus:ring focus:ring-pink-200 focus:ring-opacity-50" />
       </el-form-item>
-      <el-form-item label="Option D">
-        <el-input v-model="question.option_d" placeholder="Option D" />
+      <el-form-item label="Opsi D">
+        <el-input v-model="question.option_d" placeholder="Opsi D" class="w-full rounded-md border-gray-300 focus:border-pink-500 focus:ring focus:ring-pink-200 focus:ring-opacity-50" />
       </el-form-item>
     </div>
 
-    <el-form-item label="Correct Answer" class="mt-4">
-      <el-radio-group v-model="question.correct_answer">
-        <el-radio label="A">A</el-radio>
-        <el-radio label="B">B</el-radio>
-        <el-radio label="C">C</el-radio>
-        <el-radio label="D">D</el-radio>
+    <el-form-item label="Jawaban Benar" class="mt-4">
+      <el-radio-group v-model="question.correct_answer" class="flex flex-wrap gap-4">
+        <el-radio label="A" class="el-radio-custom">A</el-radio>
+        <el-radio label="B" class="el-radio-custom">B</el-radio>
+        <el-radio label="C" class="el-radio-custom">C</el-radio>
+        <el-radio label="D" class="el-radio-custom">D</el-radio>
       </el-radio-group>
     </el-form-item>
   </div>

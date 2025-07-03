@@ -1,33 +1,39 @@
 <template>
-  <div class="container mx-auto p-4">
-    <el-card class="box-card">
+  <div class="p-4">
+    <el-card class="shadow-lg rounded-lg bg-white">
       <template #header>
-        <div class="card-header">
-          <span class="text-xl font-bold">{{ isEdit ? 'Edit Pretest' : 'Create New Pretest' }}</span>
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-2xl font-semibold text-gray-800">{{ isEdit ? 'Edit Pretest' : 'Buat Pretest Baru' }}</span>
         </div>
       </template>
 
-      <el-form :model="pretestForm" label-position="top">
-        <el-form-item label="Pretest Title">
-          <el-input v-model="pretestForm.title" placeholder="Enter pretest title" />
+      <el-form :model="pretestForm" label-position="top" class="space-y-6">
+        <el-form-item label="Judul Pretest" class="mb-4">
+          <el-input v-model="pretestForm.title" placeholder="Masukkan judul pretest" class="w-full rounded-md border-gray-300 focus:border-pink-500 focus:ring focus:ring-pink-200 focus:ring-opacity-50" />
         </el-form-item>
-        <el-form-item label="Description">
-          <el-input v-model="pretestForm.description" type="textarea" autosize placeholder="Enter description" />
+        <el-form-item label="Deskripsi" class="mb-4">
+          <el-input v-model="pretestForm.description" type="textarea" autosize placeholder="Masukkan deskripsi" class="w-full rounded-md border-gray-300 focus:border-pink-500 focus:ring focus:ring-pink-200 focus:ring-opacity-50" />
         </el-form-item>
 
-        <h3 class="text-lg font-semibold mt-6 mb-4">Questions</h3>
-        <div v-if="pretestForm.questions.length === 0" class="text-gray-500 mb-4">
-          No questions added yet. Click "Add Question" to start.
+        <h3 class="text-xl font-semibold mt-8 mb-4 text-gray-800">Daftar Soal</h3>
+        <div v-if="pretestForm.questions.length === 0" class="text-gray-500 mb-4 p-4 border border-dashed border-gray-300 rounded-md text-center">
+          Belum ada soal ditambahkan. Klik "Tambah Soal" untuk memulai.
         </div>
-        <div v-for="(question, index) in pretestForm.questions" :key="question.order || index">
+        <div v-for="(question, index) in pretestForm.questions" :key="question.order || index" class="mb-6">
           <QuestionEditor :question="question" @remove="removeQuestion(index)" />
         </div>
 
-        <el-button type="primary" :icon="Plus" @click="addQuestion" class="mt-4">Add Question</el-button>
+        <el-button type="primary" :icon="Plus" @click="addQuestion" class="mt-4 w-full md:w-auto bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out">
+          Tambah Soal
+        </el-button>
 
-        <div class="mt-8">
-          <el-button type="success" @click="savePretest">{{ isEdit ? 'Update Pretest' : 'Create Pretest' }}</el-button>
-          <el-button @click="$router.back()">Cancel</el-button>
+        <div class="mt-8 flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4">
+          <el-button type="success" @click="savePretest" class="w-full md:w-auto bg-green-500 text-white hover:bg-green-600 border-none rounded-md transition-all duration-300 ease-in-out">
+            {{ isEdit ? 'Perbarui Pretest' : 'Buat Pretest' }}
+          </el-button>
+          <el-button @click="$router.back()" class="w-full md:w-auto bg-gray-200 text-gray-700 hover:bg-gray-300 border-none rounded-md transition-all duration-300 ease-in-out">
+            Batal
+          </el-button>
         </div>
       </el-form>
     </el-card>

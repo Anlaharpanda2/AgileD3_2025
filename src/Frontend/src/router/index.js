@@ -14,12 +14,14 @@ import DataPanitiaView from '../views/PengelolaDataPanitia/DataPanitiaView.vue';
 import DataPanitiaSampahView from '../views/PengelolaDataPanitia/DataPanitiaSampahView.vue';
 import DataKonsultasiView from '../views/PengelolaDataKonsultasi/DataKonsultasiView.vue';
 import DataKonsultasiSampahView from '../views/PengelolaDataKonsultasi/DataKonsultasiSampahView.vue';
-import PrePostTestView from '../views/PengelolaPretestPostest/PrePostTestView.vue';
-import PretestManagementView from '../views/PengelolaDataTest/PretestManagementView.vue';
 import CreatePretestView from '../views/PengelolaDataTest/CreatePretestView.vue';
 import EditPretestView from '../views/PengelolaDataTest/EditPretestView.vue';
 import PretestDetailView from '../views/PengelolaDataTest/PretestDetailView.vue';
 import TakePretestView from '../views/PengelolaDataTest/TakePretestView.vue';
+import CreatePosttestView from '../views/PengelolaDataTest/CreatePosttestView.vue';
+import EditPosttestView from '../views/PengelolaDataTest/EditPosttestView.vue';
+import TakePosttestView from '../views/PengelolaDataTest/TakePosttestView.vue';
+import TaskManagementView from '../views/PengelolaDataTest/TaskManagementView.vue';
 import DataNilaiView from '../views/DataNilai/DataNilaiView.vue';
 //pengaduan
 import BuatPengaduanView from '../views/PengelolaDataPengaduan/BuatPengaduanView.vue';
@@ -44,6 +46,7 @@ import Unauthorized from '../views/Unauthorized.vue';
 import DaftarMasyarakatView from '../views/DaftarMasyarakat/DaftarMasyarakatView.vue';
 import IkutPealtihanView from '@/views/DaftarMasyarakat/IkutPealtihanView.vue';
 import ProfileMasyarakat from '../views/Profile/ProfileMasyarakat.vue';
+import MyScoresView from '../views/Profile/MyScoresView.vue';
 import KelolaDataView from '../views/KelolaData/KelolaDataView.vue';
 import DataStrukturPegawaiView from '../views/KelolaStrukturPegawai/DataStrukturPegawaiView.vue';
 import DataStrukturPegawaiSampahView from '../views/KelolaStrukturPegawai/DataStrukturPegawaiSampahView.vue';
@@ -101,18 +104,22 @@ const routes = [
 
   //profile
   {path: '/masyarakat/:id',name: 'DetailMasyarakat',component: ProfileMasyarakat,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
+  {path: '/Test',name: 'MyScores',component: MyScoresView,meta: { requiresAuth: true, role: ['masyarakat'] }},
   
   //halaman kelola pendaftaran
   {path: '/data/pendaftaran',name: 'Datapendaftaran',component: DatapendaftaranView,meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
   
   //halaman pretest postest
-  {path: '/preposttest',name: 'PrePostTest',component: PrePostTestView},
-  {path: '/kelolatest',name: 'KelolaTest',component: PrePostTestView},
-  {path: '/pretests',name: 'PretestManagement',component: PretestManagementView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
+  {path: '/data/soal',name: 'TaskManagement',component: TaskManagementView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
   {path: '/pretests/create',name: 'CreatePretest',component: CreatePretestView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
   {path: '/pretests/:id/edit',name: 'EditPretest',component: EditPretestView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
   {path: '/pretests/:id',name: 'PretestDetail',component: PretestDetailView},
-  {path: '/pretests/:id/take',name: 'TakePretest',component: TakePretestView},
+  {path: '/pretests',name: 'TakePretest',component: TakePretestView},
+
+  {path: '/posttests/create',name: 'CreatePosttest',component: CreatePosttestView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
+  {path: '/posttests/:id/edit',name: 'EditPosttest',component: EditPosttestView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},
+  {path: '/posttests/:id',name: 'PosttestDetail',component: PretestDetailView},
+  {path: '/posttests',name: 'TakePosttest',component: TakePosttestView},
 
   // Halaman Data Nilai
   {path: '/data/nilai',name: 'DataNilai',component: DataNilaiView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] }},

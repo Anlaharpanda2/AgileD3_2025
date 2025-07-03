@@ -192,9 +192,9 @@ const rawMenu = [
 
   {
     name: 'TEST', icon: FileText, children: [
-      { name: 'Pretest', to: '/pretest', icon: Pencil },
-      { name: 'Posttest', to: '/postest', icon: ClipboardCheck },
-      { name: 'Data Nilai', to: '/data-nilai', icon: Database, roles: ['operator', 'pegawai'] },
+      { name: 'Pretest', to: '/pretests', icon: Pencil },
+      { name: 'Posttest', to: '/posttests', icon: ClipboardCheck },
+      { name: 'Data Nilai', to: '/data/nilai', icon: Database, roles: ['operator', 'pegawai'] },
       { name: 'Data Soal', to: '/data/soal', icon: Database, roles: ['operator', 'pegawai'] },
     ]
   },
@@ -212,9 +212,9 @@ const rawMenu = [
 
   {
     name: 'PENGADUAN', icon: MessageSquare, roles: ['operator', 'pegawai'], children: [
-      { name: 'Cari Pengaduan', to: '/pengaduan', icon: MessageSquare },
-      { name: 'Data Pengaduan', to: '/data-pengaduan', icon: FileQuestion },
-      { name: 'Data Konsultasi', to: '/data-konsultasi', icon: MessageCircle },
+      { name: 'Cari Pengaduan', to: '/cari/pengaduan', icon: MessageSquare },
+      { name: 'Data Pengaduan', to: '/data/pengaduan', icon: FileQuestion },
+      { name: 'Data Konsultasi', to: '/data/konsultasi', icon: MessageCircle },
     ]
   },
 ]

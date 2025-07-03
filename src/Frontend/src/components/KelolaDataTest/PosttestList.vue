@@ -3,19 +3,19 @@
     <el-card class="shadow-lg rounded-lg bg-white">
       <template #header>
         <div class="flex flex-col md:flex-row justify-between items-center mb-4">
-          <span class="text-2xl font-semibold text-gray-800">Daftar Pretest</span>
+          <span class="text-2xl font-semibold text-gray-800">Daftar Posttest</span>
           <div class="mt-4 md:mt-0 flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-3">
             <el-button type="info" :icon="Setting" @click="showVisibilityModal = true" class="w-full md:w-auto bg-gray-200 text-gray-700 hover:bg-gray-300 border-none rounded-md transition-all duration-300 ease-in-out">
               Kelola Visibilitas
             </el-button>
-            <el-button type="primary" :icon="Plus" @click="$router.push({ name: 'CreatePretest' })" class="w-full md:w-auto bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out">
-              Buat Pretest Baru
+            <el-button type="primary" :icon="Plus" @click="$router.push({ name: 'CreatePosttest' })" class="w-full md:w-auto bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out">
+              Buat Posttest Baru
             </el-button>
           </div>
         </div>
       </template>
 
-      <el-table :data="pretests" class="w-full text-gray-700 rounded-lg overflow-hidden" border stripe header-cell-class-name="bg-gray-100 text-gray-600 font-semibold" cell-class-name="py-3 px-4">
+      <el-table :data="posttests" class="w-full text-gray-700 rounded-lg overflow-hidden" border stripe header-cell-class-name="bg-gray-100 text-gray-600 font-semibold" cell-class-name="py-3 px-4">
         <el-table-column prop="title" label="Judul" sortable class-name="font-medium" />
         <el-table-column prop="description" label="Deskripsi" class-name="text-sm text-gray-500" />
         <el-table-column label="Jumlah Soal" width="120" align="center">
@@ -33,13 +33,13 @@
         <el-table-column label="Aksi" width="250" align="center">
           <template #default="scope">
             <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 justify-center">
-              <el-button size="small" @click="viewPretest(scope.row.id)" class="bg-blue-100 text-blue-700 hover:bg-blue-200 border-none rounded-md transition-all duration-300 ease-in-out">
+              <el-button size="small" @click="viewPosttest(scope.row.id)" class="bg-blue-100 text-blue-700 hover:bg-blue-200 border-none rounded-md transition-all duration-300 ease-in-out">
                 Lihat
               </el-button>
-              <el-button size="small" type="primary" @click="editPretest(scope.row.id)" class="bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out">
+              <el-button size="small" type="primary" @click="editPosttest(scope.row.id)" class="bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out">
                 Edit
               </el-button>
-              <el-button size="small" type="danger" @click="deletePretest(scope.row.id)" class="bg-red-100 text-red-700 hover:bg-red-200 border-none rounded-md transition-all duration-300 ease-in-out">
+              <el-button size="small" type="danger" @click="deletePosttest(scope.row.id)" class="bg-red-100 text-red-700 hover:bg-red-200 border-none rounded-md transition-all duration-300 ease-in-out">
                 Hapus
               </el-button>
             </div>
@@ -48,11 +48,11 @@
       </el-table>
     </el-card>
 
-    <PretestVisibilityModal
+    <PosttestVisibilityModal
       :visible="showVisibilityModal"
-      :pretests-data="pretests"
+      :posttests-data="posttests"
       @update:visible="showVisibilityModal = $event"
-      @saved="fetchPretests"
+      @saved="fetchPosttests"
     />
   </div>
 </template>
@@ -62,37 +62,37 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Plus, Setting } from '@element-plus/icons-vue';
-import pretestService, { Pretest } from '@/services/pretestService';
-import PretestVisibilityModal from './PretestVisibilityModal.vue';
+import posttestService, { Posttest } from '@/services/posttestService';
+import PosttestVisibilityModal from './PosttestVisibilityModal.vue';
 
 const router = useRouter();
-const pretests = ref<Pretest[]>([]);
+const posttests = ref<Posttest[]>([]);
 const showVisibilityModal = ref(false);
 
-const fetchPretests = async () => {
+const fetchPosttests = async () => {
   try {
-    pretests.value = await pretestService.getAllPretests();
+    posttests.value = await posttestService.getAllPosttests();
   } catch (error) {
-    ElMessage.error('Failed to fetch pretests.');
+    ElMessage.error('Failed to fetch posttests.');
     console.error(error);
   }
 };
 
 onMounted(() => {
-  fetchPretests();
+  fetchPosttests();
 });
 
-const viewPretest = (id: number) => {
-  router.push({ name: 'PretestDetail', params: { id } });
+const viewPosttest = (id: number) => {
+  router.push({ name: 'PosttestDetail', params: { id } });
 };
 
-const editPretest = (id: number) => {
-  router.push({ name: 'EditPretest', params: { id } });
+const editPosttest = (id: number) => {
+  router.push({ name: 'EditPosttest', params: { id } });
 };
 
-const deletePretest = async (id: number) => {
+const deletePosttest = async (id: number) => {
   ElMessageBox.confirm(
-    'This will permanently delete the pretest. Continue?',
+    'This will permanently delete the posttest. Continue?',
     'Warning',
     {
       confirmButtonText: 'OK',
@@ -102,11 +102,11 @@ const deletePretest = async (id: number) => {
   )
     .then(async () => {
       try {
-        await pretestService.deletePretest(id);
-        ElMessage.success('Pretest deleted successfully!');
-        fetchPretests(); // Refresh the list
+        await posttestService.deletePosttest(id);
+        ElMessage.success('Posttest deleted successfully!');
+        fetchPosttests(); // Refresh the list
       } catch (error) {
-        ElMessage.error('Failed to delete pretest.');
+        ElMessage.error('Failed to delete posttest.');
         console.error(error);
       }
     })

@@ -21,10 +21,12 @@ use App\Http\Controllers\KelolaStrukturPegawai\KelolaStrukturPegawaiController;
 use App\Http\Controllers\DataNilai\DataNilaiController;
 use App\Http\Controllers\kelolaDataTest\KelolaDataTestController;
 use App\Http\Controllers\KelolaDataTest\PretestController;
+use App\Http\Controllers\KelolaDataTest\PosttestController;
 use App\Http\Controllers\KelolaDataPelatihan\KelolaDataPelatihanController;
 //Profile
 use App\Http\Controllers\Profile\ProfileMasyarakatController;
 
+use App\Http\Controllers\CombinedScoreController;
 use App\Http\Controllers\KelolaLokasi\KelolaLokasiController;
 
 //Api auth
@@ -142,9 +144,9 @@ Route::prefix('kelola/struktur-pegawai')->group(function () {
     Route::delete('/{strukturPegawai}', [KelolaStrukturPegawaiController::class, 'destroy']);
 });
 //9. melihat Nilai pretest dan postest peserta
-use App\Http\Controllers\Pretest\PretestScoreController;
 
-Route::get('data/nilai', [PretestScoreController::class, 'index']);
+Route::get('data/combined-scores', [CombinedScoreController::class, 'index']);
+Route::get('data/combined-scores/{nik}', [CombinedScoreController::class, 'showByNik']);
 //10. pengelola pretest dan postest
 Route::prefix('kelola/test')->group(function () {
     Route::get('/', [KelolaDataTestController::class, 'index']);              
@@ -157,6 +159,10 @@ Route::prefix('kelola/test')->group(function () {
 Route::put('kelola/pretests/visibility', [PretestController::class, 'updateVisibility']);
 Route::apiResource('kelola/pretests', PretestController::class);
 Route::post('kelola/pretests/{pretest}/submit-answers', [PretestController::class, 'submitPretest']);
+
+Route::put('kelola/posttests/visibility', [PosttestController::class, 'updateVisibility']);
+Route::apiResource('kelola/posttests', PosttestController::class);
+Route::post('kelola/posttests/{posttest}/submit-answers', [PosttestController::class, 'submitPosttest']);
 
 
 

@@ -47,12 +47,14 @@ export default {
           nama: this.nama,
         });
         const userId = response.id;
+        const ttl = response.tempat_tanggal_lahir;
         // Simpan status login dan inputan untuk autocomplete
         localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('role', 'masyarakat');
         localStorage.setItem('savedNIK', this.nik);
         localStorage.setItem('savedName', this.nama);
-        localStorage.setItem('role', 'masyarakat');
         localStorage.setItem('userId', userId);
+        localStorage.setItem('Ttl', ttl);
 
         // Redirect setelah sedikit delay
         setTimeout(() => {

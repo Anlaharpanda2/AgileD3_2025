@@ -171,7 +171,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, shallowRef, watch } from 'vue'
+import { ref, onMounted, onUnmounted, shallowRef, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import sidebar from './SideBar.vue'
 import {
@@ -180,25 +180,65 @@ import {
   MessageCircle, Users2, UserCog
 } from 'lucide-vue-next'
 import Avatar from './Avatar.vue'
+import { isOperator, isPegawai, isMasyarakat, isNotLogin } from '../../services/AuthRoles'
 
 const route = useRoute()
 
-const navigationMenu = shallowRef([
+const getUserRole = () => localStorage.getItem('role') || ''
+
+// Raw menu array dengan pembatasan role
+const rawMenu = [
   { name: 'BERANDA', to: '/', icon: Home },
-  { name: 'TEST', icon: FileText, children: [
-    { name: 'Pretest', to: '/data/pelatihan-pretest', icon: Pencil },
-    { name: 'Posttest', to: '/posttest', icon: ClipboardCheck },
-    { name: 'Data Nilai', to: '/data-nilai', icon: Database },
-  ]},
-  { name: 'PELATIHAN', icon: BookUser, children: [
-    { name: 'Data Pendaftar', to: '/data/pendaftaran', icon: Users2 },
-    { name: 'Data Peserta', to: '/data/pelatihan', icon: UserCog },
-  ]},
-  { name: 'PENGADUAN', icon: MessageSquare, children: [
-    { name: 'Data Pengaduan', to: '/data-pengaduan', icon: FileQuestion },
-    { name: 'Data Konsultasi', to: '/data-konsultasi', icon: MessageCircle },
-  ]},
-])
+
+  {
+    name: 'TEST', icon: FileText, children: [
+      { name: 'Pretest', to: '/pretest', icon: Pencil },
+      { name: 'Posttest', to: '/postest', icon: ClipboardCheck },
+      { name: 'Data Nilai', to: '/data-nilai', icon: Database, roles: ['operator', 'pegawai'] },
+      { name: 'Data Soal', to: '/data/soal', icon: Database, roles: ['operator', 'pegawai'] },
+    ]
+  },
+
+  { name: 'PELATIHAN', to: '/pelatihan', icon: BookUser, roles: ['masyarakat'] },
+
+  {
+    name: 'PELATIHAN', icon: BookUser, roles: ['operator', 'pegawai'], children: [
+      { name: 'Data Pendaftar', to: '/data/pendaftaran', icon: Users2 },
+      { name: 'Data Peserta', to: '/data/pelatihan', icon: UserCog },
+    ]
+  },
+
+  { name: 'PENGADUAN', to: '/pengaduan', icon: MessageSquare, roles: ['masyarakat'] },
+
+  {
+    name: 'PENGADUAN', icon: MessageSquare, roles: ['operator', 'pegawai'], children: [
+      { name: 'Cari Pengaduan', to: '/pengaduan', icon: MessageSquare },
+      { name: 'Data Pengaduan', to: '/data-pengaduan', icon: FileQuestion },
+      { name: 'Data Konsultasi', to: '/data-konsultasi', icon: MessageCircle },
+    ]
+  },
+]
+
+// Filter menu berdasarkan role user
+const navigationMenu = computed(() => {
+  const role = getUserRole()
+
+  const filterMenu = (item) => {
+    if (item.roles && !item.roles.includes(role)) return false
+
+    if (item.children) {
+      const filteredChildren = item.children.filter(child =>
+        !child.roles || child.roles.includes(role)
+      )
+      if (filteredChildren.length === 0) return false
+      return { ...item, children: filteredChildren }
+    }
+
+    return item
+  }
+
+  return rawMenu.map(filterMenu).filter(Boolean)
+})
 
 const isScrolled = ref(false)
 const isHomeRoute = ref(route.path === '/')
@@ -234,7 +274,7 @@ onMounted(() => {
   window.addEventListener('scroll', handleScroll)
 })
 
-onUnmounted(() => window.removeEventListener('scroll', handleScroll))
+onUnmounted(() => window.removeEventListener('scroll', handleScroll, { passive: true }))
 
 function handleScroll() {
   if (isHomeRoute.value) {

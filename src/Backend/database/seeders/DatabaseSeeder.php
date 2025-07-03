@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             DataPendaftaranSeeder::class,
             DataPengaduanSeeder::class,
             DataTestSeeder::class,
+            QuotaPendaftaranSeeder::class,
             StrukturPegawaiSeeder::class,
             UserSeeder::class,
             UsersMasyarakat::class,

@@ -1,447 +1,436 @@
 <template>
-    <DefaultLayout>
-    <div class="no-padding-container">
-    <div class="dashboard-container">
-    <!-- Header Section -->
-    <div class="hero-section">
-      <div class="container">
-        <div class="row justify-content-center text-center">
-          <div class="col-lg-8">
-            <h1 class="hero-title">
-              <el-icon class="hero-icon"><Management /></el-icon>
-              Kelola Data
-            </h1>
-            <p class="hero-subtitle">
-              Kelola semua aspek sistem dengan mudah dan efisien
-            </p>
-          </div>
-        </div>
+  <div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+      <div class="mb-8 px-4 sm:px-0">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2 sm:text-3xl">Kelola Data</h1>
+        <p class="text-gray-600 text-sm sm:text-base">Manajemen data dan pengaturan sistem</p>
       </div>
-    </div>
 
-    <!-- Cards Section -->
-    <div class="cards-section">
-      <div class="container">
-        <div class="row g-4 justify-content-center">
-          <div 
-            v-for="(card, index) in crudCards" 
-            :key="index"
-            class="col-xl-4 col-lg-6 col-md-6"
-          >
-            <div 
-              class="crud-card"
-              @click="navigateToRoute(card.route)"
-            >
-              <div class="card-header">
-                <div class="icon-container">
-                  <el-icon class="card-icon">
-                    <component :is="card.icon" />
-                  </el-icon>
-                </div>
-                <div class="card-stats">
-                  <span class="stats-number">{{ card.count }}</span>
-                  <span class="stats-label">Items</span>
-                </div>
-              </div>
-              
-              <div class="card-body">
-                <h3 class="card-title">{{ card.title }}</h3>
-                <p class="card-description">{{ card.description }}</p>
-                
-                <div class="card-features">
-                  <div class="feature-item" v-for="feature in card.features" :key="feature">
-                    <el-icon class="feature-icon"><Check /></el-icon>
-                    <span>{{ feature }}</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="card-footer">
-                <div class="action-buttons">
-                  <el-button 
-                    type="primary" 
-                    class="btn-show-data"
-                    @click.stop="navigateToRoute(card.route)"
-                  >
-                    <el-icon><View /></el-icon>
-                    Tampilkan Data
-                  </el-button>
-                </div>
-              </div>
+      <!-- Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-4">
+        <!-- Dynamic Cards -->
+        <div 
+          v-for="card in cards" 
+          :key="card.id"
+          class="bg-white rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 p-4 sm:p-5 lg:p-6 border border-gray-200"
+          :class="{ 'bg-gradient-to-br from-pink-50 to-white border-2 border-pink-300': card.buttonColor === 'pink' }"
+          @click="handleCardClick(card)"
+        >
+          <div class="flex items-center mb-4">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-pink-100 rounded-lg flex items-center justify-center mr-3 sm:mr-4">
+              <!-- Document Icon -->
+              <svg v-if="card.icon === 'document'" class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+              <!-- Newspaper Icon -->
+              <svg v-else-if="card.icon === 'newspaper'" class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+              </svg>
+              <!-- Shield Icon -->
+              <svg v-else-if="card.icon === 'shield'" class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12V9a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/>
+              </svg>
+              <!-- Chat Icon -->
+              <svg v-else-if="card.icon === 'chat'" class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+              <!-- Users Icon -->
+              <svg v-else-if="card.icon === 'users'" class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+              <!-- Lock Icon -->
+              <svg v-else-if="card.icon === 'lock'" class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+              <!-- Building Icon -->
+              <svg v-else-if="card.icon === 'building'" class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+              </svg>
+              <!-- User Icon -->
+              <svg v-else-if="card.icon === 'user'" class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+              <!-- Chart Icon -->
+              <svg v-else-if="card.icon === 'chart'" class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+              </svg>
+              <!-- Clipboard Icon -->
+              <svg v-else-if="card.icon === 'clipboard'" class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+              </svg>
+              <!-- Book Icon -->
+              <svg v-else-if="card.icon === 'book'" class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
             </div>
+            <h3 class="text-base sm:text-lg lg:text-xl font-semibold text-gray-900">{{ card.title }}</h3>
           </div>
+          <p class="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">{{ card.description }}</p>
+          <button 
+            class="w-full py-2 px-3 sm:px-4 rounded-lg transition-all duration-200 text-sm sm:text-base font-medium"
+            :class="[
+              card.buttonColor === 'pink' ? 'bg-pink-600 text-white hover:bg-pink-700 active:bg-pink-800' : 'bg-gray-500 text-white hover:bg-gray-600 active:bg-gray-700',
+              { 'animate-pulse': isLoading }
+            ]"
+            @click.stop="handleButtonClick(card)"
+            :disabled="isLoading"
+          >
+            {{ isLoading ? 'Loading...' : card.buttonText }}
+          </button>
+        </div>
+
+        <!-- Card 2: Pengelola Berita dan Pengumuman -->
+        <div class="bg-white rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 p-6 border border-gray-200">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mr-4">
+              <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900">Berita & Pengumuman</h3>
+          </div>
+          <p class="text-gray-600 mb-4">Pengelola berita dan pengumuman untuk publikasi informasi</p>
+          <button class="w-full bg-pink-600 text-white py-2 px-4 rounded-lg hover:bg-pink-700 transition-colors duration-200">
+            Kelola Data
+          </button>
+        </div>
+
+        <!-- Card 3: Pengelola Pengaduan -->
+        <div class="bg-white rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 p-6 border border-gray-200">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mr-4">
+              <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12V9a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900">Pengaduan</h3>
+          </div>
+          <p class="text-gray-600 mb-4">Pengelola pengaduan dan sistem pelaporan masalah</p>
+          <button class="w-full bg-pink-600 text-white py-2 px-4 rounded-lg hover:bg-pink-700 transition-colors duration-200">
+            Kelola Data
+          </button>
+        </div>
+
+        <!-- Card 4: Pengelola Konsultasi -->
+        <div class="bg-white rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 p-6 border border-gray-200">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mr-4">
+              <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900">Konsultasi</h3>
+          </div>
+          <p class="text-gray-600 mb-4">Pengelola konsultasi dan layanan bantuan pengguna</p>
+          <button class="w-full bg-pink-600 text-white py-2 px-4 rounded-lg hover:bg-pink-700 transition-colors duration-200">
+            Kelola Data
+          </button>
+        </div>
+
+        <!-- Card 5: Pengelola Data Panitia Kegiatan -->
+        <div class="bg-white rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 p-6 border border-gray-200">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mr-4">
+              <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900">Panitia Kegiatan</h3>
+          </div>
+          <p class="text-gray-600 mb-4">Pengelola data panitia kegiatan dan organisasi acara</p>
+          <button class="w-full bg-pink-600 text-white py-2 px-4 rounded-lg hover:bg-pink-700 transition-colors duration-200">
+            Kelola Data
+          </button>
+        </div>
+
+        <!-- Card 6: Pengelola Akses Admin -->
+        <div class="bg-white rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 p-6 border border-gray-200">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mr-4">
+              <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900">Akses Admin</h3>
+          </div>
+          <p class="text-gray-600 mb-4">Pengelola akses admin dan pengaturan hak akses pengguna</p>
+          <button class="w-full bg-pink-600 text-white py-2 px-4 rounded-lg hover:bg-pink-700 transition-colors duration-200">
+            Kelola Data
+          </button>
+        </div>
+
+        <!-- Card 7: Pengelola Fasilitas -->
+        <div class="bg-white rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 p-6 border border-gray-200">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mr-4">
+              <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900">Fasilitas</h3>
+          </div>
+          <p class="text-gray-600 mb-4">Pengelola fasilitas dan infrastruktur pendukung</p>
+          <button class="w-full bg-pink-600 text-white py-2 px-4 rounded-lg hover:bg-pink-700 transition-colors duration-200">
+            Kelola Data
+          </button>
+        </div>
+
+        <!-- Card 8: Pengelola Struktur Pegawai -->
+        <div class="bg-white rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 p-6 border border-gray-200">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mr-4">
+              <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900">Struktur Pegawai</h3>
+          </div>
+          <p class="text-gray-600 mb-4">Pengelola struktur pegawai dan organisasi karyawan</p>
+          <button class="w-full bg-pink-600 text-white py-2 px-4 rounded-lg hover:bg-pink-700 transition-colors duration-200">
+            Kelola Data
+          </button>
+        </div>
+
+        <!-- Card 9: Melihat Nilai Pretest dan Postest -->
+        <div class="bg-white rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 p-6 border border-gray-200">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mr-4">
+              <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900">Nilai Pretest & Postest</h3>
+          </div>
+          <p class="text-gray-600 mb-4">Melihat nilai pretest dan postest peserta pelatihan</p>
+          <button class="w-full bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition-colors duration-200">
+            Lihat Data
+          </button>
+        </div>
+
+        <!-- Card 10: Pengelola Pretest dan Postest -->
+        <div class="bg-white rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 p-6 border border-gray-200">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mr-4">
+              <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900">Pretest & Postest</h3>
+          </div>
+          <p class="text-gray-600 mb-4">Pengelola pretest dan postest untuk evaluasi peserta</p>
+          <button class="w-full bg-pink-600 text-white py-2 px-4 rounded-lg hover:bg-pink-700 transition-colors duration-200">
+            Kelola Data
+          </button>
+        </div>
+
+        <!-- Card 11: Pengelola Peserta Pelatihan -->
+        <div class="bg-white rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 p-6 border border-gray-200">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mr-4">
+              <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900">Peserta Pelatihan</h3>
+          </div>
+          <p class="text-gray-600 mb-4">Pengelola peserta pelatihan dan manajemen kursus</p>
+          <button class="w-full bg-pink-600 text-white py-2 px-4 rounded-lg hover:bg-pink-700 transition-colors duration-200">
+            Kelola Data
+          </button>
         </div>
       </div>
     </div>
   </div>
-  </div>
-    </DefaultLayout>
 </template>
 
 <script setup lang="ts">
-import DefaultLayout from '../../layouts/DefaultLayout.vue'
-import { ref, computed } from 'vue'
-import { 
-  Management, 
-  Edit, 
-  View, 
-  Check, 
-  ArrowRight, 
-  DataAnalysis, 
-  Files, 
-  User, 
-  Trophy,
-  Document,
-  ChatLineRound,
-  Service,
-  UserFilled,
-  OfficeBuilding,
-  Promotion
-} from '@element-plus/icons-vue'
+import { ref, onMounted } from 'vue'
 
-// Gunakan array ref untuk card data
-const crudCards = ref([
+// Define interfaces for type safety
+interface CardData {
+  id: number
+  title: string
+  description: string
+  icon: string
+  buttonText: string
+  buttonColor: string
+  route?: string
+}
+
+// Reactive data
+const cards = ref<CardData[]>([
   {
-    title: 'Pengelola Berita & Pengumuman',
-    description: 'Kelola semua berita dan pengumuman untuk website dan aplikasi',
-    icon: Document,
-    route: '#',
-    count: 42,
-    features: ['Publikasi Berita', 'Jadwal Posting', 'Media Upload']
+    id: 1,
+    title: 'Data Pendaftaran',
+    description: 'Pengelola data pendaftaran peserta dan administrasi pendaftaran',
+    icon: 'document',
+    buttonText: 'Kelola Data',
+    buttonColor: 'pink',
+    route: '/pendaftaran'
   },
   {
-    title: 'Pengelola Pengaduan',
-    description: 'Sistem manajemen pengaduan masyarakat yang terintegrasi',
-    icon: ChatLineRound,
-    route: '#',
-    count: 28,
-    features: ['Tracking Status', 'Respon Otomatis', 'Laporan Analitik']
+    id: 2,
+    title: 'Berita & Pengumuman',
+    description: 'Pengelola berita dan pengumuman untuk publikasi informasi',
+    icon: 'newspaper',
+    buttonText: 'Kelola Data',
+    buttonColor: 'pink',
+    route: '/berita'
   },
   {
-    title: 'Pengelola Konsultasi',
-    description: 'Platform konsultasi online untuk layanan masyarakat',
-    icon: Service,
-    route: '#',
-    count: 35,
-    features: ['Jadwal Konsultasi', 'Video Call', 'History Konsultasi']
+    id: 3,
+    title: 'Pengaduan',
+    description: 'Pengelola pengaduan dan sistem pelaporan masalah',
+    icon: 'shield',
+    buttonText: 'Kelola Data',
+    buttonColor: 'pink',
+    route: '/pengaduan'
   },
   {
-    title: 'Pengelola Data Panitia Kegiatan',
-    description: 'Manajemen data dan struktur panitia untuk berbagai kegiatan',
-    icon: UserFilled,
-    route: '#',
-    count: 15,
-    features: ['Struktur Panitia', 'Tugas & Wewenang', 'Evaluasi Kinerja']
+    id: 4,
+    title: 'Konsultasi',
+    description: 'Pengelola konsultasi dan layanan bantuan pengguna',
+    icon: 'chat',
+    buttonText: 'Kelola Data',
+    buttonColor: 'pink',
+    route: '/konsultasi'
   },
   {
-    title: 'Pengelola Fasilitas',
-    description: 'Sistem pengelolaan dan pemeliharaan fasilitas organisasi',
-    icon: OfficeBuilding,
-    route: '#',
-    count: 67,
-    features: ['Inventarisasi', 'Jadwal Maintenance', 'Booking Fasilitas']
+    id: 5,
+    title: 'Panitia Kegiatan',
+    description: 'Pengelola data panitia kegiatan dan organisasi acara',
+    icon: 'users',
+    buttonText: 'Kelola Data',
+    buttonColor: 'pink',
+    route: '/panitia'
   },
   {
-    title: 'Pengelola Struktur Pegawai',
-    description: 'Manajemen data pegawai dan struktur organisasi',
-    icon: Promotion,
-    route: '#',
-    count: 124,
-    features: ['Data Pegawai', 'Struktur Organisasi', 'Mutasi & Promosi']
+    id: 6,
+    title: 'Akses Admin',
+    description: 'Pengelola akses admin dan pengaturan hak akses pengguna',
+    icon: 'lock',
+    buttonText: 'Kelola Data',
+    buttonColor: 'pink',
+    route: '/admin'
+  },
+  {
+    id: 7,
+    title: 'Fasilitas',
+    description: 'Pengelola fasilitas dan infrastruktur pendukung',
+    icon: 'building',
+    buttonText: 'Kelola Data',
+    buttonColor: 'pink',
+    route: '/fasilitas'
+  },
+  {
+    id: 8,
+    title: 'Struktur Pegawai',
+    description: 'Pengelola struktur pegawai dan organisasi karyawan',
+    icon: 'user',
+    buttonText: 'Kelola Data',
+    buttonColor: 'pink',
+    route: '/pegawai'
+  },
+  {
+    id: 9,
+    title: 'Nilai Pretest & Postest',
+    description: 'Melihat nilai pretest dan postest peserta pelatihan',
+    icon: 'chart',
+    buttonText: 'Lihat Data',
+    buttonColor: 'gray',
+    route: '/nilai'
+  },
+  {
+    id: 10,
+    title: 'Pretest & Postest',
+    description: 'Pengelola pretest dan postest untuk evaluasi peserta',
+    icon: 'clipboard',
+    buttonText: 'Kelola Data',
+    buttonColor: 'pink',
+    route: '/test'
+  },
+  {
+    id: 11,
+    title: 'Peserta Pelatihan',
+    description: 'Pengelola peserta pelatihan dan manajemen kursus',
+    icon: 'book',
+    buttonText: 'Kelola Data',
+    buttonColor: 'pink',
+    route: '/peserta'
   }
 ])
 
-const totalItems = computed(() => {
-  return crudCards.value.reduce((total, card) => total + card.count, 0)
+const isLoading = ref<boolean>(false)
+
+// Methods
+const handleCardClick = (card: CardData) => {
+  console.log(`Navigating to ${card.route}`)
+  // Router navigation will be implemented here
+  // router.push(card.route)
+}
+
+const handleButtonClick = (card: CardData) => {
+  isLoading.value = true
+  
+  // Simulate API call or navigation
+  setTimeout(() => {
+    handleCardClick(card)
+    isLoading.value = false
+  }, 500)
+}
+
+// Lifecycle hooks
+onMounted(() => {
+  console.log('KelolaData component mounted')
 })
-
-const activeUsers = ref(89)
-
-const navigateToRoute = (route: string) => {
-  console.log('Navigating to:', route)
-  // router.push(route) jika menggunakan useRouter()
-}
-
-const viewDetails = (card: { title: string }) => {
-  console.log('Viewing details for:', card.title)
-}
 </script>
 
-
 <style scoped>
-.no-padding-container {
-  margin: -20px;
-}
-.dashboard-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #b4f0ee 100%);
-  overflow-x: hidden;
+/* Deep selector untuk override styling dari library */
+:deep(.card-override) {
+  background: linear-gradient(135deg, #fdf2f8 0%, #ffffff 100%);
+  border: 2px solid #f9a8d4;
 }
 
-/* Hero Section */
-.hero-section {
-  background: linear-gradient(135deg, #ffa7c4 0%, #ff92b6 100%);
-  color: white;
-  padding: 4rem 0 3rem;
-  margin-bottom: 3rem;
-  position: relative;
+:deep(.pink-accent) {
+  color: #ec4899;
+  border-color: #ec4899;
 }
 
-.hero-section::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 30px;
-  background: linear-gradient(135deg, transparent 49%, #ffffff 50%);
+:deep(.pink-accent:hover) {
+  color: #be185d;
+  border-color: #be185d;
+  background-color: #fdf2f8;
 }
 
-.hero-title {
-  font-size: 3rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+/* Animation untuk loading state */
+@keyframes pulse-pink {
+  0%, 100% {
+    background-color: #ec4899;
+  }
+  50% {
+    background-color: #be185d;
+  }
 }
 
-.hero-icon {
-  font-size: 3.5rem;
-  margin-right: 1rem;
-  vertical-align: middle;
-}
-
-.hero-subtitle {
-  font-size: 1.25rem;
-  opacity: 0.9;
-  font-weight: 300;
-}
-
-/* Cards Section */
-.cards-section {
-  padding: 2rem 0 4rem;
-}
-
-
-.crud-card {
-animation: fadeInUp 0.6s ease forwards;
-  position: relative;
-  background: white;
-  border-radius: 20px;
-  padding: 0;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  transition:
-    transform 0.4s ease,
-    box-shadow 0.4s ease;
-  cursor: pointer;
-  overflow: hidden;
-  border: none;
-  height: 100%;
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-  z-index: 1;
-  will-change: transform, box-shadow;
-  transform: translateY(0); 
-}
-
-.crud-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #ffffff 0%, #e0fffd 100%);
-  opacity: 0;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  z-index: 0;
-}
-
-/* Konten tetap di atas overlay */
-.crud-card > * {
-  position: relative;
-  z-index: 1;
-}
-
-.crud-card:hover {
-  transform: translateY(-10px) scale(1.015);
-  box-shadow: 0 25px 50px rgba(105, 197, 194, 0.35);
-  z-index: 5;
-}
-
-
-.crud-card:hover::before {
-  opacity: 1;
-}
-
-.card-header {
-  padding: 2rem 2rem 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.icon-container {
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #69C5C2 0%, #5ab3b0 100%);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 8px 16px rgba(105, 197, 194, 0.3);
-}
-
-.card-icon {
-  font-size: 2.5rem;
-  color: white;
-}
-
-.card-stats {
-  text-align: right;
-}
-
-.stats-number {
-  display: block;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #69C5C2;
-  line-height: 1;
-}
-
-.stats-label {
-  font-size: 0.875rem;
-  color: #6c757d;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.card-body {
-  padding: 0 2rem 1rem;
-  flex: 1;
-}
-
-.card-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 0.75rem;
-  line-height: 1.3;
-}
-
-.card-description {
-  color: #6c757d;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-.feature-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  font-size: 0.875rem;
-  color: #495057;
-}
-
-.feature-icon {
-  color: #69C5C2;
-  margin-right: 0.5rem;
-  font-size: 1rem;
-}
-
-.card-footer {
-  padding: 0 2rem 2rem;
-  margin-top: auto;
-}
-
-.action-buttons {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.btn-show-data {
-  width: 100%;
-  background: linear-gradient(135deg, #69C5C2 0%, #5ab3b0 100%);
-  border: none;
-  border-radius: 12px;
-  padding: 0.75rem 1rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-show-data:hover {
-  background: linear-gradient(135deg, #5ab3b0 0%, #4da6a3 100%);
-  transform: translateY(-2px);
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2rem;
+/* Custom scrollbar untuk mobile */
+@media (max-width: 767px) {
+  ::-webkit-scrollbar {
+    width: 4px;
   }
   
-  .hero-icon {
-    font-size: 2.5rem;
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9;
   }
   
-  .crud-card {
-    min-height: 350px;
+  ::-webkit-scrollbar-thumb {
+    background: #ec4899;
+    border-radius: 2px;
   }
   
-  .card-header {
-    padding: 1.5rem 1.5rem 1rem;
-  }
-  
-  .card-body {
-    padding: 0 1.5rem 1rem;
-    flex: 1;
-  }
-  
-  .card-footer {
-    padding: 0 1.5rem 1.5rem;
-  }
-  
-  .icon-container {
-    width: 60px;
-    height: 60px;
-  }
-  
-  .card-icon {
-    font-size: 2rem;
-  }
-  
-  .action-buttons {
-    width: 100%;
+  ::-webkit-scrollbar-thumb:hover {
+    background: #be185d;
   }
 }
-
-@media (max-width: 576px) {
-  .hero-section {
-    padding: 2rem 0;
-  }
-  
-  .cards-section {
-    padding: 1rem 0 2rem;
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    /* HAPUS transform agar tidak bentrok */
-  }
-  to {
-    opacity: 1;
-    /* transform: none */
-  }
-}
-
-
-.crud-card {
-  animation: fadeInUp 0.6s ease forwards;
-}
-
-.crud-card:nth-child(1) { animation-delay: 0.1s; }
-.crud-card:nth-child(2) { animation-delay: 0.2s; }
-.crud-card:nth-child(3) { animation-delay: 0.3s; }
-.crud-card:nth-child(4) { animation-delay: 0.4s; }
-.crud-card:nth-child(5) { animation-delay: 0.5s; }
-.crud-card:nth-child(6) { animation-delay: 0.6s; }
 </style>

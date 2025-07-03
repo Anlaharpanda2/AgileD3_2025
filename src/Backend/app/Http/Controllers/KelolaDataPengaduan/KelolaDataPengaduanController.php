@@ -35,6 +35,13 @@ class KelolaDataPengaduanController extends Controller
                 $validated['lampiran'] = $request->file('lampiran')->store('pengaduan', 'public');
             }
 
+            // Generate kode_pengaduan unik 6 digit
+            do {
+                $kode = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+            } while (DataPengaduan::where('kode_pengaduan', $kode)->exists());
+
+            $validated['kode_pengaduan'] = $kode;
+
             $data = DataPengaduan::create($validated);
 
             return response()->json([

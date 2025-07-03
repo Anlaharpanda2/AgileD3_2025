@@ -221,4 +221,14 @@ public function update(Request $request, DataPelatihan $dataPelatihan)
             ], 500);
         }
     }
+    public function show($nik)
+    {
+        $data = DataPelatihan::where('nik', $nik)->get();
+
+        if ($data->isEmpty()) {
+            return response()->json(['message' => 'Data tidak ditemukan untuk NIK: ' . $nik], 404);
+        }
+
+        return response()->json($data, 200);
+    }
 }

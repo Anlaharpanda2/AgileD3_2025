@@ -27,7 +27,7 @@ const mainFeatures = ref([
     icon: GraduationCap,
     color: '#ec4899',
     bgColor: 'rgba(236, 72, 153, 0.1)',
-    route: '/pelatihan',
+    route: '/daftar/pelatihan',
     button:'Ikut Pelatihan'
   },
   {

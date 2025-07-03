@@ -30,7 +30,8 @@ public function login(Request $request)
 
     return response()->json([
         'message' => 'Login berhasil',
-        'id' => $pendaftar->id
+        'id' => $pendaftar->id,
+        'tempat_tanggal_lahir' => $pendaftar->tempat_tanggal_lahir,
     ]);
 }
 
@@ -64,12 +65,12 @@ public function login(Request $request)
             'nik' => $request->nik,
             'tempat_tanggal_lahir' => $request->tempat_tanggal_lahir,
             'jenis_bimtek' => '',
-            'kegiatan_dimulai' => now(),
-            'kegiatan_berakhir' => now(),
+            'kegiatan_dimulai' => null,
+            'kegiatan_berakhir' => null,
             'tempat_kegiatan' => '',
-            'angkatan' => 1,
+            'angkatan' => null,
             'pendidikan' => '',
-            'status' => 'lajang',
+            'status' => null,
             'alamat' => '',
             'jenis_usaha' => '',
             'penghasilan_perbulan' => '',

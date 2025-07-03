@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp } from 'vue';
 import { Vue3Lottie } from 'vue3-lottie';
 import App from './App.vue';
 import router from './router';
@@ -7,8 +7,9 @@ import './style.css';
 import vuetify from './plugins/vuetify';
 import 'element-plus/dist/index.css';
 import { MotionPlugin } from '@vueuse/motion'; 
-import 'leaflet/dist/leaflet.css'
-import * as L from 'leaflet'
+import 'leaflet/dist/leaflet.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import * as L from 'leaflet';
 window.L = L 
 
 const app = createApp(App);

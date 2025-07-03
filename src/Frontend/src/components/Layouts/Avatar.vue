@@ -242,6 +242,7 @@ const handleLogout = async () => {
     localStorage.removeItem('savedName');
     localStorage.removeItem('email'); 
     localStorage.removeItem('savedNIK');
+    localStorage.removeItem('Ttl');
     
     let redirectToPath = '/login/masyarakat'; 
     if (currentRole === 'operator') {

@@ -1,6 +1,36 @@
 <template>
-  <Layout>
-    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
+  <Layout2>
+    <!-- Loading State -->
+    <div v-if="loading" class="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div class="text-center">
+        <div class="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-pink-500 mx-auto mb-4"></div>
+        <p class="text-gray-600 font-medium">Memuat detail konfirmasi pengaduan...</p>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div v-else-if="error" class="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div class="max-w-md w-full mx-4">
+        <div class="bg-white rounded-2xl shadow-lg border border-red-100 p-8 text-center">
+          <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Oops! Terjadi Kesalahan</h3>
+          <p class="text-gray-600 mb-6">{{ error }}</p>
+          <button @click="fetchPengaduanDetail" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105">
+            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            Coba Lagi
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div v-else-if="pengaduan" class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
       <div class="max-w-3xl mx-auto">
         <!-- Success Animation Container -->
         <div class="text-center mb-8 animate-fade-in">
@@ -51,6 +81,24 @@
 
           <!-- Card Body -->
           <div class="p-8">
+            <!-- Kode Pengaduan Section -->
+            <div v-if="pengaduan && pengaduan.kode_pengaduan" class="flex flex-col items-center justify-center mb-8 bg-gray-50 p-6 rounded-xl border border-gray-200">
+              <p class="text-sm font-semibold text-gray-700 mb-2">Kode Pengaduan Anda:</p>
+              <div class="flex items-center space-x-3">
+                <span class="text-3xl font-mono text-gray-900 tracking-wider font-bold">{{ pengaduan.kode_pengaduan }}</span>
+                <button @click="copyToClipboard(pengaduan.kode_pengaduan)" 
+                        class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 transition-colors relative"
+                        title="Salin Kode Pengaduan">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V19a2 2 0 01-2 2h-2M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1"></path>
+                  </svg>
+                  <span v-if="showCopySuccess" class="absolute -top-8 left-1/2 -translate-x-1/2 bg-green-500 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap animate-fade-out">Disalin!</span>
+                </button>
+              </div>
+              <p class="text-sm text-gray-600 mt-2 text-center">Gunakan kode ini untuk melacak status pengaduan Anda.</p>
+            </div>
+            <!-- End Kode Pengaduan Section -->
+
             <!-- Status Timeline -->
             <div class="mb-8">
               <div class="flex items-center justify-between mb-4">
@@ -96,7 +144,7 @@
                   <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center z-10">
                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                    </svg>
+                  </svg>
                   </div>
                   <div class="ml-4 flex-1">
                     <h4 class="text-sm font-semibold text-gray-400">Tindak Lanjut</h4>
@@ -170,23 +218,82 @@
         </div>
       </div>
     </div>
-  </Layout>
+    <!-- Fallback for empty data -->
+    <div v-else class="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div class="text-center">
+        <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Data Tidak Ditemukan</h3>
+        <p class="text-gray-600 mb-4">Detail pengaduan tidak dapat dimuat atau ditemukan.</p>
+        <button @click="router.push('/')" class="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-6 rounded-xl transition-colors">
+          Kembali ke Beranda
+        </button>
+      </div>
+    </div>
+  </Layout2>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import Layout from '../../layouts/Layout.vue'
+import Layout2 from '../../layouts/Layout2.vue'
 import { useRoute, useRouter } from 'vue-router'
+import api from '../../api.js' // Pastikan Anda mengimpor instance API Anda
 
 const router = useRouter()
 const route = useRoute()
 
-const referenceNumber = ref(null)
+const pengaduan = ref(null) // State untuk menyimpan data pengaduan
+const showCopySuccess = ref(false) // State untuk pesan sukses salin
+const loading = ref(true) // State untuk indikator loading
+const error = ref(null) // State untuk pesan error
+
+const fetchPengaduanDetail = async () => {
+  let pengaduanId = route.params.id; // Coba ambil dari route params
+  if (!pengaduanId) {
+    pengaduanId = route.query.id; // Jika tidak ada di params, coba ambil dari query
+  }
+
+  if (pengaduanId) {
+    try {
+      loading.value = true;
+      error.value = null;
+      const response = await api.get(`/kelola/pengaduan/${pengaduanId}`);
+      
+      // --- DEBUGGING LOGS BARU ---
+      console.log('Full API response object:', response);
+      console.log('response.data:', response.data);
+      console.log('response.data?.data (dengan optional chaining):', response.data?.data);
+      // --- AKHIR DEBUGGING LOGS ---
+
+      // Perbaikan di sini: Langsung gunakan response.data karena objek pengaduan ada di sana
+      if (response.data) { // Cukup periksa apakah response.data ada
+        pengaduan.value = response.data;
+        console.log('Fetched pengaduan data:', pengaduan.value); // Debugging: log data yang diambil
+        console.log('Kode Pengaduan:', pengaduan.value.kode_pengaduan); // Debugging: log kode_pengaduan
+      } else {
+        // Ini akan terpicu jika response.data kosong atau null
+        throw new Error('Struktur data API tidak sesuai atau data kosong (response.data is empty).');
+      }
+    } catch (err) {
+      console.error('Error fetching pengaduan detail:', err);
+      // Tangani error dari API atau network
+      error.value = err.response?.data?.message || err.message || 'Gagal memuat detail pengaduan';
+    } finally {
+      loading.value = false;
+    }
+  } else {
+    // Ini akan terpicu jika pengaduanId tidak ditemukan di params maupun query
+    error.value = 'ID pengaduan tidak ditemukan di URL.';
+    loading.value = false;
+  }
+};
 
 onMounted(() => {
-  referenceNumber.value = route.query.id // Ambil dari query string
-})
-
+  fetchPengaduanDetail();
+});
 
 function formatDate(date) {
   return new Intl.DateTimeFormat('id-ID', {
@@ -207,16 +314,43 @@ function formatDateTime(date) {
 }
 
 function goToTrackingPage() {
-  router.push({
-    name: 'StatusPengaduan',
-    params: { id: referenceNumber.value }
-  })
+  // Pastikan pengaduan.value dan pengaduan.value.id ada sebelum navigasi
+  if (pengaduan.value && pengaduan.value.id) {
+    router.push({
+      name: 'StatusPengaduan', // Nama route yang benar untuk detail pengaduan
+      params: { id: pengaduan.value.id }
+    })
+  } else {
+    console.warn('Tidak dapat menavigasi ke halaman detail: ID pengaduan tidak tersedia.');
+    // Opsional: Tampilkan pesan ke pengguna
+  }
 }
 
 function createNewReport() {
   // Navigate back to form pengaduan
   router.push({ name: 'form-pengaduan' }) // Sesuaikan dengan nama route Anda
 }
+
+const copyToClipboard = (text) => {
+  if (text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand('copy');
+      showCopySuccess.value = true;
+      setTimeout(() => {
+        showCopySuccess.value = false;
+      }, 2000); // Pesan "Disalin!" akan hilang setelah 2 detik
+    } catch (err) {
+      console.error('Gagal menyalin teks:', err);
+      // Fallback: Anda bisa menambahkan pesan error di UI jika gagal menyalin
+    } finally {
+      document.body.removeChild(textarea);
+    }
+  }
+};
 </script>
 
 <style scoped>
@@ -268,14 +402,15 @@ function createNewReport() {
 
 @keyframes checkDraw {
   0% {
-    stroke-dasharray: 0 50;
-    stroke-dashoffset: 0;
+    stroke-dasharray: 50;
+    stroke-dashoffset: 50;
   }
   100% {
-    stroke-dasharray: 50 50;
-    stroke-dashoffset: -50;
+    stroke-dasharray: 50;
+    stroke-dashoffset: 0;
   }
 }
+
 
 @keyframes float1 {
   0%, 100% {
@@ -308,6 +443,12 @@ function createNewReport() {
     transform: translateY(-25px) rotate(90deg);
     opacity: 0.6;
   }
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; transform: translateY(0); }
+  80% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
 }
 
 /* Animation classes */
@@ -351,6 +492,10 @@ function createNewReport() {
 
 .animate-float-3 {
   animation: float3 2.8s ease-in-out infinite 1s;
+}
+
+.animate-fade-out {
+  animation: fadeOut 2s forwards;
 }
 
 /* Gradient text effect */

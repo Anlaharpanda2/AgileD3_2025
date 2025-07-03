@@ -269,7 +269,7 @@ onMounted(async () => {
 
     // Add scroll listener for mobile indicator
     if (swipeContainer.value) {
-      swipeContainer.value.addEventListener('scroll', updateCurrentSlide);
+      swipeContainer.value.addEventListener('scroll', updateCurrentSlide, { passive: true });
     }
   });
 });

@@ -20,6 +20,7 @@ use App\Http\Controllers\KelolaDataFasilitas\KelolaDataFasilitasController;
 use App\Http\Controllers\KelolaStrukturPegawai\KelolaStrukturPegawaiController;
 use App\Http\Controllers\DataNilai\DataNilaiController;
 use App\Http\Controllers\kelolaDataTest\KelolaDataTestController;
+use App\Http\Controllers\KelolaDataTest\PretestController;
 use App\Http\Controllers\KelolaDataPelatihan\KelolaDataPelatihanController;
 //Profile
 use App\Http\Controllers\Profile\ProfileMasyarakatController;
@@ -141,7 +142,9 @@ Route::prefix('kelola/struktur-pegawai')->group(function () {
     Route::delete('/{strukturPegawai}', [KelolaStrukturPegawaiController::class, 'destroy']);
 });
 //9. melihat Nilai pretest dan postest peserta
-Route::get('data/nilai', [DataNilaiController::class, 'index']);
+use App\Http\Controllers\Pretest\PretestScoreController;
+
+Route::get('data/nilai', [PretestScoreController::class, 'index']);
 //10. pengelola pretest dan postest
 Route::prefix('kelola/test')->group(function () {
     Route::get('/', [KelolaDataTestController::class, 'index']);              
@@ -150,6 +153,14 @@ Route::prefix('kelola/test')->group(function () {
     Route::delete('/{id}', [KelolaDataTestController::class, 'destroy']);     
     Route::delete('/', [KelolaDataTestController::class, 'massDestroy']);     
 });
+
+Route::put('kelola/pretests/visibility', [PretestController::class, 'updateVisibility']);
+Route::apiResource('kelola/pretests', PretestController::class);
+Route::post('kelola/pretests/{pretest}/submit-answers', [PretestController::class, 'submitPretest']);
+
+
+
+
 //11. kelola data pelatihan
 Route::prefix('kelola/pelatihan')->group(function () {
     Route::post('/impor', [KelolaDataPelatihanController::class, 'impor']);
@@ -163,6 +174,7 @@ Route::prefix('kelola/pelatihan')->group(function () {
     Route::post('/', [KelolaDataPelatihanController::class, 'store']);
     Route::put('/{data_pelatihan}', [KelolaDataPelatihanController::class, 'update']);
     Route::delete('/{data_pelatihan}', [KelolaDataPelatihanController::class, 'destroy']);
+    Route::get('{nik}', [KelolaDataPelatihanController::class, 'show']);
 });
 
 //Profile
@@ -171,6 +183,12 @@ Route::prefix('profile/masyarakat')->group(function () {
     Route::get('{nik}', [ProfileMasyarakatController::class, 'show']);
     Route::patch('{nik}/ubah-foto', [ProfileMasyarakatController::class, 'ubahFoto']);
 });
+
+//ikutpelatihan
+Route::post('/daftar/pelatihan', [KelolaDataPendaftaranController::class, 'registerPendaftar']);
+Route::get('/quota/pendaftaran', [KelolaDataPendaftaranController::class, 'getQuotaStatus']);
+Route::post('/update/quota', [KelolaDataPendaftaranController::class, 'storeOrReplace']);
+Route::post('/cek/nik', [KelolaDataPendaftaranController::class, 'cekNik']);
 
 //Tambahan
 Route::post('/data/lokasi', [KelolaLokasiController::class, 'storeOrReplace']);

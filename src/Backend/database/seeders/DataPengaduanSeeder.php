@@ -14,9 +14,18 @@ class DataPengaduanSeeder extends Seeder
     public function run(int $total = 10): void
     {
         $faker = Faker::create();
+        $usedCodes = [];
 
         for ($i = 0; $i < $total; $i++) {
+            // Generate unique 6-digit code
+            do {
+                $kode = str_pad($faker->numberBetween(0, 999999), 6, '0', STR_PAD_LEFT);
+            } while (in_array($kode, $usedCodes) || DataPengaduan::where('kode_pengaduan', $kode)->exists());
+
+            $usedCodes[] = $kode;
+
             DataPengaduan::create([
+                'kode_pengaduan' => $kode,
                 'nama_pelapor' => $faker->name(),
                 'nama_korban' => $faker->name(),
                 'deskripsi' => $faker->sentence(10),

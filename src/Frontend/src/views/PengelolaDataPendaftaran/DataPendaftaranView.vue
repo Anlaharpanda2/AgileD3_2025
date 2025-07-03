@@ -33,6 +33,13 @@
       @close="showExport = false"
       class="sm:full-screen"
     />
+    <FormQuotaDataPendaftaran
+      v-model:visible="showQuota"
+      @quota-updated="handleQuotaUpdated"
+      class="sm:full-screen"
+      :data="pagedData"
+    />
+
 
     <!-- Main Container -->
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6">
@@ -257,6 +264,16 @@
                   <div v-show="dropdownOpen === 'mobileActions'" class="sm:hidden absolute z-30 mt-1 w-48 bg-gradient-to-b from-gray-50 to-white shadow-lg border border-gray-200 rounded-lg dropdown-container" style="right: 15%; top: 20%;">
                     <div class="flex flex-col p-2">
                       <button
+                        @click.stop="showQuota = true; closeAllDropdowns()"
+                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-all duration-300 touch-highlight dropdown-item"
+                        :style="{ 'animation-delay': '0.1s' }"
+                      >
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                        </svg>
+                        Atur Pendaftaran
+                      </button>
+                      <button
                         @click.stop="showExport = true; closeAllDropdowns()"
                         class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-all duration-300 touch-highlight dropdown-item"
                         :style="{ 'animation-delay': '0.1s' }"
@@ -293,6 +310,17 @@
                 </transition>
                 <!-- Desktop Right Controls -->
                 <div class="hidden sm:flex sm:gap-3">
+                  <button
+                    @click="showQuota = true"
+                    class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
+                    title="Atur Quota"
+                  >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.827 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.827-2.37-2.37a1.724 1.724 0 00-1.066-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.573-1.066z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  </button>
                   <button
                     @click="showExport = true"
                     class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
@@ -572,6 +600,7 @@ import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import api from "../../api.js";
 import Layout2 from "../../layouts/Layout2.vue"; // Menggunakan Layout2 dari kode1
 import FormExportDatapendaftaran from "../../components/KelolaDataPendaftaran/FormExportDataPendaftaran.vue";
+import FormQuotaDataPendaftaran from "@/components/KelolaDataPendaftaran/FormQuotaDataPendaftaran.vue";
 import FormTerimaDataPendaftaran from "../../components/KelolaDataPendaftaran/FormTerimaDataPendaftaran.vue";
 import FormTerimaDataPendaftaranMassal from "../../components/KelolaDataPendaftaran/FormTerimaDataPendaftaranMassal.vue";
 import FormFilterDatapendaftaran from "../../components/KelolaDataPendaftaran/FormFilterDataPendaftaran.vue";
@@ -621,6 +650,7 @@ const itemsPerPage = ref<number | string>(10);
 const currentPage = ref(1);
 const dropdownOpen = ref<string | null>(null); // Menggunakan string untuk ID dropdown
 const showExport = ref(false);
+const showQuota = ref(false);
 const showEdit = ref(false); // Untuk FormTerimaDataPendaftaran
 const showEditMassal = ref(false); // Untuk FormTerimaDataPendaftaranMassal
 const showSort = ref(false);
@@ -649,7 +679,10 @@ const openEditMassal = (rows: pendaftar[]) => {
   TerimaDataMassal.value = rows;
   showEditMassal.value = true;
 };
-
+function handleQuotaUpdated() {
+  console.log('Kuota diperbarui di parent!');
+  // Lakukan sesuatu setelah kuota diperbarui
+}
 // Toggles the visibility of a specific dropdown menu (dari kode1)
 function toggleDropdown(dropdownId: string) {
   dropdownOpen.value = dropdownOpen.value === dropdownId ? null : dropdownId;

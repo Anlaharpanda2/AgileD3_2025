@@ -1,73 +1,157 @@
 <template>
-  <transition name="fade">
-    <div v-if="visible" class="form-overlay-wrapper">
-      <div class="overlay" @click.self="closeForm"></div>
-      <div class="sorting-form-container">
-        <button @click="closeForm" class="close-button">
-          <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-        <h2 class="form-title">Pengurutan Data</h2>
-        <el-form
-          :model="form"
-          label-position="top"
-          class="space-y-6 text-base"
-        >
-          <el-form-item label="Kolom Data">
-            <el-select
-              v-model="form.column"
-              placeholder="Pilih kolom yang akan diurutkan"
-              class="w-full custom-select"
-              filterable
-              clearable
-              size="large"
+  <div v-if="visible" class="fixed inset-0 z-50 flex items-center justify-center px-4 sm:px-6">
+    <!-- Backdrop with blur effect - This will only fade in/out -->
+    <div
+      class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300"
+      @click.self="closeForm"
+    ></div>
+
+    <!-- Main Form Container - This is where the modal content animation applies -->
+    <transition name="modal" appear>
+      <div class="relative z-10 w-full max-w-sm sm:max-w-md" v-if="visible">
+        <div class="bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+
+          <!-- Header Section -->
+          <div class="relative bg-gradient-to-r from-pink-50 to-rose-50 px-4 sm:px-6 py-4 sm:py-5 border-b border-gray-100">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-lg sm:text-xl font-bold text-gray-800 mb-1">Pengurutan Data</h2>
+                <p class="text-xs sm:text-sm text-gray-500">Atur urutan data sesuai kebutuhan</p>
+              </div>
+
+              <!-- Close Button -->
+              <button
+                @click="closeForm"
+                class="group p-2 rounded-full hover:bg-white/60 transition-all duration-200 ease-in-out touch-manipulation"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  class="w-5 h-5 text-gray-500 group-hover:text-pink-500 group-hover:rotate-90 transition-all duration-200"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Form Content -->
+          <div class="p-4 sm:p-6 space-y-5 sm:space-y-6 max-h-[70vh] overflow-y-auto">
+            <el-form
+              :model="form"
+              label-position="top"
+              class="space-y-5 sm:space-y-6"
             >
-              <el-option
-                v-for="col in columns"
-                :key="col"
-                :label="formatLabel(col)"
-                :value="col"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="Arah Pengurutan">
-            <el-radio-group
-              v-model="form.order"
-              class="flex flex-col gap-3 mt-1 text-gray-700 custom-radio-group"
-              size="large"
-            >
-              <el-radio value="asc">
-                <span class="font-medium">Naik</span> (A-Z / 0-9 / Terlama)
-              </el-radio>
-              <el-radio value="desc">
-                <span class="font-medium">Turun</span> (Z-A / 9-0 / Terbaru)
-              </el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-form>
-        <div class="form-actions">
-          <el-button
-            @click="cancelSort"
-            class="custom-cancel-button"
-          >
-            Batal
-          </el-button>
-          <el-button
-            type="primary"
-            @click="applySort"
-            class="custom-apply-button"
-          >
-            Terapkan
-          </el-button>
+              <!-- Column Selection -->
+              <el-form-item class="mb-5 sm:mb-6">
+                <template #label>
+                  <div class="flex items-center space-x-2 mb-2 sm:mb-3">
+                    <div class="w-2 h-2 bg-pink-400 rounded-full"></div>
+                    <span class="text-sm font-semibold text-gray-700">Kolom Data</span>
+                  </div>
+                </template>
+
+                <el-select
+                  v-model="form.column"
+                  placeholder="Pilih kolom yang akan diurutkan"
+                  class="w-full modern-select"
+                  filterable
+                  clearable
+                  size="large"
+                >
+                  <el-option
+                    v-for="col in filteredColumns"
+                    :key="col"
+                    :label="formatLabel(col)"
+                    :value="col"
+                  />
+                </el-select>
+              </el-form-item>
+
+              <!-- Sort Direction -->
+              <el-form-item class="mb-5 sm:mb-6">
+                <template #label>
+                  <div class="flex items-center space-x-2 mb-3 sm:mb-4">
+                    <div class="w-2 h-2 bg-pink-400 rounded-full"></div>
+                    <span class="text-sm font-semibold text-gray-700">Arah Pengurutan</span>
+                  </div>
+                </template>
+
+                <div class="space-y-2 sm:space-y-3">
+                  <label class="flex items-center p-3 sm:p-4 border-2 border-gray-100 rounded-xl cursor-pointer hover:border-pink-200 hover:bg-pink-50/30 transition-all duration-200 group touch-manipulation">
+                    <el-radio v-model="form.order" value="asc" class="mr-2 sm:mr-3">
+                      <span class="sr-only">Ascending</span>
+                    </el-radio>
+                    <div class="flex-1">
+                      <div class="flex items-center space-x-2 sm:space-x-3">
+                        <div class="flex-shrink-0">
+                          <div class="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-green-100 to-emerald-100 rounded-full flex items-center justify-center group-hover:from-green-200 group-hover:to-emerald-200 transition-all duration-200">
+                            <svg class="w-3 h-3 sm:w-4 sm:h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                            </svg>
+                          </div>
+                        </div>
+                        <div>
+                          <div class="font-semibold text-gray-800 text-sm">Naik</div>
+                          <div class="text-xs text-gray-500">A-Z • 0-9 • Terlama</div>
+                        </div>
+                      </div>
+                    </div>
+                  </label>
+
+                  <label class="flex items-center p-3 sm:p-4 border-2 border-gray-100 rounded-xl cursor-pointer hover:border-pink-200 hover:bg-pink-50/30 transition-all duration-200 group touch-manipulation">
+                    <el-radio v-model="form.order" value="desc" class="mr-2 sm:mr-3">
+                      <span class="sr-only">Descending</span>
+                    </el-radio>
+                    <div class="flex-1">
+                      <div class="flex items-center space-x-2 sm:space-x-3">
+                        <div class="flex-shrink-0">
+                          <div class="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center group-hover:from-blue-200 group-hover:to-indigo-200 transition-all duration-200">
+                            <svg class="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                          </div>
+                        </div>
+                        <div>
+                          <div class="font-semibold text-gray-800 text-sm">Turun</div>
+                          <div class="text-xs text-gray-500">Z-A • 9-0 • Terbaru</div>
+                        </div>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="bg-gray-50/50 px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-100">
+            <div class="flex flex-col-reverse sm:flex-row space-y-reverse space-y-2 sm:space-y-0 sm:space-x-3 justify-end">
+              <button
+                @click="cancelSort"
+                class="w-full sm:w-auto px-4 sm:px-5 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-200 touch-manipulation"
+              >
+                Batal
+              </button>
+              <button
+                @click="applySort"
+                class="w-full sm:w-auto px-4 sm:px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-pink-500 to-rose-500 rounded-lg hover:from-pink-600 hover:to-rose-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 touch-manipulation"
+              >
+                Terapkan
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </transition>
+    </transition>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { reactive, computed } from 'vue';
 
 const props = defineProps<{
   visible: boolean;
@@ -86,7 +170,23 @@ const form = reactive({
   order: 'asc' as 'asc' | 'desc',
 });
 
+// Filter out unwanted columns including 'deleted_at'
+const excludedColumns = ['photo', 'deleted_at', 'photo_url', 'angkatan', 'tempat_kegiatan', 'kegiatan_berakhir', 'kegiatan_dimulai'];
+
+const filteredColumns = computed(() => {
+  return props.columns.filter(col =>
+    !excludedColumns.some(excluded =>
+      col.toLowerCase().includes(excluded.toLowerCase())
+    )
+  );
+});
+
 function formatLabel(key: string): string {
+  // Ensure excluded columns are not formatted or displayed
+  if (excludedColumns.includes(key.toLowerCase())) {
+    return '';
+  }
+
   return key
     .split('_')
     .map(w => w.charAt(0).toUpperCase() + w.slice(1))
@@ -94,6 +194,7 @@ function formatLabel(key: string): string {
 }
 
 function closeForm(): void {
+  // Only emits the update:visible event, does not reset form state
   emits('update:visible', false);
 }
 
@@ -104,7 +205,7 @@ function applySort(): void {
   }
   props.data.sort((a, b) => {
     const valueA = a[form.column];
-    const valueB = b[form.column]; // Removed .toString() to handle numbers/dates directly
+    const valueB = b[form.column];
 
     const isDate = !isNaN(Date.parse(valueA)) && !isNaN(Date.parse(valueB));
     const isNumber = !isNaN(parseFloat(valueA)) && !isNaN(parseFloat(valueB));
@@ -124,11 +225,12 @@ function applySort(): void {
     }
   });
   emits('apply-sort', { column: form.column, order: form.order });
-  closeForm();
+  closeForm(); // Close form, but state is preserved
 }
 
 function cancelSort(): void {
   emits('cancel-sort');
+  // Only reset form state when "Batal" is clicked
   form.column = '';
   form.order = 'asc';
   closeForm();
@@ -136,261 +238,153 @@ function cancelSort(): void {
 </script>
 
 <style scoped>
-/* Transisi fade untuk overlay dan form */
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease;
+/* Modal Transition - Applies to the modal content only */
+.modal-enter-active,
+.modal-leave-active {
+  transition: all 0.3s ease;
 }
-.fade-enter-from, .fade-leave-to {
+
+.modal-enter-from {
   opacity: 0;
+  transform: scale(0.9) translateY(-20px);
 }
 
-/* Wrapper untuk overlay dan form, memastikan posisi tetap */
-.form-overlay-wrapper {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
+.modal-leave-to {
+  opacity: 0;
+  transform: scale(0.9) translateY(-20px);
 }
 
-/* Overlay gelap */
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Sedikit lebih gelap */
-  z-index: 998;
+/* Overrides untuk Element Plus tanpa @apply */
+:deep(.modern-select .el-input__wrapper) {
+  border-width: 2px;
+  border-color: #e5e7eb; /* gray-200 */
+  border-radius: 0.75rem; /* rounded-xl */
+  padding-left: 1rem; /* px-4 */
+  padding-right: 1rem; /* px-4 */
+  padding-top: 0.75rem; /* py-3 */
+  padding-bottom: 0.75rem; /* py-3 */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+  transition: all 0.2s ease-in-out;
 }
 
-/* Kontainer utama formulir */
-.sorting-form-container {
-  position: relative;
-  z-index: 1000;
-  background-color: #ffffff;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25); /* Bayangan lebih kuat dan modern */
-  border-radius: 20px; /* Lebih membulat */
-  padding: 30px; /* Padding lebih besar */
-  max-width: 480px; /* Ukuran yang sedikit disesuaikan */
-  width: 90%; /* Responsif */
-  font-family: 'Inter', sans-serif; /* Menggunakan font Inter */
-
-  /* Animasi masuk */
-  animation: slideInFromBottom 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+:deep(.modern-select .el-input__wrapper:hover) {
+  border-color: #fbcfe8; /* pink-300 */
 }
 
-/* Keyframes untuk Animasi "slideInFromBottom" */
-@keyframes slideInFromBottom {
-  0% {
+:deep(.modern-select .el-input__wrapper.is-focused) {
+  border-color: #f472b6; /* pink-400 */
+  box-shadow: 0 0 0 4px rgba(253, 224, 255, 0.5); /* ring-4 ring-pink-100 */
+}
+
+:deep(.modern-select .el-input__inner) {
+  color: #374151; /* gray-700 */
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 500; /* font-medium */
+}
+
+:deep(.el-radio__input.is-checked .el-radio__inner) {
+  background-color: #ec4899; /* pink-500 */
+  border-color: #ec4899; /* pink-500 */
+}
+
+:deep(.el-radio__input.is-checked + .el-radio__label) {
+  color: #374151; /* gray-800 */
+}
+
+:deep(.el-radio__inner:hover) {
+  border-color: #f472b6; /* pink-400 */
+}
+
+:deep(.el-select-dropdown) {
+  border-radius: 0.75rem; /* rounded-xl */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* shadow-2xl */
+  border-width: 0; /* border-0 */
+  background: white;
+  margin-top: 8px;
+}
+
+:deep(.el-select-dropdown__item) {
+  padding-top: 0.75rem; /* py-3 */
+  padding-bottom: 0.75rem; /* py-3 */
+  padding-left: 1rem; /* px-4 */
+  padding-right: 1rem; /* px-4 */
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 500; /* font-medium */
+  color: #374151; /* gray-700 */
+  transition: all 0.2s ease-in-out;
+}
+
+:deep(.el-select-dropdown__item.hover) {
+  background-color: #fff1f2; /* pink-50 */
+  color: #be185d; /* pink-700 */
+}
+
+:deep(.el-select-dropdown__item.selected) {
+  background-color: #fce7f3; /* pink-100 */
+  color: #9d174d; /* pink-800 */
+  font-weight: 600; /* font-semibold */
+}
+
+/* Custom scrollbar for dropdown */
+:deep(.el-select-dropdown .el-scrollbar__wrap) {
+  scrollbar-width: thin;
+  scrollbar-color: #e5e7eb transparent;
+}
+
+:deep(.el-select-dropdown .el-scrollbar__wrap::-webkit-scrollbar) {
+  width: 6px;
+}
+
+:deep(.el-select-dropdown .el-scrollbar__wrap::-webkit-scrollbar-track) {
+  background: transparent;
+}
+
+:deep(.el-select-dropdown .el-scrollbar__wrap::-webkit-scrollbar-thumb) {
+  background-color: #e5e7eb;
+  border-radius: 3px;
+}
+
+:deep(.el-select-dropdown .el-scrollbar__wrap::-webkit-scrollbar-thumb:hover) {
+  background-color: #d1d5db;
+}
+
+/* Mobile responsiveness and touch optimization */
+@media (max-width: 640px) {
+  .modern-select {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+
+  /* Ensure modal doesn't overflow on small screens and has a good mobile animation */
+  /* These styles target the modal content when it's entering or leaving */
+  .modal-enter-from {
     opacity: 0;
-    transform: translateY(30px) scale(0.95);
+    transform: translateY(100%); /* Start from bottom */
   }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+
+  .modal-leave-to {
+    opacity: 0;
+    transform: translateY(100%); /* Exit to bottom */
   }
-}
 
-/* Tombol tutup form */
-.close-button {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  line-height: 1;
-  color: #69C5C2; /* Warna utama untuk tombol close */
-  transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
-}
-.close-button:hover {
-  transform: rotate(90deg); /* Efek putar saat hover */
-  color: #5AAEA8; /* Sedikit lebih gelap saat hover */
-}
-
-/* Judul formulir */
-.form-title {
-  font-size: 1.8em; /* Ukuran lebih besar */
-  font-weight: 700;
-  color: #333333;
-  margin-bottom: 25px; /* Margin lebih besar */
-  padding-bottom: 15px;
-  border-bottom: 2px solid #88D3D1; /* Border lebih tebal, warna terkait primary */
-  position: relative;
-  letter-spacing: 0.5px;
-}
-.form-title::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -2px; /* Sesuaikan dengan border-bottom */
-  width: 60px; /* Garis aksen pendek */
-  height: 2px;
-  background-color: #69C5C2; /* Warna primary */
-  border-radius: 1px;
-}
-
-/* Item form */
-.el-form-item {
-  margin-bottom: 20px; /* Tambahkan margin antar item form */
-}
-.el-form-item__label {
-  font-weight: 600;
-  color: #555555;
-  margin-bottom: 8px !important;
-  font-size: 0.95em;
-}
-
-/* Radio button yang terpilih */
-.el-radio__input.is-checked + .el-radio__label {
-  color: #333333 !important;
-  font-weight: 600;
-}
-.el-radio__input.is-checked .el-radio__inner {
-  background-color: #69C5C2 !important;
-  border-color: #69C5C2 !important;
-}
-.el-radio__inner:hover,
-.el-radio:hover .el-radio__inner {
-  border-color: #88D3D1 !important; /* Warna primary light saat hover */
-}
-.custom-radio-group .el-radio__label {
-  font-size: 1.05em;
-  line-height: 1.5;
-}
-
-/* Input select */
-.el-select .el-input__wrapper {
-  border-radius: 12px !important; /* Sudut lebih membulat */
-  padding: 12px 16px !important; /* Padding lebih besar */
-  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); /* Bayangan halus */
-}
-.el-select .el-input__wrapper.is-focused {
-  border-color: #69C5C2 !important; /* Warna primary saat fokus */
-  box-shadow: 0 0 0 4px rgba(105, 197, 194, 0.25) !important; /* Bayangan primary dengan opacity */
-}
-.el-select .el-input__inner {
-  font-size: 1.05rem !important;
-  color: #333;
-}
-.el-select .el-select__caret {
-  color: #999;
-  transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
-}
-.el-select .el-select__caret.is-reverse {
-  color: #69C5C2; /* Warna primary saat dropdown terbuka */
-  transform: rotate(180deg);
-}
-
-/* Div actions footer */
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 15px; /* Jarak antar tombol */
-  padding-top: 25px; /* Padding atas lebih besar */
-  border-top: 1px solid #f0f0f0;
-  margin-top: 30px; /* Margin atas lebih besar */
-}
-
-/* Tombol Terapkan (Apply) */
-.custom-apply-button {
-  background: linear-gradient(to right, #88D3D1, #69C5C2); /* Gradien warna utama */
-  border: none;
-  color: white;
-  padding: 12px 25px; /* Padding lebih besar */
-  border-radius: 10px; /* Sudut membulat */
-  font-weight: 600;
-  font-size: 1.05em;
-  box-shadow: 0 4px 12px rgba(105, 197, 194, 0.35); /* Bayangan kuat dengan warna primary */
-  transition: all 0.3s ease-in-out;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.custom-apply-button:hover {
-  background: linear-gradient(to right, #69C5C2, #5AAEA8); /* Gradien lebih gelap saat hover */
-  box-shadow: 0 6px 18px rgba(105, 197, 194, 0.5); /* Bayangan lebih besar saat hover */
-  transform: translateY(-2px); /* Efek sedikit terangkat */
-}
-.custom-apply-button:active {
-  background: #69C5C2; /* Kembali ke warna utama saat diklik */
-  box-shadow: 0 2px 8px rgba(105, 197, 194, 0.2);
-  transform: translateY(0);
-}
-
-/* Tombol Batal (Cancel) */
-.custom-cancel-button {
-  color: #69C5C2; /* Warna teks primary */
-  background-color: transparent;
-  border: 1px solid #B0E0DF; /* Border ringan dengan warna terkait primary */
-  padding: 12px 25px;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 1.05em;
-  transition: all 0.3s ease-in-out;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.custom-cancel-button:hover {
-  background-color: rgba(105, 197, 194, 0.08); /* Latar belakang transparan dengan warna primary saat hover */
-  border-color: #69C5C2; /* Border warna primary saat hover */
-  color: #69C5C2;
-}
-.custom-cancel-button:active {
-  background-color: rgba(105, 197, 194, 0.15);
-  border-color: #5AAEA8;
-}
-
-/* Dropdown untuk select (opsi pilihan) */
-.el-select-dropdown {
-  border-radius: 12px !important; /* Sudut membulat */
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important; /* Bayangan lebih modern */
-  padding: 10px 0 !important; /* Padding internal */
-}
-.el-select-dropdown__item {
-  font-size: 1rem !important;
-  padding: 12px 20px !important; /* Padding internal lebih besar */
-  transition: background-color 0.2s ease-in-out;
-}
-.el-select-dropdown__item.hover {
-  background-color: rgba(105, 197, 194, 0.1) !important; /* Latar belakang transparan dengan primary saat hover */
-  color: #333;
-}
-.el-select-dropdown__item.selected {
-  color: #69C5C2 !important; /* Warna teks primary saat terpilih */
-  font-weight: 600;
-  background-color: rgba(105, 197, 194, 0.15) !important; /* Latar belakang transparan dengan primary lebih gelap saat terpilih */
-}
-
-/* Media queries untuk responsif */
-@media (max-width: 600px) {
-  .sorting-form-container {
-    padding: 20px;
-    border-radius: 15px;
+  /* Improve touch targets */
+  .touch-manipulation {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
-  .form-title {
-    font-size: 1.5em;
-    margin-bottom: 20px;
+
+  /* Better button stacking on mobile */
+  .flex-col-reverse > button {
+    margin-bottom: 0.5rem;
   }
-  .form-actions {
-    flex-direction: column;
-    gap: 10px;
-  }
-  .custom-apply-button,
-  .custom-cancel-button {
-    width: 100%;
-    padding: 10px 15px;
-    font-size: 1em;
-  }
-  .close-button {
-    top: 15px;
-    right: 15px;
+  .flex-col-reverse > button:last-child {
+    margin-bottom: 0;
   }
 }
-</style>   
+
+/* Improve accessibility for touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .group:hover {
+    /* Disable hover effects on touch devices */
+  }
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <layout>
+  <Layout2>
     <!-- Loading State -->
     <div v-if="loading" class="min-h-screen bg-gray-50 flex items-center justify-center">
       <div class="text-center">
@@ -64,8 +64,26 @@
               <div class="flex items-start justify-between">
                 <div>
                   <h1 class="text-3xl font-bold text-gray-900 mb-2">
-                    Pengaduan #{{ pengaduan.id }}
+                    Pengaduan
                   </h1>
+
+                  <!-- Kode Pengaduan Section -->
+                  <div v-if="pengaduan.kode_pengaduan" class="flex items-center mt-2 mb-4">
+                    <div class="bg-gray-100 rounded-lg px-4 py-2 flex items-center space-x-3">
+                      <span class="text-xl font-mono text-gray-800 tracking-wider">{{ pengaduan.kode_pengaduan }}</span>
+                      <button @click="copyToClipboard(pengaduan.kode_pengaduan)" 
+                              class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 transition-colors relative"
+                              title="Salin Kode Pengaduan">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V19a2 2 0 01-2 2h-2M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1"></path>
+                        </svg>
+                        <span v-if="showCopySuccess" class="absolute -top-8 left-1/2 -translate-x-1/2 bg-green-500 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap animate-fade-out">Disalin!</span>
+                      </button>
+                    </div>
+                    <p class="text-sm text-gray-600 ml-4">Kode pengaduan Anda yang digunakan untuk mencari pengaduan.</p>
+                  </div>
+                  <!-- End Kode Pengaduan Section -->
+
                   <div class="flex flex-wrap items-center gap-6 text-sm text-gray-600">
                     <div class="flex items-center">
                       <div class="w-5 h-5 bg-pink-100 rounded-full flex items-center justify-center mr-2">
@@ -86,19 +104,6 @@
                   </div>
                 </div>
                 
-                <!-- Quick Actions -->
-                <div class="flex items-center space-x-2">
-                  <button @click="editPengaduan" class="p-2 bg-pink-50 hover:bg-pink-100 text-pink-600 rounded-lg transition-colors" title="Edit Pengaduan">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                    </svg>
-                  </button>
-                  <button @click="deletePengaduan" class="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors" title="Hapus Pengaduan">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                    </svg>
-                  </button>
-                </div>
               </div>
             </div>
           </div>
@@ -299,19 +304,6 @@
                   Edit Pengaduan
                 </button>
                 
-                <button @click="updateStatus" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-xl transition-all duration-200 flex items-center justify-center">
-                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                  </svg>
-                  Update Status
-                </button>
-                
-                <button @click="deletePengaduan" class="w-full bg-red-50 hover:bg-red-100 text-red-600 font-semibold py-3 px-4 rounded-xl transition-all duration-200 flex items-center justify-center border-2 border-red-200 hover:border-red-300">
-                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                  </svg>
-                  Hapus Pengaduan
-                </button>
               </div>
             </div>
           </div>
@@ -334,13 +326,13 @@
         </button>
       </div>
     </div>
-  </layout>
+  </Layout2>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import Layout from '../../layouts/Layout.vue'
+import Layout2 from '../../layouts/Layout2.vue'
 import api from '../../api.js'
 
 const route = useRoute()
@@ -350,6 +342,7 @@ const router = useRouter()
 const pengaduan = ref(null)
 const loading = ref(true)
 const error = ref(null)
+const showCopySuccess = ref(false) // New reactive state for copy success message
 
 // Computed properties untuk status badge
 const statusBadgeClass = computed(() => {
@@ -493,10 +486,8 @@ const viewAttachment = () => {
   }
 }
 
-
 const downloadAttachment = () => {
   if (pengaduan.value?.lampiran) {
-    // Implementasi untuk mengunduh lampiran
     const link = document.createElement('a')
     const fullUrl = pengaduan.value.lampiran.startsWith('http') 
       ? pengaduan.value.lampiran 
@@ -512,30 +503,26 @@ const downloadAttachment = () => {
 const editPengaduan = () => {
   router.push(`/pengaduan/${pengaduan.value.id}/edit`)
 }
-
-const updateStatus = () => {
-  // Implementasi untuk update status
-  console.log('Update status pengaduan:', pengaduan.value.id)
-  // Bisa tambahkan modal atau redirect ke halaman update status
-}
-
-const deletePengaduan = async () => {
-  if (confirm('Apakah Anda yakin ingin menghapus pengaduan ini? Tindakan ini tidak dapat dibatalkan.')) {
+const copyToClipboard = (text) => {
+  if (text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
     try {
-      loading.value = true
-      await api.delete(`/kelola/pengaduan/${pengaduan.value.id}`)
-      
-      // Tampilkan notifikasi sukses
-      alert('Pengaduan berhasil dihapus')
-      router.push('/pengaduan')
+      document.execCommand('copy');
+      showCopySuccess.value = true;
+      setTimeout(() => {
+        showCopySuccess.value = false;
+      }, 2000); // Pesan "Disalin!" akan hilang setelah 2 detik
     } catch (err) {
-      console.error('Error deleting pengaduan:', err)
-      alert('Gagal menghapus pengaduan: ' + (err.response?.data?.message || err.message))
+      console.error('Gagal menyalin teks:', err);
+      // Fallback: Anda bisa menambahkan pesan error di UI jika gagal menyalin
     } finally {
-      loading.value = false
+      document.body.removeChild(textarea);
     }
   }
-}
+};
 
 // Lifecycle
 onMounted(() => {
@@ -565,8 +552,18 @@ onMounted(() => {
   }
 }
 
+@keyframes fadeOut {
+  0% { opacity: 1; transform: translateY(0); }
+  80% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+
 .fade-in {
   animation: fadeIn 0.5s ease-out;
+}
+
+.animate-fade-out {
+  animation: fadeOut 2s forwards;
 }
 
 /* Smooth transitions */

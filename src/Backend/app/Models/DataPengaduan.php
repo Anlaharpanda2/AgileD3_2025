@@ -22,6 +22,7 @@ class DataPengaduan extends Model
         'saksi',
         'status',
         'lampiran',
+        'kode_pengaduan',
     ];
 
     protected $dates = [

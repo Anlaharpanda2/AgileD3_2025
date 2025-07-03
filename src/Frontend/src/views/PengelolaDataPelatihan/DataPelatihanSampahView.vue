@@ -35,7 +35,7 @@
       type="default"
       @click="goBack"
       plain
-      class="flex items-center gap-2 text-pink-600 border-pink-500 hover:bg-pink-5 hover:text-white hover:bg-pink-400 hover:border-pink-500"
+      class="flex items-center gap-2 !text-pink-600 !border-pink-500 hover:!bg-pink-5 hover:!text-white hover:!bg-pink-400 hover:!border-pink-500"
     >
       <el-icon><ArrowLeft /></el-icon>
       Kembali
@@ -840,10 +840,12 @@ function toggleSelection(row: Peserta) {
 }
 
 async function fetchData() {
-  try { // Ditambahkan try-catch
+  try {
     const res = await api.get('/kelola/pelatihan/trash');
-    tableData.value = Array.isArray(res) ? res : res.data || [];
-  } catch (error) { // Notifikasi error (BARU)
+    tableData.value = (Array.isArray(res) ? res : res.data || []).sort((a, b) => {
+      return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+    });
+  } catch (error) {
     console.error('Error fetching data:', error);
     ElNotification({
       title: 'Error',
@@ -853,6 +855,7 @@ async function fetchData() {
     });
   }
 }
+
 
 async function onDeleteClick(row: Peserta) {
   ElMessageBox.confirm(

@@ -15,12 +15,12 @@ import {
 import AOS from 'aos'
 import 'aos/dist/aos.css' 
 import Layout2 from '../../layouts/Layout2.vue'
-import Lokasi from '../../components/Home/Lokasi.vue'
+import Lokasi from '@/components/Home/LokasiPeta.vue'
 import Pengumuman from '../../components/Home/Pengumuman.vue'
 import LayananUtama from '../../components/Home/LayananUtama.vue'
 import TentangKami from '../../components/Home/TentangKami.vue'
 import BeritaTerbaru from '../../components/Home/BeritaTerbaru.vue'
-import Kontak from '../../components/Home/Kontak.vue'
+import Kontak from '@/components/Home/KontakKami.vue'
 const router = useRouter()
 onMounted(() => {
   AOS.init({

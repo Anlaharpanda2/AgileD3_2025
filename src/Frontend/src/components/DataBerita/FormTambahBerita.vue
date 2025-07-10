@@ -1,23 +1,36 @@
 <template>
   <div class="form-overlay">
     <transition name="popup">
-      <div class="form-popup">
+      <div
+        v-if="isMounted"
+        class="form-popup"
+      >
         <div class="form-header background text-center text-white py-3 rounded-top">
-          <h3 class="mb-0">Form Tambah Berita</h3>
+          <h3 class="mb-0">
+            Form Tambah Berita
+          </h3>
         </div>
 
         <div class="form-body">
           <el-form
+            ref="formRef"
             :model="form"
             :rules="rules"
-            ref="formRef"
             label-width="140px"
             label-position="top"
             class="p-4"
           >
             <el-row :gutter="20">
-              <el-col :span="24" :md="12" class="mb-3">
-                <el-form-item label="Judul Berita" prop="judul" required>
+              <el-col
+                :span="24"
+                :md="12"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="Judul Berita"
+                  prop="judul"
+                  required
+                >
                   <el-input
                     v-model="form.judul"
                     type="text"
@@ -27,11 +40,18 @@
                 </el-form-item>
               </el-col>
 
-              <el-col :span="24" class="mb-3">
-                <el-form-item label="Isi Berita" prop="isi" required>
+              <el-col
+                :span="24"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="Isi Berita"
+                  prop="isi"
+                  required
+                >
                   <el-input
-                    type="textarea"
                     v-model="form.isi"
+                    type="textarea"
                     placeholder="Isi Berita"
                     rows="6"
                     clearable
@@ -39,30 +59,74 @@
                 </el-form-item>
               </el-col>
 
-              <el-col :span="24" :md="12" class="mb-3">
-                <el-form-item label="Jenis Konten" prop="jenis_konten" required>
-                  <el-select v-model="form.jenis_konten" placeholder="Pilih Jenis Konten" clearable>
-                    <el-option label="Berita" value="berita" />
-                    <el-option label="Artikel" value="artikel" />
-                    <el-option label="Pengumuman" value="pengumuman" />
+              <el-col
+                :span="24"
+                :md="12"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="Jenis Konten"
+                  prop="jenis_konten"
+                  required
+                >
+                  <el-select
+                    v-model="form.jenis_konten"
+                    placeholder="Pilih Jenis Konten"
+                    clearable
+                  >
+                    <el-option
+                      label="Berita"
+                      value="berita"
+                    />
+                    <el-option
+                      label="Artikel"
+                      value="artikel"
+                    />
+                    <el-option
+                      label="Pengumuman"
+                      value="pengumuman"
+                    />
                   </el-select>
                 </el-form-item>
               </el-col>
 
               <!-- Tanggal Buat dan Update biasanya otomatis dari backend, tapi kita tampilkan readonly -->
-              <el-col :span="24" :md="12" class="mb-3">
+              <el-col
+                :span="24"
+                :md="12"
+                class="mb-3"
+              >
                 <el-form-item label="Tanggal Buat">
-                  <el-input v-model="form.created_at" readonly placeholder="Tanggal Buat" />
+                  <el-input
+                    v-model="form.created_at"
+                    readonly
+                    placeholder="Tanggal Buat"
+                  />
                 </el-form-item>
               </el-col>
-              <el-col :span="24" :md="12" class="mb-3">
+              <el-col
+                :span="24"
+                :md="12"
+                class="mb-3"
+              >
                 <el-form-item label="Tanggal Update">
-                  <el-input v-model="form.updated_at" readonly placeholder="Tanggal Update" />
+                  <el-input
+                    v-model="form.updated_at"
+                    readonly
+                    placeholder="Tanggal Update"
+                  />
                 </el-form-item>
               </el-col>
 
-              <el-col :span="24" class="mb-3">
-                <el-form-item label="Gambar" prop="gambar" required>
+              <el-col
+                :span="24"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="Gambar"
+                  prop="gambar"
+                  required
+                >
                   <el-upload
                     class="upload-demo"
                     drag
@@ -74,17 +138,34 @@
                     :auto-upload="false"
                     :on-change="handleChange"
                   >
-                    <i class="el-icon-upload"></i>
-                    <div class="el-upload__text">Drop file gambar di sini, atau klik untuk upload</div>
-                    <div class="el-upload__tip" slot="tip">Hanya JPG dan PNG. Maksimal 1 file.</div>
+                    <i class="el-icon-upload" />
+                    <div class="el-upload__text">
+                      Drop file gambar di sini, atau klik untuk upload
+                    </div>
+                    <template #tip>
+                      <div class="el-upload__tip">
+                        Hanya JPG dan PNG. Maksimal 1 file.
+                      </div>
+                    </template>
                   </el-upload>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-form-item class="d-flex justify-content-end gap-3 mt-4">
-              <el-button @click="$emit('close')" class="btn-cancel">Batal</el-button>
-              <el-button type="primary" @click="submitForm" class="btn-submit">Simpan</el-button>
+              <el-button
+                class="btn-cancel"
+                @click="$emit('close')"
+              >
+                Batal
+              </el-button>
+              <el-button
+                type="primary"
+                class="btn-submit"
+                @click="submitForm"
+              >
+                Simpan
+              </el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -94,13 +175,18 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import api from '../../api.js'
 import { ElNotification } from 'element-plus'
 
 const emit = defineEmits(['close'])
 
 const formRef = ref(null)
+
+const isMounted = ref(false)
+onMounted(() => {
+  isMounted.value = true
+})
 
 const form = reactive({
   judul: '',

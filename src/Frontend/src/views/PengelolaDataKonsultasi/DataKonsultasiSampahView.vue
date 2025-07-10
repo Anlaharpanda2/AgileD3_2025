@@ -1,234 +1,895 @@
 <template>
-  <DefaultLayout>
+  <SimpleLayout>
+    <!-- Form Popups -->
     <FormSortingDataKonsultasi
       v-if="showSort"
       :visible="showSort"
       :columns="filterableColumns"
       :data="tableData"
+      class="sm:full-screen"
       @update:visible="showSort = $event"
     />
     <FormFilterDataKonsultasi
       v-model="showFilter"
-      :columns="filterableColumns"
       v-model:active-filters="activeFilters"
+      :columns="filterableColumns"
+      class="sm:full-screen"
     />
-    <a href="/data/konsultasi" class="d-inline-flex align-items-center text-decoration-none mb-2">
-      <img src="/arrow.svg" alt="Kembali" width="25" height="25" class="me-2" />
-      <span class="h6 text-grey pt-2">Kembali ke Data Konsultasi</span>
-    </a>
-    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-4">
-      <h1 class="h3 fw-bold text-secondary">Data Konsultasi Sampah</h1>
-      <span class="h6 text-muted pt-2">Data akan terhapus otomatis dalam 15 hari</span>
-    </div>
-    <!-- pagination atas -->
-    <div class="table-header">
-      <div class="left-controls">
-        <div class="show-wrapper">
-          <div class="select-box" @click.stop="toggleDropdown">
-            <span>{{ itemsPerPage === Infinity ? 'All' : itemsPerPage }}</span>
-            <img src="/table/panah.svg" alt="Dropdown" style="width:22px;height:22px" />
-            <ul class="dropdown-list" v-show="dropdownOpen">
-              <li
-                v-for="option in perPageOptions"
-                :key="option"
-                @click="changeItemsPerPage(option)"
+    <FormTambahDataKonsultasi
+      v-if="showTambah"
+      class="sm:full-screen"
+      @close="showTambah = false"
+    />
+    <FormEditDataKonsultasi
+      v-if="showEdit && editData"
+      :initial-data="editData"
+      class="sm:full-screen"
+      @close="showEdit = false"
+    />
+
+    <!-- Main Container -->
+    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6">
+      <!-- Page Header -->
+      <div class="mb-4">
+        <el-button
+          type="default"
+          plain
+          class="flex items-center gap-2 !text-pink-600 !border-pink-500 hover:!bg-pink-5 hover:!text-white hover:!bg-pink-400 hover:!border-pink-500"
+          @click="goBack"
+        >
+          <el-icon><ArrowLeft /></el-icon>
+          Kembali
+        </el-button>
+      </div>
+      <div class="mb-6 sm:mb-8">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+          Data Konsultasi Sampah
+        </h1>
+        <p class="text-gray-600 text-sm sm:text-base">
+          Kelola dan pantau semua data konsultasi yang telah dihapus
+        </p>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 hover:shadow-md transition-shadow">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs sm:text-sm font-medium text-gray-600">
+                Total Laporan
+              </p>
+              <p class="text-xl sm:text-2xl font-bold text-gray-900">
+                {{ tableData.length }}
+              </p>
+            </div>
+            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-pink-100 rounded-lg flex items-center justify-center">
+              <svg
+                class="w-5 h-5 sm:w-6 sm:h-6 text-pink-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                {{ option === 'all' ? 'All' : option }}
-              </li>
-            </ul>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 20h-10a2 2 0 01-2-2V7a2 2 0 012-2h10a2 2 0 012 2v11a2 2 0 01-2 2zM9 10h.01M9 14h.01M13 10h.01M13 14h.01M17 10h.01M17 14h.01M7 7h.01"
+                />
+              </svg>
+            </div>
           </div>
         </div>
 
-        <!-- pencarian -->
-        <div class="search-box">
-          <input type="text" placeholder="Cari Nama" v-model="search" />
-          <img src="/table/cari.svg" alt="Search" />
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 hover:shadow-md transition-shadow">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs sm:text-sm font-medium text-gray-600">
+                Dipilih
+              </p>
+              <p class="text-xl sm:text-2xl font-bold text-gray-900">
+                {{ selected.length }}
+              </p>
+            </div>
+            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <svg
+                class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+          </div>
         </div>
 
-        <!-- filter dan sorting -->
-        <button class="button2" @click="showFilter = true">
-          <img src="/table/filter.svg" alt="Filter" />
-        </button>
-        <button class="button2" @click="showSort = true">
-          <img src="/table/sort.svg" alt="Sort" />
-        </button>
-      </div>
-
-      <!-- export, import, sampah, hapus masal dan tambah data disiko -->
-      <div class="right-control">
-        <button class="button" @click="onMassDeletePermanentClick">
-          <img src="/table/deleteForever.svg" alt="Hapus Permanen Massal" />
-          Hapus Permanen Massal
-        </button>
-        <button class="button" @click="onMassRestoreClick">
-          <img src="/table/pulihkan.svg" alt="Pulihkan Massal" />
-          Pulihkan Massal
-        </button>
-      </div>
-    </div>
-
-    <!-- struktur tabel -->
-    <div class="table-wrapper">
-      <el-table
-        ref="elTable"
-        :data="pagedData"
-        v-loading="loading"
-        style="width: 100%"
-        @selection-change="onSelectionChange"
-        :header-cell-style="headerCellStyle"
-        :row-style="rowStyle"
-      >
-        <el-table-column type="selection" width="40" fixed="left" show-overflow-tooltip />
-
-        <el-table-column prop="nama" show-overflow-tooltip>
-          <template #header>
-            <el-tooltip content="Nama" placement="top">
-              <span class="header-tooltip-text">Nama</span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="nik" show-overflow-tooltip>
-          <template #header>
-            <el-tooltip content="NIK" placement="top">
-              <span class="header-tooltip-text">NIK</span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="jenis_kelamin" show-overflow-tooltip>
-          <template #header>
-            <el-tooltip content="Jenis Kelamin" placement="top">
-              <span class="header-tooltip-text">Jenis Kelamin</span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="kasus" show-overflow-tooltip>
-          <template #header>
-            <el-tooltip content="Kasus" placement="top">
-              <span class="header-tooltip-text">Kasus</span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="alamat" show-overflow-tooltip>
-          <template #header>
-            <el-tooltip content="Alamat" placement="top">
-              <span class="header-tooltip-text">Alamat</span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="umur" show-overflow-tooltip>
-          <template #header>
-            <el-tooltip content="Umur" placement="top">
-              <span class="header-tooltip-text">Umur</span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="no_hp" show-overflow-tooltip>
-          <template #header>
-            <el-tooltip content="No. HP" placement="top">
-              <span class="header-tooltip-text">No. HP</span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="saksi" show-overflow-tooltip>
-          <template #header>
-            <el-tooltip content="Saksi" placement="top">
-              <span class="header-tooltip-text">Saksi</span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="status" show-overflow-tooltip>
-          <template #header>
-            <el-tooltip content="Status" placement="top">
-              <span class="header-tooltip-text">Status</span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="Aksi" width="60" fixed="right">
-          <template #header>
-            <el-tooltip content="Aksi" placement="top">
-              <span class="header-tooltip-text">Aksi</span>
-            </el-tooltip>
-          </template>
-          <template #default="{ row }">
-            <div class="action-buttons">
-              <img
-                src="/table/pulihkan2.svg"
-                alt="Restore"
-                class="action-icon"
-                @click="onRestoreClick(row)"
-                title="Pulihkan data"
-              />
-              <img
-                src="/table/deleteForever2.svg"
-                alt="Hapus Selamanya"
-                class="action-icon"
-                @click="onDeletePermanentClick(row)"
-                title="Hapus Selamanya"
-              />
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 hover:shadow-md transition-shadow">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs sm:text-sm font-medium text-gray-600">
+                Hasil Filter
+              </p>
+              <p class="text-xl sm:text-2xl font-bold text-gray-900">
+                {{ filteredData.length }}
+              </p>
             </div>
-          </template>
-        </el-table-column>
-      </el-table>
+            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <svg
+                class="w-5 h-5 sm:w-6 sm:h-6 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 hover:shadow-md transition-shadow">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs sm:text-sm font-medium text-gray-600">
+                Halaman
+              </p>
+              <p class="text-xl sm:text-2xl font-bold text-gray-900">
+                {{ currentPage }}/{{ totalPages }}
+              </p>
+            </div>
+            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+              <svg
+                class="w-5 h-5 sm:w-6 sm:h-6 text-purple-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls Section -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 mb-6">
+        <div class="p-4 sm:p-6">
+          <!-- Top Controls -->
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <!-- Left Controls -->
+            <div class="flex flex-col sm:flex-row gap-4">
+              <!-- Items Per Page -->
+              <div class="relative sm:flex-1 sm:max-w-[100px]">
+                <div
+                  class="
+                    relative 
+                    flex items-center 
+                    gap-[6px] 
+                    cursor-pointer 
+                    select-none 
+                    bg-[#EC4899] 
+                    text-white 
+                    rounded-[6px] 
+                    px-[10px]
+                  "
+                >
+                  <button
+                    id="itemsPerPageBtn"
+                    class="bg-white border border-gray-300 rounded-lg px-4 py-2.5 pr-10 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors w-full sm:min-w-[80px] touch-highlight"
+                    @click.stop="toggleDropdown('itemsPerPage')"
+                  >
+                    {{ itemsPerPage === Infinity ? 'Semua' : itemsPerPage }}
+                  </button>
+                  <div class="absolute inset-y-0 right-4 flex items-center pr-3 pointer-events-none">
+                    <svg
+                      class="w-4 h-4 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+
+                  <!-- Dropdown Items Per Page -->
+                  <transition name="dropdown">
+                    <div
+                      v-show="dropdownOpen === 'itemsPerPage'"
+                      class="absolute z-30 mt-1 w-full bg-gradient-to-b from-gray-50 to-white shadow-lg border border-gray-200 rounded-lg dropdown-container"
+                    >
+                      <ul style="padding: 0;">
+                        <li
+                          v-for="(option, index) in perPageOptions"
+                          :key="option"
+                          class="px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 cursor-pointer transition-all duration-300 touch-highlight dropdown-item"
+                          :style="{ 'animation-delay': `${index * 0.1}s` }"
+                          @click.stop="changeItemsPerPage(option)"
+                        >
+                          {{ option === 'all' ? 'Semua' : option }}
+                        </li>
+                      </ul>
+                    </div>
+                  </transition>
+                </div>
+              </div>
+
+              <!-- Search Box -->
+              <div class="flex-1 max-w-md">
+                <div class="relative">
+                  <input
+                    v-model="search"
+                    type="text"
+                    placeholder="Cari nama..."
+                    class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors text-sm"
+                  >
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg
+                      class="w-5 h-5 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Filter & Sort (Mobile: Hamburger Menu) -->
+              <div class="relative sm:flex sm:gap-2 mobile-menu">
+                <label class="block text-sm font-medium text-gray-700 mb-2 sm:hidden">Aksi</label>
+                <button
+                  id="mobileMenuBtn"
+                  class="sm:hidden flex items-center justify-center w-12 h-12 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors touch-highlight"
+                  @click.stop="toggleDropdown('mobileMenu')"
+                >
+                  <svg
+                    class="w-6 h-6 text-gray-700"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 6h16M4 12h16m-7 6h7"
+                    />
+                  </svg>
+                </button>
+                <!-- Mobile Menu Dropdown -->
+                <transition name="dropdown">
+                  <div
+                    v-show="dropdownOpen === 'mobileMenu'"
+                    class="sm:hidden absolute z-30 mt-1 w-48 bg-gradient-to-b from-gray-50 to-white shadow-lg border border-gray-200 rounded-lg dropdown-container"
+                    style="right: 15%; top: 20%;"
+                  >
+                    <div class="flex flex-col p-2">
+                      <button
+                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-all duration-300 touch-highlight dropdown-item"
+                        :style="{ 'animation-delay': '0s' }"
+                        @click.stop="showFilter = true; closeAllDropdowns()"
+                      >
+                        <svg
+                          class="w-4 h-4 mr-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"
+                          />
+                        </svg>
+                        Filter
+                      </button>
+                      <button
+                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-all duration-300 touch-highlight dropdown-item"
+                        :style="{ 'animation-delay': '0.1s' }"
+                        @click.stop="showSort = true; closeAllDropdowns()"
+                      >
+                        <svg
+                          class="w-4 h-4 mr-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
+                          />
+                        </svg>
+                        Urutkan
+                      </button>
+                    </div>
+                  </div>
+                </transition>
+                <!-- Desktop Filter & Sort -->
+                <div class="hidden sm:flex sm:gap-2">
+                  <div>
+                    <button
+                      class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
+                      @click="showFilter = true"
+                    >
+                      <svg
+                        class="w-4 h-4 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"
+                        />
+                      </svg>
+                      Filter
+                    </button>
+                  </div>
+                  <div>
+                    <button
+                      class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
+                      @click="showSort = true"
+                    >
+                      <svg
+                        class="w-4 h-4 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
+                        />
+                      </svg>
+                      Urutkan
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Controls -->
+            <div class="flex flex-col sm:flex-row gap-3">
+              <div class="relative sm:flex sm:gap-3 mobile-actions">
+                <label class="block text-sm font-medium text-gray-700 mb-2 sm:hidden">Aksi Lain</label>
+                <button
+                  id="mobileActionsBtn"
+                  class="sm:hidden flex items-center justify-center w-12 h-12 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors touch-highlight"
+                  @click.stop="toggleDropdown('mobileActions')"
+                >
+                  <svg
+                    class="w-6 h-6 text-gray-700"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6h.01M12 12h.01M12 18h.01"
+                    />
+                  </svg>
+                </button>
+                <!-- Mobile Actions Dropdown -->
+                <transition name="dropdown">
+                  <div
+                    v-show="dropdownOpen === 'mobileActions'"
+                    class="sm:hidden absolute z-30 mt-1 w-48 bg-gradient-to-b from-gray-50 to-white shadow-lg border border-gray-200 rounded-lg dropdown-container"
+                    style="right: 15%; top: 20%;"
+                  >
+                    <div class="flex flex-col p-2">
+                      <button
+                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-all duration-300 touch-highlight dropdown-item"
+                        :style="{ 'animation-delay': '0s' }"
+                        @click.stop="showAllColumns = !showAllColumns; closeAllDropdowns()"
+                      >
+                        <component
+                          :is="showAllColumns ? EyeOff : Eye"
+                          class="w-4 h-4 mr-2"
+                        />
+                        {{ showAllColumns ? 'Sembunyikan Kolom' : 'Tampilkan Semua Kolom' }}
+                      </button>
+                      <button
+                        :disabled="selected.length === 0"
+                        class="flex items-center px-4 py-2 text-sm text-green-700 hover:bg-green-50 hover:text-green-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed touch-highlight dropdown-item"
+                        :style="{ 'animation-delay': '0.1s' }"
+                        @click.stop="onMassRestoreClick"
+                      >
+                        <svg
+                          class="w-4 h-4 mr-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                          />
+                        </svg>
+                        Pulihkan Massal
+                      </button>
+                      <button
+                        :disabled="selected.length === 0"
+                        class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-50 hover:text-red-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed touch-highlight dropdown-item"
+                        :style="{ 'animation-delay': '0.2s' }"
+                        @click.stop="onMassDeletePermanentClick"
+                      >
+                        <svg
+                          class="w-4 h-4 mr-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                        Hapus Massal Permanen
+                      </button>
+                    </div>
+                  </div>
+                </transition>
+                <!-- Desktop Right Controls -->
+                <div class="hidden sm:flex sm:gap-3">
+                  <button
+                    class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
+                    :title="showAllColumns ? 'Sembunyikan Kolom' : 'Tampilkan Semua Kolom'"
+                    @click="showAllColumns = !showAllColumns"
+                  >
+                    <component
+                      :is="showAllColumns ? EyeOff : Eye"
+                      class="w-4 h-4"
+                    />
+                  </button>
+                  <button
+                    :disabled="selected.length === 0"
+                    class="!inline-flex !items-center !px-4 !py-2.5 !border !border-green-300 !rounded-lg !text-sm !font-medium bg-green-100 text-green-600 hover:bg-green-200 !hover:bg-green-50 !focus:outline-none !focus:ring-2 !focus:ring-green-500 !transition-colors !disabled:opacity-50 !disabled:cursor-not-allowed"
+                    title="Pulihkan Massal"
+                    @click="onMassRestoreClick"
+                  >
+                    <svg
+                      class="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                      />
+                    </svg>
+                    Pulihkan Massal
+                  </button>
+                  <button
+                    :disabled="selected.length === 0"
+                    class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-lg text-sm font-medium hover:from-pink-600 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200 shadow-md w-full sm:w-auto touch-highlight"
+                    title="Hapus Massal Permanen"
+                    @click="onMassDeletePermanentClick"
+                  >
+                    <svg
+                      class="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                    Hapus Massal Permanen
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table Section (Desktop) -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden sm:block hidden">
+        <div class="overflow-x-auto">
+          <el-table
+            ref="elTable"
+            v-loading="loading"
+            :data="pagedData"
+            style="width: 100%"
+            :header-cell-style="{
+              backgroundColor: '#3c4758',
+              color: '#ffffff',
+              fontWeight: '700',
+              textAlign: 'left',
+              borderBottom: '2px solid #e5e7eb',
+              padding: '16px 12px'
+            }"
+            :row-style="{
+              backgroundColor: '#ffffff'
+            }"
+            :cell-style="{
+              padding: '16px 12px',
+              borderBottom: '1px solid #f3f4f6'
+            }"
+            class="modern-table full-width-cells"
+            @selection-change="onSelectionChange"
+          >
+            <el-table-column
+              type="selection"
+              width="55"
+              fixed="left"
+            />
+
+            <el-table-column
+              prop="nama_pelapor"
+              label="Nama Pelapor"
+              min-width="150"
+            >
+              <template #default="{ row }">
+                <div class="font-medium text-gray-900 hover:text-pink-600 transition-colors full-width-content line-clamp-2">
+                  {{ row.nama_pelapor }}
+                </div>
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              prop="nama_korban"
+              label="Nama Korban"
+              min-width="150"
+            >
+              <template #default="{ row }">
+                <div class="font-medium text-gray-900 hover:text-pink-600 transition-colors full-width-content line-clamp-2">
+                  {{ row.nama_korban }}
+                </div>
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              prop="kasus"
+              label="Kasus"
+              min-width="140"
+            >
+              <template #default="{ row }">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 full-width-content">
+                  {{ row.kasus }}
+                </span>
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              label="Waktu Kejadian"
+              min-width="160"
+            >
+              <template #default="{ row }">
+                <div class="text-gray-600 text-sm full-width-content">
+                  {{ formatTanggal(row.waktu_kejadian) }}
+                </div>
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              prop="status"
+              label="Status"
+              min-width="100"
+            >
+              <template #default="{ row }">
+                <div class="text-gray-600 text-sm full-width-content">
+                  {{ row.status }}
+                </div>
+              </template>
+            </el-table-column>
+
+            <!-- Columns to be conditionally displayed -->
+            <el-table-column
+              v-if="showAllColumns"
+              prop="deskripsi"
+              label="Deskripsi"
+              min-width="180"
+            >
+              <template #default="{ row }">
+                <div class="text-gray-600 text-sm line-clamp-2 full-width-content">
+                  {{ row.deskripsi }}
+                </div>
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              v-if="showAllColumns"
+              prop="alamat"
+              label="Alamat"
+              min-width="180"
+            >
+              <template #default="{ row }">
+                <div class="text-gray-600 text-sm line-clamp-2 full-width-content">
+                  {{ row.alamat }}
+                </div>
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              v-if="showAllColumns"
+              prop="no_hp"
+              label="No. HP"
+              min-width="130"
+            >
+              <template #default="{ row }">
+                <div class="text-gray-600 text-sm full-width-content">
+                  {{ row.no_hp }}
+                </div>
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              v-if="showAllColumns"
+              prop="saksi"
+              label="Saksi"
+              min-width="130"
+            >
+              <template #default="{ row }">
+                <div class="text-gray-600 text-sm full-width-content">
+                  {{ row.saksi }}
+                </div>
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              label="Aksi"
+              width="120"
+              fixed="right"
+            >
+              <template #default="{ row }">
+                <div class="flex items-center gap-2 full-width-content">
+                  <button
+                    class="w-8 h-8 flex items-center justify-center rounded-lg bg-green-100 text-green-600 hover:bg-green-200 transition-colors"
+                    title="Pulihkan"
+                    @click.stop="onRestoreClick(row)"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition-colors"
+                    title="Hapus Permanen"
+                    @click.stop="onDeleteClick(row)"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </div>
+
+      <!-- Card-based Data Display (Mobile) -->
+      <div class="block sm:hidden space-y-4">
+        <div
+          v-for="row in pagedData"
+          :key="row.id"
+          class="bg-white rounded-xl shadow-sm border border-gray-100 p-4"
+        >
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <input
+                type="checkbox"
+                class="w-5 h-5 text-pink-500 border-gray-300 rounded focus:ring-pink-500"
+                :checked="selected.includes(row)"
+                @click.stop
+                @change="toggleSelection(row)"
+              >
+              <div>
+                <p class="font-medium text-gray-900 text-sm">
+                  {{ row.nama_pelapor }}
+                </p>
+                <p class="text-xs text-gray-600">
+                  {{ row.nama_korban }}
+                </p>
+              </div>
+            </div>
+            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+              {{ row.kasus }}
+            </span>
+          </div>
+          <div class="text-xs text-gray-600 mb-2">
+            <p>{{ formatTanggal(row.waktu_kejadian) }}</p>
+            <p>Status {{ row.status }}</p>
+          </div>
+          <div class="flex gap-2">
+            <button
+              class="flex-1 py-2 bg-green-100 text-green-600 rounded-lg text-sm hover:bg-green-200 transition-colors touch-highlight"
+              @click.stop="onRestoreClick(row)"
+            >
+              Pulihkan
+            </button>
+            <button
+              class="flex-1 py-2 bg-red-100 text-red-600 rounded-lg text-sm hover:bg-red-200 transition-colors touch-highlight"
+              @click.stop="onDeleteClick(row)"
+            >
+              Hapus Permanen
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="text-sm text-gray-700">
+          Menampilkan <span class="font-medium">{{ Math.min((currentPage - 1) * (typeof itemsPerPage === 'number' ? itemsPerPage : filteredData.length) + 1, filteredData.length) }}</span>
+          hingga <span class="font-medium">{{ Math.min(currentPage * (typeof itemsPerPage === 'number' ? itemsPerPage : filteredData.length), filteredData.length) }}</span>
+          dari <span class="font-medium">{{ filteredData.length }}</span> hasil
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button
+            :disabled="currentPage === 1"
+            class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-w-[44px] h-10 touch-highlight"
+            @click.stop="prevPage"
+          >
+            <svg
+              class="w-4 h-4 mr-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            <span class="sm:block hidden">Sebelum</span>
+          </button>
+
+          <div class="flex items-center gap-1">
+            <template
+              v-for="item in visiblePages"
+              :key="String(item)"
+            >
+              <button
+                v-if="item === '...'"
+                class="px-3 py-2 text-sm text-gray-500 cursor-default"
+                disabled
+              >
+                …
+              </button>
+              <button
+                v-else
+                :class="[
+                  'px-3 py-2 text-sm font-medium rounded-lg transition-colors min-w-[44px] h-10 touch-highlight',
+                  item === currentPage
+                    ? 'bg-pink-500 text-white shadow-sm'
+                    : 'text-gray-700 hover:bg-gray-100'
+                ]"
+                @click.stop="goToPage(item)"
+              >
+                {{ item }}
+              </button>
+            </template>
+          </div>
+
+          <button
+            :disabled="currentPage === totalPages"
+            class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-w-[44px] h-10 touch-highlight"
+            @click.stop="nextPage"
+          >
+            <span class="sm:block hidden">Selanjutnya</span>
+            <svg
+              class="w-4 h-4 ml-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
     </div>
-
-    <!-- pagination bawah -->
-    <div class="pagination">
-      <button class="page-btn" :disabled="currentPage === 1" @click="prevPage">
-        <img src="/table/sebelum.svg" alt="preview">
-      </button>
-
-      <template v-for="item in visiblePages" :key="String(item)">
-        <button
-          v-if="item === '...'"
-          class="page-number ellipsis"
-          disabled
-        >…</button>
-        <button
-          v-else
-          class="page-number"
-          :class="{ active: item === currentPage }"
-          @click="goToPage(item)"
-        >{{ item }}</button>
-      </template>
-
-      <button class="page-btn" :disabled="currentPage === totalPages" @click="nextPage">
-        <img src="/table/next.svg" alt="next">
-      </button>
-    </div>
-  </DefaultLayout>
+  </SimpleLayout>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import api from "../../api.js";
-import DefaultLayout from "../../layouts/DefaultLayout.vue";
+import SimpleLayout from "../../layouts/SimpleLayout.vue";
+import FormEditDataKonsultasi from "../../components/KelolaDataKonsultasi/FormEditDataKonsultasi.vue";
+import FormTambahDataKonsultasi from "../../components/KelolaDataKonsultasi/FormTambahDataKonsultasi.vue";
 import FormFilterDataKonsultasi from "../../components/KelolaDataKonsultasi/FormFilterDataKonsultasi.vue";
 import FormSortingDataKonsultasi from "../../components/KelolaDataKonsultasi/FormSortingDataKonsultasi.vue";
 import { ElNotification, ElMessageBox, ElMessage } from 'element-plus';
+import { Eye, EyeOff } from 'lucide-vue-next';
+import { useRouter } from 'vue-router'
+import { ArrowLeft } from '@element-plus/icons-vue'
 
+const router = useRouter()
+
+function goBack() {
+  router.push('/data/konsultasi')
+}
 interface Konsultasi {
   id: number;
-  nama: string;
+  nama_pelapor: string;
   nama_korban: string;
-  nik: string;
-  jenis_kelamin: string;
-  kasus: string;
+  deskripsi: string;
   alamat: string;
-  umur: number;
+  waktu_kejadian: string;
+  kasus: string;
   no_hp: string;
   saksi: string;
-  status: "pending" | "selesai" | "ditolak";
+  status: string;
+  lampiran: string;
   created_at?: string;
   updated_at?: string;
+  deleted_at?: string;
 }
 
 const tableData = ref<Konsultasi[]>([]);
@@ -237,28 +898,79 @@ const search = ref("");
 const loading = ref(false);
 const itemsPerPage = ref<number | string>(10);
 const currentPage = ref(1);
-const dropdownOpen = ref(false);
+const dropdownOpen = ref<string | null>(null);
 const showSort = ref(false);
 const showFilter = ref(false);
+const showTambah = ref(false);
+const showEdit = ref(false);
+const editData = ref<Konsultasi | null>(null);
+const showAllColumns = ref(false);
 const perPageOptions = [10, 20, 50, 100, "all"];
 
-function toggleDropdown() {
-  dropdownOpen.value = !dropdownOpen.value;
+function toggleDropdown(dropdownName: string) {
+  dropdownOpen.value = dropdownOpen.value === dropdownName ? null : dropdownName;
 }
+
+function closeAllDropdowns() {
+  dropdownOpen.value = null;
+}
+
+onMounted(() => {
+  document.addEventListener("click", closeAllDropdowns);
+  fetchData();
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("click", closeAllDropdowns);
+});
 
 function changeItemsPerPage(option: number | string) {
   itemsPerPage.value = option === "all" ? filteredData.value.length : option;
-  currentPage.value = 1;
-  dropdownOpen.value = false;
+  currentPage.value = 1; // Reset to first page
+  closeAllDropdowns();
+}
+
+function formatTanggal(date: string): string {
+  if (!date) return '-';
+  const d = new Date(date);
+  const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+  return d.toLocaleDateString('id-ID', options);
 }
 
 const activeFilters = ref<{ [key: string]: string | number | null }>({});
+
+const columnMapping: { [key: string]: string } = {
+  nama_pelapor: "Nama Pelapor",
+  nama_korban: "Nama Korban",
+  deskripsi: "Deskripsi",
+  alamat: "Alamat",
+  waktu_kejadian: "Waktu Kejadian",
+  kasus: "Kasus",
+  no_hp: "No. HP",
+  saksi: "Saksi",
+  status: "Status",
+};
+
+const allColumns = computed(() => {
+  return Object.keys(columnMapping).map(key => ({
+    key: key,
+    label: columnMapping[key]
+  }));
+});
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const visibleColumns = computed(() => {
+  if (showAllColumns.value) {
+    return allColumns.value;
+  }
+  return allColumns.value.filter(col => ['nama_pelapor', 'nama_korban', 'kasus', 'status'].includes(col.key));
+});
 
 const filterableColumns = computed(() => {
   if (!tableData.value || tableData.value.length === 0) {
     return [];
   }
-  const exclude = ['id', 'created_at', 'updated_at'];
+  const exclude = ['id', 'created_at', 'updated_at', 'deleted_at', 'lampiran'];
   return Object.keys(tableData.value[0] || {}).filter(key => !exclude.includes(key));
 });
 
@@ -267,16 +979,16 @@ const filteredData = computed(() => {
 
   if (search.value) {
     data = data.filter(item =>
-      item.nama.toLowerCase().includes(search.value.toLowerCase())
+      item.nama_pelapor.toLowerCase().includes(search.value.toLowerCase()) ||
+      item.nama_korban.toLowerCase().includes(search.value.toLowerCase())
     );
   }
 
   for (const key in activeFilters.value) {
     const filterValue = activeFilters.value[key];
-
     if (filterValue !== null && filterValue !== '') {
       data = data.filter(item => {
-        const itemValue = (item as any)[key];
+        const itemValue = item[key as keyof Konsultasi];
         if (itemValue === null || itemValue === undefined) {
           return false;
         }
@@ -288,14 +1000,11 @@ const filteredData = computed(() => {
 });
 
 const totalPages = computed(() =>
-  Math.ceil(
-    filteredData.value.length /
-      (typeof itemsPerPage.value === "number" ? itemsPerPage.value : 1)
-  )
+  Math.ceil(filteredData.value.length / (typeof itemsPerPage.value === "number" ? itemsPerPage.value : 1))
 );
 
 const pagedData = computed(() => {
-  const perPage = typeof itemsPerPage.value === "number" ? itemsPerPage.value : 1;
+  const perPage = typeof itemsPerPage.value === "number" ? itemsPerPage.value : filteredData.value.length;
   const start = (currentPage.value - 1) * perPage;
   return filteredData.value.slice(start, start + perPage);
 });
@@ -303,9 +1012,11 @@ const pagedData = computed(() => {
 function prevPage() {
   if (currentPage.value > 1) currentPage.value--;
 }
+
 function nextPage() {
   if (currentPage.value < totalPages.value) currentPage.value++;
 }
+
 function goToPage(page: number) {
   currentPage.value = page;
 }
@@ -313,111 +1024,57 @@ function goToPage(page: number) {
 const visiblePages = computed<(number | '...')[]>(() => {
   const total = totalPages.value;
   const current = currentPage.value;
-  const delta = 2;
+  const delta = 2; // Number of pages to show around the current page
   const pages: (number | '...')[] = [];
 
   if (total < 1) return pages;
-  pages.push(1);
+  pages.push(1); // Always include the first page
 
-  if (current > 2) {
-    pages.push('...');
-  }
+  let left = current - delta;
+  let right = current + delta;
 
-  for (let i = Math.max(2, current - delta); i <= Math.min(total - 1, current + delta); i++) {
-    pages.push(i);
+  // Adjust left/right bounds if they go too close to the edges
+  if (left < 2) {
+    right += (2 - left);
+    left = 2;
   }
+  if (right > total - 1) {
+    left -= (right - (total - 1));
+    right = total - 1;
+  }
+  left = Math.max(left, 2);
+  right = Math.min(right, total - 1);
 
-  if (current < total - 1) {
-    pages.push('...');
-    pages.push(total);
-  }
+  // Add '...' if there's a gap between 1 and left
+  if (left > 2) pages.push('...');
+  // Add pages in the calculated range
+  for (let i = left; i <= right; i++) pages.push(i);
+  // Add '...' if there's a gap between right and total
+  if (right < total - 1) pages.push('...');
+  // Always include the last page if total > 1
+  if (total > 1) pages.push(total);
 
   return pages;
 });
-
 function onSelectionChange(rows: Konsultasi[]) {
   selected.value = rows;
 }
 
-// Permanent delete (mass/single)
-async function onMassDeletePermanentClick() {
-  if (!selected.value.length) return;
-
-  try {
-    await ElMessageBox.confirm(
-      `Yakin ingin menghapus permanen ${selected.value.length} data ini?`,
-      'Konfirmasi Hapus',
-      {
-        confirmButtonText: 'Iya, Hapus',
-        cancelButtonText: 'Batal',
-        type: 'warning',
-      }
-    );
-
-    loading.value = true;
-    const niks = selected.value.map(p => p.nik);
-    await api.delete('/kelola/konsultasi/permanent', {
-      data: { niks },
-    });
-    await fetchData();
-    ElMessage.success('Data berhasil dihapus permanen.');
-  } catch (err) {
-    // Dibatalkan, tidak perlu error log
-  } finally {
-    loading.value = false;
+function toggleSelection(row: Konsultasi) {
+  const index = selected.value.findIndex(item => item.id === row.id);
+  if (index > -1) {
+    selected.value.splice(index, 1);
+  } else {
+    selected.value.push(row);
   }
-}
-
-async function onDeletePermanentClick(row: Konsultasi) {
-  try {
-    await ElMessageBox.confirm(
-      `Yakin ingin menghapus permanen peserta dengan NIK ${row.nik}?`,
-      'Konfirmasi Hapus',
-      {
-        confirmButtonText: 'Iya, Hapus',
-        cancelButtonText: 'Batal',
-        type: 'warning',
-      }
-    );
-
-    loading.value = true;
-    await api.delete(`/kelola/konsultasi/${row.id}/permanent`);
-    await fetchData();
-    ElMessage.success('Peserta berhasil dihapus permanen.');
-  } catch (err) {
-    // Dibatalkan oleh user
-  } finally {
-    loading.value = false;
-  }
-}
-
-// Restore (mass/single)
-async function onMassRestoreClick() {
-  if (!selected.value.length) return;
-  loading.value = true;
-
-  try {
-    const niks = selected.value.map(p => p.nik);
-    const res = await api.put('/kelola/konsultasi/restore', { niks });
-    await fetchData();
-  } catch (err) {
-    console.error('Gagal memulihkan data:', err);
-    ElMessage.error('Terjadi kesalahan saat memulihkan data');
-  } finally {
-    loading.value = false;
-  }
-}
-
-async function onRestoreClick(row: Konsultasi) {
-  loading.value = true;
-  await api.put(`/kelola/konsultasi/${row.id}/restore`);
-  await fetchData();
 }
 
 async function fetchData() {
   try {
     const res = await api.get('/kelola/konsultasi/trash');
-    tableData.value = Array.isArray(res) ? res : res.data || [];
+    tableData.value = (Array.isArray(res) ? res : res.data || []).sort((a, b) => {
+      return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+    });
   } catch (error) {
     console.error('Error fetching data:', error);
     ElNotification({
@@ -429,334 +1086,165 @@ async function fetchData() {
   }
 }
 
-onMounted(async () => {
-  loading.value = true;
-  await fetchData();
-  loading.value = false;
-});
 
-const headerCellStyle = {
-  backgroundImage: 'linear-gradient(to top, #FB9CB1, #FE6B99)',
-  color: 'white',
-  whiteSpace: 'nowrap',
-  textAlign: 'left',
-};
-function rowStyle() {
-  return { backgroundColor: '#F7F6FE' };
+async function onDeleteClick(row: Konsultasi) {
+  ElMessageBox.confirm(
+    `Apakah Anda yakin ingin menghapus data ${row.nama_pelapor} secara permanen?`,
+    'Konfirmasi Hapus Permanen',
+    {
+      confirmButtonText: 'Hapus Permanen',
+      cancelButtonText: 'Batal',
+      type: 'warning',
+    }
+  ).then(async () => {
+    try {
+      await api.delete(`/kelola/konsultasi/${row.id}/permanent`);
+      ElMessage({
+        type: 'success',
+        message: 'Data berhasil dihapus permanen!',
+      });
+      fetchData();
+    } catch (error) {
+      console.error("Error deleting data permanently:", error);
+      ElNotification({
+        title: 'Error',
+        message: 'Gagal menghapus data secara permanen. Silakan coba lagi.',
+        type: 'error',
+      });
+    }
+  }).catch(() => {
+    ElMessage({
+      type: 'info',
+      message: 'Penghapusan dibatalkan',
+    });
+  });
 }
+
+async function onRestoreClick(row: Konsultasi) {
+  ElMessageBox.confirm(
+    `Apakah Anda yakin ingin memulihkan data ${row.nama_pelapor}?`,
+    'Konfirmasi Pemulihan',
+    {
+      confirmButtonText: 'Pulihkan',
+      cancelButtonText: 'Batal',
+      type: 'info',
+    }
+  ).then(async () => {
+    try {
+      await api.put(`/kelola/konsultasi/${row.id}/restore`);
+      ElMessage({
+        type: 'success',
+        message: 'Data berhasil dipulihkan!',
+      });
+      fetchData();
+    } catch (error) {
+      console.error("Error restoring data:", error);
+      ElNotification({
+        title: 'Error',
+        message: 'Gagal memulihkan data. Silakan coba lagi.',
+        type: 'error',
+      });
+    }
+  }).catch(() => {
+    ElMessage({
+      type: 'info',
+      message: 'Pemulihan dibatalkan',
+    });
+  });
+}
+
+async function onMassDeletePermanentClick() {
+  if (selected.value.length === 0) {
+    ElMessage({
+      type: 'info',
+      message: 'Pilih setidaknya satu data untuk dihapus permanen.',
+    });
+    return;
+  }
+
+  ElMessageBox.confirm(
+    `Apakah Anda yakin ingin menghapus ${selected.value.length} data terpilih secara permanen?`,
+    'Konfirmasi Hapus Permanen Massal',
+    {
+      confirmButtonText: 'Hapus Permanen',
+      cancelButtonText: 'Batal',
+      type: 'warning',
+    }
+  ).then(async () => {
+    try {
+      const idsToDelete = selected.value.map(item => item.id);
+      await api.post('/kelola/konsultasi/permanent', {
+        ids: idsToDelete,
+      });
+
+      ElMessage({
+        type: 'success',
+        message: `${selected.value.length} data berhasil dihapus permanen!`,
+      });
+      selected.value = [];
+      fetchData();
+    } catch (error) {
+      console.error("Error mass deleting data permanently:", error);
+      ElNotification({
+        title: 'Error',
+        message: 'Gagal menghapus data secara permanen. Silakan coba lagi.',
+        type: 'error',
+      });
+    }
+  }).catch(() => {
+    ElMessage({
+      type: 'info',
+      message: 'Penghapusan massal dibatalkan',
+    });
+  });
+}
+
+async function onMassRestoreClick() {
+  if (selected.value.length === 0) {
+    ElMessage({
+      type: 'info',
+      message: 'Pilih setidaknya satu data untuk dipulihkan.',
+    });
+    return;
+  }
+
+  ElMessageBox.confirm(
+    `Apakah Anda yakin ingin memulihkan ${selected.value.length} data terpilih?`,
+    'Konfirmasi Pemulihan Massal',
+    {
+      confirmButtonText: 'Pulihkan',
+      cancelButtonText: 'Batal',
+      type: 'info',
+    }
+  ).then(async () => {
+    try {
+      const idsToRestore = selected.value.map(item => item.id);
+      console.log("IDs yang dikirim:", idsToRestore); // 🔍 Debug
+
+      await api.put('/kelola/konsultasi/restore', {
+        ids: idsToRestore,
+      });
+
+      ElMessage({
+        type: 'success',
+        message: `${selected.value.length} data berhasil dipulihkan!`,
+      });
+      selected.value = [];
+      fetchData();
+    } catch (error) {
+      console.error("Error mass restoring data:", error);
+      ElNotification({
+        title: 'Error',
+        message: 'Gagal memulihkan data. Silakan coba lagi.',
+        type: 'error',
+      });
+    }
+  }).catch(() => {
+    ElMessage({
+      type: 'info',
+      message: 'Pemulihan massal dibatalkan',
+    });
+  });
+}
+
 </script>
-
-<style>
-.header-tooltip-text {
-  display: inline-block;
-  max-width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  vertical-align: middle;
-}
-.table-container {
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.table-header {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-  padding-bottom: 20px;
-}
-.left-controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.right-control {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.select-box {
-  height: 34px;
-  background: #69C5C2;
-  padding: 6px 10px;
-  border-radius: 6px;
-  color: white;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  user-select: none;
-  position: relative;
-}
-.dropdown-list {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: white;
-  border-radius: 6px;
-  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
-  margin-top: 4px;
-  width: 70px;
-  color: black;
-  z-index: 10;
-  list-style: none;
-  padding: 0;
-}
-.dropdown-list li {
-  padding: 6px 10px;
-  cursor: pointer;
-}
-.dropdown-list li:hover {
-  background-color: #69C5C2;
-  color: white;
-}
-.search-box {
-  width: 239px;
-  height: 34px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  border: 2px solid #8a8a8a;
-  border-radius: 6px;
-  padding: 2px 5px;
-}
-.search-box input {
-  border: none;
-  outline: none;
-  padding: 6px;
-  flex: 1;
-}
-.icon-group .img {
-  width: 34px;
-  height: 34px;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.button img {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-.button2 img {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.button {
-  background: #69C5C2;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.button2 {
-  background: #69C5C2;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.button1 {
-  display: none;
-}
-.button.danger {
-  background: #e74c3c;
-}
-.button2.danger {
-  background: #e74c3c;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 20px;
-  flex-wrap: wrap;
-}
-.page-btn,
-.page-number {
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  min-width: 40px;
-  text-align: center;
-}
-.page-btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-.page-number.active {
-  background: #69C5C2;
-  color: white;
-}
-.page-number.ellipsis {
-  cursor: default;
-}
-
-.table-wrapper {
-  overflow-x: auto;
-  font-size: 10pt;
-}
-.el-table {
-  width: 100% !important;
-  table-layout: auto !important;
-  font-size: inherit;
-}
-
-/* Header corner radius */
-.el-table__header-wrapper thead th:first-child {
-  border-top-left-radius: 15px !important;
-}
-.el-table__header-wrapper thead th:last-child {
-  border-top-right-radius: 15px !important;
-}
-.el-table__header-wrapper {
-  overflow: visible !important;
-}
-
-/* Body cell styles */
-.el-table th > div,
-.el-table td > div {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  max-width: 150px;
-  padding: 6px 12px;
-  vertical-align: top !important;
-  text-align: left !important;
-  font-size: inherit;
-  transition: background-color 0.3s ease;
-}
-
-/* Row background */
-.el-table .el-table__body-wrapper tbody tr td {
-  background-color: #ececec;
-}
-
-/* Selection column width */
-.el-table-column--selection {
-  width: 55px !important;
-}
-
-/* Action button styling */
-.action-buttons {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  align-items: center;
-}
-.action-icon {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-.action-icon:hover {
-  transform: scale(1.1);
-}
-.button:hover {
-  transform: scale(1.05);
-  background: #549b98;
-}
-.button1:hover {
-  transform: scale(1.05);
-  background: #549b98;
-}
-.button2:hover {
-  transform: scale(1.05);
-  background: #549b98;
-}
-
-@media(max-width:700px) {
-  .hilang {
-    display: none;
-  }
-  .search-box {
-    width: 79%;
-  }
-  .table-header {
-    flex-wrap: none;
-  }
-  .button2 {
-    display: none;
-  }
-  .button1 {
-    background: #69C5C2;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .button1 img {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-  .right-control {
-    gap: 12px;
-  }
-  .left-controls {
-    width: 100%;
-  }
-}
-@media(max-width:365px) {
-  .hilang {
-    display: none;
-  }
-  .search-box {
-    width: 75%;
-  }
-  .table-header {
-    flex-wrap: none;
-  }
-  .button2 {
-    display: none;
-  }
-  .button1 {
-    background: #69C5C2;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .button1 img {
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-  .right-control {
-    gap: 5px;
-  }
-}
-</style>

@@ -1,17 +1,17 @@
 <template>
   <div class="layout">
-    <Header />
+    <TheHeader />
     <!-- <SideBar /> -->
     <main class="layout-content">
       <slot /> 
     </main>
-    <Footer /> 
+    <TheFooter /> 
   </div>
 </template>
 
 <script setup>
-import Header from '../components/Layouts/Header.vue'
-import Footer from '../components/Layouts/Footer.vue'
+import TheHeader from '@/components/Layouts/TheHeader.vue';
+import TheFooter from '@/components/Layouts/TheFooter.vue';
 </script>
 
 <style scoped>

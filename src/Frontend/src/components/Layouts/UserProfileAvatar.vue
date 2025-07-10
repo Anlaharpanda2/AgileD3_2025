@@ -1,11 +1,14 @@
 <template>
   <!-- Profile Dropdown -->
-  <div class="relative" @click.stop>
+  <div
+    class="relative"
+    @click.stop
+  >
     <!-- Avatar Button -->
     <button
-      @click="toggleDropdown"
       class="relative group focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-opacity-50 rounded-full transition-all duration-300"
       :aria-label="'Profil ' + (isNotLogin ? 'Tamu' : user.fullName)"
+      @click="toggleDropdown"
     >
       <div 
         class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl"
@@ -17,7 +20,7 @@
       <div 
         v-if="!isNotLogin"
         class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-400 border-2 border-white rounded-full shadow-sm"
-      ></div>
+      />
     </button>
 
     <!-- Dropdown Menu -->
@@ -32,7 +35,7 @@
           <div 
             v-show="isDropdownOpen"
             class="absolute inset-0 bg-black/20 backdrop-blur-sm"
-          ></div>
+          />
         </transition>
         
         <!-- Dropdown Card dengan animasi terpisah -->
@@ -44,7 +47,7 @@
           >
             <!-- Header Section -->
             <div class="bg-gradient-to-br from-pink-500 to-pink-600 p-5 text-white relative overflow-hidden">
-              <div class="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+              <div class="absolute inset-0 bg-white/10 backdrop-blur-sm" />
               <div class="relative z-10 text-center">
                 <!-- Large Avatar -->
                 <div 
@@ -67,8 +70,8 @@
               </div>
               
               <!-- Decorative Elements -->
-              <div class="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10"></div>
-              <div class="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-8 -mb-8"></div>
+              <div class="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10" />
+              <div class="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-8 -mb-8" />
             </div>
 
             <!-- Menu Section -->
@@ -76,39 +79,80 @@
               <template v-if="!isNotLogin">
                 <!-- Profile Button -->
                 <button
-                  @click="goToDetailMasyarakat"
                   class="w-full flex items-center p-3 text-gray-700 hover:bg-pink-50 hover:text-pink-600 rounded-xl transition-all duration-300 group"
+                  @click="goToDetailMasyarakat"
                 >
                   <div class="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center mr-3 group-hover:bg-pink-200 transition-colors duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-5 h-5 text-pink-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
                     </svg>
                   </div>
                   <div class="flex-1 text-left">
-                    <div class="font-medium">Profil Saya</div>
-                    <div class="text-xs text-gray-500">Lihat dan edit profil</div>
+                    <div class="font-medium">
+                      Profil Saya
+                    </div>
+                    <div class="text-xs text-gray-500">
+                      Lihat dan edit profil
+                    </div>
                   </div>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400 group-hover:text-pink-500 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4 text-gray-400 group-hover:text-pink-500 transition-colors duration-300"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 </button>
 
                 <!-- Divider -->
-                <div class="border-t border-gray-100 my-2"></div>
+                <div class="border-t border-gray-100 my-2" />
 
                 <!-- Logout Button -->
                 <button
-                  @click="handleLogout"
                   class="w-full flex items-center p-3 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-xl transition-all duration-300 group"
+                  @click="handleLogout"
                 >
                   <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3 group-hover:bg-red-200 transition-colors duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-5 h-5 text-red-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                      />
                     </svg>
                   </div>
                   <div class="flex-1 text-left">
-                    <div class="font-medium">Keluar</div>
-                    <div class="text-xs text-gray-500">Logout dari akun</div>
+                    <div class="font-medium">
+                      Keluar
+                    </div>
+                    <div class="text-xs text-gray-500">
+                      Logout dari akun
+                    </div>
                   </div>
                 </button>
               </template>
@@ -116,20 +160,46 @@
               <!-- Guest Login Button -->
               <template v-else>
                 <button
-                  @click="router.push('/login/masyarakat')"
                   class="w-full flex items-center p-3 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-xl transition-all duration-300 group"
+                  @click="router.push('/login/masyarakat')"
                 >
                   <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3 group-hover:bg-green-200 transition-colors duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-5 h-5 text-green-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                      />
                     </svg>
                   </div>
                   <div class="flex-1 text-left">
-                    <div class="font-medium">Masuk</div>
-                    <div class="text-xs text-gray-500">Login ke akun Anda</div>
+                    <div class="font-medium">
+                      Masuk
+                    </div>
+                    <div class="text-xs text-gray-500">
+                      Login ke akun Anda
+                    </div>
                   </div>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400 group-hover:text-green-500 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4 text-gray-400 group-hover:text-green-500 transition-colors duration-300"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 </button>
               </template>

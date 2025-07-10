@@ -1,27 +1,57 @@
 <template>
-  <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" @click.self="$emit('close')">
-    <transition name="popup" appear>
+  <div
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+    @click.self="$emit('close')"
+  >
+    <transition
+      name="popup"
+      appear
+    >
       <div class="w-full max-w-4xl max-h-[95vh] bg-white rounded-2xl shadow-2xl overflow-hidden">
         <!-- Header -->
         <div class="bg-gradient-to-r from-pink-500 to-pink-600 px-6 py-4">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
               <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                <svg
+                  class="w-5 h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
                 </svg>
               </div>
               <div>
-                <h3 class="text-xl font-semibold text-white">Form Terima Data Pendaftar Massal</h3>
-                <p class="text-pink-100 text-sm">Lengkapi informasi kegiatan dan validasi data</p>
+                <h3 class="text-xl font-semibold text-white">
+                  Form Terima Data Pendaftar Massal
+                </h3>
+                <p class="text-pink-100 text-sm">
+                  Lengkapi informasi kegiatan dan validasi data
+                </p>
               </div>
             </div>
             <button
-              @click="$emit('close')"
               class="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all duration-200"
+              @click="$emit('close')"
             >
-              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              <svg
+                class="w-4 h-4 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>
@@ -31,9 +61,9 @@
         <div class="overflow-y-auto max-h-[calc(95vh-120px)]">
           <div class="p-6">
             <el-form
+              ref="formRef"
               :model="form"
               :rules="rules"
-              ref="formRef"
               label-width="140px"
               label-position="top"
               class="space-y-6"
@@ -61,15 +91,53 @@
                     <div class="flex items-center space-x-3">
                       <!-- Field Icons - External -->
                       <div class="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <svg v-if="field.component === 'el-date-picker'" class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        <svg
+                          v-if="field.component === 'el-date-picker'"
+                          class="w-5 h-5 text-pink-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
                         </svg>
-                        <svg v-else-if="field.key === 'tempat_kegiatan'" class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <svg
+                          v-else-if="field.key === 'tempat_kegiatan'"
+                          class="w-5 h-5 text-pink-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                          />
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
                         </svg>
-                        <svg v-else-if="field.key === 'angkatan'" class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path>
+                        <svg
+                          v-else-if="field.key === 'angkatan'"
+                          class="w-5 h-5 text-pink-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
+                          />
                         </svg>
                       </div>
 
@@ -77,20 +145,20 @@
                       <div class="flex-1">
                         <component
                           :is="field.component"
+                          v-if="field.component !== 'el-select'"
+                          :id="field.key"
                           v-model="form[field.key]"
                           :type="field.type"
                           :placeholder="`Masukkan ${field.label.toLowerCase()}`"
-                          :id="field.key"
                           :name="field.key"
                           clearable
                           class="w-full modern-input"
-                          v-if="field.component !== 'el-select'"
                         />
                         <el-select
                           v-else-if="field.key === 'status'"
+                          :id="field.key"
                           v-model="form.status"
                           placeholder="Pilih Status"
-                          :id="field.key"
                           :name="field.key"
                           clearable
                           class="w-full modern-select"
@@ -112,12 +180,24 @@
               <div class="bg-gradient-to-r from-pink-50 to-gray-50 border border-pink-100 rounded-xl p-4 mt-6">
                 <div class="flex items-start space-x-3">
                   <div class="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg class="w-4 h-4 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    <svg
+                      class="w-4 h-4 text-pink-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                   </div>
                   <div>
-                    <h4 class="text-sm font-medium text-gray-800 mb-1">Informasi Penting</h4>
+                    <h4 class="text-sm font-medium text-gray-800 mb-1">
+                      Informasi Penting
+                    </h4>
                     <p class="text-xs text-gray-600 leading-relaxed">
                       Pastikan semua data yang dimasukkan sudah benar. Tanggal berakhir kegiatan harus setelah tanggal mulai kegiatan.
                     </p>
@@ -128,23 +208,43 @@
               <!-- Action Buttons -->
               <div class="flex flex-col sm:flex-row gap-3 justify-end pt-6 border-t border-gray-100">
                 <el-button
-                  @click="$emit('close')"
                   class="modern-btn-cancel order-2 sm:order-1"
                   size="large"
+                  @click="$emit('close')"
                 >
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  <svg
+                    class="w-4 h-4 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                   Batal
                 </el-button>
                 <el-button
                   type="primary"
-                  @click="submitForm"
                   class="modern-btn-submit order-1 sm:order-2"
                   size="large"
+                  @click="submitForm"
                 >
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  <svg
+                    class="w-4 h-4 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                   Simpan Perubahan
                 </el-button>
@@ -158,19 +258,20 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, watch, onMounted } from 'vue';
-import { ElNotification } from 'element-plus';
+import { reactive, ref, watch, PropType } from 'vue';
+import { ElNotification, FormInstance, FormItemRule } from 'element-plus';
 import api from '../../api.js';
+import { AxiosError } from 'axios';
 
 const props = defineProps({
   initialData: {
-    type: Array, // Changed to Array as per FormTerimaDataPendaftaranMassal.vue
+    type: Array as PropType<Array<Record<string, unknown>>>,
     required: true,
   },
 });
 
 const emit = defineEmits(['close']);
-const formRef = ref(null);
+const formRef = ref<FormInstance | null>(null);
 const statusOptions = ['kawin', 'lajang', 'janda'];
 
 const fields = [
@@ -186,9 +287,10 @@ const form = reactive({
   kegiatan_berakhir: null,
   tempat_kegiatan: '',
   angkatan: null,
+  status: '',
 });
 
-const applyInitialData = (data: any) => {
+const applyInitialData = (data: Array<Record<string, unknown>>) => {
   if (data) {
     // For massal, initialData is an array, but the form only holds common fields
     // We only apply the date and angkatan if they are present in the first item (if any)
@@ -201,7 +303,7 @@ const applyInitialData = (data: any) => {
       if (firstItem.kegiatan_berakhir && typeof firstItem.kegiatan_berakhir === 'string') {
         form.kegiatan_berakhir = new Date(firstItem.kegiatan_berakhir);
       }
-      if (firstItem.tempat_kegiatan) {
+      if (firstItem.tempat_kegiatan && typeof firstItem.tempat_kegiatan === 'string') {
         form.tempat_kegiatan = firstItem.tempat_kegiatan;
       }
       if (firstItem.angkatan !== null && typeof firstItem.angkatan === 'string') {
@@ -232,12 +334,24 @@ const rules = {
       trigger: 'change',
     },
     {
-      validator: (rule: any, value: any, callback: any) => {
-        if (!value || !(value instanceof Date)) {
+      validator: (rule: FormItemRule, value: number | string | null | undefined, callback: (error?: Error) => void) => {
+        if (!value) {
           callback();
           return;
         }
-        if (form.kegiatan_dimulai && value < form.kegiatan_dimulai) {
+
+        let endDate: Date;
+        // Coba konversi value ke Date
+        endDate = new Date(value as string | number);
+
+        // Periksa apakah endDate valid
+        if (isNaN(endDate.getTime())) {
+          callback(new Error('Tanggal Berakhir harus berupa tanggal yang valid'));
+          return;
+        }
+
+        // Periksa apakah tanggal berakhir lebih awal dari tanggal mulai
+        if (form.kegiatan_dimulai && endDate < form.kegiatan_dimulai) {
           callback(new Error('Tanggal Berakhir harus setelah Tanggal Mulai'));
         } else {
           callback();
@@ -260,7 +374,7 @@ const rules = {
       trigger: 'blur',
     },
     {
-      validator: (rule: any, value: any, callback: any) => {
+      validator: (rule: FormItemRule, value: number | string | null | undefined, callback: (error?: Error) => void) => {
         const number = Number(value);
         if (value === '' || value === null || value === undefined) {
           callback(new Error('Angkatan wajib diisi'));
@@ -295,7 +409,7 @@ const submitForm = () => {
     }
 
     // Prepare payload for mass update based on initialData array
-    const payload = props.initialData.map((item: any) => ({
+    const payload = props.initialData.map((item: Record<string, unknown>) => ({
       ...item, // Keep existing item properties
       kegiatan_dimulai: formatDate(form.kegiatan_dimulai),
       kegiatan_berakhir: formatDate(form.kegiatan_berakhir),
@@ -309,17 +423,28 @@ const submitForm = () => {
       const response = await api.post('/kelola/pendaftaran/accept', payload);
       ElNotification({
         title: 'Berhasil',
-        message: response?.data?.message ?? 'Data berhasil diproses!',
+        message: ((response?.data?.message ?? 'Data berhasil diproses!') as string),
         type: 'success',
         duration: 3000,
       });
       emit('close');
       window.location.reload();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error submitting form:', error);
+      let errorMessage = 'Terjadi kesalahan yang tidak terduga.'; // Default generic message
+
+      if (error instanceof AxiosError) {
+        errorMessage = String(error.response?.data?.message ?? 'Gagal memproses data. Periksa jaringan/server.');
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      } else if (typeof error === 'object' && error !== null && 'message' in error && typeof (error as Record<string, unknown>).message === 'string') {
+        errorMessage = (error as Record<string, unknown>).message as string;
+      }
       ElNotification({
         title: 'Gagal',
-        message: error?.response?.data?.message ?? 'Gagal memproses data. Periksa jaringan/server.',
+        message: errorMessage,
         type: 'error',
         duration: 0,
       });

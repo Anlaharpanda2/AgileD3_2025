@@ -21,6 +21,17 @@ export interface Pretest {
   is_active?: boolean;
 }
 
+export interface SubmitResult {
+  score: number;
+  message: string;
+}
+
+export interface UserInfo {
+  status_pendaftaran: string;
+  nama: string;
+  // tambahkan properti lain yang mungkin ada
+}
+
 const pretestService = {
   async getAllPretests(): Promise<Pretest[]> {
     const response = await axios.get(API_URL);
@@ -50,7 +61,7 @@ const pretestService = {
     await axios.put(`${API_URL}/visibility`, { pretests });
   },
 
-  async submitPretestAnswers(pretestId: number, answers: { question_id: number; selected_option: 'A' | 'B' | 'C' | 'D' }[], userNik: string, userName: string): Promise<any> {
+  async submitPretestAnswers(pretestId: number, answers: { question_id: number; selected_option: 'A' | 'B' | 'C' | 'D' }[], userNik: string, userName: string): Promise<SubmitResult> {
     const response = await axios.post(`${API_URL}/${pretestId}/submit-answers`, {
       answers,
       user_nik: userNik,
@@ -59,7 +70,7 @@ const pretestService = {
     return response.data;
   },
 
-  async getUserInfoByNik(nik: string): Promise<any> {
+  async getUserInfoByNik(nik: string): Promise<UserInfo[]> {
     const response = await axios.get(`http://127.0.0.1:8000/api/kelola/pelatihan/${nik}`); // Adjust URL if needed
     return response.data;
   },

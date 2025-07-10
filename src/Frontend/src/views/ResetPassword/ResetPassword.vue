@@ -1,59 +1,86 @@
 <template>
   <div class="coverpage">
     <div class="overlap">
-      <div class="ellipse"></div>
-      <div class="div"></div>
+      <div class="ellipse" />
+      <div class="div" />
       <div class="login">
         <div class="overlap-group">
-          <div class="rectangle"></div>
-          <img class="mask-group" src="https://c.animaapp.com/IJi6pJQY/img/mask-group@2x.png" alt="Mask Group" />
+          <div class="rectangle" />
+          <img
+            class="mask-group"
+            src="https://c.animaapp.com/IJi6pJQY/img/mask-group@2x.png"
+            alt="Mask Group"
+          >
           <div class="group">
-            <img class="thunderbolt" src="https://c.animaapp.com/IJi6pJQY/img/thunderbolt-1@2x.png" alt="Thunderbolt" />
+            <img
+              class="thunderbolt"
+              src="https://c.animaapp.com/IJi6pJQY/img/thunderbolt-1@2x.png"
+              alt="Thunderbolt"
+            >
           </div>
-          <div class="keluarga-sejahtera">Keluarga<br />Sejahtera<br />Setara<br />Terlindung</div>
+          <div class="keluarga-sejahtera">
+            Keluarga<br>Sejahtera<br>Setara<br>Terlindung
+          </div>
         </div>
         <div class="overlap-2">
           <div class="group-2">
             <!-- Judul halaman diubah menjadi "Atur Kata Sandi Baru" -->
-            <div class="masuk">Atur Kata Sandi Baru</div>
+            <div class="masuk">
+              Atur Kata Sandi Baru
+            </div>
             <p class="p">
               Silakan masukkan kata sandi baru Anda.
-              <br />
+              <br>
               <span class="email-display">{{ email }}</span>
             </p>
 
             <form @submit.prevent="resetPassword">
               <!-- Kolom input untuk password baru -->
-              <div class="form-group" style="margin-top: 50px;">
-                <label for="newPassword" class="input-label">Password Baru</label>
+              <div
+                class="form-group"
+                style="margin-top: 50px;"
+              >
+                <label
+                  for="newPassword"
+                  class="input-label"
+                >Password Baru</label>
                 <div class="password-input-container">
-                    <input
-                        id="newPassword"
-                        v-model="newPassword"
-                        :type="showNewPassword ? 'text' : 'password'"
-                        class="input-field"
-                        placeholder="Masukkan password baru"
-                    />
-                    <span class="password-toggle" @click="toggleNewPasswordVisibility">
-                        <img
-                            v-if="showNewPassword"
-                            src="/reset/asset1.svg"
-                            alt="Tampilkan password"
-                            class="w-6 h-6"
-                        />
-                        <img
-                            v-else
-                            src="/reset/asset2.svg"
-                            alt="Sembunyikan password"
-                            class="w-6 h-6"
-                        />
-                    </span>
+                  <input
+                    id="newPassword"
+                    v-model="newPassword"
+                    :type="showNewPassword ? 'text' : 'password'"
+                    class="input-field"
+                    placeholder="Masukkan password baru"
+                  >
+                  <span
+                    class="password-toggle"
+                    @click="toggleNewPasswordVisibility"
+                  >
+                    <img
+                      v-if="showNewPassword"
+                      src="/reset/asset1.svg"
+                      alt="Tampilkan password"
+                      class="w-6 h-6"
+                    >
+                    <img
+                      v-else
+                      src="/reset/asset2.svg"
+                      alt="Sembunyikan password"
+                      class="w-6 h-6"
+                    >
+                  </span>
                 </div>
               </div>
 
               <!-- Kolom input untuk konfirmasi password baru -->
-              <div class="form-group" style="margin-top: 20px;">
-                <label for="confirmPassword" class="input-label">Konfirmasi Password Baru</label>
+              <div
+                class="form-group"
+                style="margin-top: 20px;"
+              >
+                <label
+                  for="confirmPassword"
+                  class="input-label"
+                >Konfirmasi Password Baru</label>
                 <div class="password-input-container">
                   <input
                     id="confirmPassword"
@@ -61,33 +88,48 @@
                     :type="showConfirmPassword ? 'text' : 'password'"
                     class="input-field"
                     placeholder="Konfirmasi password baru"
-                  />
-                  <span class="password-toggle" @click="toggleConfirmPasswordVisibility">
+                  >
+                  <span
+                    class="password-toggle"
+                    @click="toggleConfirmPasswordVisibility"
+                  >
                     <img
-                        v-if="showConfirmPassword"
-                        src="/reset/asset1.svg"
-                        alt="Tampilkan password"
-                        class="w-6 h-6"
-                    />
+                      v-if="showConfirmPassword"
+                      src="/reset/asset1.svg"
+                      alt="Tampilkan password"
+                      class="w-6 h-6"
+                    >
                     <img
-                        v-else
-                        src="/reset/asset2.svg"
-                        alt="Sembunyikan password"
-                        class="w-6 h-6"
-                    />
+                      v-else
+                      src="/reset/asset2.svg"
+                      alt="Sembunyikan password"
+                      class="w-6 h-6"
+                    >
                   </span>
                 </div>
               </div>
 
               <!-- Tombol submit -->
-              <div class="group-7" style="top: 180px; left: 65px;">
-                <button type="submit" class="btn overlap-5 btn-gradient" :disabled="isLoading">
-                  <div class="text-wrapper-4">{{ isLoading ? 'Memproses...' : 'Reset Password' }}</div>
+              <div
+                class="group-7"
+                style="top: 180px; left: 65px;"
+              >
+                <button
+                  type="submit"
+                  class="btn overlap-5 btn-gradient"
+                  :disabled="isLoading"
+                >
+                  <div class="text-wrapper-4">
+                    {{ isLoading ? 'Memproses...' : 'Reset Password' }}
+                  </div>
                 </button>
               </div>
 
               <!-- Pesan error jika ada -->
-              <div v-if="errorMessage" class="error-message">
+              <div
+                v-if="errorMessage"
+                class="error-message"
+              >
                 {{ errorMessage }}
               </div>
             </form>

@@ -1,0 +1,205 @@
+
+> frontend@0.0.0 lint
+> eslint . --ext .js,.ts,.vue
+
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\DataBerita\FormSortingDataBerita.vue
+  132:48  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  132:85  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  133:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  133:87  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  137:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  137:66  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  138:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  138:66  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  141:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  141:60  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  142:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  142:60  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  145:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  145:64  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  146:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  146:64  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\DataNilai\CombinedScoreTable.vue
+  377:28  error  'rowIndex' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\Home\LokasiPeta.vue
+  369:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  499:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  540:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataFasilitas\FormEditDataFasilitas.vue
+  303:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  327:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  327:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  327:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  373:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataFasilitas\FormImportDataFasilitas.vue
+  347:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  347:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  386:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataFasilitas\FormSortingDataFasilitas.vue
+  255:48  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  255:85  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  256:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  256:87  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  260:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  260:66  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  261:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  261:66  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  264:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  264:60  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  265:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  265:60  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  268:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  268:64  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  269:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  269:64  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataFasilitas\FormTambahDataFasilitas.vue
+  303:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  303:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  303:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataKonsultasi\FormEditDataKonsultasi.vue
+  455:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataKonsultasi\FormImportDataKonsultasi.vue
+  104:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  104:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  139:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataKonsultasi\FormSortingDataKonsultasi.vue
+  132:48  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  132:85  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  133:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  133:87  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  137:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  137:66  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  138:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  138:66  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  141:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  141:60  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  142:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  142:60  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  145:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  145:64  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  146:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  146:64  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataKonsultasi\FormTambahDataKonsultasi.vue
+  136:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  164:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  195:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataPanitia\FormEditDataPanitia.vue
+  301:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  374:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataPanitia\FormImportDataPanitia.vue
+  347:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  347:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  386:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataPanitia\FormTambahDataPanitia.vue
+  362:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataPelatihan\FormImportDataPelatihan.vue
+  347:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  347:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  386:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataPelatihan\FormTambahDataPelatihan.vue
+  600:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  600:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  600:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  656:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataPendaftaran\FormTerimaDataPendaftaran.vue
+  262:40  error  'FormItemRule' is defined but never used  @typescript-eslint/no-unused-vars
+  341:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  341:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  341:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  373:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  373:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  373:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataPengaduan\FormSortingDataPengaduan.vue
+  219:11  error  'Pengaduan' is already defined  no-redeclare
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataTest\PosttestPreview.vue
+  41:7  error  'props' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataTest\PretestPreview.vue
+  202:7   error  'props' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  206:39  error  Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\Layouts\NavBar.vue
+  75:7  error  'isMasyarakat' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  76:7  error  'isNotLogin' is assigned a value but never used    @typescript-eslint/no-unused-vars
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\Layouts\TheHeader.vue
+  200:39  error  'shallowRef' is defined but never used    @typescript-eslint/no-unused-vars
+  209:10  error  'isOperator' is defined but never used    @typescript-eslint/no-unused-vars
+  209:22  error  'isPegawai' is defined but never used     @typescript-eslint/no-unused-vars
+  209:33  error  'isMasyarakat' is defined but never used  @typescript-eslint/no-unused-vars
+  209:47  error  'isNotLogin' is defined but never used    @typescript-eslint/no-unused-vars
+  288:31  error  'parentName' is defined but never used    @typescript-eslint/no-unused-vars
+
+D:\PBL\AgileD3_2025\src\Frontend\src\composables\usePosttestForm.ts
+  2:20  error  'Question' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\PBL\AgileD3_2025\src\Frontend\src\composables\usePretestForm.ts
+  2:19  error  'Question' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\PBL\AgileD3_2025\src\Frontend\src\views\DaftarMasyarakat\IkutPealtihanView.vue
+  541:11  error  'CekNikResponse' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\PBL\AgileD3_2025\src\Frontend\src\views\Home\HomeView.vue
+   2:10  error  'ref' is defined but never used              @typescript-eslint/no-unused-vars
+  12:3   error  'Trophy' is defined but never used           @typescript-eslint/no-unused-vars
+  24:7   error  'router' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\PBL\AgileD3_2025\src\Frontend\src\views\KelolaAkses\DataPelatihanSampahView.vue
+  224:8   error  'SimpleLayout' is defined but never used    @typescript-eslint/no-unused-vars
+  226:10  error  'ElNotification' is defined but never used  @typescript-eslint/no-unused-vars
+  282:11  error  'res' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  303:11  error  'res' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  318:10  error  'onFilterClick' is defined but never used   @typescript-eslint/no-unused-vars
+  319:10  error  'onSortClick' is defined but never used     @typescript-eslint/no-unused-vars
+
+D:\PBL\AgileD3_2025\src\Frontend\src\views\KelolaAkses\KelolaAksesView.vue
+  412:10  error  'onAddClick' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\PBL\AgileD3_2025\src\Frontend\src\views\PengelolaDataBerita\DataBeritaView.vue
+  642:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\views\PengelolaDataFasilitas\DataFasilitasSampahView.vue
+  888:10  error  'formatTanggal' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\PBL\AgileD3_2025\src\Frontend\src\views\PengelolaDataKonsultasi\DataKonsultasiView.vue
+  441:26  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  441:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\views\PengelolaDataPanitia\DataPanitiaSampahView.vue
+  921:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\views\PengelolaDataPanitia\DataPanitiaView.vue
+  920:10  error  'useRouter' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\PBL\AgileD3_2025\src\Frontend\src\views\PengelolaDataPelatihan\DataPelatihanSampahView.vue
+  1045:7   error  'visibleColumns' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  1073:36  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\views\PengelolaDataPengaduan\StatusPengaduan.vue
+  708:12  error  'e' is defined but never used  @typescript-eslint/no-unused-vars
+  723:12  error  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\PBL\AgileD3_2025\src\Frontend\test\unit\ExportDataPelatihan.spec.ts
+  4:12  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+✖ 126 problems (126 errors, 0 warnings)
+

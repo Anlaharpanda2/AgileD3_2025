@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+
 import {
   ElRow,
   ElCol,
@@ -14,8 +14,15 @@ import {
   <!-- Tentang Kami -->
   <section class="py-16 md:py-24 bg-white">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <ElRow :gutter="40" align="middle">
-        <ElCol :xs="24" :md="12" data-aos="fade-right">
+      <ElRow
+        :gutter="40"
+        align="middle"
+      >
+        <ElCol
+          :xs="24"
+          :md="12"
+          data-aos="fade-right"
+        >
           <div class="md:pr-8">
             <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
               Tentang Kami
@@ -54,10 +61,18 @@ import {
         </ElCol>
         
         <!-- Illustration - Hidden on mobile <470px -->
-        <ElCol :xs="24" :md="12" data-aos="fade-left" class="hidden sm:block">
+        <ElCol
+          :xs="24"
+          :md="12"
+          data-aos="fade-left"
+          class="hidden sm:block"
+        >
           <div class="flex items-center justify-center h-96 mt-12 md:mt-0">
             <div class="w-70 h-70 bg-gradient-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center animate-pulse">
-              <ElIcon size="140" color="#ec4899">
+              <ElIcon
+                size="140"
+                color="#ec4899"
+              >
                 <Female />
               </ElIcon>
             </div>

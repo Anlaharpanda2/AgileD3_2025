@@ -2,51 +2,81 @@
   <div class="bg-gradient-to-br from-slate-50 via-white to-purple-50 py-16">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Section Header -->
-      <div class="text-center mb-16" data-aos="fade-up">
+      <div
+        class="text-center mb-16"
+        data-aos="fade-up"
+      >
         <h2 class="text-4xl md:text-5xl font-bold bg-black bg-clip-text text-transparent mb-4">
           Berita Terbaru
         </h2>
         <p class="text-xl text-gray-600 max-w-2xl mx-auto">
           Informasi terkini seputar kegiatan dan program pemberdayaan
         </p>
-        <div class="w-24 h-1 bg-gradient-to-r from-pink-500 to-purple-600 mx-auto mt-6 rounded-full"></div>
+        <div class="w-24 h-1 bg-gradient-to-r from-pink-500 to-purple-600 mx-auto mt-6 rounded-full" />
       </div>
 
       <!-- Loading State -->
-      <div v-if="loading" class="flex flex-col items-center justify-center py-20">
+      <div
+        v-if="loading"
+        class="flex flex-col items-center justify-center py-20"
+      >
         <div class="relative">
-          <div class="w-16 h-16 border-4 border-pink-200 border-t-pink-500 rounded-full animate-spin"></div>
-          <div class="w-12 h-12 border-4 border-purple-200 border-t-purple-500 rounded-full animate-spin absolute top-2 left-2"></div>
+          <div class="w-16 h-16 border-4 border-pink-200 border-t-pink-500 rounded-full animate-spin" />
+          <div class="w-12 h-12 border-4 border-purple-200 border-t-purple-500 rounded-full animate-spin absolute top-2 left-2" />
         </div>
-        <p class="text-gray-600 mt-6 text-lg">Memuat berita...</p>
+        <p class="text-gray-600 mt-6 text-lg">
+          Memuat berita...
+        </p>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="text-center py-20">
-        <div class="text-red-500 text-6xl mb-4">⚠️</div>
-        <p class="text-red-600 text-lg mb-6">{{ error }}</p>
-        <ElButton @click="fetchBerita" type="primary" size="large" class="bg-pink-500 border-pink-500 hover:bg-pink-600">
+      <div
+        v-else-if="error"
+        class="text-center py-20"
+      >
+        <div class="text-red-500 text-6xl mb-4">
+          ⚠️
+        </div>
+        <p class="text-red-600 text-lg mb-6">
+          {{ error }}
+        </p>
+        <ElButton
+          type="primary"
+          size="large"
+          class="bg-pink-500 border-pink-500 hover:bg-pink-600"
+          @click="fetchBerita"
+        >
           Coba Lagi
         </ElButton>
       </div>
 
       <!-- Empty State -->
-      <div v-else-if="news.length === 0" class="text-center py-20">
-        <div class="text-gray-400 text-6xl mb-4">📰</div>
-        <p class="text-gray-500 text-lg">Belum ada berita tersedia</p>
+      <div
+        v-else-if="news.length === 0"
+        class="text-center py-20"
+      >
+        <div class="text-gray-400 text-6xl mb-4">
+          📰
+        </div>
+        <p class="text-gray-500 text-lg">
+          Belum ada berita tersedia
+        </p>
       </div>
 
       <!-- Carousel Container -->
-      <div v-else class="relative">
-        
+      <div
+        v-else
+        class="relative"
+      >
         <!-- Desktop Navigation Buttons -->
-        <div class="hidden sm:flex absolute inset-y-0 left-0 right-0 items-center justify-between pointer-events-none z-20" 
-             v-if="news.length > 3">
+        <div
+          v-if="news.length > 3" 
+          class="hidden sm:flex absolute inset-y-0 left-0 right-0 items-center justify-between pointer-events-none z-20"
+        >
           <ElButton
             native-type="button"
             type="default"
             :disabled="!canGoPrev || isAnimating"
-            @click="goToPrev"
             :class="[
               '!pointer-events-auto', '!w-12', '!h-12', '!rounded-full', '!bg-white',
               '!shadow-xl', '!border-2', '!border-grey',
@@ -56,12 +86,14 @@
             ]"
             circle
             size="large"
+            @click="goToPrev"
           >
-            <ElIcon class="text-black"><ArrowLeft /></ElIcon>
+            <ElIcon class="text-black">
+              <ArrowLeft />
+            </ElIcon>
           </ElButton>
           <ElButton 
             :disabled="!canGoNext || isAnimating"
-            @click="goToNext"
             :class="[
               '!pointer-events-auto', '!w-12', '!h-12', '!rounded-full', '!bg-white',
               '!shadow-xl', '!border-2', '!border-gray',
@@ -71,8 +103,11 @@
             ]"
             circle
             size="large"
+            @click="goToNext"
           >
-            <ElIcon class="text-black"><ArrowRight /></ElIcon>
+            <ElIcon class="text-black">
+              <ArrowRight />
+            </ElIcon>
           </ElButton>
         </div>
 
@@ -85,7 +120,7 @@
             :class="{ 'pointer-events-none': isAnimating }"
           >
             <div
-              v-for="(newsItem, index) in visibleNewsDesktop"
+              v-for="newsItem in visibleNewsDesktop"
               :key="`desktop-${newsItem.key}`"
               :class="[
                 'transition-all duration-700 ease-out transform-gpu',
@@ -119,24 +154,28 @@
                     :alt="newsItem.judul"
                     @error="() => {}"
                   />
-                  <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent group-hover:from-black/30"></div>
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent group-hover:from-black/30" />
                 </div>
 
                 <!-- Content Section -->
                 <div class="p-6 h-[244px] flex flex-col">
-                  <h3 :class="[
-                    'font-bold mb-3 line-clamp-2 leading-tight',
-                    newsItem.position === 'center' 
-                      ? 'text-xl text-pink-600' 
-                      : 'text-lg text-gray-800'
-                  ]">
+                  <h3
+                    :class="[
+                      'font-bold mb-3 line-clamp-2 leading-tight',
+                      newsItem.position === 'center' 
+                        ? 'text-xl text-pink-600' 
+                        : 'text-lg text-gray-800'
+                    ]"
+                  >
                     {{ newsItem.judul }}
                   </h3>
                   
-                  <p :class="[
-                    'text-gray-600 flex-grow line-clamp-3 leading-relaxed',
-                    newsItem.position === 'center' ? 'text-base' : 'text-sm'
-                  ]">
+                  <p
+                    :class="[
+                      'text-gray-600 flex-grow line-clamp-3 leading-relaxed',
+                      newsItem.position === 'center' ? 'text-base' : 'text-sm'
+                    ]"
+                  >
                     {{ truncateText(newsItem.isi, newsItem.position === 'center' ? 150 : 100) }}
                   </p>
                   
@@ -179,7 +218,7 @@
               :style="{ transform: `translateX(${mobileTranslateX}px)` }"
             >
               <div
-                v-for="(newsItem, index) in news"
+                v-for="newsItem in news"
                 :key="`mobile-${newsItem.id}`"
                 class="flex-shrink-0 w-full flex justify-center px-4"
               >
@@ -197,7 +236,7 @@
                       :alt="newsItem.judul"
                       @error="() => {}"
                     />
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                     <ElTag 
                       type="primary"
                       class="absolute top-4 left-4 bg-pink-500 border-pink-500 text-white font-semibold px-3 py-1 rounded-full shadow-lg"
@@ -243,7 +282,10 @@
         </div>
 
         <!-- Desktop Pagination -->
-        <div class="hidden sm:flex justify-center items-center gap-2 mt-8" v-if="news.length > 3">
+        <div
+          v-if="news.length > 3"
+          class="hidden sm:flex justify-center items-center gap-2 mt-8"
+        >
           <button
             v-for="(item, index) in paginationItemsDesktop" 
             :key="`desktop-pagination-${index}`"
@@ -255,16 +297,22 @@
                 'px-2 text-gray-400 cursor-default': item.type === 'ellipsis'
               }
             ]"
-            @click="item.type === 'page' ? goToIndex(Number(item.value)) : null"
             :disabled="isAnimating"
+            @click="item.type === 'page' ? goToIndex(Number(item.value)) : null"
           >
             <span v-if="item.type === 'ellipsis'">{{ item.value }}</span>
-            <span v-else-if="item.type === 'page' && item.active" class="text-sm">{{ Math.floor(item.value / 3) + 1 }}</span>
+            <span
+              v-else-if="item.type === 'page' && item.active"
+              class="text-sm"
+            >{{ Math.floor(item.value / 3) + 1 }}</span>
           </button>
         </div>
 
         <!-- Mobile Pagination (Dots) -->
-        <div class="flex sm:hidden justify-center items-center gap-2 mt-8" v-if="news.length > 1">
+        <div
+          v-if="news.length > 1"
+          class="flex sm:hidden justify-center items-center gap-2 mt-8"
+        >
           <button
             v-for="(newsItem, index) in news" 
             :key="`mobile-pagination-${index}`"
@@ -276,19 +324,24 @@
               }
             ]"
             @click="goToMobileIndex(index)"
-          >
-          </button>
+          />
         </div>
 
         <!-- Desktop Carousel Info -->
-        <div class="hidden sm:block text-center mt-6" v-if="news.length > 3">
+        <div
+          v-if="news.length > 3"
+          class="hidden sm:block text-center mt-6"
+        >
           <span class="text-gray-500 text-sm font-medium bg-gray-100 px-4 py-2 rounded-full">
             Halaman {{ Math.floor(currentIndex / 3) + 1 }} dari {{ Math.ceil(news.length / 3) }}
           </span>
         </div>
 
         <!-- Mobile Carousel Info -->
-        <div class="block sm:hidden text-center mt-6" v-if="news.length > 1">
+        <div
+          v-if="news.length > 1"
+          class="block sm:hidden text-center mt-6"
+        >
           <span class="text-gray-500 text-sm font-medium bg-gray-100 px-4 py-2 rounded-full">
             {{ mobileCurrentIndex + 1 }} dari {{ news.length }} berita
           </span>
@@ -314,7 +367,7 @@ import 'aos/dist/aos.css';
 
 // Impor composables dan services yang sudah di-refactor
 import { useBeritaData } from '../../composables/useBeritaData';
-import { useBeritaCarousel } from '../../composables/useBeritaCarousel';
+
 import { formatDate } from '../../services/dateFormatter';
 import { truncateText } from '../../composables/textFormatter';
 import { getImageSrc } from '../../composables/imageService';

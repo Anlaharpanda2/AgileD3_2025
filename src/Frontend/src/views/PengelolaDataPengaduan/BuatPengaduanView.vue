@@ -1,15 +1,27 @@
 <template>
-  <Layout>
+  <SimpleLayout>
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
       <div class="max-w-4xl mx-auto">
         <!-- Header Section -->
         <div class="text-center mb-8">
           <div class="inline-flex items-center justify-center w-16 h-16 bg-pink-500 rounded-full mb-4">
-            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            <svg
+              class="w-8 h-8 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
             </svg>
           </div>
-          <h1 class="text-3xl font-bold text-gray-800 mb-2">Formulir Pengaduan Masyarakat</h1>
+          <h1 class="text-3xl font-bold text-gray-800 mb-2">
+            Formulir Pengaduan Masyarakat
+          </h1>
           <p class="text-gray-600 max-w-2xl mx-auto">
             Sampaikan laporan Anda dengan lengkap dan jelas. Tim kami akan menindaklanjuti setiap pengaduan yang masuk.
           </p>
@@ -20,8 +32,18 @@
           <!-- Form Header -->
           <div class="bg-gradient-to-r from-pink-500 to-pink-600 px-8 py-6">
             <h2 class="text-xl font-semibold text-white flex items-center">
-              <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+              <svg
+                class="w-6 h-6 mr-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                />
               </svg>
               Data Pengaduan
             </h2>
@@ -30,24 +52,41 @@
           <!-- Form Body -->
           <div class="p-8">
             <el-form
+              ref="formRef"
               :model="form"
               :rules="rules"
-              ref="formRef"
               label-position="top"
               class="space-y-6"
             >
               <!-- Informasi Pelapor Section -->
               <div class="bg-gray-50 rounded-xl p-6 border-l-4 border-pink-500">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                  <svg class="w-5 h-5 mr-2 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                  <svg
+                    class="w-5 h-5 mr-2 text-pink-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
                   </svg>
                   Informasi Pelapor
                 </h3>
                 
                 <el-row :gutter="20">
-                  <el-col :span="24" :md="12">
-                    <el-form-item label="Nama Pelapor" prop="nama_pelapor" required>
+                  <el-col
+                    :span="24"
+                    :md="12"
+                  >
+                    <el-form-item
+                      label="Nama Pelapor"
+                      prop="nama_pelapor"
+                      required
+                    >
                       <el-input 
                         v-model="form.nama_pelapor" 
                         placeholder="Masukkan nama lengkap Anda"
@@ -56,8 +95,14 @@
                       />
                     </el-form-item>
                   </el-col>
-                  <el-col :span="24" :md="12">
-                    <el-form-item label="Nomor HP" prop="no_hp">
+                  <el-col
+                    :span="24"
+                    :md="12"
+                  >
+                    <el-form-item
+                      label="Nomor HP"
+                      prop="no_hp"
+                    >
                       <el-input 
                         v-model="form.no_hp" 
                         placeholder="Contoh: 08123456789"
@@ -67,7 +112,10 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="24">
-                    <el-form-item label="Alamat Pelapor" prop="alamat">
+                    <el-form-item
+                      label="Alamat Pelapor"
+                      prop="alamat"
+                    >
                       <el-input 
                         v-model="form.alamat" 
                         type="textarea" 
@@ -83,15 +131,31 @@
               <!-- Detail Kejadian Section -->
               <div class="bg-gray-50 rounded-xl p-6 border-l-4 border-pink-500">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                  <svg class="w-5 h-5 mr-2 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                  <svg
+                    class="w-5 h-5 mr-2 text-pink-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                    />
                   </svg>
                   Detail Kejadian
                 </h3>
                 
                 <el-row :gutter="20">
-                  <el-col :span="24" :md="12">
-                    <el-form-item label="Nama Korban" prop="nama_korban">
+                  <el-col
+                    :span="24"
+                    :md="12"
+                  >
+                    <el-form-item
+                      label="Nama Korban"
+                      prop="nama_korban"
+                    >
                       <el-input 
                         v-model="form.nama_korban" 
                         placeholder="Nama korban (jika ada)"
@@ -100,8 +164,14 @@
                       />
                     </el-form-item>
                   </el-col>
-                  <el-col :span="24" :md="12">
-                    <el-form-item label="Jenis Kasus" prop="kasus">
+                  <el-col
+                    :span="24"
+                    :md="12"
+                  >
+                    <el-form-item
+                      label="Jenis Kasus"
+                      prop="kasus"
+                    >
                       <el-input 
                         v-model="form.kasus" 
                         placeholder="Contoh: Kekerasan, KDRT, dll"
@@ -110,8 +180,14 @@
                       />
                     </el-form-item>
                   </el-col>
-                  <el-col :span="24" :md="12">
-                    <el-form-item label="Waktu Kejadian" prop="waktu_kejadian">
+                  <el-col
+                    :span="24"
+                    :md="12"
+                  >
+                    <el-form-item
+                      label="Waktu Kejadian"
+                      prop="waktu_kejadian"
+                    >
                       <el-date-picker
                         v-model="form.waktu_kejadian"
                         type="datetime"
@@ -122,8 +198,14 @@
                       />
                     </el-form-item>
                   </el-col>
-                  <el-col :span="24" :md="12">
-                    <el-form-item label="Nama Saksi" prop="saksi">
+                  <el-col
+                    :span="24"
+                    :md="12"
+                  >
+                    <el-form-item
+                      label="Nama Saksi"
+                      prop="saksi"
+                    >
                       <el-input 
                         v-model="form.saksi" 
                         placeholder="Nama saksi (jika ada)"
@@ -133,7 +215,11 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="24">
-                    <el-form-item label="Deskripsi Kejadian" prop="deskripsi" required>
+                    <el-form-item
+                      label="Deskripsi Kejadian"
+                      prop="deskripsi"
+                      required
+                    >
                       <el-input 
                         v-model="form.deskripsi" 
                         type="textarea" 
@@ -149,32 +235,77 @@
               <!-- Lampiran Section -->
               <div class="bg-gray-50 rounded-xl p-6 border-l-4 border-pink-500">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                  <svg class="w-5 h-5 mr-2 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+                  <svg
+                    class="w-5 h-5 mr-2 text-pink-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+                    />
                   </svg>
                   Lampiran Bukti
                 </h3>
                 
-                <el-form-item label="Upload File" prop="lampiran">
+                <el-form-item
+                  label="Upload File"
+                  prop="lampiran"
+                >
                   <div class="w-full">
                     <div class="flex items-center justify-center w-full">
-                      <label for="file-upload" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-gray-50 transition-colors duration-200">
+                      <label
+                        for="file-upload"
+                        class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-gray-50 transition-colors duration-200"
+                      >
                         <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                          <svg class="w-8 h-8 mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                          <svg
+                            class="w-8 h-8 mb-4 text-gray-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                            />
                           </svg>
                           <p class="mb-2 text-sm text-gray-500">
                             <span class="font-semibold">Klik untuk upload</span> atau drag & drop
                           </p>
                           <p class="text-xs text-gray-500">PNG, JPG, PDF (MAX. 10MB)</p>
                         </div>
-                        <input id="file-upload" type="file" class="hidden" @change="onFileChange" accept="image/*,.pdf" />
+                        <input
+                          id="file-upload"
+                          type="file"
+                          class="hidden"
+                          accept="image/*,.pdf"
+                          @change="onFileChange"
+                        >
                       </label>
                     </div>
-                    <div v-if="form.lampiran" class="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <div
+                      v-if="form.lampiran"
+                      class="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg"
+                    >
                       <div class="flex items-center">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        <svg
+                          class="w-5 h-5 text-green-500 mr-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
                         </svg>
                         <span class="text-sm text-green-700">{{ form.lampiran.name }}</span>
                       </div>
@@ -187,26 +318,63 @@
               <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
                 <button
                   type="button"
-                  @click="resetForm"
                   class="flex-1 sm:flex-none px-8 py-3 bg-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-300 transition-colors duration-200 flex items-center justify-center"
+                  @click="resetForm"
                 >
-                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                  <svg
+                    class="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    />
                   </svg>
                   Reset Form
                 </button>
                 <button
                   type="button"
-                  @click="submitForm"
                   :disabled="isSubmitting"
                   class="flex-1 px-8 py-3 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-xl font-medium hover:from-pink-600 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center shadow-lg hover:shadow-xl"
+                  @click="submitForm"
                 >
-                  <svg v-if="!isSubmitting" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                  <svg
+                    v-if="!isSubmitting"
+                    class="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                    />
                   </svg>
-                  <svg v-else class="animate-spin w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  <svg
+                    v-else
+                    class="animate-spin w-5 h-5 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      class="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"
+                    />
+                    <path
+                      class="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
                   </svg>
                   {{ isSubmitting ? 'Mengirim...' : 'Kirim Pengaduan' }}
                 </button>
@@ -216,23 +384,40 @@
         </div>
 
         <!-- Success Message -->
-        <div v-if="showSuccessMessage" class="mt-8 bg-green-50 border border-green-200 rounded-xl p-6 text-center">
+        <div
+          v-if="showSuccessMessage"
+          class="mt-8 bg-green-50 border border-green-200 rounded-xl p-6 text-center"
+        >
           <div class="inline-flex items-center justify-center w-12 h-12 bg-green-500 rounded-full mb-4">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            <svg
+              class="w-6 h-6 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
             </svg>
           </div>
-          <h3 class="text-lg font-semibold text-green-800 mb-2">Pengaduan Berhasil Dikirim!</h3>
-          <p class="text-green-600">Tim kami akan segera menindaklanjuti laporan Anda. Terima kasih atas partisipasi Anda.</p>
+          <h3 class="text-lg font-semibold text-green-800 mb-2">
+            Pengaduan Berhasil Dikirim!
+          </h3>
+          <p class="text-green-600">
+            Tim kami akan segera menindaklanjuti laporan Anda. Terima kasih atas partisipasi Anda.
+          </p>
         </div>
       </div>
     </div>
-  </Layout>
+  </SimpleLayout>
 </template>
 
 <script setup>
 import { reactive, ref } from 'vue'
-import Layout from '../../layouts/Layout.vue'
+import SimpleLayout from '../../layouts/SimpleLayout.vue'
 import api from '../../api.js'
 import { ElNotification } from 'element-plus'
 import { useRouter } from 'vue-router'

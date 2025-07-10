@@ -1,31 +1,63 @@
 <template>
-  <div class="fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 p-4" @click.self="$emit('close')">
-    <transition name="modal" appear>
+  <div
+    class="fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+    @click.self="$emit('close')"
+  >
+    <transition
+      name="modal"
+      appear
+    >
       <div class="bg-white rounded-xl shadow-2xl max-w-5xl w-full max-h-[95vh] flex flex-col overflow-hidden">
         <!-- Header -->
-        <div class="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700
- px-6 py-4 sm:px-8 sm:py-6 rounded-t-xl">
+        <div
+          class="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700
+ px-6 py-4 sm:px-8 sm:py-6 rounded-t-xl"
+        >
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
               <div class="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
                 <!-- Icon for header -->
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                <svg
+                  class="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
                 </svg>
               </div>
               <div>
-                <h2 class="text-xl sm:text-2xl font-bold text-white">Edit Data Fasilitas</h2>
-                <p class="text-pink-100 text-xs sm:text-sm">Perbarui informasi fasilitas</p>
+                <h2 class="text-xl sm:text-2xl font-bold text-white">
+                  Edit Data Fasilitas
+                </h2>
+                <p class="text-pink-100 text-xs sm:text-sm">
+                  Perbarui informasi fasilitas
+                </p>
               </div>
             </div>
             <button
-              @click="$emit('close')"
               class="p-2 hover:bg-white/20 rounded-lg transition-colors duration-200"
               aria-label="Tutup"
+              @click="$emit('close')"
             >
               <!-- Close icon -->
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              <svg
+                class="w-6 h-6 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>
@@ -34,9 +66,9 @@
         <!-- Form Body -->
         <div class="flex-grow overflow-y-auto p-6 sm:p-8">
           <el-form
+            ref="formRef"
             :model="form"
             :rules="rules"
-            ref="formRef"
             label-position="top"
             class="space-y-6"
           >
@@ -45,14 +77,29 @@
               <div class="flex items-center space-x-3 mb-5">
                 <div class="p-2 bg-pink-100 rounded-lg">
                   <!-- Fasilitas info icon -->
-                  <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  <svg
+                    class="w-5 h-5 text-pink-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
                   </svg>
                 </div>
-                <h3 class="text-base sm:text-lg font-semibold text-gray-800">Informasi Fasilitas</h3>
+                <h3 class="text-base sm:text-lg font-semibold text-gray-800">
+                  Informasi Fasilitas
+                </h3>
               </div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                <el-form-item label="Nama Fasilitas" prop="nama_fasilitas">
+                <el-form-item
+                  label="Nama Fasilitas"
+                  prop="nama_fasilitas"
+                >
                   <el-input
                     v-model="form.nama_fasilitas"
                     placeholder="Masukkan nama fasilitas"
@@ -60,14 +107,27 @@
                     class="modern-input"
                   >
                     <template #prefix>
-                      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                      <svg
+                        class="w-4 h-4 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
                       </svg>
                     </template>
                   </el-input>
                 </el-form-item>
                 
-                <el-form-item label="Kategori" prop="kategori">
+                <el-form-item
+                  label="Kategori"
+                  prop="kategori"
+                >
                   <el-input
                     v-model="form.kategori"
                     placeholder="Contoh: Ruangan, Peralatan"
@@ -75,15 +135,28 @@
                     class="modern-input"
                   >
                     <template #prefix>
-                      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                      <svg
+                        class="w-4 h-4 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
                       </svg>
                     </template>
                   </el-input>
                 </el-form-item>
                 
                 
-                <el-form-item label="Status" prop="status">
+                <el-form-item
+                  label="Status"
+                  prop="status"
+                >
                   <el-select
                     v-model="form.status"
                     placeholder="Pilih status"
@@ -100,7 +173,11 @@
                   </el-select>
                 </el-form-item>
               </div>
-              <el-form-item label="Deskripsi" prop="deskripsi" class="mt-4">
+              <el-form-item
+                label="Deskripsi"
+                prop="deskripsi"
+                class="mt-4"
+              >
                 <el-input
                   v-model="form.deskripsi"
                   type="textarea"
@@ -109,46 +186,79 @@
                   class="modern-textarea"
                 />
               </el-form-item>
-              <el-form-item label="Jumlah" prop="jumlah">
-                  <el-input
-                    v-model="form.jumlah"
-                    type="number"
-                    placeholder="Masukkan jumlah fasilitas"
-                    size="large"
-                    class="modern-input"
-                  >
-                    <template #prefix>
-                      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/>
-                      </svg>
-                    </template>
-                  </el-input>
-                </el-form-item>
+              <el-form-item
+                label="Jumlah"
+                prop="jumlah"
+              >
+                <el-input
+                  v-model="form.jumlah"
+                  type="number"
+                  placeholder="Masukkan jumlah fasilitas"
+                  size="large"
+                  class="modern-input"
+                >
+                  <template #prefix>
+                    <svg
+                      class="w-4 h-4 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
+                      />
+                    </svg>
+                  </template>
+                </el-input>
+              </el-form-item>
             </div>
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 justify-end pt-6 border-t border-gray-200">
               <button
-                @click="$emit('close')"
                 type="button"
                 class="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-xl font-medium hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 shadow-sm"
+                @click="$emit('close')"
               >
                 <div class="flex items-center justify-center space-x-2">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                   <span>Batal</span>
                 </div>
               </button>
               <button
-                @click="submitForm"
                 type="button"
                 class="px-6 py-3 bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700
  text-white rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                @click="submitForm"
               >
                 <div class="flex items-center justify-center space-x-2">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                   <span>Simpan Perubahan</span>
                 </div>
@@ -160,6 +270,127 @@
     </transition>
   </div>
 </template>
+
+<script setup lang="ts">
+import { reactive, ref, watch } from 'vue';
+import { ElNotification, FormItemRule } from 'element-plus';
+import api from '../../api.js'; // Pastikan path ini benar
+
+const props = defineProps({
+  initialData: Object,
+});
+
+const emit = defineEmits(['close']);
+
+const formRef = ref(null);
+const statusOptions = ['tersedia', 'tidak tersedia', 'dalam perbaikan'];
+
+// Form fields definition
+
+
+// Reactive form state
+const form = reactive({
+  id: null,
+  nama_fasilitas: '',
+  deskripsi: '',
+  kategori: '',
+  jumlah: null,
+  status: '',
+});
+
+// Function to apply initial data to the form
+ 
+const applyInitialData = (data: Record<string, unknown>) => {
+  if (data) {
+    form.id = data.id || null;
+    Object.assign(form, data);
+    if (form.jumlah !== null && typeof form.jumlah === 'string') {
+      form.jumlah = Number(form.jumlah);
+    }
+  }
+};
+
+// Watcher for initialData prop changes
+watch(() => props.initialData, (newVal) => {
+  applyInitialData(newVal);
+}, { deep: true, immediate: true });
+
+// Form validation rules
+const rules = {
+  nama_fasilitas: [{ required: true, message: 'Nama fasilitas wajib diisi', trigger: 'blur' }],
+  deskripsi: [{ required: true, message: 'Deskripsi wajib diisi', trigger: 'blur' }],
+  kategori: [{ required: true, message: 'Kategori wajib diisi', trigger: 'blur' }],
+  jumlah: [
+    { required: true, message: 'Jumlah wajib diisi', trigger: 'change' },
+    {
+       
+      validator: (rule: unknown, value: unknown, callback: (error?: Error) => void) => {
+        const number = Number(value);
+        if (value === '' || value === null || value === undefined) {
+          callback(new Error('Jumlah wajib diisi'));
+        } else if (isNaN(number)) {
+          callback(new Error('Jumlah harus berupa angka'));
+        } else if (number <= 0) {
+          callback(new Error('Jumlah harus lebih besar dari 0'));
+        } else {
+          callback();
+        }
+      },
+      trigger: 'blur',
+    },
+  ],
+  status: [{ required: true, message: 'Status wajib diisi', trigger: 'change' }],
+};
+
+// Helper function to capitalize strings
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+// Form submission logic
+const submitForm = () => {
+  formRef.value.validate(async (isValid: boolean, // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  invalidFields?: Record<string, FormItemRule[]>) => {
+    if (!isValid) {
+      ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });
+      return;
+    }
+
+    const payload = {
+      ...form,
+      jumlah: Number(form.jumlah),
+    };
+
+    try {
+      const response = await api.put(`/kelola/fasilitas/${form.id}`, payload);
+      const successMessage = (response && response.data && response.data.message) || 'Data berhasil diupdate!';
+        ElNotification({
+          title: 'Berhasil',
+          message: successMessage,
+          type: 'success',
+          duration: 3000,
+        });
+        emit('close');
+        window.location.reload();
+     
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      let errorMessage = 'Gagal memperbarui data. Terjadi kesalahan jaringan atau server.';
+      if (error instanceof Error) {
+        if ('response' in error && error.response && typeof error.response === 'object' && 'data' in error.response && error.response.data && typeof error.response.data === 'object' && 'message' in error.response.data) {
+          errorMessage = error.response.data.message;
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      ElNotification({
+        title: 'Gagal',
+        message: errorMessage,
+        type: 'error',
+        duration: 0,
+      });
+    }
+  });
+};
+</script>
 
 <style scoped>
 /* Modal Transition */
@@ -229,124 +460,3 @@
   width: 100%;
 }
 </style>
-
-<script setup lang="ts">
-import { reactive, ref, watch } from 'vue';
-import { ElNotification } from 'element-plus';
-import api from '../../api.js'; // Pastikan path ini benar
-
-const props = defineProps({
-  initialData: Object,
-});
-
-const emit = defineEmits(['close']);
-
-const formRef = ref(null);
-const statusOptions = ['tersedia', 'tidak tersedia', 'dalam perbaikan'];
-
-// Form fields definition
-const fields = [
-  { key: 'nama_fasilitas', label: 'Nama Fasilitas', component: 'el-input', type: 'text' },
-  { key: 'deskripsi', label: 'Deskripsi', component: 'el-input', type: 'textarea' },
-  { key: 'kategori', label: 'Kategori', component: 'el-input', type: 'text' },
-  { key: 'jumlah', label: 'Jumlah', component: 'el-input', type: 'number' },
-  { key: 'status', label: 'Status', component: 'el-select', type: '' },
-];
-
-// Reactive form state
-const form = reactive({
-  id: null,
-  nama_fasilitas: '',
-  deskripsi: '',
-  kategori: '',
-  jumlah: null,
-  status: '',
-});
-
-// Function to apply initial data to the form
-const applyInitialData = (data: any) => {
-  if (data) {
-    form.id = data.id || null;
-    Object.assign(form, data);
-    if (form.jumlah !== null && typeof form.jumlah === 'string') {
-      form.jumlah = Number(form.jumlah);
-    }
-  }
-};
-
-// Watcher for initialData prop changes
-watch(() => props.initialData, (newVal) => {
-  applyInitialData(newVal);
-}, { deep: true, immediate: true });
-
-// Form validation rules
-const rules = {
-  nama_fasilitas: [{ required: true, message: 'Nama fasilitas wajib diisi', trigger: 'blur' }],
-  deskripsi: [{ required: true, message: 'Deskripsi wajib diisi', trigger: 'blur' }],
-  kategori: [{ required: true, message: 'Kategori wajib diisi', trigger: 'blur' }],
-  jumlah: [
-    { required: true, message: 'Jumlah wajib diisi', trigger: 'change' },
-    {
-      validator: (rule: any, value: any, callback: any) => {
-        const number = Number(value);
-        if (value === '' || value === null || value === undefined) {
-          callback(new Error('Jumlah wajib diisi'));
-        } else if (isNaN(number)) {
-          callback(new Error('Jumlah harus berupa angka'));
-        } else if (number <= 0) {
-          callback(new Error('Jumlah harus lebih besar dari 0'));
-        } else {
-          callback();
-        }
-      },
-      trigger: 'blur',
-    },
-  ],
-  status: [{ required: true, message: 'Status wajib diisi', trigger: 'change' }],
-};
-
-// Helper function to capitalize strings
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-
-// Form submission logic
-const submitForm = () => {
-  formRef.value.validate(async (valid: boolean) => {
-    if (!valid) {
-      ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });
-      return;
-    }
-
-    const payload = {
-      ...form,
-      jumlah: Number(form.jumlah),
-    };
-
-    try {
-      const response = await api.put(`/kelola/fasilitas/${form.id}`, payload);
-      const successMessage = (response && response.data && response.data.message) || 'Data berhasil diupdate!';
-        ElNotification({
-          title: 'Berhasil',
-          message: successMessage,
-          type: 'success',
-          duration: 3000,
-        });
-        emit('close');
-        window.location.reload();
-    } catch (error: any) {
-      console.error('Error submitting form:', error);
-      let errorMessage = 'Gagal memperbarui data. Terjadi kesalahan jaringan atau server.';
-      if (error && error.response && error.response.data && error.response.data.message) {
-        errorMessage = error.response.data.message;
-      } else if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-      ElNotification({
-        title: 'Gagal',
-        message: errorMessage,
-        type: 'error',
-        duration: 0,
-      });
-    }
-  });
-};
-</script>

@@ -7,59 +7,154 @@
         </div>
       </template>
 
-      <div v-if="isLoading" class="text-center text-blue-500 mt-8">
-        <p class="text-lg">Memuat data posttest...</p>
+      <div
+        v-if="isLoading"
+        class="text-center text-blue-500 mt-8"
+      >
+        <p class="text-lg">
+          Memuat data posttest...
+        </p>
       </div>
 
-      <div v-else-if="!hasAccess" class="text-center text-red-500 mt-8">
-        <p class="text-lg">Akses ditolak. Anda tidak memiliki izin untuk melihat halaman ini.</p>
-        <el-button type="primary" class="mt-4 bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out" @click="$router.push({ name: 'LoginMasyarakat' })">Kembali ke Login</el-button>
+      <div
+        v-else-if="!hasAccess"
+        class="text-center text-red-500 mt-8"
+      >
+        <p class="text-lg">
+          Akses ditolak. Anda tidak memiliki izin untuk melihat halaman ini.
+        </p>
+        <el-button
+          type="primary"
+          class="mt-4 bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out"
+          @click="$router.push({ name: 'LoginMasyarakat' })"
+        >
+          Kembali ke Login
+        </el-button>
       </div>
 
-      <div v-else-if="isMasyarakat && nikNotFound" class="text-center text-red-500 mt-8">
-        <p class="text-lg">Anda tidak terdaftar sebagai peserta pelatihan atau NIK tidak ditemukan.</p>
-        <el-button type="primary" class="mt-4 bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out" @click="$router.push({ name: 'LoginMasyarakat' })">Kembali ke Login</el-button>
+      <div
+        v-else-if="isMasyarakat && nikNotFound"
+        class="text-center text-red-500 mt-8"
+      >
+        <p class="text-lg">
+          Anda tidak terdaftar sebagai peserta pelatihan atau NIK tidak ditemukan.
+        </p>
+        <el-button
+          type="primary"
+          class="mt-4 bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out"
+          @click="$router.push({ name: 'LoginMasyarakat' })"
+        >
+          Kembali ke Login
+        </el-button>
       </div>
 
-      <div v-else-if="noActivePosttest" class="text-center text-blue-500 mt-8">
-        <p class="text-lg">Saat ini tidak ada posttest yang aktif.</p>
-        <el-button type="primary" class="mt-4 bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out" @click="$router.push('/')">Kembali ke Beranda</el-button>
+      <div
+        v-else-if="noActivePosttest"
+        class="text-center text-blue-500 mt-8"
+      >
+        <p class="text-lg">
+          Saat ini tidak ada posttest yang aktif.
+        </p>
+        <el-button
+          type="primary"
+          class="mt-4 bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out"
+          @click="$router.push('/')"
+        >
+          Kembali ke Beranda
+        </el-button>
       </div>
 
       <div v-else-if="posttest.id">
-        <p class="mb-4 text-gray-700">{{ posttest.description }}</p>
+        <p class="mb-4 text-gray-700">
+          {{ posttest.description }}
+        </p>
 
-        <el-form v-if="!isSubmitted && isMasyarakat" @submit.prevent="submitPosttest">
-          <div v-for="(question) in posttest.questions" :key="question.id" class="border border-gray-200 p-4 mb-4 rounded-lg shadow-sm bg-gray-50 transition-all duration-300 ease-in-out hover:shadow-md">
-            <h4 class="font-medium text-gray-800 mb-3">{{ question.order }}. {{ question.question_text }}</h4>
+        <el-form
+          v-if="!isSubmitted && isMasyarakat"
+          @submit.prevent="submitPosttest"
+        >
+          <div
+            v-for="(question) in posttest.questions"
+            :key="question.id"
+            class="border border-gray-200 p-4 mb-4 rounded-lg shadow-sm bg-gray-50 transition-all duration-300 ease-in-out hover:shadow-md"
+          >
+            <h4 class="font-medium text-gray-800 mb-3">
+              {{ question.order }}. {{ question.question_text }}
+            </h4>
             <el-radio-group v-model="userAnswers[question.id!]">
-              <el-radio value="A" class="el-radio-custom">A. {{ question.option_a }}</el-radio>
-              <el-radio value="B" class="el-radio-custom">B. {{ question.option_b }}</el-radio>
-              <el-radio value="C" class="el-radio-custom">C. {{ question.option_c }}</el-radio>
-              <el-radio value="D" class="el-radio-custom">D. {{ question.option_d }}</el-radio>
+              <el-radio
+                value="A"
+                class="el-radio-custom"
+              >
+                A. {{ question.option_a }}
+              </el-radio>
+              <el-radio
+                value="B"
+                class="el-radio-custom"
+              >
+                B. {{ question.option_b }}
+              </el-radio>
+              <el-radio
+                value="C"
+                class="el-radio-custom"
+              >
+                C. {{ question.option_c }}
+              </el-radio>
+              <el-radio
+                value="D"
+                class="el-radio-custom"
+              >
+                D. {{ question.option_d }}
+              </el-radio>
             </el-radio-group>
           </div>
 
           <div class="mt-8 flex space-x-4">
-            <el-button type="success" @click="submitPosttest" :disabled="isSubmitting" class="bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out">
+            <el-button
+              type="success"
+              :disabled="isSubmitting"
+              class="bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out"
+              @click="submitPosttest"
+            >
               {{ isSubmitting ? 'Menyimpan...' : 'Submit Posttest' }}
             </el-button>
-            <el-button @click="$router.back()" class="bg-gray-200 text-gray-700 hover:bg-gray-300 border-none rounded-md transition-all duration-300 ease-in-out">
+            <el-button
+              class="bg-gray-200 text-gray-700 hover:bg-gray-300 border-none rounded-md transition-all duration-300 ease-in-out"
+              @click="$router.back()"
+            >
               Batal
             </el-button>
           </div>
         </el-form>
 
-        <div v-else-if="isSubmitted && isMasyarakat" class="text-center mt-8 p-6 bg-green-50 rounded-lg shadow-md">
-          <h3 class="text-2xl font-bold text-green-600 mb-2">Anda telah melaksanakan posttest!</h3>
-          <p class="text-lg mt-2 text-gray-700">Skor Anda: <span class="font-bold">{{ score }}%</span></p>
-          <el-button type="primary" class="mt-4 bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out" @click="$router.push('/')">Kembali ke Beranda</el-button>
+        <div
+          v-else-if="isSubmitted && isMasyarakat"
+          class="text-center mt-8 p-6 bg-green-50 rounded-lg shadow-md"
+        >
+          <h3 class="text-2xl font-bold text-green-600 mb-2">
+            Anda telah melaksanakan posttest!
+          </h3>
+          <p class="text-lg mt-2 text-gray-700">
+            Skor Anda: <span class="font-bold">{{ score }}%</span>
+          </p>
+          <el-button
+            type="primary"
+            class="mt-4 bg-pink-500 text-white hover:bg-pink-600 border-none rounded-md transition-all duration-300 ease-in-out"
+            @click="$router.push('/')"
+          >
+            Kembali ke Beranda
+          </el-button>
         </div>
 
-        <PosttestPreview v-else-if="isOperatorOrPegawai" :posttest="posttest" />
-
+        <PosttestPreview
+          v-else-if="isOperatorOrPegawai"
+          :posttest="posttest"
+        />
       </div>
-      <div v-else class="text-center text-gray-500 mt-8">
+      <div
+        v-else
+        class="text-center text-gray-500 mt-8"
+      >
         Memuat posttest...
       </div>
     </el-card>
@@ -69,11 +164,11 @@
 <script setup lang="ts">
 import { ref, onMounted, reactive } from 'vue';
 import PosttestPreview from './PosttestPreview.vue';
-import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import posttestService, { Posttest } from '@/services/posttestService';
+import { AxiosError } from 'axios';
 
-const router = useRouter();
+
 
 const posttest = ref<Posttest>({ id: undefined, title: '', description: '', questions: [] });
 const userAnswers = reactive<{ [key: number]: 'A' | 'B' | 'C' | 'D' | null }>({});
@@ -208,8 +303,8 @@ const submitPosttest = async () => {
     score.value = result.score;
     isSubmitted.value = true;
     ElMessage.success(result.message || 'Posttest berhasil dikirim!');
-  } catch (error: any) {
-    if (error.response && error.response.status === 409) {
+  } catch (error: unknown) {
+    if (error instanceof AxiosError && error.response && error.response.status === 409) {
       ElMessage.warning(error.response.data.message);
     } else {
       ElMessage.error('Gagal mengirim posttest.');

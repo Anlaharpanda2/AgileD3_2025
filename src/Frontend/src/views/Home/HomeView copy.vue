@@ -99,8 +99,8 @@ onMounted(() => {
         <ElMenu
           :default-active="activeIndex"
           mode="horizontal"
-          @select="handleSelect"
           class="navbar-menu"
+          @select="handleSelect"
         >
           <ElMenuItem index="1">
             <ElIcon><House /></ElIcon>
@@ -140,7 +140,10 @@ onMounted(() => {
 
     <!-- Hero Section -->
     <section class="hero-section">
-      <div class="hero-content" data-aos="fade-up">
+      <div
+        class="hero-content"
+        data-aos="fade-up"
+      >
         <h1 class="hero-title">
           Platform Pelatihan Digital 
           <span class="text-accent">Terdepan</span>
@@ -150,26 +153,60 @@ onMounted(() => {
           dalam satu platform yang terintegrasi dan mudah digunakan.
         </p>
         <div class="hero-actions">
-          <ElButton type="primary" size="large" class="cta-button">
+          <ElButton
+            type="primary"
+            size="large"
+            class="cta-button"
+          >
             Mulai Sekarang
-            <ElIcon class="ml-2"><ArrowRight /></ElIcon>
+            <ElIcon class="ml-2">
+              <ArrowRight />
+            </ElIcon>
           </ElButton>
-          <ElButton size="large" class="secondary-button">
+          <ElButton
+            size="large"
+            class="secondary-button"
+          >
             Pelajari Lebih Lanjut
           </ElButton>
         </div>
       </div>
-      <div class="hero-illustration" data-aos="fade-left" data-aos-delay="200">
+      <div
+        class="hero-illustration"
+        data-aos="fade-left"
+        data-aos-delay="200"
+      >
         <div class="floating-card">
-          <ElIcon size="48" color="#ec4899"><Trophy /></ElIcon>
+          <ElIcon
+            size="48"
+            color="#ec4899"
+          >
+            <Trophy />
+          </ElIcon>
           <p>Program Pelatihan</p>
         </div>
-        <div class="floating-card" style="top: 60%; left: 20%;">
-          <ElIcon size="48" color="#ec4899"><DataBoard /></ElIcon>
+        <div
+          class="floating-card"
+          style="top: 60%; left: 20%;"
+        >
+          <ElIcon
+            size="48"
+            color="#ec4899"
+          >
+            <DataBoard />
+          </ElIcon>
           <p>Analytics</p>
         </div>
-        <div class="floating-card" style="top: 20%; right: 10%;">
-          <ElIcon size="48" color="#ec4899"><CircleCheck /></ElIcon>
+        <div
+          class="floating-card"
+          style="top: 20%; right: 10%;"
+        >
+          <ElIcon
+            size="48"
+            color="#ec4899"
+          >
+            <CircleCheck />
+          </ElIcon>
           <p>Evaluasi</p>
         </div>
       </div>
@@ -178,10 +215,19 @@ onMounted(() => {
     <!-- About Section -->
     <section class="about-section">
       <div class="container">
-        <ElRow :gutter="40" align="middle">
-          <ElCol :xs="24" :md="12" data-aos="fade-right">
+        <ElRow
+          :gutter="40"
+          align="middle"
+        >
+          <ElCol
+            :xs="24"
+            :md="12"
+            data-aos="fade-right"
+          >
             <div class="about-content">
-              <h2 class="section-title">Tentang Kami</h2>
+              <h2 class="section-title">
+                Tentang Kami
+              </h2>
               <p class="about-text">
                 Kami adalah platform digital yang berfokus pada pengelolaan program pelatihan 
                 dan pengembangan sumber daya manusia. Dengan teknologi terdepan dan antarmuka 
@@ -204,10 +250,19 @@ onMounted(() => {
               </div>
             </div>
           </ElCol>
-          <ElCol :xs="24" :md="12" data-aos="fade-left">
+          <ElCol
+            :xs="24"
+            :md="12"
+            data-aos="fade-left"
+          >
             <div class="about-illustration">
               <div class="illustration-bg">
-                <ElIcon size="120" color="#ec4899"><DataBoard /></ElIcon>
+                <ElIcon
+                  size="120"
+                  color="#ec4899"
+                >
+                  <DataBoard />
+                </ElIcon>
               </div>
             </div>
           </ElCol>
@@ -218,31 +273,51 @@ onMounted(() => {
     <!-- Services Section -->
     <section class="services-section">
       <div class="container">
-        <div class="section-header" data-aos="fade-up">
-          <h2 class="section-title">Layanan & Fitur Unggulan</h2>
+        <div
+          class="section-header"
+          data-aos="fade-up"
+        >
+          <h2 class="section-title">
+            Layanan & Fitur Unggulan
+          </h2>
           <p class="section-subtitle">
             Dapatkan solusi lengkap untuk kebutuhan pelatihan dan pengembangan tim Anda
           </p>
         </div>
         <ElRow :gutter="24">
           <ElCol 
+            v-for="(service, index) in services" 
+            :key="index" 
             :xs="24" 
             :sm="12" 
-            :lg="6" 
-            v-for="(service, index) in services" 
-            :key="index"
+            :lg="6"
             data-aos="fade-up"
             :data-aos-delay="index * 100"
           >
-            <ElCard class="service-card" shadow="hover">
+            <ElCard
+              class="service-card"
+              shadow="hover"
+            >
               <div class="service-icon">
-                <ElIcon size="40" :component="service.icon" />
+                <ElIcon
+                  size="40"
+                  :component="service.icon"
+                />
               </div>
-              <h3 class="service-title">{{ service.title }}</h3>
-              <p class="service-description">{{ service.description }}</p>
-              <ElButton text class="service-link">
+              <h3 class="service-title">
+                {{ service.title }}
+              </h3>
+              <p class="service-description">
+                {{ service.description }}
+              </p>
+              <ElButton
+                text
+                class="service-link"
+              >
                 Pelajari Lebih Lanjut
-                <ElIcon class="ml-1"><ArrowRight /></ElIcon>
+                <ElIcon class="ml-1">
+                  <ArrowRight />
+                </ElIcon>
               </ElButton>
             </ElCard>
           </ElCol>
@@ -253,27 +328,51 @@ onMounted(() => {
     <!-- Testimonials Section -->
     <section class="testimonials-section">
       <div class="container">
-        <div class="section-header" data-aos="fade-up">
-          <h2 class="section-title">Testimoni Pengguna</h2>
+        <div
+          class="section-header"
+          data-aos="fade-up"
+        >
+          <h2 class="section-title">
+            Testimoni Pengguna
+          </h2>
           <p class="section-subtitle">
             Apa kata mereka yang telah menggunakan platform kami
           </p>
         </div>
-        <div class="testimonials-carousel" data-aos="fade-up" data-aos-delay="200">
-          <ElCarousel height="300px" :autoplay="true" :interval="5000">
-            <ElCarouselItem v-for="(testimonial, index) in testimonials" :key="index">
+        <div
+          class="testimonials-carousel"
+          data-aos="fade-up"
+          data-aos-delay="200"
+        >
+          <ElCarousel
+            height="300px"
+            :autoplay="true"
+            :interval="5000"
+          >
+            <ElCarouselItem
+              v-for="(testimonial, index) in testimonials"
+              :key="index"
+            >
               <div class="testimonial-card">
                 <div class="testimonial-content">
                   <div class="stars">
-                    <ElIcon v-for="i in testimonial.rating" :key="i" color="#fbbf24">
+                    <ElIcon
+                      v-for="i in testimonial.rating"
+                      :key="i"
+                      color="#fbbf24"
+                    >
                       <Star />
                     </ElIcon>
                   </div>
-                  <p class="testimonial-text">"{{ testimonial.content }}"</p>
+                  <p class="testimonial-text">
+                    "{{ testimonial.content }}"
+                  </p>
                   <div class="testimonial-author">
                     <h4>{{ testimonial.name }}</h4>
                     <p>{{ testimonial.role }}</p>
-                    <p class="company">{{ testimonial.company }}</p>
+                    <p class="company">
+                      {{ testimonial.company }}
+                    </p>
                   </div>
                 </div>
               </div>

@@ -1,5 +1,5 @@
 import { ref, Ref } from 'vue';
-import { Pretest, Question } from '@/services/pretestService';
+import { Pretest } from '@/services/pretestService';
 
 export function usePretestForm() {
   const pretestForm: Ref<Pretest> = ref({

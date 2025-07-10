@@ -1,0 +1,39 @@
+Buatlah penjelasan komprehensif mengenai implementasi fitur "Kelola Data Pelatihan" dari backend Laravel 11 hingga frontend Vue 3 + Vite.
+
+Untuk bagian backend Laravel 11, jelaskan peran dan keterkaitan masing-masing file berikut dalam fitur ini:
+
+Model: Bagaimana model Pelatihan merepresentasikan data dan berinteraksi dengan database.
+
+Migration: Struktur tabel pelatihans yang dibuat oleh migrasi.
+
+Seeder: Cara data dummy pelatihan diisi ke dalam database.
+
+Controller: Fungsi-fungsi (index, store, show, update, destroy) di PelatihanController dan bagaimana mereka menangani permintaan API.
+
+API Routes: Bagaimana routes/api.php mendefinisikan endpoint untuk fitur pelatihan.
+
+Untuk bagian frontend Vue 3 + Vite, jelaskan peran dan alur kerja masing-masing file:
+
+Component: Bagaimana sebuah komponen formulir (misalnya, PelatihanForm.vue) digunakan untuk input data.
+
+View: Bagaimana sebuah view (misalnya, PelatihanView.vue) mengelola tampilan daftar, menampilkan formulir, dan berinteraksi dengan API backend (ambil, tambah, edit, hapus data).
+
+Setelah pemahaman tersebut, buatlah panduan langkah demi langkah untuk mengimplementasikan fitur "Kelola Data Konsultasi" hanya di sisi frontend Vue 3 + Vite. Penting untuk diingat bahwa backend Laravel 11 tidak boleh disentuh atau dirubah, karena saya sudah menyediakan API yang relevan di api.php.
+
+Panduan untuk fitur "Kelola Data Konsultasi" di frontend harus mencakup:
+
+Pembuatan komponen baru (misalnya, KonsultasiForm.vue) yang disesuaikan untuk data konsultasi. Jelaskan properti apa saja yang dibutuhkan dan bagaimana data akan di-binding.
+
+Pembuatan view baru (misalnya, KonsultasiView.vue) yang akan menjadi halaman utama. Jelaskan bagaimana view ini akan:
+
+Memanggil API untuk mengambil dan menampilkan data konsultasi.
+
+Menggunakan komponen formulir yang baru dibuat untuk operasi tambah dan edit.
+
+Menangani logika untuk menghapus data konsultasi.
+
+Mengelola state loading, error, dan mode form (tambah/edit).
+
+Integrasi ke dalam router Vue agar view konsultasi dapat diakses.
+
+Panduan ini harus menyoroti kemiripan dan perbedaan antara implementasi "Kelola Data Pelatihan" dan "Kelola Data Konsultasi" di sisi frontend, dengan fokus pada penyesuaian nama variabel, struktur data, dan endpoint API.

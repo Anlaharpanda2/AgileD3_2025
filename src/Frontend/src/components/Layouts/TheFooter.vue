@@ -2,8 +2,8 @@
   <footer class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-300 mt-16 relative overflow-hidden">
     <!-- Background Pattern -->
     <div class="absolute inset-0 opacity-5">
-      <div class="absolute top-0 left-0 w-96 h-96 bg-pink-500 rounded-full filter blur-3xl"></div>
-      <div class="absolute bottom-0 right-0 w-96 h-96 bg-purple-500 rounded-full filter blur-3xl"></div>
+      <div class="absolute top-0 left-0 w-96 h-96 bg-pink-500 rounded-full filter blur-3xl" />
+      <div class="absolute bottom-0 right-0 w-96 h-96 bg-purple-500 rounded-full filter blur-3xl" />
     </div>
     
     <div class="relative max-w-7xl mx-auto px-9 py-16">
@@ -19,7 +19,7 @@
                   alt="DP3AP2KB Logo" 
                   class="w-10 h-10 object-contain"
                   @error="handleImageError"
-                />
+                >
               </div>
               <h3 class="text-3xl font-black bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
                 DP3AP2KB
@@ -44,7 +44,12 @@
               :class="social.hoverColor"
               class="group relative w-12 h-12 bg-slate-700/80 backdrop-blur-sm rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg border border-slate-600/50"
             >
-              <svg v-html="social.iconSvg" class="w-6 h-6 text-slate-300 group-hover:text-white transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24"></svg>
+              <svg
+                class="w-6 h-6 text-slate-300 group-hover:text-white transition-colors duration-300"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                v-html="social.iconSvg"
+              />
               <div class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
                 {{ social.name }}
               </div>
@@ -54,21 +59,28 @@
 
         <!-- Quick Links -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 lg:col-span-2">
-          <div v-for="column in footerColumns" :key="column.title" class="space-y-6">
+          <div
+            v-for="column in footerColumns"
+            :key="column.title"
+            class="space-y-6"
+          >
             <h4 class="text-white font-bold text-lg mb-6 relative">
               {{ column.title }}
-              <span class="absolute -bottom-1 left-0 w-8 h-1 bg-gradient-to-r from-pink-400 to-purple-400 rounded-full"></span>
+              <span class="absolute -bottom-1 left-0 w-8 h-1 bg-gradient-to-r from-pink-400 to-purple-400 rounded-full" />
             </h4>
             <ul class="space-y-4">
-              <li v-for="link in column.links" :key="link.name">
+              <li
+                v-for="link in column.links"
+                :key="link.name"
+              >
                 <a 
                   :href="link.href"
                   class="text-slate-400 hover:text-pink-300 transition-all duration-300 flex items-center group hover:translate-x-1"
                 >
-                  <div class="w-1.5 h-1.5 bg-pink-400 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div class="w-1.5 h-1.5 bg-pink-400 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <span class="relative">
                     {{ link.name }}
-                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-pink-400 transition-all duration-300 group-hover:w-full"></span>
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-pink-400 transition-all duration-300 group-hover:w-full" />
                   </span>
                 </a>
               </li>
@@ -84,8 +96,12 @@
         </p>
         <p class="text-slate-400 text-sm flex items-center">
           Dikembangkan dengan 
-          <svg class="w-4 h-4 mx-2 text-pink-400 animate-pulse" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          <svg
+            class="w-4 h-4 mx-2 text-pink-400 animate-pulse"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
           </svg>
           untuk Indonesia yang lebih baik
         </p>

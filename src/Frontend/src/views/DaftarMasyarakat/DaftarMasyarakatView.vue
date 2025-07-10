@@ -115,62 +115,116 @@ export default {
 <template>
   <div class="coverpage">
     <div class="overlap">
-      <div class="ellipse"></div>
-      <div class="div"></div>
+      <div class="ellipse" />
+      <div class="div" />
       <div class="login">
         <div class="overlap-group">
-          <div class="rectangle"></div>
-          <img class="mask-group" src="https://c.animaapp.com/IJi6pJQY/img/mask-group@2x.png" />
+          <div class="rectangle" />
+          <img
+            class="mask-group"
+            src="https://c.animaapp.com/IJi6pJQY/img/mask-group@2x.png"
+          >
           <div class="group">
-            <img class="thunderbolt" src="https://c.animaapp.com/IJi6pJQY/img/thunderbolt-1@2x.png" />
+            <img
+              class="thunderbolt"
+              src="https://c.animaapp.com/IJi6pJQY/img/thunderbolt-1@2x.png"
+            >
           </div>
-          <div class="keluarga-sejahtera">Keluarga<br />Sejahtera<br />Setara<br />Terlindung</div>
+          <div class="keluarga-sejahtera">
+            Keluarga<br>Sejahtera<br>Setara<br>Terlindung
+          </div>
         </div>
         <div class="overlap-2">
           <div class="group-2">
             <!-- Bagian pesan error/success yang sebelumnya menggunakan errorMessage sekarang dihapus -->
-            <div class="masuk">DAFTAR</div> <!-- Diubah dari 'MASUK' ke 'DAFTAR' -->
-            <p class="p">Silahkan Lengkapi Data Diri Anda</p> <!-- Pesan diubah -->
+            <div class="masuk">
+              DAFTAR
+            </div> <!-- Diubah dari 'MASUK' ke 'DAFTAR' -->
+            <p class="p">
+              Silahkan Lengkapi Data Diri Anda
+            </p> <!-- Pesan diubah -->
 
-            <form @submit="submitRegistration" class="form-register">
+            <form
+              class="form-register"
+              @submit="submitRegistration"
+            >
               <!-- Input: Nama Lengkap -->
               <div class="form-group">
                 <div class="overlap-4">
-                  <input type="text" v-model="namaLengkap" class="text-wrapper-3" placeholder="Nama Lengkap"
-                    name="full-name" autocomplete="name" />
-                  <img class="frame" src="https://c.animaapp.com/IJi6pJQY/img/frame-1.svg" /> <!-- Icon untuk nama -->
+                  <input
+                    v-model="namaLengkap"
+                    type="text"
+                    class="text-wrapper-3"
+                    placeholder="Nama Lengkap"
+                    name="full-name"
+                    autocomplete="name"
+                  >
+                  <img
+                    class="frame"
+                    src="https://c.animaapp.com/IJi6pJQY/img/frame-1.svg"
+                  > <!-- Icon untuk nama -->
                 </div>
               </div>
 
               <!-- Input: NIK -->
               <div class="form-group">
                 <div class="overlap-4">
-                  <input type="text" v-model="nik" class="text-wrapper-3" placeholder="NIK" name="id-number"
-                    autocomplete="one-time-code" />
-                  <img class="frame" src="https://c.animaapp.com/IJi6pJQY/img/frame.svg" /> <!-- Icon untuk NIK -->
+                  <input
+                    v-model="nik"
+                    type="text"
+                    class="text-wrapper-3"
+                    placeholder="NIK"
+                    name="id-number"
+                    autocomplete="one-time-code"
+                  >
+                  <img
+                    class="frame"
+                    src="https://c.animaapp.com/IJi6pJQY/img/frame.svg"
+                  > <!-- Icon untuk NIK -->
                 </div>
               </div>
 
               <!-- Input: Tempat Lahir -->
               <div class="form-group">
                 <div class="overlap-4">
-                  <input type="text" v-model="tempatLahir" class="text-wrapper-3" placeholder="Tempat Lahir" />
-                  <img class="frame" src="https://c.animaapp.com/IJi6pJQY/img/frame-1.svg" /> <!-- Icon placeholder -->
+                  <input
+                    v-model="tempatLahir"
+                    type="text"
+                    class="text-wrapper-3"
+                    placeholder="Tempat Lahir"
+                  >
+                  <img
+                    class="frame"
+                    src="https://c.animaapp.com/IJi6pJQY/img/frame-1.svg"
+                  > <!-- Icon placeholder -->
                 </div>
               </div>
 
               <!-- Input: Tanggal Lahir -->
               <div class="form-group">
                 <div class="overlap-4">
-                  <input type="date" v-model="tanggalLahir" class="text-wrapper-3" placeholder="Tanggal Lahir" />
-                  <img class="frame" src="https://c.animaapp.com/IJi6pJQY/img/frame.svg" /> <!-- Icon placeholder, bisa diganti icon kalender -->
+                  <input
+                    v-model="tanggalLahir"
+                    type="date"
+                    class="text-wrapper-3"
+                    placeholder="Tanggal Lahir"
+                  >
+                  <img
+                    class="frame"
+                    src="https://c.animaapp.com/IJi6pJQY/img/frame.svg"
+                  > <!-- Icon placeholder, bisa diganti icon kalender -->
                 </div>
               </div>
 
               <!-- Tombol Daftar -->
               <div class="group-7-register">
-                <button type="submit" class="btn overlap-5 btn-gradient">
-                  <div class="text-wrapper-4">Daftar</div> <!-- Teks tombol diubah -->
+                <button
+                  type="submit"
+                  class="btn overlap-5 btn-gradient"
+                >
+                  <div class="text-wrapper-4">
+                    Daftar
+                  </div> <!-- Teks tombol diubah -->
                 </button>
               </div>
             </form>

@@ -1,10 +1,10 @@
 <template>
-  <Layout2>
+  <SimpleLayout>
     <PosttestFormBuilder />
-  </Layout2>
+  </SimpleLayout>
 </template>
 
 <script setup lang="ts">
 import PosttestFormBuilder from '@/components/KelolaDataTest/PosttestFormBuilder.vue';
-import Layout2 from '@/layouts/Layout2.vue';
+import SimpleLayout from '@/layouts/SimpleLayout.vue';
 </script>

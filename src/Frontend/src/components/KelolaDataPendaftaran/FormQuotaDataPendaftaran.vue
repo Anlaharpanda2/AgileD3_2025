@@ -1,20 +1,26 @@
 <template>
-  <div v-if="visible" class="fixed inset-0 z-50 flex items-center justify-center">
+  <div
+    v-if="visible"
+    class="fixed inset-0 z-50 flex items-center justify-center"
+  >
     <!-- Overlay with immediate dark background -->
     <div 
       class="absolute inset-0 bg-black/50 backdrop-blur-sm" 
       @click.self="closeForm"
-    ></div>
+    />
     
     <!-- Modal Container with separate transition -->
-    <transition name="modal" appear>
+    <transition
+      name="modal"
+      appear
+    >
       <div class="relative z-10 w-full max-w-md mx-4">
         <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
           <!-- Header -->
           <div class="relative bg-gradient-to-r from-pink-50 to-white p-6 border-b border-gray-100">
             <button 
-              @click="closeForm" 
-              class="absolute top-4 right-4 p-2 text-gray-400 hover:text-pink-500 hover:bg-pink-50 rounded-full transition-all duration-200 group"
+              class="absolute top-4 right-4 p-2 text-gray-400 hover:text-pink-500 hover:bg-pink-50 rounded-full transition-all duration-200 group" 
+              @click="closeForm"
             >
               <X class="w-5 h-5 group-hover:rotate-90 transition-transform duration-200" />
             </button>
@@ -24,8 +30,12 @@
                 <Settings class="w-6 h-6 text-pink-600" />
               </div>
               <div>
-                <h2 class="text-xl font-bold text-gray-800">Pengaturan Kuota</h2>
-                <p class="text-sm text-gray-500 mt-1">Kelola kuota pendaftaran</p>
+                <h2 class="text-xl font-bold text-gray-800">
+                  Pengaturan Kuota
+                </h2>
+                <p class="text-sm text-gray-500 mt-1">
+                  Kelola kuota pendaftaran
+                </p>
               </div>
             </div>
           </div>
@@ -39,20 +49,22 @@
               </label>
               <div class="flex items-center justify-between bg-gray-50 rounded-xl p-4">
                 <div class="flex items-center space-x-3">
-                  <div :class="[
-                    'w-3 h-3 rounded-full transition-colors duration-200',
-                    form.status ? 'bg-green-400' : 'bg-gray-300'
-                  ]"></div>
+                  <div
+                    :class="[
+                      'w-3 h-3 rounded-full transition-colors duration-200',
+                      form.status ? 'bg-green-400' : 'bg-gray-300'
+                    ]"
+                  />
                   <span class="text-sm font-medium text-gray-700">
                     {{ form.status ? 'Pendaftaran Dibuka' : 'Pendaftaran Ditutup' }}
                   </span>
                 </div>
                 <button
-                  @click="toggleStatus"
                   :class="[
                     'relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2',
                     form.status ? 'bg-pink-500' : 'bg-gray-300'
                   ]"
+                  @click="toggleStatus"
                 >
                   <span
                     :class="[
@@ -77,17 +89,17 @@
                   max="9999"
                   class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200 bg-white text-gray-800"
                   placeholder="Masukkan jumlah kuota"
-                />
+                >
                 <div class="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col">
                   <button
-                    @click="incrementQuota"
                     class="text-gray-400 hover:text-pink-500 transition-colors duration-200"
+                    @click="incrementQuota"
                   >
                     <ChevronUp class="w-4 h-4" />
                   </button>
                   <button
-                    @click="decrementQuota"
                     class="text-gray-400 hover:text-pink-500 transition-colors duration-200"
+                    @click="decrementQuota"
                   >
                     <ChevronDown class="w-4 h-4" />
                   </button>
@@ -113,15 +125,24 @@
             </div>
 
             <!-- Message -->
-            <div v-if="message" :class="[
-              'p-4 rounded-xl border text-sm font-medium',
-              messageType === 'success' 
-                ? 'bg-green-50 border-green-200 text-green-700' 
-                : 'bg-red-50 border-red-200 text-red-700'
-            ]">
+            <div
+              v-if="message"
+              :class="[
+                'p-4 rounded-xl border text-sm font-medium',
+                messageType === 'success' 
+                  ? 'bg-green-50 border-green-200 text-green-700' 
+                  : 'bg-red-50 border-red-200 text-red-700'
+              ]"
+            >
               <div class="flex items-center space-x-2">
-                <CheckCircle v-if="messageType === 'success'" class="w-4 h-4" />
-                <AlertCircle v-else class="w-4 h-4" />
+                <CheckCircle
+                  v-if="messageType === 'success'"
+                  class="w-4 h-4"
+                />
+                <AlertCircle
+                  v-else
+                  class="w-4 h-4"
+                />
                 <span>{{ message }}</span>
               </div>
             </div>
@@ -131,19 +152,25 @@
           <div class="bg-gray-50 px-6 py-4 border-t border-gray-100">
             <div class="flex space-x-3">
               <button
-                @click="cancelChanges"
                 class="flex-1 px-4 py-2.5 text-sm font-semibold text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200"
+                @click="cancelChanges"
               >
                 Batal
               </button>
               <button
-                @click="applyChanges"
                 :disabled="isLoading"
                 class="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl hover:from-pink-600 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl"
+                @click="applyChanges"
               >
                 <div class="flex items-center justify-center space-x-2">
-                  <Loader2 v-if="isLoading" class="w-4 h-4 animate-spin" />
-                  <Save v-else class="w-4 h-4" />
+                  <Loader2
+                    v-if="isLoading"
+                    class="w-4 h-4 animate-spin"
+                  />
+                  <Save
+                    v-else
+                    class="w-4 h-4"
+                  />
                   <span>{{ isLoading ? 'Menyimpan...' : 'Simpan Perubahan' }}</span>
                 </div>
               </button>

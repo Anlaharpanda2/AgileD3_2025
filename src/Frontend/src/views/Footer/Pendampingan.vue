@@ -1,5 +1,5 @@
 <template>
-  <layout2>
+  <SimpleLayout>
     <div>
       <h1 class="p-5 text-2xl font-bold">
         Layanan Pendampingan
@@ -59,9 +59,13 @@
         🚨 Jika Anda atau seseorang yang Anda kenal sedang berada dalam situasi darurat, segera hubungi pihak berwajib atau layanan darurat terdekat.
       </p>
     </div>
-  </layout2>
+  </SimpleLayout>
 </template>
 
 <script setup>
-import layout2 from '../../layouts/Layout2.vue';
+import SimpleLayout from '../../layouts/SimpleLayout.vue';
+
+defineOptions({
+  name: 'PendampinganPage'
+});
 </script>

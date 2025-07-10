@@ -19,7 +19,7 @@ export const loadLeaflet = (): Promise<typeof import('leaflet')> => {
         const DefaultIcon = window.L.Icon.Default;
 
         // Paksa akses _getIconUrl dengan casting ke any
-        const prototypeAny = DefaultIcon.prototype as any;
+        const prototypeAny = DefaultIcon.prototype as { _getIconUrl?: unknown };
 
         if (typeof prototypeAny._getIconUrl !== 'undefined') {
         delete prototypeAny._getIconUrl;

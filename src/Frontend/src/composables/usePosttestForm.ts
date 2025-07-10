@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import { Posttest, Question } from '@/services/posttestService';
+import { Posttest } from '@/services/posttestService';
 
 export function usePosttestForm() {
   const posttestForm = ref<Posttest>({

@@ -1,5 +1,5 @@
 <template>
-  <layout2>
+  <SimpleLayout>
     <div>
       <h1 class="p-5 text-2xl font-bold">
         Feedback
@@ -12,9 +12,13 @@
         Setiap masukan akan kami gunakan untuk meningkatkan layanan publik yang lebih ramah dan efisien.
       </p>
     </div>
-  </layout2>
+  </SimpleLayout>
 </template>
 
 <script setup>
-import layout2 from '../../layouts/Layout2.vue';
+import SimpleLayout from '../../layouts/SimpleLayout.vue';
+
+defineOptions({
+  name: 'FeedbackPage'
+});
 </script>

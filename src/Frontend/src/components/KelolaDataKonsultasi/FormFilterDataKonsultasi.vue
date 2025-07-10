@@ -1,59 +1,195 @@
 <template>
   <Transition name="dialog-fade">
-    <div v-if="localDialogVisible" class="filter-dialog-overlay" @click.self="handleClose">
-      <div class="filter-dialog">
-        <div class="my-header">
-          <h4>
-            <i class="fa-solid fa-filter dialog-icon"></i>
-            Filter Data Konsultasi
-          </h4>
-          <el-button class="el-button--close-custom" circle :icon="Close" @click="handleClose" />
-        </div>
-        <div class="scrollable-form-container">
-          <div class="filter-section filter-selection">
-            <h3 class="section-title">Pilih Kolom untuk Filter:</h3>
-            <el-checkbox-group v-model="localSelectedColumns" class="column-checkboxes">
-              <el-checkbox
-                v-for="col in columns"
-                :key="col"
-                :label="col"
-                :value="col"
-                size="large"
-                border
-                class="column-checkbox"
-              >
-                <span class="column-checkbox-label-text">{{ formatColumnName(col) }}</span>
-              </el-checkbox>
-            </el-checkbox-group>
-          </div>
-          <div class="filter-section filter-inputs" v-if="localSelectedColumns.length > 0">
-            <h3 class="section-title">Masukkan Nilai Filter:</h3>
-            <div
-              v-for="col in localSelectedColumns"
-              :key="col"
-              class="filter-input-item"
+    <div
+      v-if="localDialogVisible"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm p-4"
+      @click.self="handleClose"
+    >
+      <div class="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl shadow-gray-500/10 overflow-hidden transform transition-all duration-300 max-h-[90vh] flex flex-col">
+        <div class="relative bg-gradient-to-r from-pink-50 to-rose-50 border-b border-gray-100">
+          <div class="flex items-center justify-between p-6">
+            <div class="flex items-center space-x-3">
+              <div class="flex items-center justify-center w-10 h-10 bg-pink-100 rounded-full">
+                <IconFilter class="text-pink-600 w-4 h-4" />
+              </div>
+              <div>
+                <h2 class="text-xl font-bold text-gray-800">
+                  Filter Data Konsultasi
+                </h2>
+                <p class="text-sm text-gray-600">
+                  Pilih kolom dan masukkan kriteria filter
+                </p>
+              </div>
+            </div>
+            <button
+              class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all duration-200"
+              @click="handleClose"
             >
-              <el-input
-                v-model="localActiveFilters[col]"
-                :placeholder="`Filter berdasarkan ${formatColumnName(col)}`"
-                clearable
-                size="large"
-                class="styled-input"
+              <IconX class="w-4 h-4" />
+            </button>
+          </div>
+          <div class="absolute bottom-0 left-6 right-6 h-px bg-gradient-to-r from-pink-200 via-pink-300 to-transparent" />
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6 space-y-8">
+          <div class="space-y-4">
+            <div class="flex items-center space-x-2">
+              <div class="w-1 h-6 bg-pink-400 rounded-full" />
+              <h3 class="text-lg font-semibold text-gray-800">
+                Pilih Kolom untuk Filter
+              </h3>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <label
+                v-for="col in filteredColumns"
+                :key="col"
+                class="relative flex items-center p-4 bg-gray-50 hover:bg-pink-50 border border-gray-200 hover:border-pink-200 rounded-xl cursor-pointer transition-all duration-200 group"
+                :class="{ 'bg-pink-50 border-pink-300 shadow-sm': localSelectedColumns.includes(col) }"
               >
-                <template #prepend>
-                  <span class="input-prepend">{{ formatColumnName(col) }}</span>
-                </template>
-              </el-input>
+                <input
+                  v-model="localSelectedColumns"
+                  type="checkbox"
+                  :value="col"
+                  class="sr-only"
+                >
+                <div
+                  class="flex items-center justify-center w-8 h-8 rounded-lg mr-3 transition-all duration-200"
+                  :class="localSelectedColumns.includes(col)
+                    ? 'bg-pink-500 text-white'
+                    : 'bg-gray-200 text-gray-600 group-hover:bg-pink-100 group-hover:text-pink-600'"
+                >
+                  <component
+                    :is="getColumnIcon(col)"
+                    class="w-4 h-4"
+                  />
+                </div>
+                <div
+                  class="flex items-center justify-center w-5 h-5 border-2 rounded-md mr-3 transition-all duration-200"
+                  :class="localSelectedColumns.includes(col)
+                    ? 'bg-pink-500 border-pink-500 text-white'
+                    : 'border-gray-300 group-hover:border-pink-400'"
+                >
+                  <IconCheck
+                    v-if="localSelectedColumns.includes(col)"
+                    class="w-3 h-3"
+                  />
+                </div>
+                <span class="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+                  {{ formatColumnName(col) }}
+                </span>
+                <div
+                  v-if="localSelectedColumns.includes(col)"
+                  class="absolute top-2 right-2 w-2 h-2 bg-pink-400 rounded-full animate-pulse"
+                />
+              </label>
             </div>
           </div>
+
+          <div
+            v-if="localSelectedColumns.length > 0"
+            class="space-y-4"
+          >
+            <div class="flex items-center space-x-2">
+              <div class="w-1 h-6 bg-pink-400 rounded-full" />
+              <h3 class="text-lg font-semibold text-gray-800">
+                Masukkan Nilai Filter
+              </h3>
+              <div class="flex items-center justify-center w-6 h-6 bg-pink-100 text-pink-600 rounded-full text-xs font-bold">
+                {{ localSelectedColumns.length }}
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <div
+                v-for="col in localSelectedColumns"
+                :key="col"
+                class="group"
+              >
+                <div class="relative">
+                  <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                    <div class="flex items-center justify-center w-6 h-6 bg-pink-100 text-pink-600 rounded-md mr-2">
+                      <component
+                        :is="getColumnIcon(col)"
+                        class="w-3 h-3"
+                      />
+                    </div>
+                    {{ formatColumnName(col) }}
+                  </label>
+
+                  <div class="relative">
+                    <input
+                      v-model="localActiveFilters[col]"
+                      type="text"
+                      :placeholder="`Masukkan filter untuk ${formatColumnName(col).toLowerCase()}`"
+                      class="w-full px-4 py-3 pr-10 text-gray-700 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-200 focus:border-pink-400 transition-all duration-200 placeholder-gray-400"
+                    >
+                    <button
+                      v-if="localActiveFilters[col]"
+                      class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                      @click="localActiveFilters[col] = ''"
+                    >
+                      <IconX class="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            v-if="localSelectedColumns.length === 0"
+            class="text-center py-12"
+          >
+            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <IconFilter class="text-gray-400 w-8 h-8" />
+            </div>
+            <h3 class="text-lg font-medium text-gray-600 mb-2">
+              Belum Ada Kolom Dipilih
+            </h3>
+            <p class="text-gray-500">
+              Pilih kolom di atas untuk mulai membuat filter
+            </p>
+          </div>
         </div>
-        <div class="dialog-footer">
-          <el-button @click="handleClearFilters" class="footer-button reset-button" :disabled="isLoading">
-            <i class="fa-solid fa-eraser mr-2"></i>Bersihkan Filter
-          </el-button>
-          <el-button type="primary" @click="handleApplyFilters" class="footer-button apply-button" :loading="isLoading">
-            <i class="fa-solid fa-check-circle mr-2"></i>Terapkan Filter
-          </el-button>
+
+        <div class="border-t border-gray-100 bg-gray-50/50 px-6 py-4">
+          <div class="flex flex-col sm:flex-row gap-3 sm:justify-end">
+            <button
+              :disabled="isLoading"
+              class="inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-700 focus:ring-2 focus:ring-gray-200 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              @click="handleClearFilters"
+            >
+              <IconTrash class="w-4 h-4 mr-2" />
+              Bersihkan Filter
+            </button>
+
+            <button
+              :disabled="isLoading || localSelectedColumns.length === 0"
+              class="inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 rounded-lg focus:ring-2 focus:ring-pink-200 shadow-sm hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
+              @click="handleApplyFilters"
+            >
+              <div
+                v-if="isLoading"
+                class="absolute inset-0 flex items-center justify-center"
+              >
+                <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              </div>
+
+              <span :class="{ 'opacity-0': isLoading }">
+                <IconCheck class="w-4 h-4 mr-2" />
+                Terapkan Filter
+              </span>
+            </button>
+          </div>
+
+          <div
+            v-if="localSelectedColumns.length > 0"
+            class="flex items-center justify-center mt-3 text-xs text-gray-500"
+          >
+            <IconInfo class="w-3 h-3 mr-1" />
+            {{ localSelectedColumns.length }} kolom dipilih untuk filter
+          </div>
         </div>
       </div>
     </div>
@@ -61,8 +197,42 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
-import { Close } from '@element-plus/icons-vue';
+import { ref, watch, computed } from 'vue';
+
+// Import icon components dari lucide-vue-next
+import {
+  Filter as IconFilter,
+  X as IconX,
+  Check as IconCheck,
+  User as IconUser,
+  Mail as IconMail,
+  Phone as IconPhone,
+  MapPin as IconMapPin,
+  Users as IconUsers,
+  Calendar as IconCalendar,
+  Clock as IconClock,
+  MessageCircle as IconMessageCircle, // Untuk topic dan comment
+  Lightbulb as IconLightbulb,
+  Info as IconInfo,
+  Handshake as IconHandshake,
+  Laptop as IconLaptop,
+  Link as IconLink,
+  DollarSign as IconDollarSign,
+  StarHalf as IconStarHalf, // Untuk rating
+  MessageSquare as IconMessageSquare, // Untuk feedback
+  Plus as IconPlus,
+  Edit as IconEdit,
+  Play as IconPlay,
+  Square as IconSquare,
+  Timer as IconTimer,
+  Hash as IconHash,
+  IdCard as IconIdCard,
+  AlignLeft as IconAlignLeft,
+  StickyNote as IconStickyNote,
+  Type as IconType,
+  Columns as IconColumns,
+  Trash as IconTrash
+} from 'lucide-vue-next';
 
 const props = defineProps<{
   modelValue: boolean;
@@ -70,15 +240,72 @@ const props = defineProps<{
   initialFilters?: { [key: string]: string | number | null };
 }>();
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void;
-  (e: 'update:activeFilters', filters: { [key: string]: string | number | null }): void;
-}>();
+const emit = new Map<string, Function>();
 
 const localDialogVisible = ref(props.modelValue);
 const localSelectedColumns = ref<string[]>([]);
 const localActiveFilters = ref<{ [key: string]: string | number | null }>({});
 const isLoading = ref(false);
+
+// Filter kolom yang tidak diinginkan
+const filteredColumns = computed(() => {
+  const excludedColumns = ['photo', 'deleted_at', 'photo_url'];
+  return props.columns.filter(col =>
+    !excludedColumns.some(excluded =>
+      col.toLowerCase().includes(excluded.toLowerCase())
+    )
+  );
+});
+
+// Mapping icon untuk setiap kolom menggunakan component Lucid-Vue-Next
+const getColumnIcon = (column: string) => {
+  const col = column.toLowerCase();
+
+  // Data pribadi
+  if (col.includes('name') || col.includes('nama')) return IconUser;
+  if (col.includes('email')) return IconMail;
+  if (col.includes('phone') || col.includes('telepon') || col.includes('hp')) return IconPhone;
+  if (col.includes('address') || col.includes('alamat')) return IconMapPin;
+  if (col.includes('gender') || col.includes('jenis_kelamin')) return IconUsers;
+  if (col.includes('birth') || col.includes('lahir') || col.includes('tanggal_lahir')) return IconCalendar;
+  if (col.includes('age') || col.includes('umur')) return IconClock;
+
+  // Konsultasi
+  if (col.includes('topic') || col.includes('topik')) return IconMessageCircle;
+  if (col.includes('type') || col.includes('tipe') || col.includes('jenis')) return IconLightbulb;
+  if (col.includes('status')) return IconInfo;
+  if (col.includes('mode') || col.includes('metode')) return IconHandshake;
+  if (col.includes('platform')) return IconLaptop;
+  if (col.includes('link')) return IconLink;
+  if (col.includes('price') || col.includes('biaya')) return IconDollarSign;
+  if (col.includes('rating')) return IconStarHalf;
+  if (col.includes('feedback')) return IconMessageSquare;
+  if (col.includes('schedule') || col.includes('jadwal')) return IconCalendar;
+  if (col.includes('consultant') || col.includes('konsultan')) return IconUser;
+  if (col.includes('client') || col.includes('klien')) return IconUser;
+
+  // Waktu & Tanggal
+  if (col.includes('date') || col.includes('tanggal')) return IconCalendar;
+  if (col.includes('time') || col.includes('waktu')) return IconClock;
+  if (col.includes('created') || col.includes('dibuat')) return IconPlus;
+  if (col.includes('updated') || col.includes('diperbarui')) return IconEdit;
+  if (col.includes('start') || col.includes('mulai')) return IconPlay;
+  if (col.includes('end') || col.includes('selesai')) return IconSquare;
+  if (col.includes('duration') || col.includes('durasi')) return IconTimer;
+
+  // Identifikasi & Kode
+  if (col.includes('id') || col.includes('code') || col.includes('kode')) return IconHash;
+  if (col.includes('number') || col.includes('nomor')) return IconHash;
+
+  // Deskripsi & Konten
+  if (col.includes('description') || col.includes('deskripsi')) return IconAlignLeft;
+  if (col.includes('note') || col.includes('catatan')) return IconStickyNote;
+  if (col.includes('comment') || col.includes('komentar')) return IconMessageCircle;
+  if (col.includes('title') || col.includes('judul')) return IconType;
+
+  // Default icon
+  return IconColumns;
+};
 
 watch(() => props.modelValue, (newVal) => {
   localDialogVisible.value = newVal;
@@ -96,7 +323,7 @@ watch(() => props.modelValue, (newVal) => {
 }, { immediate: true });
 
 watch(localDialogVisible, (newVal) => {
-  emit('update:modelValue', newVal);
+  emit.get('update:modelValue')?.(newVal);
 });
 
 watch(localSelectedColumns, (newSelected, oldSelected) => {
@@ -132,7 +359,7 @@ const handleApplyFilters = async () => {
       filtersToEmit[col] = value;
     }
   }
-  emit('update:activeFilters', filtersToEmit);
+  emit.get('update:activeFilters')?.(filtersToEmit);
   localDialogVisible.value = false;
   isLoading.value = false;
 };
@@ -140,233 +367,95 @@ const handleApplyFilters = async () => {
 const handleClearFilters = () => {
   localSelectedColumns.value = [];
   localActiveFilters.value = {};
-  emit('update:activeFilters', {});
+  emit.get('update:activeFilters')?.({});
   localDialogVisible.value = false;
 };
 </script>
 
 <style scoped>
-/* Dialog transition styles */
+/* Transition animations yang lebih smooth */
 .dialog-fade-enter-active,
 .dialog-fade-leave-active {
-  transition: opacity 0.4s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
 .dialog-fade-enter-from,
 .dialog-fade-leave-to {
   opacity: 0;
-}
-.dialog-fade-enter-active .filter-dialog,
-.dialog-fade-leave-active .filter-dialog {
-  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.4s ease-in-out;
-}
-.dialog-fade-enter-from .filter-dialog,
-.dialog-fade-leave-to .filter-dialog {
-  transform: translateY(50px) scale(0.95);
-  opacity: 0;
+  transform: scale(0.95) translateY(-20px);
 }
 
-/* Overlay and dialog container */
-.filter-dialog-overlay {
-  display: flex;
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.65);
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  padding: 20px;
-}
-.filter-dialog {
-  width: 90%;
-  max-width: 700px;
-  border-radius: 16px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-  background-color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  max-height: 95vh;
-  overflow: hidden;
+.dialog-fade-enter-to,
+.dialog-fade-leave-from {
+  opacity: 1;
+  transform: scale(1) translateY(0);
 }
 
-/* Header styles */
-.my-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 30px;
-  background: linear-gradient(to right, #88D3D1, #69C5C2);
-  color: white;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px 16px 0 0;
-  flex-shrink: 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-.my-header h4 {
-  margin: 0;
-  font-size: 1.6em;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
-  letter-spacing: 0.5px;
-}
-.dialog-icon {
-  margin-right: 12px;
-  font-size: 1.3em;
-  opacity: 0.9;
+/* Custom scrollbar untuk area scroll */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 4px;
 }
 
-/* Scrollable form container */
-.scrollable-form-container {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 25px 30px;
-  background-color: #f8f9fa;
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 2px;
 }
 
-/* Filter section styles */
-.filter-section {
-  margin-bottom: 25px;
-  background-color: #ffffff;
-  padding: 25px;
-  border-radius: 12px;
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 2px;
 }
 
-/* Section title */
-.section-title {
-  margin-top: 0;
-  margin-bottom: 20px;
-  color: #69C5C2;
-  font-size: 1.35em;
-  font-weight: 700;
-  border-bottom: 3px solid #88D3D1;
-  padding-bottom: 8px;
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
-/* Checkbox group layout */
-.column-checkboxes {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 15px;
+/* Animasi untuk indicator dot */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
-/* Individual checkbox styling */
-.column-checkbox {
-  background-color: #F8FCFB;
-  border: 1px solid #CFE9E8;
-  border-radius: 10px;
-  padding: 12px 15px;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  font-weight: 500;
-  color: #333;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-.column-checkbox:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 15px rgba(105, 197, 194, 0.25);
-  border-color: #69C5C2;
-}
-.column-checkbox-label-text {
-  white-space: normal;
-  word-break: break-word;
-  line-height: 1.4;
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Input field styling */
-.filter-input-item {
-  margin-bottom: 15px;
-}
-.styled-input .el-input-group__prepend {
-  min-width: 140px;
-  text-align: right;
-  font-weight: 600;
-  color: #555;
-  background-color: #F5F9FB;
-  border-right: 1px solid #DCE6E9;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 15px;
-  border-radius: 8px 0 0 8px;
-}
-.styled-input .el-input__wrapper {
-  border-radius: 8px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-/* Input focus style */
-.styled-input .el-input__wrapper.is-focus {
-  border-color: #69C5C2;
-  box-shadow: 0 0 0 3px rgba(105, 197, 194, 0.25);
+/* Hover effects yang lebih halus */
+.group:hover .group-hover\:border-pink-400 {
+  border-color: #f472b6;
 }
 
-/* Dialog footer styles */
-.dialog-footer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 15px;
-  padding: 20px 30px;
-  background-color: #f8f9fa;
-  border-top: 1px solid #e0e0e0;
-  border-radius: 0 0 16px 16px;
-  flex-shrink: 0;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-}
-.footer-button {
-  min-width: 150px;
-  padding: 12px 20px;
-  font-size: 1.05em;
-  font-weight: bold;
-  border-radius: 10px;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.group:hover .group-hover\:text-gray-900 {
+  color: #111827;
 }
 
-/* Reset button styling */
-.reset-button {
-  background-color: #FEEEEE;
-  color: #EB5757;
-  border: 1px solid #FBCACD;
-  box-shadow: 0 2px 8px rgba(235, 87, 87, 0.1);
-}
-.reset-button:hover {
-  background-color: #FAEAEA;
-  border-color: #E88F92;
-  color: #D63030;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 15px rgba(245, 108, 108, 0.2);
+/* Focus styles untuk accessibility */
+input:focus,
+button:focus {
+  outline: none;
 }
 
-/* Apply button styling */
-.apply-button {
-  background: linear-gradient(to right, #88D3D1, #69C5C2);
-  border: none;
-  color: white;
-  box-shadow: 0 4px 10px rgba(105, 197, 194, 0.25);
-}
-.apply-button:hover {
-  background: linear-gradient(to right, #69C5C2, #5AAEA8);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(105, 197, 194, 0.25);
+/* Custom gradient backgrounds */
+.bg-gradient-to-r.from-pink-500.to-rose-500 {
+  background-image: linear-gradient(to right, #ec4899, #f43f5e);
 }
 
-/* Custom styling for the close button to match the primary color */
-.el-button--close-custom {
-  background-color: rgba(255, 255, 255, 0.2) !important;
-  border-color: rgba(255, 255, 255, 0.3) !important;
-  color: white !important;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+.bg-gradient-to-r.from-pink-600.to-rose-600:hover {
+  background-image: linear-gradient(to right, #db2777, #e11d48);
 }
-.el-button--close-custom:hover,
-.el-button--close-custom:focus {
-  background-color: rgba(255, 255, 255, 0.35) !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
-  transform: scale(1.05);
+
+/* Loading animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
 </style>

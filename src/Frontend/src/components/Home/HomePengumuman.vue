@@ -2,7 +2,10 @@
   <div class="bg-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header Section -->
-      <div class="text-center mb-15 md:mb-16" data-aos="fade-up">
+      <div
+        class="text-center mb-15 md:mb-16"
+        data-aos="fade-up"
+      >
         <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
           Pengumuman
         </h2>
@@ -12,27 +15,46 @@
       </div>
 
       <!-- Loading State -->
-      <div v-if="loading" class="flex justify-center items-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500"></div>
+      <div
+        v-if="loading"
+        class="flex justify-center items-center py-12"
+      >
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500" />
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="text-center py-12">
+      <div
+        v-else-if="error"
+        class="text-center py-12"
+      >
         <div class="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto shadow-sm">
-          <p class="text-red-600 font-medium">{{ error }}</p>
+          <p class="text-red-600 font-medium">
+            {{ error }}
+          </p>
         </div>
       </div>
 
       <!-- No Announcements State -->
-      <div v-else-if="announcements.length === 0" class="text-center py-12">
+      <div
+        v-else-if="announcements.length === 0"
+        class="text-center py-12"
+      >
         <div class="bg-gray-50 border border-gray-200 rounded-lg p-8 max-w-md mx-auto shadow-sm">
-          <ElIcon class="text-5xl text-gray-400 mb-4 opacity-75"><Bell /></ElIcon>
-          <p class="text-gray-600 font-medium">Belum ada pengumuman tersedia saat ini.</p>
+          <ElIcon class="text-5xl text-gray-400 mb-4 opacity-75">
+            <Bell />
+          </ElIcon>
+          <p class="text-gray-600 font-medium">
+            Belum ada pengumuman tersedia saat ini.
+          </p>
         </div>
       </div>
 
       <!-- Announcements List -->
-      <div v-else data-aos="fade-up" data-aos-delay="200">
+      <div
+        v-else
+        data-aos="fade-up"
+        data-aos-delay="200"
+      >
         <!-- Desktop Layout (unchanged) -->
         <div class="hidden md:block max-w-2xl mx-auto">
           <div 
@@ -52,7 +74,9 @@
                   <!-- Icon Placeholder -->
                   <div class="flex-shrink-0 mt-1">
                     <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center">
-                      <ElIcon class="text-xl text-pink-500"><Bell /></ElIcon>
+                      <ElIcon class="text-xl text-pink-500">
+                        <Bell />
+                      </ElIcon>
                     </div>
                   </div>
 
@@ -85,11 +109,24 @@
           </div>
           
           <!-- Desktop Scroll Hint -->
-          <div v-if="announcements.length > 3" class="text-center mt-6">
+          <div
+            v-if="announcements.length > 3"
+            class="text-center mt-6"
+          >
             <p class="text-sm text-gray-500 flex items-center justify-center gap-2">
               <span>Gulir untuk melihat pengumuman lainnya</span>
-              <svg class="w-5 h-5 text-gray-400 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+              <svg
+                class="w-5 h-5 text-gray-400 animate-bounce"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                />
               </svg>
             </p>
           </div>
@@ -121,7 +158,9 @@
                     <!-- Header with Icon and Tag -->
                     <div class="flex items-center justify-between">
                       <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center">
-                        <ElIcon class="text-xl text-pink-500"><Bell /></ElIcon>
+                        <ElIcon class="text-xl text-pink-500">
+                          <Bell />
+                        </ElIcon>
                       </div>
                       <ElTag 
                         :type="getAnnouncementType(announcement.created_at)"
@@ -155,21 +194,37 @@
           </div>
 
           <!-- Mobile Indicators -->
-          <div v-if="announcements.length > 1" class="flex justify-center mt-4 gap-2">
+          <div
+            v-if="announcements.length > 1"
+            class="flex justify-center mt-4 gap-2"
+          >
             <div
               v-for="(announcement, index) in announcements"
               :key="index"
               class="w-2 h-2 rounded-full transition-all duration-300"
               :class="currentSlide === index ? 'bg-pink-500 w-6' : 'bg-gray-300'"
-            ></div>
+            />
           </div>
 
           <!-- Mobile Swipe Hint -->
-          <div v-if="announcements.length > 1" class="text-center mt-4">
+          <div
+            v-if="announcements.length > 1"
+            class="text-center mt-4"
+          >
             <p class="text-sm text-gray-500 flex items-center justify-center gap-2">
               <span>Geser untuk melihat pengumuman lainnya</span>
-              <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              <svg
+                class="w-4 h-4 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
               </svg>
             </p>
           </div>

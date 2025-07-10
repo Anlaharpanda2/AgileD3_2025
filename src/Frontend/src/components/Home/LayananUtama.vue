@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import { markRaw, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import {
-  ElButton,
-  ElCard,
-  ElRow,
-  ElCol,
   ElIcon
 } from 'element-plus'
 import {
@@ -52,7 +48,10 @@ const navigateToFeature = (route: string) => {
   <section class="py-16 bg-gray-50">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header Section -->
-      <div class="text-center mb-12" data-aos="fade-up">
+      <div
+        class="text-center mb-12"
+        data-aos="fade-up"
+      >
         <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
           Layanan
         </h2>
@@ -71,8 +70,8 @@ const navigateToFeature = (route: string) => {
           :data-aos-delay="index * 100"
         >
           <div
-            @click="navigateToFeature(feature.route)"
             class="bg-white rounded-2xl p-4 sm:p-6 md:p-8 text-center cursor-pointer border-2 border-transparent hover:border-pink-200 shadow-lg h-full flex flex-col justify-between min-h-[280px] sm:min-h-[320px] md:min-h-[360px]"
+            @click="navigateToFeature(feature.route)"
           >
             <!-- Icon -->
             <div class="flex-shrink-0">
@@ -83,7 +82,11 @@ const navigateToFeature = (route: string) => {
                   color: feature.color
                 }"
               >
-                <component :is="feature.icon" :size="32" class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12" />
+                <component
+                  :is="feature.icon"
+                  :size="32"
+                  class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
+                />
               </div>
             </div>
 
@@ -101,7 +104,9 @@ const navigateToFeature = (route: string) => {
             <div class="flex-shrink-0">
               <button class="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-semibold py-2 sm:py-3 px-4 sm:px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg text-xs sm:text-sm md:text-base flex items-center justify-center gap-2">
                 {{ feature.button }}
-                <ElIcon class="text-sm sm:text-base"><ArrowRight /></ElIcon>
+                <ElIcon class="text-sm sm:text-base">
+                  <ArrowRight />
+                </ElIcon>
               </button>
             </div>
           </div>

@@ -1,14 +1,14 @@
 <template>
   <!-- Form pop up -->
-  <DefaultLayout>
+  <SimpleLayout>
     <FormTambah 
       v-if="showTambah && TambahData" 
-      :initialData="TambahData" 
+      :initial-data="TambahData" 
       @close="showTambah = false" 
     />
     <FormEdit 
       v-if="showEdit && editData" 
-      :initialData="editData" 
+      :initial-data="editData" 
       @close="showEdit = false" 
     />
     <FormExport 
@@ -24,10 +24,20 @@
     <div class="table-header">
       <div class="left-controls">
         <div class="show-wrapper">
-          <div class="select-box" @click.stop="toggleDropdown">
+          <div
+            class="select-box"
+            @click.stop="toggleDropdown"
+          >
             <span>{{ itemsPerPage === Infinity ? 'All' : itemsPerPage }}</span>
-            <img src="/table/panah.svg" alt="Dropdown" style="width:22px;height:22px" />
-            <ul class="dropdown-list" v-show="dropdownOpen">
+            <img
+              src="/table/panah.svg"
+              alt="Dropdown"
+              style="width:22px;height:22px"
+            >
+            <ul
+              v-show="dropdownOpen"
+              class="dropdown-list"
+            >
               <li
                 v-for="option in perPageOptions"
                 :key="option"
@@ -41,34 +51,79 @@
 
         <!-- pencarian -->
         <div class="search-box">
-          <input type="text" placeholder="Cari" v-model="search" />
-          <img src="/table/cari.svg" alt="Search" />
+          <input
+            v-model="search"
+            type="text"
+            placeholder="Cari"
+          >
+          <img
+            src="/table/cari.svg"
+            alt="Search"
+          >
         </div>
 
         <!-- filter dan sorting -->
         <div class="icon-group">
-          <img src="/table/filter.svg" alt="Filter" @click="onFilterClick" />
-          <img src="/table/sort.svg" alt="Sort" @click="onSortClick" />
+          <img
+            src="/table/filter.svg"
+            alt="Filter"
+            @click="onFilterClick"
+          >
+          <img
+            src="/table/sort.svg"
+            alt="Sort"
+            @click="onSortClick"
+          >
         </div>
       </div>
 
       <!-- export, import, sampah, hapus masal dan tambah data disiko -->
       <div class="right-controls">
-        <button class="button" @click="showExport = true">
-          <img src="/table/export.svg" alt="Export" />
+        <button
+          class="button"
+          @click="showExport = true"
+        >
+          <img
+            src="/table/export.svg"
+            alt="Export"
+          >
         </button>
-        <button class="button" @click="showImport = true">
-          <img src="/table/import.svg" alt="Import" />
+        <button
+          class="button"
+          @click="showImport = true"
+        >
+          <img
+            src="/table/import.svg"
+            alt="Import"
+          >
         </button>
-        <button class="button" @click="onExportClick">
-          <img src="/table/sampah.svg" alt="Sampah" />
+        <button
+          class="button"
+          @click="onExportClick"
+        >
+          <img
+            src="/table/sampah.svg"
+            alt="Sampah"
+          >
         </button>
-        <button class="button" @click="onMassDeleteClick">
-          <img src="/table/hapusMass.svg" alt="hapusMassal" />
+        <button
+          class="button"
+          @click="onMassDeleteClick"
+        >
+          <img
+            src="/table/hapusMass.svg"
+            alt="hapusMassal"
+          >
           Hapus Massal
         </button>
-        <button class="button" @click="openTambah" >
-          <img src="/table/tambah.svg" alt="Add" />
+        <button
+          class="button"
+          @click="openTambah"
+        >
+          <img
+            src="/table/tambah.svg"
+            alt="Add"
+          >
           Tambah Data
         </button>
       </div>
@@ -78,40 +133,67 @@
     <div class="table-wrapper">
       <el-table
         ref="elTable"
-        :data="pagedData"
         v-loading="loading"
+        :data="pagedData"
         style="width: 100%"
-        @selection-change="onSelectionChange"
         :header-cell-style="headerCellStyle"
         :row-style="rowStyle"
+        @selection-change="onSelectionChange"
       >
-        <el-table-column type="selection" width="55" show-overflow-tooltip/>
-        <el-table-column prop="name" label="Nama" show-overflow-tooltip/>
-        <el-table-column prop="email" label="email" show-overflow-tooltip/>
-        <el-table-column prop="role" label="akses" show-overflow-tooltip/>
-        <el-table-column prop="created_at" label="tanggal dibuat" show-overflow-tooltip/>
-        <el-table-column prop="updated_at" label="tanggal diperbarui" show-overflow-tooltip/>
+        <el-table-column
+          type="selection"
+          width="55"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          prop="name"
+          label="Nama"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          prop="email"
+          label="email"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          prop="role"
+          label="akses"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          prop="created_at"
+          label="tanggal dibuat"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          prop="updated_at"
+          label="tanggal diperbarui"
+          show-overflow-tooltip
+        />
 
-        <el-table-column label="Aksi" width="120" fixed="right">
+        <el-table-column
+          label="Aksi"
+          width="120"
+          fixed="right"
+        >
           <template #default="{ row }">
             <div class="action-buttons">
-
               <!-- edit data -->
               <img
-              src="/table/edit.svg"
-              alt="Edit"
-              class="action-icon"
-              @click="openEdit(row)" 
-              title="Edit"
-              />
+                src="/table/edit.svg"
+                alt="Edit"
+                class="action-icon"
+                title="Edit" 
+                @click="openEdit(row)"
+              >
               <!-- hapus data idividu -->
               <img
                 src="/table/hapus.svg"
                 alt="Hapus"
                 class="action-icon"
-                @click="onDelete(row)"
                 title="Hapus"
-              />
+                @click="onDelete(row)"
+              >
             </div>
           </template>
         </el-table-column>
@@ -120,35 +202,56 @@
 
     <!-- pagination bawah -->
     <div class="pagination">
-      <button class="page-btn" :disabled="currentPage === 1" @click="prevPage">
-        <img src="/table/sebelum.svg" alt="preview">
+      <button
+        class="page-btn"
+        :disabled="currentPage === 1"
+        @click="prevPage"
+      >
+        <img
+          src="/table/sebelum.svg"
+          alt="preview"
+        >
       </button>
 
-      <template v-for="item in visiblePages" :key="String(item)">
+      <template
+        v-for="item in visiblePages"
+        :key="String(item)"
+      >
         <button
           v-if="item === '...'"
           class="page-number ellipsis"
           disabled
-        >…</button>
+        >
+          …
+        </button>
         <button
           v-else
           class="page-number"
           :class="{ active: item === currentPage }"
           @click="goToPage(item)"
-        >{{ item }}</button>
+        >
+          {{ item }}
+        </button>
       </template>
 
-      <button class="page-btn" :disabled="currentPage === totalPages" @click="nextPage">
-        <img src="/table/next.svg" alt="next">
+      <button
+        class="page-btn"
+        :disabled="currentPage === totalPages"
+        @click="nextPage"
+      >
+        <img
+          src="/table/next.svg"
+          alt="next"
+        >
       </button>
     </div>
-  </DefaultLayout>
+  </SimpleLayout>
 </template>
 
 <script lang="ts" setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import api from "../../api.js";
-import DefaultLayout from "../../layouts/DefaultLayout.vue";
+import SimpleLayout from "../../layouts/SimpleLayout.vue";
 import { ElNotification } from 'element-plus';
 
 interface Peserta {
@@ -158,6 +261,7 @@ interface Peserta {
   role: "pegawai" | "operator";
   created_at: string;
   updated_at?: string;
+  nik: string;
 }
 
 const tableData = ref<Peserta[]>([]);
@@ -305,7 +409,6 @@ async function onDelete(row: Peserta) {
 // other handlers unchanged
 function onFilterClick() {}
 function onSortClick() {}
-function onAddClick() {}
 
 async function fetchData() {
   const res = await api.get('/kelola/akses');

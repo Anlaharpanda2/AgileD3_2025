@@ -1,5 +1,5 @@
 <template>
-  <layout2>
+  <SimpleLayout>
     <div>
       <h1 class="p-5 text-2xl font-bold">
         Layanan Pengaduan Masyarakat
@@ -25,7 +25,12 @@
             <li>
               <b>Isi Formulir Pengaduan Online</b><br>
               Klik link berikut untuk mengisi formulir:  
-              🔗 <router-link to="/pengaduan/buat" class="text-blue-600 underline">Formulir Pengaduan</router-link>
+              🔗 <router-link
+                to="/pengaduan/buat"
+                class="text-blue-600 underline"
+              >
+                Formulir Pengaduan
+              </router-link>
             </li>
             <li class="mt-2">
               <b>Verifikasi Awal</b><br>
@@ -75,9 +80,9 @@
         </router-link>
       </div>
     </div>
-  </layout2>
+  </SimpleLayout>
 </template>
 
 <script setup>
-import layout2 from '../../layouts/Layout2.vue';
+import SimpleLayout from '../../layouts/SimpleLayout.vue';
 </script>

@@ -1,15 +1,31 @@
 <template>
-  <DefaultLayout2>
-    <h1 class="headeratas">Data Berita Sampah</h1>
+  <DefaultSimpleLayout>
+    <h1 class="headeratas">
+      Data Berita Sampah
+    </h1>
 
     <div class="table-header">
       <div class="left-controls">
         <div class="show-wrapper">
-          <div class="select-box" @click.stop="toggleDropdown">
+          <div
+            class="select-box"
+            @click.stop="toggleDropdown"
+          >
             <span>{{ itemsPerPage === Infinity ? 'All' : itemsPerPage }}</span>
-            <img src="/table/panah.svg" alt="Dropdown" style="width:22px;height:22px" />
-            <ul class="dropdown-list" v-show="dropdownOpen">
-              <li v-for="option in perPageOptions" :key="option" @click="changeItemsPerPage(option)">
+            <img
+              src="/table/panah.svg"
+              alt="Dropdown"
+              style="width:22px;height:22px"
+            >
+            <ul
+              v-show="dropdownOpen"
+              class="dropdown-list"
+            >
+              <li
+                v-for="option in perPageOptions"
+                :key="option"
+                @click="changeItemsPerPage(option)"
+              >
                 {{ option === 'all' ? 'All' : option }}
               </li>
             </ul>
@@ -18,18 +34,38 @@
 
 
         <div class="search-box">
-          <input type="text" placeholder="Cari Judul atau Jenis Konten" v-model="search" />
-          <img src="/table/cari.svg" alt="Search" />
+          <input
+            v-model="search"
+            type="text"
+            placeholder="Cari Judul atau Jenis Konten"
+          >
+          <img
+            src="/table/cari.svg"
+            alt="Search"
+          >
         </div>
       </div>
 
       <div class="right-controls">
-        <button class="button" @click="onMassDeletePermanentClick" v-if="isOperator">
-          <img src="/table/deleteForever.svg" alt="hapusPermanenMassal" />
+        <button
+          v-if="isOperator"
+          class="button"
+          @click="onMassDeletePermanentClick"
+        >
+          <img
+            src="/table/deleteForever.svg"
+            alt="hapusPermanenMassal"
+          >
           Hapus Permanen Massal
         </button>
-        <button class="button" @click="onMassRestoreClick">
-          <img src="/table/pulihkan.svg" alt="restoreMassal" />
+        <button
+          class="button"
+          @click="onMassRestoreClick"
+        >
+          <img
+            src="/table/pulihkan.svg"
+            alt="restoreMassal"
+          >
           Pulihkan Massal
         </button>
       </div>
@@ -38,42 +74,78 @@
     <div class="table-wrapper">
       <el-table
         ref="elTable"
-        :data="pagedData"
         v-loading="loading"
+        :data="pagedData"
         style="width: 100%"
-        @selection-change="onSelectionChange"
         :header-cell-style="headerCellStyle"
         :row-style="rowStyle"
+        @selection-change="onSelectionChange"
       >
-        <el-table-column type="selection" width="55" show-overflow-tooltip/>
-        <el-table-column prop="judul" label="Judul" show-overflow-tooltip/>
-        <el-table-column prop="jenis_konten" label="Jenis Konten" show-overflow-tooltip/>
-        <el-table-column prop="isi" label="Isi Berita" show-overflow-tooltip/>
-        <el-table-column prop="updated_at" label="Tanggal Update" show-overflow-tooltip/>
-        <el-table-column prop="created_at" label="Tanggal Buat" show-overflow-tooltip/>
-        <el-table-column label="Gambar" width="120">
+        <el-table-column
+          type="selection"
+          width="55"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          prop="judul"
+          label="Judul"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          prop="jenis_konten"
+          label="Jenis Konten"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          prop="isi"
+          label="Isi Berita"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          prop="updated_at"
+          label="Tanggal Update"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          prop="created_at"
+          label="Tanggal Buat"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          label="Gambar"
+          width="120"
+        >
           <template #default="{ row }">
-            <img :src="getImageUrl(row.gambar)" alt="Gambar Berita" style="width: 60px; height: auto" @error="onImageError" />
+            <img
+              :src="getImageUrl(row.gambar)"
+              alt="Gambar Berita"
+              style="width: 60px; height: auto"
+              @error="onImageError"
+            >
           </template>
         </el-table-column>
 
-        <el-table-column label="Aksi" width="120" fixed="right">
+        <el-table-column
+          label="Aksi"
+          width="120"
+          fixed="right"
+        >
           <template #default="{ row }">
             <div class="action-buttons">
               <img
                 src="/table/pulihkan2.svg"
                 alt="Restore"
                 class="action-icon"
-                @click="onRestore(row)"
                 title="Pulihkan data"
-              />
+                @click="onRestore(row)"
+              >
               <img
                 src="/table/deleteForever2.svg"
                 alt="HapusSelamanya"
                 class="action-icon"
-                @click="onDelete(row)"
                 title="Hapus Selamanya"
-              />
+                @click="onDelete(row)"
+              >
             </div>
           </template>
         </el-table-column>
@@ -81,28 +153,56 @@
     </div>
 
     <div class="pagination">
-      <button class="page-btn" :disabled="currentPage === 1" @click="prevPage">
-        <img src="/table/sebelum.svg" alt="prev" />
+      <button
+        class="page-btn"
+        :disabled="currentPage === 1"
+        @click="prevPage"
+      >
+        <img
+          src="/table/sebelum.svg"
+          alt="prev"
+        >
       </button>
 
-      <template v-for="item in visiblePages" :key="String(item)">
-        <button v-if="item === '...'" class="page-number ellipsis" disabled>…</button>
-        <button v-else class="page-number" :class="{ active: item === currentPage }" @click="goToPage(item)">
+      <template
+        v-for="item in visiblePages"
+        :key="String(item)"
+      >
+        <button
+          v-if="item === '...'"
+          class="page-number ellipsis"
+          disabled
+        >
+          …
+        </button>
+        <button
+          v-else
+          class="page-number"
+          :class="{ active: item === currentPage }"
+          @click="goToPage(item)"
+        >
           {{ item }}
         </button>
       </template>
 
-      <button class="page-btn" :disabled="currentPage === totalPages" @click="nextPage">
-        <img src="/table/next.svg" alt="next" />
+      <button
+        class="page-btn"
+        :disabled="currentPage === totalPages"
+        @click="nextPage"
+      >
+        <img
+          src="/table/next.svg"
+          alt="next"
+        >
       </button>
     </div>
-  </DefaultLayout2>
+  </DefaultSimpleLayout>
 </template>
 
 <script lang="ts" setup>
 import { ref, computed, onMounted } from 'vue'
 import api from '../../api.js'
-import DefaultLayout2 from '../../layouts/Layout2.vue'
+import DefaultSimpleLayout from '../../layouts/SimpleLayout.vue'
 import { ElMessage } from 'element-plus';
 
 interface Berita {
@@ -126,6 +226,7 @@ const loading = ref(false)
 const itemsPerPage = ref<number|string>(10)
 const currentPage = ref(1)
 const dropdownOpen = ref(false)
+const isOperator = ref(false)
 
 const perPageOptions = [10, 20, 50, 100, 'all']
 

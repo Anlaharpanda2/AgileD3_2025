@@ -2,14 +2,29 @@
   <div class="error-container">
     <div class="content-wrapper">
       <div class="text-section">
-        <div class="ooops-text">Ooops....</div>
-        <div class="access-denied-title">Akses Ditolak</div>
-        <div class="permission-message">Anda tidak memiliki izin untuk mengakses halaman ini.</div>
-        <div class="back-home-button" @click="goToBeranda">
-          <div class="button-text">Kembali Ke Beranda</div>
+        <div class="ooops-text">
+          Ooops....
+        </div>
+        <div class="access-denied-title">
+          Akses Ditolak
+        </div>
+        <div class="permission-message">
+          Anda tidak memiliki izin untuk mengakses halaman ini.
+        </div>
+        <div
+          class="back-home-button"
+          @click="goToBeranda"
+        >
+          <div class="button-text">
+            Kembali Ke Beranda
+          </div>
         </div>
       </div>
-      <img class="error-image" alt="Akses Ditolak" src="/Forbiden/image.png" />
+      <img
+        class="error-image"
+        alt="Akses Ditolak"
+        src="/Forbiden/image.png"
+      >
     </div>
   </div>
 </template>
@@ -20,6 +35,10 @@ const router = useRouter()
 function goToBeranda() {
   router.push('/')
 }
+
+defineOptions({
+  name: 'UnauthorizedPage'
+});
 </script>
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');

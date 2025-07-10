@@ -80,51 +80,72 @@ export default {
 <template>
   <div class="coverpage">
     <div class="overlap">
-      <div class="ellipse"></div>
-      <div class="div"></div>
+      <div class="ellipse" />
+      <div class="div" />
       <div class="login">
         <div class="overlap-group">
-          <div class="rectangle"></div>
-          <img class="mask-group" src="https://c.animaapp.com/IJi6pJQY/img/mask-group@2x.png" />
+          <div class="rectangle" />
+          <img
+            class="mask-group"
+            src="https://c.animaapp.com/IJi6pJQY/img/mask-group@2x.png"
+          >
           <div class="group">
-            <img class="thunderbolt" src="https://c.animaapp.com/IJi6pJQY/img/thunderbolt-1@2x.png" />
+            <img
+              class="thunderbolt"
+              src="https://c.animaapp.com/IJi6pJQY/img/thunderbolt-1@2x.png"
+            >
           </div>
-          <div class="keluarga-sejahtera">Keluarga<br />Sejahtera<br />Setara<br />Terlindung</div>
+          <div class="keluarga-sejahtera">
+            Keluarga<br>Sejahtera<br>Setara<br>Terlindung
+          </div>
         </div>
         <div class="overlap-2">
           <div class="group-2">
-            <div class="masuk">Lupa Kata Sandi</div>
-            <p class="p">Silakan masukkan alamat email Anda untuk reset kata sandi.</p>
+            <div class="masuk">
+              Lupa Kata Sandi
+            </div>
+            <p class="p">
+              Silakan masukkan alamat email Anda untuk reset kata sandi.
+            </p>
 
             <form @submit="handleSubmit">
               <div class="group-email-input">
                 <div class="overlap-4">
                   <input
-                    type="email"
                     v-model="email"
+                    type="email"
                     class="text-wrapper-3"
                     placeholder="Email"
                     name="email"
                     autocomplete="email"
-                  />
+                  >
                   <!-- Ikon email (Anda bisa ganti dengan ikon yang sesuai jika ada) -->
-                  <img class="frame" src="https://c.animaapp.com/IJi6pJQY/img/frame-1.svg" />
+                  <img
+                    class="frame"
+                    src="https://c.animaapp.com/IJi6pJQY/img/frame-1.svg"
+                  >
                 </div>
               </div>
 
               <div class="group-7">
-                <button type="submit" class="btn overlap-5 btn-gradient" :disabled="isLoading">
-                  <div class="text-wrapper-4">{{ isLoading ? 'Memproses...' : 'Kirim Link Reset' }}</div>
+                <button
+                  type="submit"
+                  class="btn overlap-5 btn-gradient"
+                  :disabled="isLoading"
+                >
+                  <div class="text-wrapper-4">
+                    {{ isLoading ? 'Memproses...' : 'Kirim Link Reset' }}
+                  </div>
                 </button>
               </div>
             </form>
 
             <p class="belum-memiliki-akun">
-                <span class="text-wrapper-5">Ingat Kata Sandi?</span>
-                <span class="text-wrapper-6">&nbsp;&nbsp;</span>
-                <a href="/login/operator">
-                    <span class="text-wrapper-7">Login</span>
-                </a>
+              <span class="text-wrapper-5">Ingat Kata Sandi?</span>
+              <span class="text-wrapper-6">&nbsp;&nbsp;</span>
+              <a href="/login/operator">
+                <span class="text-wrapper-7">Login</span>
+              </a>
             </p>
           </div>
         </div>

@@ -1,9 +1,9 @@
 <template>
-  <Layout2>
+  <SimpleLayout>
     <div class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-pink-50">
       <!-- Header Section with Modern Design -->
       <div class="relative overflow-hidden bg-white/80 backdrop-blur-sm border-b border-gray-200/50">
-        <div class="absolute inset-0 bg-gradient-to-r from-pink-100/20 via-transparent to-pink-100/20"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-pink-100/20 via-transparent to-pink-100/20" />
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div class="text-center mb-8">
             <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-pink-500 to-pink-600 rounded-2xl shadow-lg mb-4">
@@ -25,8 +25,12 @@
                   <BarChart3 class="w-6 h-6 text-pink-600" />
                 </div>
                 <div>
-                  <p class="text-sm text-gray-600">Total Modul</p>
-                  <p class="text-2xl font-bold text-gray-900">{{ cards.length }}</p>
+                  <p class="text-sm text-gray-600">
+                    Total Modul
+                  </p>
+                  <p class="text-2xl font-bold text-gray-900">
+                    {{ cards.length }}
+                  </p>
                 </div>
               </div>
             </div>
@@ -36,8 +40,12 @@
                   <Users class="w-6 h-6 text-pink-600" />
                 </div>
                 <div>
-                  <p class="text-sm text-gray-600">Akses Aktif</p>
-                  <p class="text-2xl font-bold text-gray-900">8</p>
+                  <p class="text-sm text-gray-600">
+                    Akses Aktif
+                  </p>
+                  <p class="text-2xl font-bold text-gray-900">
+                    8
+                  </p>
                 </div>
               </div>
             </div>
@@ -47,8 +55,12 @@
                   <Settings class="w-6 h-6 text-pink-600" />
                 </div>
                 <div>
-                  <p class="text-sm text-gray-600">Konfigurasi</p>
-                  <p class="text-2xl font-bold text-gray-900">100%</p>
+                  <p class="text-sm text-gray-600">
+                    Konfigurasi
+                  </p>
+                  <p class="text-2xl font-bold text-gray-900">
+                    100%
+                  </p>
                 </div>
               </div>
             </div>
@@ -71,11 +83,28 @@
                 <Search class="w-4 h-4 text-gray-400" />
               </template>
             </el-input>
-            <el-select v-model="selectedCategory" placeholder="Kategori" class="w-48" clearable>
-              <el-option label="Semua Kategori" value="" />
-              <el-option label="Administrasi" value="admin" />
-              <el-option label="Pelatihan" value="training" />
-              <el-option label="Komunikasi" value="communication" />
+            <el-select
+              v-model="selectedCategory"
+              placeholder="Kategori"
+              class="w-48"
+              clearable
+            >
+              <el-option
+                label="Semua Kategori"
+                value=""
+              />
+              <el-option
+                label="Administrasi"
+                value="admin"
+              />
+              <el-option
+                label="Pelatihan"
+                value="training"
+              />
+              <el-option
+                label="Komunikasi"
+                value="communication"
+              />
             </el-select>
           </div>
           <div class="flex items-center gap-2">
@@ -115,20 +144,23 @@
             <!-- Grid View -->
             <template v-if="isGridView">
               <!-- Background Pattern -->
-              <div class="absolute inset-0 bg-gradient-to-br from-pink-50/30 via-transparent to-pink-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div class="absolute inset-0 bg-gradient-to-br from-pink-50/30 via-transparent to-pink-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               
               <!-- Icon and Badge -->
               <div class="relative flex items-center justify-between mb-4">
                 <div class="relative">
                   <div class="w-14 h-14 bg-gradient-to-r from-pink-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
-                    <component :is="getIconComponent(card.icon)" class="w-7 h-7 text-white" />
+                    <component
+                      :is="getIconComponent(card.icon)"
+                      class="w-7 h-7 text-white"
+                    />
                   </div>
                   <div class="absolute -top-2 -right-2 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center shadow-lg">
                     <span class="text-xs font-bold text-white">{{ card.id }}</span>
                   </div>
                 </div>
                 <div class="flex items-center gap-2">
-                  <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <div class="w-2 h-2 bg-green-500 rounded-full" />
                   <span class="text-xs text-gray-500">Online</span>
                 </div>
               </div>
@@ -146,12 +178,15 @@
                 <el-button
                   type="primary"
                   class="w-full bg-gradient-to-r from-pink-500 to-pink-600 border-none hover:from-pink-600 hover:to-pink-700"
-                  @click.stop="handleButtonClick(card)"
                   :loading="isLoading"
                   size="large"
+                  @click.stop="handleButtonClick(card)"
                 >
                   <template #icon>
-                    <component :is="getActionIcon(card.buttonText)" class="w-4 h-4" />
+                    <component
+                      :is="getActionIcon(card.buttonText)"
+                      class="w-4 h-4"
+                    />
                   </template>
                   {{ card.buttonText }}
                 </el-button>
@@ -162,30 +197,43 @@
             <template v-else>
               <div class="flex items-center flex-1">
                 <div class="w-12 h-12 bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg mr-4">
-                  <component :is="getIconComponent(card.icon)" class="w-6 h-6 text-white" />
+                  <component
+                    :is="getIconComponent(card.icon)"
+                    class="w-6 h-6 text-white"
+                  />
                 </div>
                 <div class="flex-1">
                   <div class="flex items-center gap-2 mb-1">
                     <h3 class="text-lg font-bold text-gray-900 group-hover:text-pink-600 transition-colors duration-300">
                       {{ card.title }}
                     </h3>
-                    <el-tag size="small" type="success">ID: {{ card.id }}</el-tag>
+                    <el-tag
+                      size="small"
+                      type="success"
+                    >
+                      ID: {{ card.id }}
+                    </el-tag>
                   </div>
-                  <p class="text-sm text-gray-600">{{ card.description }}</p>
+                  <p class="text-sm text-gray-600">
+                    {{ card.description }}
+                  </p>
                 </div>
                 <div class="flex items-center gap-3">
                   <div class="flex items-center gap-2">
-                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <div class="w-2 h-2 bg-green-500 rounded-full" />
                     <span class="text-xs text-gray-500">Aktif</span>
                   </div>
                   <el-button
                     type="primary"
                     class="bg-gradient-to-r from-pink-500 to-pink-600 border-none hover:from-pink-600 hover:to-pink-700"
-                    @click.stop="handleButtonClick(card)"
                     :loading="isLoading"
+                    @click.stop="handleButtonClick(card)"
                   >
                     <template #icon>
-                      <component :is="getActionIcon(card.buttonText)" class="w-4 h-4" />
+                      <component
+                        :is="getActionIcon(card.buttonText)"
+                        class="w-4 h-4"
+                      />
                     </template>
                     {{ card.buttonText }}
                   </el-button>
@@ -196,22 +244,30 @@
         </div>
 
         <!-- Empty State -->
-        <div v-if="filteredCards.length === 0" class="text-center py-16">
+        <div
+          v-if="filteredCards.length === 0"
+          class="text-center py-16"
+        >
           <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Search class="w-12 h-12 text-gray-400" />
           </div>
-          <h3 class="text-lg font-semibold text-gray-900 mb-2">Tidak ada data ditemukan</h3>
-          <p class="text-gray-600">Coba ubah kata kunci pencarian atau filter kategori</p>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">
+            Tidak ada data ditemukan
+          </h3>
+          <p class="text-gray-600">
+            Coba ubah kata kunci pencarian atau filter kategori
+          </p>
         </div>
       </div>
     </div>
-  </Layout2>
+  </SimpleLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
+import type { Component } from 'vue'
 import { useRouter } from 'vue-router'
-import Layout2 from '@/layouts/Layout2.vue'
+import SimpleLayout from '@/layouts/SimpleLayout.vue'
 import { 
   Database, 
   BarChart3, 
@@ -381,7 +437,7 @@ const filteredCards = computed(() => {
 
 // Methods
 const getIconComponent = (iconName: string) => {
-  const iconMap: { [key: string]: any } = {
+  const iconMap: { [key: string]: Component } = {
     'document': FileText,
     'newspaper': Newspaper,
     'shield': Shield,
@@ -499,7 +555,6 @@ onMounted(() => {
 /* Line Clamp Utility */
 .line-clamp-2 {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

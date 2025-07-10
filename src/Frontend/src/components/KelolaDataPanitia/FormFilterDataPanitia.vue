@@ -1,111 +1,122 @@
 <template>
   <Transition name="dialog-fade">
-    <!-- Modern backdrop dengan blur effect -->
-    <div v-if="localDialogVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm p-4" @click.self="handleClose">
-      <!-- Main dialog container dengan shadow yang lebih soft -->
+    <div
+      v-if="localDialogVisible"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm p-4"
+      @click.self="handleClose"
+    >
       <div class="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl shadow-gray-500/10 overflow-hidden transform transition-all duration-300 max-h-[90vh] flex flex-col">
-        
-        <!-- Header dengan gradient pink yang subtle -->
         <div class="relative bg-gradient-to-r from-pink-50 to-rose-50 border-b border-gray-100">
           <div class="flex items-center justify-between p-6">
             <div class="flex items-center space-x-3">
-              <!-- Icon dengan background circle -->
               <div class="flex items-center justify-center w-10 h-10 bg-pink-100 rounded-full">
-                <i class="fas fa-filter text-pink-600 text-sm"></i>
+                <IconFilter class="text-pink-600 w-4 h-4" />
               </div>
               <div>
-                <h2 class="text-xl font-bold text-gray-800">Filter Data Panitia</h2>
-                <p class="text-sm text-gray-600">Pilih kolom dan masukkan kriteria filter</p>
+                <h2 class="text-xl font-bold text-gray-800">
+                  Filter Data Panitia
+                </h2>
+                <p class="text-sm text-gray-600">
+                  Pilih kolom dan masukkan kriteria filter
+                </p>
               </div>
             </div>
-            <!-- Close button dengan hover effect -->
-            <button 
-              @click="handleClose"
+            <button
               class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all duration-200"
+              @click="handleClose"
             >
-              <i class="fas fa-times text-sm"></i>
+              <IconX class="w-4 h-4" />
             </button>
           </div>
-          <!-- Decorative line -->
-          <div class="absolute bottom-0 left-6 right-6 h-px bg-gradient-to-r from-pink-200 via-pink-300 to-transparent"></div>
+          <div class="absolute bottom-0 left-6 right-6 h-px bg-gradient-to-r from-pink-200 via-pink-300 to-transparent" />
         </div>
 
-        <!-- Scrollable content area -->
         <div class="flex-1 overflow-y-auto p-6 space-y-8">
-          
-          <!-- Column Selection Section -->
           <div class="space-y-4">
             <div class="flex items-center space-x-2">
-              <div class="w-1 h-6 bg-pink-400 rounded-full"></div>
-              <h3 class="text-lg font-semibold text-gray-800">Pilih Kolom untuk Filter</h3>
+              <div class="w-1 h-6 bg-pink-400 rounded-full" />
+              <h3 class="text-lg font-semibold text-gray-800">
+                Pilih Kolom untuk Filter
+              </h3>
             </div>
-            
-            <!-- Grid layout untuk checkbox dengan design card -->
+
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              <label 
-                v-for="col in filteredColumns" 
+              <label
+                v-for="col in filteredColumns"
                 :key="col"
                 class="relative flex items-center p-4 bg-gray-50 hover:bg-pink-50 border border-gray-200 hover:border-pink-200 rounded-xl cursor-pointer transition-all duration-200 group"
                 :class="{ 'bg-pink-50 border-pink-300 shadow-sm': localSelectedColumns.includes(col) }"
               >
-                <input 
-                  type="checkbox" 
-                  :value="col"
+                <input
                   v-model="localSelectedColumns"
+                  type="checkbox"
+                  :value="col"
                   class="sr-only"
                 >
-                <!-- Column icon -->
-                <div class="flex items-center justify-center w-8 h-8 rounded-lg mr-3 transition-all duration-200"
-                     :class="localSelectedColumns.includes(col) 
-                       ? 'bg-pink-500 text-white' 
-                       : 'bg-gray-200 text-gray-600 group-hover:bg-pink-100 group-hover:text-pink-600'">
-                  <i :class="getColumnIcon(col)" class="text-sm"></i>
+                <div
+                  class="flex items-center justify-center w-8 h-8 rounded-lg mr-3 transition-all duration-200"
+                  :class="localSelectedColumns.includes(col)
+                    ? 'bg-pink-500 text-white'
+                    : 'bg-gray-200 text-gray-600 group-hover:bg-pink-100 group-hover:text-pink-600'"
+                >
+                  <component
+                    :is="getColumnIcon(col)"
+                    class="w-4 h-4"
+                  />
                 </div>
-                <!-- Custom checkbox -->
-                <div class="flex items-center justify-center w-5 h-5 border-2 rounded-md mr-3 transition-all duration-200"
-                     :class="localSelectedColumns.includes(col) 
-                       ? 'bg-pink-500 border-pink-500 text-white' 
-                       : 'border-gray-300 group-hover:border-pink-400'">
-                  <i v-if="localSelectedColumns.includes(col)" class="fas fa-check text-xs"></i>
+                <div
+                  class="flex items-center justify-center w-5 h-5 border-2 rounded-md mr-3 transition-all duration-200"
+                  :class="localSelectedColumns.includes(col)
+                    ? 'bg-pink-500 border-pink-500 text-white'
+                    : 'border-gray-300 group-hover:border-pink-400'"
+                >
+                  <IconCheck
+                    v-if="localSelectedColumns.includes(col)"
+                    class="w-3 h-3"
+                  />
                 </div>
-                <!-- Label text -->
                 <span class="text-sm font-medium text-gray-700 group-hover:text-gray-900">
                   {{ formatColumnName(col) }}
                 </span>
-                <!-- Indicator dot -->
-                <div v-if="localSelectedColumns.includes(col)" 
-                     class="absolute top-2 right-2 w-2 h-2 bg-pink-400 rounded-full animate-pulse"></div>
+                <div
+                  v-if="localSelectedColumns.includes(col)"
+                  class="absolute top-2 right-2 w-2 h-2 bg-pink-400 rounded-full animate-pulse"
+                />
               </label>
             </div>
           </div>
 
-          <!-- Filter Input Section -->
-          <div v-if="localSelectedColumns.length > 0" class="space-y-4">
+          <div
+            v-if="localSelectedColumns.length > 0"
+            class="space-y-4"
+          >
             <div class="flex items-center space-x-2">
-              <div class="w-1 h-6 bg-pink-400 rounded-full"></div>
-              <h3 class="text-lg font-semibold text-gray-800">Masukkan Nilai Filter</h3>
+              <div class="w-1 h-6 bg-pink-400 rounded-full" />
+              <h3 class="text-lg font-semibold text-gray-800">
+                Masukkan Nilai Filter
+              </h3>
               <div class="flex items-center justify-center w-6 h-6 bg-pink-100 text-pink-600 rounded-full text-xs font-bold">
                 {{ localSelectedColumns.length }}
               </div>
             </div>
 
-            <!-- Filter inputs dengan design modern -->
             <div class="space-y-4">
-              <div 
-                v-for="col in localSelectedColumns" 
+              <div
+                v-for="col in localSelectedColumns"
                 :key="col"
                 class="group"
               >
                 <div class="relative">
-                  <!-- Label dengan icon -->
                   <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
                     <div class="flex items-center justify-center w-6 h-6 bg-pink-100 text-pink-600 rounded-md mr-2">
-                      <i :class="getColumnIcon(col)" class="text-xs"></i>
+                      <component
+                        :is="getColumnIcon(col)"
+                        class="w-3 h-3"
+                      />
                     </div>
                     {{ formatColumnName(col) }}
                   </label>
-                  
-                  <!-- Input field dengan icon dan styling modern -->
+
                   <div class="relative">
                     <input
                       v-model="localActiveFilters[col]"
@@ -113,13 +124,12 @@
                       :placeholder="`Masukkan filter untuk ${formatColumnName(col).toLowerCase()}`"
                       class="w-full px-4 py-3 pr-10 text-gray-700 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-200 focus:border-pink-400 transition-all duration-200 placeholder-gray-400"
                     >
-                    <!-- Clear button -->
-                    <button 
+                    <button
                       v-if="localActiveFilters[col]"
-                      @click="localActiveFilters[col] = ''"
                       class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                      @click="localActiveFilters[col] = ''"
                     >
-                      <i class="fas fa-times text-sm"></i>
+                      <IconX class="w-4 h-4" />
                     </button>
                   </div>
                 </div>
@@ -127,51 +137,57 @@
             </div>
           </div>
 
-          <!-- Empty state ketika belum ada kolom yang dipilih -->
-          <div v-if="localSelectedColumns.length === 0" class="text-center py-12">
+          <div
+            v-if="localSelectedColumns.length === 0"
+            class="text-center py-12"
+          >
             <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <i class="fas fa-filter text-gray-400 text-xl"></i>
+              <IconFilter class="text-gray-400 w-8 h-8" />
             </div>
-            <h3 class="text-lg font-medium text-gray-600 mb-2">Belum Ada Kolom Dipilih</h3>
-            <p class="text-gray-500">Pilih kolom di atas untuk mulai membuat filter</p>
+            <h3 class="text-lg font-medium text-gray-600 mb-2">
+              Belum Ada Kolom Dipilih
+            </h3>
+            <p class="text-gray-500">
+              Pilih kolom di atas untuk mulai membuat filter
+            </p>
           </div>
         </div>
 
-        <!-- Footer dengan action buttons -->
         <div class="border-t border-gray-100 bg-gray-50/50 px-6 py-4">
           <div class="flex flex-col sm:flex-row gap-3 sm:justify-end">
-            <!-- Clear button -->
             <button
-              @click="handleClearFilters"
               :disabled="isLoading"
               class="inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-700 focus:ring-2 focus:ring-gray-200 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              @click="handleClearFilters"
             >
-              <i class="fas fa-eraser mr-2 text-xs"></i>
+              <IconTrash class="w-4 h-4 mr-2" />
               Bersihkan Filter
             </button>
-            
-            <!-- Apply button -->
+
             <button
-              @click="handleApplyFilters"
               :disabled="isLoading || localSelectedColumns.length === 0"
               class="inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 rounded-lg focus:ring-2 focus:ring-pink-200 shadow-sm hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
+              @click="handleApplyFilters"
             >
-              <!-- Loading spinner -->
-              <div v-if="isLoading" class="absolute inset-0 flex items-center justify-center">
-                <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              <div
+                v-if="isLoading"
+                class="absolute inset-0 flex items-center justify-center"
+              >
+                <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
               </div>
-              
-              <!-- Button content -->
+
               <span :class="{ 'opacity-0': isLoading }">
-                <i class="fas fa-check-circle mr-2 text-xs"></i>
+                <IconCheck class="w-4 h-4 mr-2" />
                 Terapkan Filter
               </span>
             </button>
           </div>
-          
-          <!-- Summary info -->
-          <div v-if="localSelectedColumns.length > 0" class="flex items-center justify-center mt-3 text-xs text-gray-500">
-            <i class="fas fa-info-circle mr-1"></i>
+
+          <div
+            v-if="localSelectedColumns.length > 0"
+            class="flex items-center justify-center mt-3 text-xs text-gray-500"
+          >
+            <IconInfo class="w-3 h-3 mr-1" />
             {{ localSelectedColumns.length }} kolom dipilih untuk filter
           </div>
         </div>
@@ -183,16 +199,48 @@
 <script lang="ts" setup>
 import { ref, watch, computed } from 'vue';
 
+// Import icon components dari lucide-vue-next
+import {
+  Filter as IconFilter,
+  X as IconX,
+  Check as IconCheck,
+  User as IconUser,
+  Mail as IconMail,
+  Phone as IconPhone,
+  MapPin as IconMapPin,
+  Users as IconUsers,
+  Calendar as IconCalendar,
+  Clock as IconClock,
+  Tag as IconTag, // Untuk role/peran dan category
+  Building as IconBuilding, // Untuk city, company
+  Info as IconInfo,
+  List as IconList,
+  Star as IconStar,
+  ToggleLeft as IconToggleLeft,
+  Plus as IconPlus,
+  Edit as IconEdit,
+  Play as IconPlay,
+  Square as IconSquare,
+  Timer as IconTimer,
+  Flag as IconFlag,
+  Globe as IconGlobe,
+  Hash as IconHash,
+  IdCard as IconIdCard,
+  AlignLeft as IconAlignLeft,
+  StickyNote as IconStickyNote,
+  MessageCircle as IconMessageCircle,
+  Type as IconType,
+  Columns as IconColumns,
+  Trash as IconTrash
+} from 'lucide-vue-next';
+
 const props = defineProps<{
   modelValue: boolean;
   columns: string[];
   initialFilters?: { [key: string]: string | number | null };
 }>();
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void;
-  (e: 'update:activeFilters', filters: { [key: string]: string | number | null }): void;
-}>();
+const emit = new Map<string, Function>();
 
 const localDialogVisible = ref(props.modelValue);
 const localSelectedColumns = ref<string[]>([]);
@@ -201,26 +249,66 @@ const isLoading = ref(false);
 
 // Filter kolom yang tidak diinginkan
 const filteredColumns = computed(() => {
-  const excludedColumns = ['photo', 'deleted_at', 'photo_url', 'foto'];
-  return props.columns.filter(col => 
-    !excludedColumns.some(excluded => 
+  const excludedColumns = ['photo', 'deleted_at', 'photo_url'];
+  return props.columns.filter(col =>
+    !excludedColumns.some(excluded =>
       col.toLowerCase().includes(excluded.toLowerCase())
     )
   );
 });
 
-// Mapping icon untuk setiap kolom
-const getColumnIcon = (column: string): string => {
+// Mapping icon untuk setiap kolom menggunakan component Lucid-Vue-Next
+const getColumnIcon = (column: string) => {
   const col = column.toLowerCase();
-  
-  // Data panitia
-  if (col.includes('nama_panitia')) return 'fas fa-user';
-  if (col.includes('email')) return 'fas fa-envelope';
-  if (col.includes('jabatan')) return 'fas fa-briefcase';
-  if (col.includes('no_hp')) return 'fas fa-phone';
-  
+
+  // Data pribadi
+  if (col.includes('name') || col.includes('nama')) return IconUser;
+  if (col.includes('email')) return IconMail;
+  if (col.includes('phone') || col.includes('telepon') || col.includes('hp')) return IconPhone;
+  if (col.includes('address') || col.includes('alamat')) return IconMapPin;
+  if (col.includes('gender') || col.includes('jenis_kelamin')) return IconUsers;
+  if (col.includes('birth') || col.includes('lahir') || col.includes('tanggal_lahir')) return IconCalendar;
+  if (col.includes('age') || col.includes('umur')) return IconClock;
+
+  // Panitia
+  if (col.includes('role') || col.includes('peran')) return IconTag; // Menggunakan IconTag untuk role/peran
+  if (col.includes('division') || col.includes('divisi')) return IconUsers; // Menggunakan IconUsers untuk divisi
+
+  // Status & Kategori
+  if (col.includes('status')) return IconInfo;
+  if (col.includes('category') || col.includes('kategori')) return IconTag;
+  if (col.includes('type') || col.includes('tipe') || col.includes('jenis')) return IconList;
+  if (col.includes('priority') || col.includes('prioritas')) return IconStar;
+  if (col.includes('active') || col.includes('aktif')) return IconToggleLeft;
+
+  // Waktu & Tanggal
+  if (col.includes('date') || col.includes('tanggal')) return IconCalendar;
+  if (col.includes('time') || col.includes('waktu')) return IconClock;
+  if (col.includes('created') || col.includes('dibuat')) return IconPlus;
+  if (col.includes('updated') || col.includes('diperbarui')) return IconEdit;
+  if (col.includes('start') || col.includes('mulai')) return IconPlay;
+  if (col.includes('end') || col.includes('selesai')) return IconSquare;
+  if (col.includes('duration') || col.includes('durasi')) return IconTimer;
+
+  // Lokasi
+  if (col.includes('location') || col.includes('lokasi')) return IconMapPin;
+  if (col.includes('city') || col.includes('kota')) return IconBuilding;
+  if (col.includes('province') || col.includes('provinsi')) return IconFlag;
+  if (col.includes('country') || col.includes('negara')) return IconGlobe;
+
+  // Identifikasi & Kode
+  if (col.includes('id') || col.includes('code') || col.includes('kode')) return IconHash;
+  if (col.includes('nik') || col.includes('ktp')) return IconIdCard;
+  if (col.includes('number') || col.includes('nomor')) return IconHash;
+
+  // Deskripsi & Konten
+  if (col.includes('description') || col.includes('deskripsi')) return IconAlignLeft;
+  if (col.includes('note') || col.includes('catatan')) return IconStickyNote;
+  if (col.includes('comment') || col.includes('komentar')) return IconMessageCircle;
+  if (col.includes('title') || col.includes('judul')) return IconType;
+
   // Default icon
-  return 'fas fa-columns';
+  return IconColumns;
 };
 
 watch(() => props.modelValue, (newVal) => {
@@ -239,7 +327,7 @@ watch(() => props.modelValue, (newVal) => {
 }, { immediate: true });
 
 watch(localDialogVisible, (newVal) => {
-  emit('update:modelValue', newVal);
+  emit.get('update:modelValue')?.(newVal);
 });
 
 watch(localSelectedColumns, (newSelected, oldSelected) => {
@@ -275,7 +363,7 @@ const handleApplyFilters = async () => {
       filtersToEmit[col] = value;
     }
   }
-  emit('update:activeFilters', filtersToEmit);
+  emit.get('update:activeFilters')?.(filtersToEmit);
   localDialogVisible.value = false;
   isLoading.value = false;
 };
@@ -283,7 +371,7 @@ const handleApplyFilters = async () => {
 const handleClearFilters = () => {
   localSelectedColumns.value = [];
   localActiveFilters.value = {};
-  emit('update:activeFilters', {});
+  emit.get('update:activeFilters')?.({});
   localDialogVisible.value = false;
 };
 </script>

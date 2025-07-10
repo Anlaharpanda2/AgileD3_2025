@@ -1,5 +1,5 @@
 <template>
-  <layout2>
+  <SimpleLayout>
     <div>
       <h1 class="p-5 text-2xl font-bold">
         Pusat Bantuan
@@ -16,9 +16,9 @@
         FAQ dan video tutorial juga tersedia agar pengguna tidak mengalami kendala saat menggunakan website.
       </p>
     </div>
-  </layout2>
+  </SimpleLayout>
 </template>
 
 <script setup>
-import layout2 from '../../layouts/Layout2.vue';
+import SimpleLayout from '../../layouts/SimpleLayout.vue';
 </script>

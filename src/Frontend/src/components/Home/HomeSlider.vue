@@ -13,8 +13,7 @@
         :src="slide"
         height="100%"
         cover
-      >
-      </v-img>
+      />
     </v-carousel-item>
   </v-carousel>
 </template>

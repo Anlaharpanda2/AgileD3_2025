@@ -4,21 +4,48 @@
     <div class="bg-white px-6 py-4 sm:px-8 sm:py-6 shadow-sm border-b border-gray-200">
       <div class="flex items-center justify-between">
         <!-- Back Arrow -->
-        <button @click="goBack" class="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-pink-500">
-          <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        <button
+          class="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-pink-500"
+          @click="goBack"
+        >
+          <svg
+            class="w-6 h-6 text-gray-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
           </svg>
         </button>
         
         <div class="flex items-center space-x-3 flex-grow ml-4">
           <div class="p-2 bg-pink-100 rounded-lg">
-            <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            <svg
+              class="w-6 h-6 text-pink-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
           </div>
           <div>
-            <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Daftar Pelatihan</h2>
-            <p class="text-gray-600 text-xs sm:text-sm">Lengkapi informasi untuk mendaftar pelatihan baru</p>
+            <h2 class="text-xl sm:text-2xl font-bold text-gray-800">
+              Daftar Pelatihan
+            </h2>
+            <p class="text-gray-600 text-xs sm:text-sm">
+              Lengkapi informasi untuk mendaftar pelatihan baru
+            </p>
           </div>
         </div>
       </div>
@@ -26,9 +53,16 @@
 
     <!-- Roadmap -->
     <!-- Roadmap hanya ditampilkan jika tidak sedang loading, kuota tersedia, dan belum disubmit -->
-    <div class="p-6 sm:p-8 bg-white shadow-sm border-b border-gray-200" v-if="!isLoadingQuota && isQuotaAvailable && !isSubmitted">
+    <div
+      v-if="!isLoadingQuota && isQuotaAvailable && !isSubmitted"
+      class="p-6 sm:p-8 bg-white shadow-sm border-b border-gray-200"
+    >
       <div class="flex items-center justify-between space-x-2">
-        <div v-for="(step, index) in steps" :key="index" class="flex-1 flex items-center">
+        <div
+          v-for="(step, index) in steps"
+          :key="index"
+          class="flex-1 flex items-center"
+        >
           <div class="flex items-center w-full">
             <!-- Step Circle -->
             <div
@@ -40,17 +74,31 @@
               @click="goToStep(index)"
             >
               {{ index < 4 ? index + 1 : '' }}
-              <svg v-if="index === 4 && isSubmitted" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              <svg
+                v-if="index === 4 && isSubmitted"
+                class="w-5 h-5 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             </div>
             <!-- Step Label -->
             <span class="ml-2 text-sm font-medium text-gray-700 hidden sm:block">{{ step.label }}</span>
             <!-- Connector Line -->
-            <div v-if="index < steps.length - 1" class="flex-1 h-1 bg-gray-200 mx-2 rounded-full overflow-hidden">
+            <div
+              v-if="index < steps.length - 1"
+              class="flex-1 h-1 bg-gray-200 mx-2 rounded-full overflow-hidden"
+            >
               <div
                 :class="['h-full transition-all duration-300 ease-in-out', currentStep > index ? 'bg-pink-500' : 'bg-gray-200']"
-              ></div>
+              />
             </div>
           </div>
         </div>
@@ -60,120 +108,269 @@
     <!-- Main Content -->
     <div class="p-6 sm:p-8">
       <!-- Tampilan Loading -->
-      <div v-if="isLoadingQuota" class="text-center py-10">
-        <p class="text-gray-600">Memuat status pendaftaran...</p>
+      <div
+        v-if="isLoadingQuota"
+        class="text-center py-10"
+      >
+        <p class="text-gray-600">
+          Memuat status pendaftaran...
+        </p>
       </div>
 
       <!-- Tampilan Setelah Loading Selesai -->
       <div v-else>
         <!-- Tampilan Jika Pendaftaran Tidak Tersedia (NIK sudah terdaftar atau kuota penuh) -->
-        <div v-if="!isQuotaAvailable" class="bg-white rounded-xl p-8 text-center shadow-md border border-gray-100">
-          <svg class="w-16 h-16 text-pink-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <div
+          v-if="!isQuotaAvailable"
+          class="bg-white rounded-xl p-8 text-center shadow-md border border-gray-100"
+        >
+          <svg
+            class="w-16 h-16 text-pink-500 mx-auto mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
-          <h3 class="text-xl font-semibold text-gray-800 mb-2">Pendaftaran Tidak Tersedia</h3>
-          <p class="text-gray-600 mb-6">{{ quotaMessage }}</p>
+          <h3 class="text-xl font-semibold text-gray-800 mb-2">
+            Pendaftaran Tidak Tersedia
+          </h3>
+          <p class="text-gray-600 mb-6">
+            {{ quotaMessage }}
+          </p>
         </div>
 
         <!-- Tampilan Form Pendaftaran (Jika Kuota Tersedia dan Belum Disubmit) -->
-        <div v-else-if="!isSubmitted" class="space-y-6">
+        <div
+          v-else-if="!isSubmitted"
+          class="space-y-6"
+        >
           <!-- Step 1: Informasi Personal -->
-          <div v-if="currentStep === 0" class="bg-white rounded-xl p-5 sm:p-6 border border-gray-100 shadow-md">
+          <div
+            v-if="currentStep === 0"
+            class="bg-white rounded-xl p-5 sm:p-6 border border-gray-100 shadow-md"
+          >
             <div class="flex items-center space-x-3 mb-5">
               <div class="p-2 bg-pink-100 rounded-lg">
-                <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                <svg
+                  class="w-5 h-5 text-pink-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
                 </svg>
               </div>
-              <h3 class="text-base sm:text-lg font-semibold text-gray-800">Informasi Personal</h3>
+              <h3 class="text-base sm:text-lg font-semibold text-gray-800">
+                Informasi Personal
+              </h3>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap <span class="text-red-500">*</span></label>
-                <el-input v-model="form.nama" placeholder="Masukkan nama lengkap" size="large" class="modern-input" :disabled="isNamaDisabled" />
+                <el-input
+                  v-model="form.nama"
+                  placeholder="Masukkan nama lengkap"
+                  size="large"
+                  class="modern-input"
+                  :disabled="isNamaDisabled"
+                />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">NIK <span class="text-red-500">*</span></label>
-                <el-input v-model="form.nik" placeholder="Masukkan NIK" size="large" class="modern-input" :disabled="isNikDisabled" />
+                <el-input
+                  v-model="form.nik"
+                  placeholder="Masukkan NIK"
+                  size="large"
+                  class="modern-input"
+                  :disabled="isNikDisabled"
+                />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Tempat Tanggal Lahir <span class="text-red-500">*</span></label>
-                <el-input v-model="form.tempat_tanggal_lahir" placeholder="Contoh: Jakarta, 15 Januari 1990" size="large" class="modern-input" :disabled="isTtlDisabled" />
+                <el-input
+                  v-model="form.tempat_tanggal_lahir"
+                  placeholder="Contoh: Jakarta, 15 Januari 1990"
+                  size="large"
+                  class="modern-input"
+                  :disabled="isTtlDisabled"
+                />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Status <span class="text-red-500">*</span></label>
-                <el-select v-model="form.status" placeholder="Pilih status" size="large" class="w-full modern-select" clearable>
-                  <el-option v-for="option in statusOptions" :key="option" :label="capitalize(option)" :value="option" />
+                <el-select
+                  v-model="form.status"
+                  placeholder="Pilih status"
+                  size="large"
+                  class="w-full modern-select"
+                  clearable
+                >
+                  <el-option
+                    v-for="option in statusOptions"
+                    :key="option"
+                    :label="capitalize(option)"
+                    :value="option"
+                  />
                 </el-select>
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Pendidikan <span class="text-red-500">*</span></label>
-                <el-input v-model="form.pendidikan" placeholder="Contoh: S1 Teknik Informatika" size="large" class="modern-input" />
+                <el-input
+                  v-model="form.pendidikan"
+                  placeholder="Contoh: S1 Teknik Informatika"
+                  size="large"
+                  class="modern-input"
+                />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Telepon <span class="text-red-500">*</span></label>
-                <el-input v-model="form.nomor_telefon" placeholder="Contoh: 081234567890" size="large" class="modern-input" />
+                <el-input
+                  v-model="form.nomor_telefon"
+                  placeholder="Contoh: 081234567890"
+                  size="large"
+                  class="modern-input"
+                />
               </div>
               <div class="md:col-span-2">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Alamat <span class="text-red-500">*</span></label>
-                <el-input v-model="form.alamat" type="textarea" placeholder="Masukkan alamat lengkap" :rows="3" class="modern-textarea" />
+                <el-input
+                  v-model="form.alamat"
+                  type="textarea"
+                  placeholder="Masukkan alamat lengkap"
+                  :rows="3"
+                  class="modern-textarea"
+                />
               </div>
             </div>
           </div>
 
           <!-- Step 2: Informasi Pelatihan -->
-          <div v-if="currentStep === 1" class="bg-white rounded-xl p-5 sm:p-6 border border-gray-100 shadow-md">
+          <div
+            v-if="currentStep === 1"
+            class="bg-white rounded-xl p-5 sm:p-6 border border-gray-100 shadow-md"
+          >
             <div class="flex items-center space-x-3 mb-5">
               <div class="p-2 bg-pink-100 rounded-lg">
-                <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                <svg
+                  class="w-5 h-5 text-pink-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                  />
                 </svg>
               </div>
-              <h3 class="text-base sm:text-lg font-semibold text-gray-800">Informasi Pelatihan</h3>
+              <h3 class="text-base sm:text-lg font-semibold text-gray-800">
+                Informasi Pelatihan
+              </h3>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Bimtek <span class="text-red-500">*</span></label>
-                <el-input v-model="form.jenis_bimtek" placeholder="Masukkan jenis bimbingan teknis" size="large" class="modern-input" />
+                <el-input
+                  v-model="form.jenis_bimtek"
+                  placeholder="Masukkan jenis bimbingan teknis"
+                  size="large"
+                  class="modern-input"
+                />
               </div>
             </div>
           </div>
 
           <!-- Step 3: Informasi Usaha -->
-          <div v-if="currentStep === 2" class="bg-white rounded-xl p-5 sm:p-6 border border-gray-100 shadow-md">
+          <div
+            v-if="currentStep === 2"
+            class="bg-white rounded-xl p-5 sm:p-6 border border-gray-100 shadow-md"
+          >
             <div class="flex items-center space-x-3 mb-5">
               <div class="p-2 bg-pink-100 rounded-lg">
-                <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8"/>
+                <svg
+                  class="w-5 h-5 text-pink-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8"
+                  />
                 </svg>
               </div>
-              <h3 class="text-base sm:text-lg font-semibold text-gray-800">Informasi Usaha</h3>
+              <h3 class="text-base sm:text-lg font-semibold text-gray-800">
+                Informasi Usaha
+              </h3>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Usaha <span class="text-red-500">*</span></label>
-                <el-input v-model="form.jenis_usaha" placeholder="Contoh: Kuliner, Fashion" size="large" class="modern-input" />
+                <el-input
+                  v-model="form.jenis_usaha"
+                  placeholder="Contoh: Kuliner, Fashion"
+                  size="large"
+                  class="modern-input"
+                />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Penghasilan Per Bulan <span class="text-red-500">*</span></label>
-                <el-input v-model="form.penghasilan_perbulan" placeholder="Contoh: Rp 5.000.000" size="large" class="modern-input" />
+                <el-input
+                  v-model="form.penghasilan_perbulan"
+                  placeholder="Contoh: Rp 5.000.000"
+                  size="large"
+                  class="modern-input"
+                />
               </div>
             </div>
           </div>
 
           <!-- Step 4: Rangkuman Data -->
-          <div v-if="currentStep === 3" class="bg-white rounded-xl p-5 sm:p-6 border border-gray-100 shadow-md">
+          <div
+            v-if="currentStep === 3"
+            class="bg-white rounded-xl p-5 sm:p-6 border border-gray-100 shadow-md"
+          >
             <div class="flex items-center space-x-3 mb-5">
               <div class="p-2 bg-pink-100 rounded-lg">
-                <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                <svg
+                  class="w-5 h-5 text-pink-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
                 </svg>
               </div>
-              <h3 class="text-base sm:text-lg font-semibold text-gray-800">Rangkuman Data</h3>
+              <h3 class="text-base sm:text-lg font-semibold text-gray-800">
+                Rangkuman Data
+              </h3>
             </div>
             <div class="space-y-4">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
-                <div v-for="(value, key) in form" :key="key" class="flex flex-col">
+                <div
+                  v-for="(value, key) in form"
+                  :key="key"
+                  class="flex flex-col"
+                >
                   <span class="text-sm font-medium text-gray-500">{{ formatLabel(key) }}</span>
                   <span class="text-base text-gray-800 font-semibold">{{ value || '-' }}</span>
                 </div>
@@ -185,13 +382,23 @@
           <div class="flex flex-col sm:flex-row gap-3 justify-between pt-6 border-t border-gray-200">
             <button
               v-if="currentStep > 0"
-              @click="currentStep--"
               type="button"
               class="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-xl font-medium hover:bg-gray-50 transition-all duration-200 ease-in-out transform hover:scale-105 shadow-sm"
+              @click="currentStep--"
             >
               <div class="flex items-center justify-center space-x-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                  />
                 </svg>
                 <span>Kembali</span>
               </div>
@@ -200,26 +407,46 @@
               <!-- Removed "Batal" button -->
               <button
                 v-if="currentStep < 3"
-                @click="nextStep"
                 type="button"
                 class="px-6 py-3 bg-pink-500 text-white rounded-xl font-medium hover:bg-pink-600 transition-all duration-200 ease-in-out transform hover:scale-105 shadow-lg"
+                @click="nextStep"
               >
                 <div class="flex items-center justify-center space-x-2">
                   <span>Lanjut</span>
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 </div>
               </button>
               <button
                 v-if="currentStep === 3"
-                @click="confirmSubmitData"
                 type="button"
                 class="px-6 py-3 bg-pink-500 text-white rounded-xl font-medium hover:bg-pink-600 transition-all duration-200 ease-in-out transform hover:scale-105 shadow-lg"
+                @click="confirmSubmitData"
               >
                 <div class="flex items-center justify-center space-x-2">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                   <span>Kirim Data</span>
                 </div>
@@ -229,16 +456,33 @@
         </div>
 
         <!-- Tampilan Konfirmasi Pengiriman (Setelah Disubmit) -->
-        <div v-else-if="isSubmitted" class="bg-white rounded-xl p-8 text-center shadow-md border border-gray-100">
-          <svg class="w-16 h-16 text-pink-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        <div
+          v-else-if="isSubmitted"
+          class="bg-white rounded-xl p-8 text-center shadow-md border border-gray-100"
+        >
+          <svg
+            class="w-16 h-16 text-pink-500 mx-auto mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            />
           </svg>
-          <h3 class="text-xl font-semibold text-gray-800 mb-2">Data Pendaftaran Diterima!</h3>
-          <p class="text-gray-600 mb-6">Terima kasih atas pendaftaran Anda. Data Anda sedang diproses. Anda akan menerima notifikasi lebih lanjut.</p>
+          <h3 class="text-xl font-semibold text-gray-800 mb-2">
+            Data Pendaftaran Diterima!
+          </h3>
+          <p class="text-gray-600 mb-6">
+            Terima kasih atas pendaftaran Anda. Data Anda sedang diproses. Anda akan menerima notifikasi lebih lanjut.
+          </p>
           <button
-            @click="resetPage"
             type="button"
             class="px-8 py-3 bg-pink-500 text-white rounded-xl font-medium hover:bg-pink-600 transition-all duration-200 ease-in-out transform hover:scale-105 shadow-lg"
+            @click="resetPage"
           >
             Lihat Status Pendaftaran
           </button>
@@ -247,108 +491,6 @@
     </div>
   </div>
 </template>
-
-<style>
-/* Custom styles for ElMessageBox - Moved out of scoped to apply globally */
-.custom-message-box {
-  border-radius: 1rem !important; /* rounded-xl */
-  background-color: #ffffff !important; /* bg-white */
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important; /* shadow-lg */
-  border: 1px solid #e5e7eb !important; /* border-gray-200 */
-}
-
-.custom-message-box .el-message-box__header {
-  background-color: #ffffff !important; /* bg-white */
-  border-bottom: 1px solid #fbcfe8 !important; /* pink-200 */
-  padding: 1rem 1.5rem !important; /* px-6 py-4 */
-  border-top-left-radius: 1rem !important;
-  border-top-right-radius: 1rem !important;
-}
-
-.custom-message-box .el-message-box__title {
-  color: #374151 !important; /* gray-800 */
-  font-weight: 700 !important; /* font-bold */
-  font-size: 1.125rem !important; /* text-lg */
-}
-
-.custom-message-box .el-message-box__content {
-  padding: 1.5rem !important; /* p-6 */
-  color: #4b5563 !important; /* gray-600 */
-  font-size: 0.875rem !important; /* text-sm */
-}
-
-.custom-message-box .el-message-box__btns {
-  padding: 1rem 1.5rem !important; /* px-6 py-4 */
-  background-color: #f9fafb !important; /* gray-50 */
-  border-top: 1px solid #e5e7eb !important; /* gray-200 */
-  border-bottom-left-radius: 1rem !important;
-  border-bottom-right-radius: 1rem !important;
-}
-
-.custom-message-box .el-button {
-  border-radius: 0.75rem !important; /* rounded-xl */
-  font-weight: 500 !important; /* font-medium */
-  transition: all 0.2s ease-in-out !important;
-  transform: scale(1) !important;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
-  padding: 0.75rem 1.5rem !important; /* px-6 py-3 */
-}
-
-.custom-message-box .el-button--default { /* Cancel button */
-  background-color: #ffffff !important; /* bg-white */
-  border-color: #d1d5db !important; /* gray-300 */
-  color: #4b5563 !important; /* gray-700 */
-}
-
-.custom-message-box .el-button--default:hover {
-  background-color: #f9fafb !important; /* hover:bg-gray-50 */
-  transform: scale(1.05) !important;
-}
-
-.custom-message-box .el-button--primary { /* Confirm button */
-  background-color: #ec4899 !important; /* pink-500 */
-  border-color: #ec4899 !important; /* pink-500 */
-  color: #ffffff !important; /* text-white */
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important; /* shadow-lg */
-}
-
-.custom-message-box .el-button--primary:hover {
-  background-color: #db2777 !important; /* hover:bg-pink-600 */
-  border-color: #db2777 !important; /* hover:bg-pink-600 */
-  transform: scale(1.05) !important;
-}
-
-/* Modern Input Styles - Keep these scoped as they apply to elements within the component */
-:deep(.modern-input .el-input__wrapper),
-:deep(.modern-select .el-input__wrapper),
-:deep(.modern-textarea .el-textarea__inner) {
-  border-radius: 12px;
-  border: 1px solid #e5e7eb; /* gray-200 */
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
-  padding: 8px 12px;
-  background-color: #ffffff; /* Ensure white background for inputs */
-}
-
-:deep(.modern-input .el-input__wrapper:hover),
-:deep(.modern-select .el-input__wrapper:hover),
-:deep(.modern-textarea .el-textarea__inner:hover) {
-  border-color: #f472b6; /* pink-400 */
-}
-
-:deep(.modern-input.is-focus .el-input__wrapper),
-:deep(.modern-select.is-focus .el-input__wrapper),
-:deep(.modern-textarea .el-textarea__inner:focus) {
-  border-color: #ec4899; /* pink-500 */
-  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1); /* pink-500 with 0.1 opacity */
-}
-
-:deep(.el-input),
-:deep(.el-select),
-:deep(.el-textarea) {
-  width: 100%;
-}
-</style>
 
 <script setup lang="ts">
 import { reactive, ref, onMounted, computed } from 'vue';
@@ -396,9 +538,7 @@ const form = reactive({
 const goBack = () => {
   window.location.href = '/';
 };
-interface CekNikResponse {
-  exists: boolean;
-}
+
 // On component mount, check local storage for pre-filled data and API for quota
 onMounted(async () => {
   // Load data from local storage
@@ -430,9 +570,6 @@ onMounted(async () => {
       // Prioritize checking cekNikResponse.data.exists (standard Axios behavior)
       if (cekNikResponse.data && typeof cekNikResponse.data.exists === 'boolean') {
         existsInResponse = cekNikResponse.data.exists;
-      } else if (typeof cekNikResponse.exists === 'boolean') {
-        // Fallback: Check if exists is directly on the response object (less common for Axios, but possible with custom API wrappers or if 'data' is omitted)
-        existsInResponse = cekNikResponse.exists;
       }
 
       console.log('Determined existsInResponse:', existsInResponse);
@@ -637,3 +774,105 @@ const goToStep = (stepIndex: number) => {
   }
 };
 </script>
+
+<style>
+/* Custom styles for ElMessageBox - Moved out of scoped to apply globally */
+.custom-message-box {
+  border-radius: 1rem !important; /* rounded-xl */
+  background-color: #ffffff !important; /* bg-white */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important; /* shadow-lg */
+  border: 1px solid #e5e7eb !important; /* border-gray-200 */
+}
+
+.custom-message-box .el-message-box__header {
+  background-color: #ffffff !important; /* bg-white */
+  border-bottom: 1px solid #fbcfe8 !important; /* pink-200 */
+  padding: 1rem 1.5rem !important; /* px-6 py-4 */
+  border-top-left-radius: 1rem !important;
+  border-top-right-radius: 1rem !important;
+}
+
+.custom-message-box .el-message-box__title {
+  color: #374151 !important; /* gray-800 */
+  font-weight: 700 !important; /* font-bold */
+  font-size: 1.125rem !important; /* text-lg */
+}
+
+.custom-message-box .el-message-box__content {
+  padding: 1.5rem !important; /* p-6 */
+  color: #4b5563 !important; /* gray-600 */
+  font-size: 0.875rem !important; /* text-sm */
+}
+
+.custom-message-box .el-message-box__btns {
+  padding: 1rem 1.5rem !important; /* px-6 py-4 */
+  background-color: #f9fafb !important; /* gray-50 */
+  border-top: 1px solid #e5e7eb !important; /* gray-200 */
+  border-bottom-left-radius: 1rem !important;
+  border-bottom-right-radius: 1rem !important;
+}
+
+.custom-message-box .el-button {
+  border-radius: 0.75rem !important; /* rounded-xl */
+  font-weight: 500 !important; /* font-medium */
+  transition: all 0.2s ease-in-out !important;
+  transform: scale(1) !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+  padding: 0.75rem 1.5rem !important; /* px-6 py-3 */
+}
+
+.custom-message-box .el-button--default { /* Cancel button */
+  background-color: #ffffff !important; /* bg-white */
+  border-color: #d1d5db !important; /* gray-300 */
+  color: #4b5563 !important; /* gray-700 */
+}
+
+.custom-message-box .el-button--default:hover {
+  background-color: #f9fafb !important; /* hover:bg-gray-50 */
+  transform: scale(1.05) !important;
+}
+
+.custom-message-box .el-button--primary { /* Confirm button */
+  background-color: #ec4899 !important; /* pink-500 */
+  border-color: #ec4899 !important; /* pink-500 */
+  color: #ffffff !important; /* text-white */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important; /* shadow-lg */
+}
+
+.custom-message-box .el-button--primary:hover {
+  background-color: #db2777 !important; /* hover:bg-pink-600 */
+  border-color: #db2777 !important; /* hover:bg-pink-600 */
+  transform: scale(1.05) !important;
+}
+
+/* Modern Input Styles - Keep these scoped as they apply to elements within the component */
+:deep(.modern-input .el-input__wrapper),
+:deep(.modern-select .el-input__wrapper),
+:deep(.modern-textarea .el-textarea__inner) {
+  border-radius: 12px;
+  border: 1px solid #e5e7eb; /* gray-200 */
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+  padding: 8px 12px;
+  background-color: #ffffff; /* Ensure white background for inputs */
+}
+
+:deep(.modern-input .el-input__wrapper:hover),
+:deep(.modern-select .el-input__wrapper:hover),
+:deep(.modern-textarea .el-textarea__inner:hover) {
+  border-color: #f472b6; /* pink-400 */
+}
+
+:deep(.modern-input.is-focus .el-input__wrapper),
+:deep(.modern-select.is-focus .el-input__wrapper),
+:deep(.modern-textarea .el-textarea__inner:focus) {
+  border-color: #ec4899; /* pink-500 */
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1); /* pink-500 with 0.1 opacity */
+}
+
+:deep(.el-input),
+:deep(.el-select),
+:deep(.el-textarea) {
+  width: 100%;
+}
+</style>

@@ -1,5 +1,6 @@
 import { ref } from 'vue';
 import api from '../api';
+import { AxiosError } from 'axios';
 /**
  * Interface untuk struktur data pengumuman.
  */
@@ -28,7 +29,7 @@ export function useAnnouncements() {
     error.value = null; 
     try {
       const response = await api.get('/kelola/berita');
-      let rawData: any[] = [];
+      let rawData: Announcement[] = [];
       if (response && response.data) {
         if (Array.isArray(response.data)) {
           rawData = response.data;
@@ -57,9 +58,15 @@ export function useAnnouncements() {
           return dateB - dateA; 
         });
       announcements.value = filteredAndSortedData;
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error fetching announcements:', err);
-      error.value = `Gagal memuat pengumuman: ${err.message || 'Terjadi kesalahan jaringan atau server.'}`;
+      let errorMessage = 'Terjadi kesalahan jaringan atau server.';
+      if (err instanceof AxiosError && err.message) {
+        errorMessage = err.message;
+      } else if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+      error.value = `Gagal memuat pengumuman: ${errorMessage}`;
     } finally {
       loading.value = false;
     }

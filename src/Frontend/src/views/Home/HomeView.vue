@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import {
   ElButton,
@@ -9,18 +9,18 @@ import {
   Female,
   Male,
   User,
-  Trophy,
   ArrowRight
 } from '@element-plus/icons-vue'
 import AOS from 'aos'
 import 'aos/dist/aos.css' 
-import Layout2 from '../../layouts/Layout2.vue'
+import SimpleLayout from '../../layouts/SimpleLayout.vue'
 import Lokasi from '@/components/Home/LokasiPeta.vue'
-import Pengumuman from '../../components/Home/Pengumuman.vue'
+import HomePengumuman from '../../components/Home/HomePengumuman.vue'
 import LayananUtama from '../../components/Home/LayananUtama.vue'
 import TentangKami from '../../components/Home/TentangKami.vue'
 import BeritaTerbaru from '../../components/Home/BeritaTerbaru.vue'
 import Kontak from '@/components/Home/KontakKami.vue'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const router = useRouter()
 onMounted(() => {
   AOS.init({
@@ -33,14 +33,19 @@ onMounted(() => {
 })
 </script>
 <template>
-  <Layout2>
+  <SimpleLayout>
     <section class="hero-section">
-      <div class="hero-ball"></div>
-      <div class="hero-content" data-aos="fade-up">
+      <div class="hero-ball" />
+      <div
+        class="hero-content"
+        data-aos="fade-up"
+      >
         <div class="hero-text">
           <h1 class="hero-title">
             DP3AP2KB
-            <div class="text-accent">Sumatera Barat</div>
+            <div class="text-accent">
+              Sumatera Barat
+            </div>
             <div class="hero-title2">
               Peningkatan Ekonomi Perempuan Rentan Berspektif Gender
             </div>
@@ -49,26 +54,58 @@ onMounted(() => {
             Pemberdayaan Perempuan Demi Meningkatkan Penghasilan Dan Kemandirian Ekonomi Melalui Pelatihan, Pendampingan Dan Pendekatan Berbasis Kesetaraan Gender.
           </p>
           <div class="hero-actions">
-            <ElButton type="primary" size="large" class="cta-button">
+            <ElButton
+              type="primary"
+              size="large"
+              class="cta-button"
+            >
               Mulai Bergabung
-              <ElIcon class="ml-2"><ArrowRight /></ElIcon>
+              <ElIcon class="ml-2">
+                <ArrowRight />
+              </ElIcon>
             </ElButton>
-            <ElButton size="large" class="secondary-button">
+            <ElButton
+              size="large"
+              class="secondary-button"
+            >
               Pelajari Program
             </ElButton>
           </div>
         </div>
-        <div class="hero-illustration" data-aos="fade-left" data-aos-delay="200">
+        <div
+          class="hero-illustration"
+          data-aos="fade-left"
+          data-aos-delay="200"
+        >
           <div class="floating-card main-card">
-            <ElIcon size="60" color="#ec4899"><Female /></ElIcon>
+            <ElIcon
+              size="60"
+              color="#ec4899"
+            >
+              <Female />
+            </ElIcon>
             <p>Pemberdayaan<br>Perempuan</p>
           </div>
-          <div class="floating-card" style="top: 60%; left: 15%;">
-            <ElIcon size="48" color="#8b5cf6"><User /></ElIcon>
+          <div
+            class="floating-card"
+            style="top: 60%; left: 15%;"
+          >
+            <ElIcon
+              size="48"
+              color="#8b5cf6"
+            >
+              <User />
+            </ElIcon>
             <p>Pengendalian<br>Penduduk</p>
           </div>
-          <div class="floating-card" style="top: 10%; right: 13%;">
-            <ElIcon size="48" color="#10b981">
+          <div
+            class="floating-card"
+            style="top: 10%; right: 13%;"
+          >
+            <ElIcon
+              size="48"
+              color="#10b981"
+            >
               <div class="relative w-10 h-10">
                 <ElIcon class="text-pink-500 text-xl">
                   <Female />
@@ -96,12 +133,19 @@ onMounted(() => {
     <section class="announcements-locations-section">
       <div class="container">
         <ElRow :gutter="32">
-          <ElCol :xs="24" :lg="12" class="mb-4 lg:mb-0">
+          <ElCol
+            :xs="24"
+            :lg="12"
+            class="mb-4 lg:mb-0"
+          >
             <div class="announcement-content">
-              <Pengumuman />
+              <HomePengumuman />
             </div>
           </ElCol>
-          <ElCol :xs="24" :lg="12">
+          <ElCol
+            :xs="24"
+            :lg="12"
+          >
             <div class="location-content">
               <Lokasi />
             </div>
@@ -111,7 +155,7 @@ onMounted(() => {
     </section>
     <!-- Bagian Kontak (menggunakan komponen Kontak yang dipisahkan) -->
     <Kontak />
-  </Layout2>
+  </SimpleLayout>
 </template>
 <style scoped>
 * {

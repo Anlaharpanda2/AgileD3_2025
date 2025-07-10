@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import {
-  ElCard,
-  ElRow,
-  ElCol,
   ElIcon,
-  ElDivider
 } from 'element-plus'
 import {
   Phone,
@@ -52,7 +48,11 @@ onMounted(() => {
   <section class="py-12 bg-gradient-to-br from-gray-50 via-white to-pink-50 md:py-16">
     <div class="container mx-auto px-4 max-w-7xl">
       <!-- Section Header -->
-      <div class="text-center mb-12" data-aos="fade-up" data-aos-duration="500">
+      <div
+        class="text-center mb-12"
+        data-aos="fade-up"
+        data-aos-duration="500"
+      >
         <h2 class="text-3xl font-bold bg-black bg-clip-text text-transparent mb-4 md:text-4xl">
           Hubungi Kami
         </h2>
@@ -62,12 +62,18 @@ onMounted(() => {
       </div>
 
       <!-- Contact Card -->
-      <div class="flex justify-center" data-aos="fade-up" data-aos-delay="200">
+      <div
+        class="flex justify-center"
+        data-aos="fade-up"
+        data-aos-delay="200"
+      >
         <div class="w-full max-w-4xl">
           <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
             <!-- Card Header with gradient -->
             <div class="bg-gradient-to-r from-pink-500 to-pink-600 px-6 py-4">
-              <h3 class="text-xl font-semibold text-white">Informasi Kontak</h3>
+              <h3 class="text-xl font-semibold text-white">
+                Informasi Kontak
+              </h3>
             </div>
             
             <!-- Card Content -->
@@ -79,14 +85,21 @@ onMounted(() => {
                   <div class="flex items-center gap-4 p-4 rounded-xl bg-gray-50 hover:bg-pink-50 transition-all duration-300">
                     <div class="flex-shrink-0">
                       <div class="w-12 h-12 bg-pink-500 rounded-xl flex items-center justify-center">
-                        <ElIcon size="20px" color="white">
+                        <ElIcon
+                          size="20px"
+                          color="white"
+                        >
                           <Location />
                         </ElIcon>
                       </div>
                     </div>
                     <div class="min-w-0">
-                      <h4 class="font-semibold text-gray-800 mb-1">Alamat</h4>
-                      <p class="text-sm text-gray-600">{{ contactInfo.address }}</p>
+                      <h4 class="font-semibold text-gray-800 mb-1">
+                        Alamat
+                      </h4>
+                      <p class="text-sm text-gray-600">
+                        {{ contactInfo.address }}
+                      </p>
                     </div>
                   </div>
                   
@@ -94,14 +107,22 @@ onMounted(() => {
                   <div class="flex items-center gap-4 p-4 rounded-xl bg-gray-50 hover:bg-pink-50 transition-all duration-300">
                     <div class="flex-shrink-0">
                       <div class="w-12 h-12 bg-pink-500 rounded-xl flex items-center justify-center">
-                        <ElIcon size="20px" color="white">
+                        <ElIcon
+                          size="20px"
+                          color="white"
+                        >
                           <Phone />
                         </ElIcon>
                       </div>
                     </div>
                     <div class="min-w-0">
-                      <h4 class="font-semibold text-gray-800 mb-1">Telepon</h4>
-                      <a href="tel:02112345678" class="text-sm text-gray-600 hover:text-pink-600 transition-colors">{{ contactInfo.phone }}</a>
+                      <h4 class="font-semibold text-gray-800 mb-1">
+                        Telepon
+                      </h4>
+                      <a
+                        href="tel:02112345678"
+                        class="text-sm text-gray-600 hover:text-pink-600 transition-colors"
+                      >{{ contactInfo.phone }}</a>
                     </div>
                   </div>
                 </div>
@@ -112,14 +133,22 @@ onMounted(() => {
                   <div class="flex items-center gap-4 p-4 rounded-xl bg-gray-50 hover:bg-pink-50 transition-all duration-300">
                     <div class="flex-shrink-0">
                       <div class="w-12 h-12 bg-pink-500 rounded-xl flex items-center justify-center">
-                        <ElIcon size="20px" color="white">
+                        <ElIcon
+                          size="20px"
+                          color="white"
+                        >
                           <Message />
                         </ElIcon>
                       </div>
                     </div>
                     <div class="min-w-0">
-                      <h4 class="font-semibold text-gray-800 mb-1">Email</h4>
-                      <a href="mailto:info@dp3ap2kb.go.id" class="text-sm text-gray-600 hover:text-pink-600 transition-colors break-all">{{ contactInfo.email }}</a>
+                      <h4 class="font-semibold text-gray-800 mb-1">
+                        Email
+                      </h4>
+                      <a
+                        href="mailto:info@dp3ap2kb.go.id"
+                        class="text-sm text-gray-600 hover:text-pink-600 transition-colors break-all"
+                      >{{ contactInfo.email }}</a>
                     </div>
                   </div>
                   
@@ -127,14 +156,23 @@ onMounted(() => {
                   <div class="flex items-center gap-4 p-4 rounded-xl bg-gray-50 hover:bg-pink-50 transition-all duration-300">
                     <div class="flex-shrink-0">
                       <div class="w-12 h-12 bg-pink-500 rounded-xl flex items-center justify-center">
-                        <ElIcon size="20px" color="white">
+                        <ElIcon
+                          size="20px"
+                          color="white"
+                        >
                           <ChatDotRound />
                         </ElIcon>
                       </div>
                     </div>
                     <div class="min-w-0">
-                      <h4 class="font-semibold text-gray-800 mb-1">WhatsApp</h4>
-                      <a href="https://wa.me/6281234567890" target="_blank" class="text-sm text-gray-600 hover:text-pink-600 transition-colors">{{ contactInfo.whatsapp }}</a>
+                      <h4 class="font-semibold text-gray-800 mb-1">
+                        WhatsApp
+                      </h4>
+                      <a
+                        href="https://wa.me/6281234567890"
+                        target="_blank"
+                        class="text-sm text-gray-600 hover:text-pink-600 transition-colors"
+                      >{{ contactInfo.whatsapp }}</a>
                     </div>
                   </div>
                 </div>

@@ -6,7 +6,6 @@
   >
     <!-- Modal Container dengan shadow yang lebih dramatis -->
     <div class="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl shadow-pink-500/10 animate-in zoom-in-95 duration-300 ease-out">
-
       <!-- Header Section -->
       <!-- Mengurangi padding-bottom untuk proporsi yang lebih baik -->
       <div class="relative px-8 pt-8 pb-4">
@@ -14,23 +13,47 @@
           <div class="flex items-center space-x-3">
             <!-- Icon dengan background gradient -->
             <div class="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl shadow-lg shadow-pink-500/25">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
+              <svg
+                class="w-6 h-6 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
+                />
               </svg>
             </div>
             <div>
-              <h3 class="text-2xl font-bold text-gray-900">Impor Data Excel</h3>
-              <p class="text-sm text-gray-500 mt-1">Upload file Excel untuk mengimpor data pelatihan</p>
+              <h3 class="text-2xl font-bold text-gray-900">
+                Impor Data Excel
+              </h3>
+              <p class="text-sm text-gray-500 mt-1">
+                Upload file Excel untuk mengimpor data pelatihan
+              </p>
             </div>
           </div>
 
           <!-- Close Button dengan hover effect -->
           <button
-            @click="$emit('close')"
             class="flex items-center justify-center w-10 h-10 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all duration-200 hover:scale-110"
+            @click="$emit('close')"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
@@ -40,9 +63,9 @@
       <!-- Menyesuaikan padding-top untuk proporsi yang lebih baik -->
       <div class="px-8 pb-8 pt-4">
         <el-upload
+          ref="upload"
           class="w-full"
           drag
-          ref="upload"
           :file-list="fileList"
           :auto-upload="false"
           :before-upload="beforeUpload"
@@ -51,17 +74,30 @@
         >
           <div class="upload-area-custom">
             <!-- Upload State: Empty -->
-            <div v-if="!fileList.length" class="flex flex-col items-center justify-center py-12">
+            <div
+              v-if="!fileList.length"
+              class="flex flex-col items-center justify-center py-12"
+            >
               <!-- Animated upload icon -->
               <div class="relative mb-6">
                 <div class="flex items-center justify-center w-20 h-20 bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl border-2 border-dashed border-gray-300 hover:border-pink-400 transition-all duration-300">
-                  <svg class="w-8 h-8 text-gray-400 hover:text-pink-500 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                  <svg
+                    class="w-8 h-8 text-gray-400 hover:text-pink-500 transition-colors duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
                   </svg>
                 </div>
                 <!-- Floating dots animation -->
-                <div class="absolute -top-1 -right-1 w-3 h-3 bg-pink-400 rounded-full animate-pulse"></div>
-                <div class="absolute -bottom-1 -left-1 w-2 h-2 bg-gray-400 rounded-full animate-pulse delay-75"></div>
+                <div class="absolute -top-1 -right-1 w-3 h-3 bg-pink-400 rounded-full animate-pulse" />
+                <div class="absolute -bottom-1 -left-1 w-2 h-2 bg-gray-400 rounded-full animate-pulse delay-75" />
               </div>
 
               <!-- Upload text -->
@@ -76,14 +112,34 @@
                 <!-- File format info -->
                 <div class="flex items-center justify-center space-x-4 mt-6 pt-4 border-t border-gray-100">
                   <div class="flex items-center space-x-2 text-sm text-gray-500">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                     <span>Format: .xls, .xlsx</span>
                   </div>
                   <div class="flex items-center space-x-2 text-sm text-gray-500">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                     <span>Maksimal 1 file</span>
                   </div>
@@ -92,12 +148,25 @@
             </div>
 
             <!-- Upload State: File Selected -->
-            <div v-else class="flex items-center justify-center py-8">
+            <div
+              v-else
+              class="flex items-center justify-center py-8"
+            >
               <div class="flex items-center space-x-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl border border-green-200 w-full max-w-md">
                 <!-- File icon -->
                 <div class="flex items-center justify-center w-12 h-12 bg-green-100 rounded-xl">
-                  <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                  <svg
+                    class="w-6 h-6 text-green-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
                   </svg>
                 </div>
 
@@ -113,8 +182,18 @@
 
                 <!-- Success checkmark -->
                 <div class="flex items-center justify-center w-8 h-8 bg-green-500 rounded-full">
-                  <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                  <svg
+                    class="w-4 h-4 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                 </div>
               </div>
@@ -128,11 +207,21 @@
           <div>
             <button
               v-if="fileList.length"
-              @click="resetAndSelectNewFile"
               class="inline-flex items-center space-x-2 px-4 py-2.5 text-sm font-medium text-gray-600 hover:text-gray-800 bg-white hover:bg-gray-50 border border-gray-300 hover:border-gray-400 rounded-xl transition-all duration-200 hover:shadow-sm"
+              @click="resetAndSelectNewFile"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
               </svg>
               <span>Pilih File Lain</span>
             </button>
@@ -146,25 +235,35 @@
               download
               class="inline-flex items-center space-x-2 px-6 py-2.5 text-sm font-medium text-gray-600 hover:text-gray-800 bg-white hover:bg-gray-50 border border-gray-300 hover:border-gray-400 rounded-xl transition-all duration-200 hover:shadow-sm"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                />
               </svg>
               <span>Unduh Format Import</span>
             </a>
 
             <!-- Cancel button -->
             <button
-              @click="$emit('close')"
               class="px-6 py-2.5 text-sm font-medium text-gray-600 hover:text-gray-800 bg-white hover:bg-gray-50 border border-gray-300 hover:border-gray-400 rounded-xl transition-all duration-200"
+              @click="$emit('close')"
             >
               Batal
             </button>
 
             <!-- Import button -->
             <button
-              @click="submitFile"
               :disabled="!fileList.length || loading"
               class="inline-flex items-center space-x-2 px-8 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 focus:from-pink-600 focus:to-pink-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed rounded-xl shadow-lg shadow-pink-500/25 hover:shadow-xl hover:shadow-pink-500/30 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-200 hover:scale-105 disabled:hover:scale-100 disabled:hover:shadow-lg"
+              @click="submitFile"
             >
               <!-- Loading spinner -->
               <svg
@@ -173,8 +272,19 @@
                 fill="none"
                 viewBox="0 0 24 24"
               >
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                />
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
               </svg>
 
               <!-- Import icon -->
@@ -185,7 +295,12 @@
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
+                />
               </svg>
 
               <span>{{ loading ? 'Mengimpor...' : 'Impor File' }}</span>
@@ -199,7 +314,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ElMessage, ElNotification } from 'element-plus'
+import { ElMessage, ElNotification, UploadFile, UploadFiles } from 'element-plus'
 import api from '../../api.js' // Pastikan path ini benar sesuai struktur proyek Anda
 
 const fileList = ref<File[]>([])
@@ -228,7 +343,8 @@ const beforeUpload = (file: File) => {
  * Tangani perubahan file
  * Mengambil file terakhir yang dipilih dan menyimpannya ke fileList.
  */
-const handleChange = (file: any, fileListRaw: any[]) => {
+ 
+const handleChange = (file: UploadFile, fileListRaw: UploadFiles) => {
   // Ambil file terakhir, bisa .raw jika <el-upload> atau langsung File jika <input>
   const lastFile = fileListRaw.slice(-1)[0]
   fileList.value = [lastFile.raw || lastFile]
@@ -266,11 +382,18 @@ const submitFile = async () => {
 
     fileList.value = [] // Kosongkan daftar file setelah berhasil
     // emit event jika perlu, contoh: emit('close') untuk menutup modal
-  } catch (err: any) {
-    // Tangani error dari respons API atau error lainnya
-    const errorMessage = err.response?.data?.error || 'Terjadi kesalahan saat mengimpor data.'
-    ElMessage.error(errorMessage) // Tampilkan pesan error
-    console.error('Import error:', err)
+   
+  } catch (err) {
+    let errorMessage = 'Terjadi kesalahan saat mengimpor data.';
+    if (err instanceof Error) {
+      if ('response' in err && err.response && typeof err.response === 'object' && 'data' in err.response && err.response.data && typeof err.response.data === 'object' && 'error' in err.response.data) {
+        errorMessage = err.response.data.error;
+      } else {
+        errorMessage = err.message;
+      }
+    }
+    ElMessage.error(errorMessage);
+    console.error('Import error:', err);
   } finally {
     loading.value = false // Nonaktifkan status loading
   }

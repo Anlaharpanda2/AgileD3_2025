@@ -1,5 +1,5 @@
 <template>
-  <layout2>
+  <SimpleLayout>
     <div class="p-5 max-w-3xl mx-auto">
       <h1 class="text-3xl font-bold text-center mb-8 text-black">
         FAQ
@@ -11,12 +11,12 @@
         class="mb-4 border border-gray-200 rounded-2xl shadow-md overflow-hidden transition"
       >
         <button
-          @click="toggle(index)"
           class="w-full flex items-center justify-between px-5 py-4"
           :style="{
             backgroundColor: 'var(--color-pink-50)',
             color: openIndex === index ? 'var(--accent-pink)' : 'var(--text-dark)'
           }"
+          @click="toggle(index)"
         >
           <span class="font-medium text-base text-left">
             {{ faq.question }}
@@ -31,8 +31,12 @@
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M19 9l-7 7-7-7" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </button>
 
@@ -41,17 +45,17 @@
             v-if="openIndex === index"
             class="px-5 py-4 text-gray-700 bg-white text-justify leading-relaxed"
           >
-            <p v-html="faq.answer"></p>
+            <p v-html="faq.answer" />
           </div>
         </transition>
       </div>
     </div>
-  </layout2>
+  </SimpleLayout>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import layout2 from '../../layouts/Layout2.vue';
+import SimpleLayout from '../../layouts/SimpleLayout.vue';
 
 const openIndex = ref(null);
 const toggle = (index) => {

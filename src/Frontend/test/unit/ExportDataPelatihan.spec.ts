@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import FormExportDataPelatihan from '../../src/components/KelolaDataPelatihan/FormExportDataPelatihan.vue'
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 (global as any).fetch = vi.fn().mockResolvedValue({
   arrayBuffer: () => Promise.resolve(new Uint8Array([0]).buffer),
   ok: true

@@ -1,70 +1,190 @@
 <template>
   <div class="form-overlay">
     <transition name="popup">
-      <div class="form-popup">
+      <div
+        v-if="isMounted"
+        class="form-popup"
+      >
         <div class="form-header background text-center text-white py-3 rounded-top">
-          <h3 class="mb-0">Formulir Data Pengaduan</h3>
+          <h3 class="mb-0">
+            Formulir Data Pengaduan
+          </h3>
         </div>
         <div class="form-body">
           <el-form
+            ref="formRef"
             :model="form"
             :rules="rules"
-            ref="formRef"
             label-width="140px"
             label-position="top"
             class="p-4"
           >
             <el-row :gutter="20">
-              <el-col :span="24" :md="12" class="mb-3">
-                <el-form-item label="NIK" prop="nik" required>
-                  <el-input v-model="form.nik" placeholder="Masukkan NIK" />
+              <el-col
+                :span="24"
+                :md="12"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="NIK"
+                  prop="nik"
+                  required
+                >
+                  <el-input
+                    v-model="form.nik"
+                    placeholder="Masukkan NIK"
+                  />
                 </el-form-item>
               </el-col>
-              <el-col :span="24" :md="12" class="mb-3">
-                <el-form-item label="Nama" prop="nama" required>
-                  <el-input v-model="form.nama" placeholder="Masukkan Nama" />
+              <el-col
+                :span="24"
+                :md="12"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="Nama"
+                  prop="nama"
+                  required
+                >
+                  <el-input
+                    v-model="form.nama"
+                    placeholder="Masukkan Nama"
+                  />
                 </el-form-item>
               </el-col>
-              <el-col :span="24" :md="12" class="mb-3">
-                <el-form-item label="Jenis Kelamin" prop="jenis_kelamin" required>
-                  <el-select v-model="form.jenis_kelamin" placeholder="Pilih Jenis Kelamin" clearable>
-                    <el-option label="Laki-laki" value="Laki-laki" />
-                    <el-option label="Perempuan" value="Perempuan" />
+              <el-col
+                :span="24"
+                :md="12"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="Jenis Kelamin"
+                  prop="jenis_kelamin"
+                  required
+                >
+                  <el-select
+                    v-model="form.jenis_kelamin"
+                    placeholder="Pilih Jenis Kelamin"
+                    clearable
+                  >
+                    <el-option
+                      label="Laki-laki"
+                      value="Laki-laki"
+                    />
+                    <el-option
+                      label="Perempuan"
+                      value="Perempuan"
+                    />
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="24" :md="12" class="mb-3">
-                <el-form-item label="Umur" prop="umur" required>
-                  <el-input-number v-model="form.umur" :min="0" placeholder="Umur" style="width: 100%;" />
+              <el-col
+                :span="24"
+                :md="12"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="Umur"
+                  prop="umur"
+                  required
+                >
+                  <el-input-number
+                    v-model="form.umur"
+                    :min="0"
+                    placeholder="Umur"
+                    style="width: 100%;"
+                  />
                 </el-form-item>
               </el-col>
-              <el-col :span="24" class="mb-3">
-                <el-form-item label="Alamat" prop="alamat" required>
-                  <el-input v-model="form.alamat" type="textarea" placeholder="Masukkan Alamat" />
+              <el-col
+                :span="24"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="Alamat"
+                  prop="alamat"
+                  required
+                >
+                  <el-input
+                    v-model="form.alamat"
+                    type="textarea"
+                    placeholder="Masukkan Alamat"
+                  />
                 </el-form-item>
               </el-col>
-              <el-col :span="24" :md="12" class="mb-3">
-                <el-form-item label="Nomor HP" prop="no_hp" required>
-                  <el-input v-model="form.no_hp" placeholder="Masukkan Nomor HP" />
+              <el-col
+                :span="24"
+                :md="12"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="Nomor HP"
+                  prop="no_hp"
+                  required
+                >
+                  <el-input
+                    v-model="form.no_hp"
+                    placeholder="Masukkan Nomor HP"
+                  />
                 </el-form-item>
               </el-col>
-              <el-col :span="24" :md="12" class="mb-3">
-                <el-form-item label="Jenis Kasus" prop="jenis_kasus" required>
-                  <el-input v-model="form.jenis_kasus" placeholder="Masukkan Jenis Kasus" />
+              <el-col
+                :span="24"
+                :md="12"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="Jenis Kasus"
+                  prop="jenis_kasus"
+                  required
+                >
+                  <el-input
+                    v-model="form.jenis_kasus"
+                    placeholder="Masukkan Jenis Kasus"
+                  />
                 </el-form-item>
               </el-col>
-              <el-col :span="24" :md="12" class="mb-3">
-                <el-form-item label="Kasus" prop="kasus">
-                  <el-input v-model="form.kasus" placeholder="Masukkan Kasus (opsional)" />
+              <el-col
+                :span="24"
+                :md="12"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="Kasus"
+                  prop="kasus"
+                >
+                  <el-input
+                    v-model="form.kasus"
+                    placeholder="Masukkan Kasus (opsional)"
+                  />
                 </el-form-item>
               </el-col>
-              <el-col :span="24" class="mb-3">
-                <el-form-item label="Deskripsi Laporan" prop="deskripsi_laporan" required>
-                  <el-input v-model="form.deskripsi_laporan" type="textarea" placeholder="Deskripsi Laporan" />
+              <el-col
+                :span="24"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="Deskripsi Laporan"
+                  prop="deskripsi_laporan"
+                  required
+                >
+                  <el-input
+                    v-model="form.deskripsi_laporan"
+                    type="textarea"
+                    placeholder="Deskripsi Laporan"
+                  />
                 </el-form-item>
               </el-col>
-              <el-col :span="24" :md="12" class="mb-3">
-                <el-form-item label="Waktu Kejadian" prop="waktu_kejadian" required>
+              <el-col
+                :span="24"
+                :md="12"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="Waktu Kejadian"
+                  prop="waktu_kejadian"
+                  required
+                >
                   <el-date-picker
                     v-model="form.waktu_kejadian"
                     type="datetime"
@@ -73,31 +193,86 @@
                   />
                 </el-form-item>
               </el-col>
-              <el-col :span="24" :md="12" class="mb-3">
-                <el-form-item label="Nama Korban" prop="nama_korban">
-                  <el-input v-model="form.nama_korban" placeholder="Nama Korban (opsional)" />
+              <el-col
+                :span="24"
+                :md="12"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="Nama Korban"
+                  prop="nama_korban"
+                >
+                  <el-input
+                    v-model="form.nama_korban"
+                    placeholder="Nama Korban (opsional)"
+                  />
                 </el-form-item>
               </el-col>
-              <el-col :span="24" :md="12" class="mb-3">
-                <el-form-item label="Saksi" prop="saksi">
-                  <el-input v-model="form.saksi" placeholder="Saksi (opsional)" />
+              <el-col
+                :span="24"
+                :md="12"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="Saksi"
+                  prop="saksi"
+                >
+                  <el-input
+                    v-model="form.saksi"
+                    placeholder="Saksi (opsional)"
+                  />
                 </el-form-item>
               </el-col>
-              <el-col :span="24" :md="12" class="mb-3">
-                <el-form-item label="Jenis Pengaduan" prop="jenis_pengaduan" required>
-                  <el-select v-model="form.jenis_pengaduan" placeholder="Pilih Jenis Pengaduan" clearable>
-                    <el-option label="langsung" value="langsung" />
-                    <el-option label="tidak langsung" value="tidak langsung" />
+              <el-col
+                :span="24"
+                :md="12"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="Jenis Pengaduan"
+                  prop="jenis_pengaduan"
+                  required
+                >
+                  <el-select
+                    v-model="form.jenis_pengaduan"
+                    placeholder="Pilih Jenis Pengaduan"
+                    clearable
+                  >
+                    <el-option
+                      label="langsung"
+                      value="langsung"
+                    />
+                    <el-option
+                      label="tidak langsung"
+                      value="tidak langsung"
+                    />
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="24" :md="12" class="mb-3">
-                <el-form-item label="Lampiran" prop="lampiran">
-                  <input type="file" @change="onFileChange" />
+              <el-col
+                :span="24"
+                :md="12"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="Lampiran"
+                  prop="lampiran"
+                >
+                  <input
+                    type="file"
+                    @change="onFileChange"
+                  >
                 </el-form-item>
               </el-col>
-              <el-col :span="24" :md="12" class="mb-3">
-                <el-form-item label="Tanggal Pengaduan" prop="tanggal_pengaduan">
+              <el-col
+                :span="24"
+                :md="12"
+                class="mb-3"
+              >
+                <el-form-item
+                  label="Tanggal Pengaduan"
+                  prop="tanggal_pengaduan"
+                >
                   <el-date-picker
                     v-model="form.tanggal_pengaduan"
                     type="date"
@@ -108,8 +283,19 @@
               </el-col>
             </el-row>
             <el-form-item class="d-flex justify-content-end gap-3 mt-4">
-              <el-button @click="$emit('close')" class="btn-cancel">Batal</el-button>
-              <el-button type="primary" @click="submitForm" class="btn-submit">Kirim</el-button>
+              <el-button
+                class="btn-cancel"
+                @click="$emit('close')"
+              >
+                Batal
+              </el-button>
+              <el-button
+                type="primary"
+                class="btn-submit"
+                @click="submitForm"
+              >
+                Kirim
+              </el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -119,12 +305,17 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import api from '../../api.js'
 import { ElNotification } from 'element-plus'
 
 const emit = defineEmits(['close'])
 const formRef = ref(null)
+
+const isMounted = ref(false)
+onMounted(() => {
+  isMounted.value = true
+})
 
 const form = reactive({
   nik: '',

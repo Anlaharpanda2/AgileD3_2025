@@ -149,23 +149,33 @@ export default {
 <template>
   <div class="coverpage">
     <div class="overlap">
-      <div class="ellipse"></div>
-      <div class="div"></div>
+      <div class="ellipse" />
+      <div class="div" />
       <div class="login">
         <div class="overlap-group">
-          <div class="rectangle"></div>
-          <img class="mask-group" src="https://c.animaapp.com/IJi6pJQY/img/mask-group@2x.png" />
+          <div class="rectangle" />
+          <img
+            class="mask-group"
+            src="https://c.animaapp.com/IJi6pJQY/img/mask-group@2x.png"
+          >
           <div class="group">
-            <img class="thunderbolt" src="https://c.animaapp.com/IJi6pJQY/img/thunderbolt-1@2x.png" />
+            <img
+              class="thunderbolt"
+              src="https://c.animaapp.com/IJi6pJQY/img/thunderbolt-1@2x.png"
+            >
           </div>
-          <div class="keluarga-sejahtera">Keluarga<br />Sejahtera<br />Setara<br />Terlindung</div>
+          <div class="keluarga-sejahtera">
+            Keluarga<br>Sejahtera<br>Setara<br>Terlindung
+          </div>
         </div>
         <div class="overlap-2">
           <div class="group-2">
-            <div class="masuk">Verifikasi OTP</div>
+            <div class="masuk">
+              Verifikasi OTP
+            </div>
             <p class="p">
               Silakan masukkan kode OTP 6 digit yang telah dikirim ke email
-              <br />
+              <br>
               <span class="email-display">{{ userEmail }}</span>
             </p>
 
@@ -178,21 +188,30 @@ export default {
                   type="text"
                   maxlength="1"
                   :value="digit"
-                  @input="event => handleInput(event, index)"
-                  @keydown.backspace="event => handleKeyDown(event, index)"
-                  @paste="handlePaste"
                   class="otp-digit-input"
                   inputmode="numeric"
                   pattern="[0-9]"
-                />
+                  @input="event => handleInput(event, index)"
+                  @keydown.backspace="event => handleKeyDown(event, index)"
+                  @paste="handlePaste"
+                >
               </div>
 
               <div class="group-7">
-                <button type="submit" class="btn overlap-5 btn-gradient" :disabled="isLoading">
-                  <div class="text-wrapper-4">{{ isLoading ? 'Memverifikasi...' : 'Verifikasi OTP' }}</div>
+                <button
+                  type="submit"
+                  class="btn overlap-5 btn-gradient"
+                  :disabled="isLoading"
+                >
+                  <div class="text-wrapper-4">
+                    {{ isLoading ? 'Memverifikasi...' : 'Verifikasi OTP' }}
+                  </div>
                 </button>
               </div>
-              <div v-if="errorMessage" class="error-message">
+              <div
+                v-if="errorMessage"
+                class="error-message"
+              >
                 {{ errorMessage }}
               </div>
             </form>

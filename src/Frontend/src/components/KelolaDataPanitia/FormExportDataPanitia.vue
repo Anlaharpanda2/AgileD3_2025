@@ -22,7 +22,7 @@ import {
 import { ElNotification } from 'element-plus'
 
 const props = defineProps<{
-  data: Array<Record<string, any>>
+  data: Array<Record<string, unknown>>
 }>()
 
 // Kolom-kolom yang akan diekspor
@@ -150,7 +150,7 @@ async function ExportWord(headerText: string, titleText: string, showLogo1: bool
   })
 
   // Tambahkan judul dokumen jika ada
-  const documentChildren = [new Paragraph({ text: "", spacing: { after: 200 } })];
+  const documentChildren: (Paragraph | Table)[] = [new Paragraph({ text: "", spacing: { after: 200 } })];
   if (titleText) {
     documentChildren.push(new Paragraph({
       children: [new TextRun({ text: titleText, bold: true, size: 24 })], // Ukuran font disamakan dengan headerText
@@ -316,36 +316,68 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
   >
     <!-- Modal Container -->
     <div class="relative bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl shadow-gray-500/10 p-8 w-full max-w-md mx-auto animate-scale-in max-h-[90vh] overflow-y-auto md:max-h-auto">
-      
       <!-- Close Button -->
       <button
-        @click="$emit('close')"
         class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all duration-200 hover:scale-110 group"
+        @click="$emit('close')"
       >
-        <svg class="w-4 h-4 text-gray-500 group-hover:text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        <svg
+          class="w-4 h-4 text-gray-500 group-hover:text-gray-700"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
         </svg>
       </button>
 
       <!-- Header -->
       <div class="text-center mb-8">
         <div class="w-16 h-16 bg-gradient-to-br from-pink-300 to-pink-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          <svg
+            class="w-8 h-8 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
           </svg>
         </div>
-        <h2 class="text-2xl font-bold text-gray-800 mb-2">Export Data Panitia</h2>
-        <p class="text-gray-600 text-sm">Pilih format export dan konfigurasi dokumen</p>
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">
+          Export Data Panitia
+        </h2>
+        <p class="text-gray-600 text-sm">
+          Pilih format export dan konfigurasi dokumen
+        </p>
       </div>
 
       <!-- Form Content -->
       <div class="space-y-6">
-        
         <!-- Header Dokumen Input -->
         <div class="space-y-2">
           <label class="block text-sm font-semibold text-gray-700 mb-2">
-            <svg class="w-4 h-4 inline mr-2 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            <svg
+              class="w-4 h-4 inline mr-2 text-pink-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
             </svg>
             Header Dokumen
           </label>
@@ -355,10 +387,20 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
               type="text"
               placeholder="Masukkan teks header untuk PDF & Word"
               class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-300 focus:border-transparent transition-all duration-200 placeholder-gray-400"
-            />
+            >
             <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-              <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+              <svg
+                class="w-4 h-4 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                />
               </svg>
             </div>
           </div>
@@ -367,8 +409,18 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
         <!-- Judul Dokumen Input (baru) -->
         <div class="space-y-2">
           <label class="block text-sm font-semibold text-gray-700 mb-2">
-            <svg class="w-4 h-4 inline mr-2 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            <svg
+              class="w-4 h-4 inline mr-2 text-pink-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
             </svg>
             Judul Dokumen (Opsional)
           </label>
@@ -378,10 +430,20 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
               type="text"
               placeholder="Masukkan judul dokumen (di bawah header)"
               class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-300 focus:border-transparent transition-all duration-200 placeholder-gray-400"
-            />
+            >
             <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-              <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+              <svg
+                class="w-4 h-4 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                />
               </svg>
             </div>
           </div>
@@ -390,8 +452,18 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
         <!-- Opsi Logo -->
         <div class="space-y-3">
           <label class="text-sm font-semibold text-gray-700 block">
-            <svg class="w-4 h-4 inline mr-2 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            <svg
+              class="w-4 h-4 inline mr-2 text-pink-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
             </svg>
             Opsi Logo
           </label>
@@ -399,14 +471,22 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
           <div class="space-y-3">
             <label class="flex items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer group">
               <input
-                type="checkbox"
                 v-model="showLogo1"
+                type="checkbox"
                 class="w-4 h-4 text-pink-400 bg-gray-100 border-gray-300 rounded focus:ring-pink-300 focus:ring-2"
-              />
+              >
               <div class="ml-3 flex items-center">
                 <div class="w-8 h-8 bg-gradient-to-br from-sky-300 to-sky-400 rounded-lg flex items-center justify-center mr-3">
-                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm2 2V5h1v1H5zM3 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zm2 2v-1h1v1H5zM13 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1V4zm2 2V5h1v1h-1z" clip-rule="evenodd"></path>
+                  <svg
+                    class="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M3 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm2 2V5h1v1H5zM3 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zm2 2v-1h1v1H5zM13 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1V4zm2 2V5h1v1h-1z"
+                      clip-rule="evenodd"
+                    />
                   </svg>
                 </div>
                 <span class="text-sm font-medium text-gray-700 group-hover:text-gray-900">Logo Tuah Sakato</span>
@@ -415,14 +495,22 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
 
             <label class="flex items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer group">
               <input
-                type="checkbox"
                 v-model="showLogo2"
+                type="checkbox"
                 class="w-4 h-4 text-pink-400 bg-gray-100 border-gray-300 rounded focus:ring-pink-300 focus:ring-2"
-              />
+              >
               <div class="ml-3 flex items-center">
                 <div class="w-8 h-8 bg-gradient-to-br from-emerald-300 to-emerald-400 rounded-lg flex items-center justify-center mr-3">
-                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                  <svg
+                    class="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                      clip-rule="evenodd"
+                    />
                   </svg>
                 </div>
                 <span class="text-sm font-medium text-gray-700 group-hover:text-gray-900">Logo Padang Kota Tercinta</span>
@@ -434,19 +522,37 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
         <!-- Tombol Export -->
         <div class="space-y-3 pt-2">
           <p class="text-sm font-semibold text-gray-700 mb-3">
-            <svg class="w-4 h-4 inline mr-2 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+            <svg
+              class="w-4 h-4 inline mr-2 text-pink-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+              />
             </svg>
             Format Export
           </p>
           
           <!-- Tombol Excel -->
           <button
-            @click="ExportHandler('excel')"
             class="w-full flex items-center justify-center px-6 py-3 bg-gradient-to-r from-emerald-400 to-emerald-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-emerald-500 hover:to-emerald-600 transform hover:scale-105 transition-all duration-200 group"
+            @click="ExportHandler('excel')"
           >
-            <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V8z" clip-rule="evenodd"></path>
+            <svg
+              class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V8z"
+                clip-rule="evenodd"
+              />
             </svg>
             Export Excel
             <span class="ml-2 text-xs bg-white/30 px-2 py-1 rounded-full">XLSX</span>
@@ -454,11 +560,19 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
 
           <!-- Tombol PDF -->
           <button
-            @click="ExportHandler('pdf')"
             class="w-full flex items-center justify-center px-6 py-3 bg-gradient-to-r from-rose-400 to-rose-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-rose-500 hover:to-rose-600 transform hover:scale-105 transition-all duration-200 group"
+            @click="ExportHandler('pdf')"
           >
-            <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path>
+            <svg
+              class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                clip-rule="evenodd"
+              />
             </svg>
             Export PDF
             <span class="ml-2 text-xs bg-white/30 px-2 py-1 rounded-full">PDF</span>
@@ -466,11 +580,19 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
 
           <!-- Tombol Word -->
           <button
-            @click="ExportHandler('word')"
             class="w-full flex items-center justify-center px-6 py-3 bg-gradient-to-r from-sky-400 to-sky-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-sky-500 hover:to-sky-600 transform hover:scale-105 transition-all duration-200 group"
+            @click="ExportHandler('word')"
           >
-            <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"></path>
+            <svg
+              class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
+                clip-rule="evenodd"
+              />
             </svg>
             Export Word
             <span class="ml-2 text-xs bg-white/30 px-2 py-1 rounded-full">DOCX</span>
@@ -481,17 +603,28 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
         <div class="mt-6 p-4 bg-gradient-to-r from-pink-50 to-pink-100 rounded-xl border border-pink-200">
           <div class="flex items-center">
             <div class="w-8 h-8 bg-pink-400 rounded-lg flex items-center justify-center mr-3">
-              <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+              <svg
+                class="w-4 h-4 text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                  clip-rule="evenodd"
+                />
               </svg>
             </div>
             <div class="flex-1">
-              <p class="text-sm font-semibold text-pink-700">{{ props.data.length }} Data Siap Export</p>
-              <p class="text-xs text-pink-500">Data panitia akan diekspor sesuai format yang dipilih</p>
+              <p class="text-sm font-semibold text-pink-700">
+                {{ props.data.length }} Data Siap Export
+              </p>
+              <p class="text-xs text-pink-500">
+                Data panitia akan diekspor sesuai format yang dipilih
+              </p>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>

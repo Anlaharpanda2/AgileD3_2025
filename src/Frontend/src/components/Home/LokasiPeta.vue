@@ -1,29 +1,45 @@
 <template>
   <div class="w-full">
     <!-- Header Section -->
-    <div class="text-center mb-16" data-aos="fade-up">
-      <h2 class="text-4xl font-bold text-slate-800 mb-4">Lokasi Kami</h2>
+    <div
+      class="text-center mb-16"
+      data-aos="fade-up"
+    >
+      <h2 class="text-4xl font-bold text-slate-800 mb-4">
+        Lokasi Kami
+      </h2>
       <p class="text-lg text-slate-600 font-normal max-w-2xl mx-auto">
         Temukan lokasi pusat layanan kami di sini
       </p>
     </div>
     
     <!-- Location Card -->
-    <ElCard class="rounded-3xl p-10 border-0 shadow-xl h-full" data-aos="zoom-in" data-aos-delay="100">
-      <div v-loading="isLoading" class="relative min-h-[200px]">
+    <ElCard
+      class="rounded-3xl p-10 border-0 shadow-xl h-full"
+      data-aos="zoom-in"
+      data-aos-delay="100"
+    >
+      <div
+        v-loading="isLoading"
+        class="relative min-h-[200px]"
+      >
         <!-- Location Header -->
         <div class="flex justify-between items-center mb-6">
-          <h3 class="text-2xl font-bold text-slate-800 location-name">{{ locationInfo.name }}</h3>
+          <h3 class="text-2xl font-bold text-slate-800 location-name">
+            {{ locationInfo.name }}
+          </h3>
           <ElButton 
             :icon="Edit" 
             circle 
-            @click="toggleEditLocation" 
-            class="transition-transform hover:scale-110"
+            class="transition-transform hover:scale-110" 
             :type="locationInfo.isEditing ? 'primary' : 'default'"
             :loading="isSaving"
+            @click="toggleEditLocation"
           >
             <template #loading>
-              <ElIcon class="is-loading"><Loading /></ElIcon>
+              <ElIcon class="is-loading">
+                <Loading />
+              </ElIcon>
             </template>
           </ElButton>
         </div>
@@ -34,13 +50,21 @@
             class="w-full h-[300px] overflow-hidden rounded-xl border-2 mb-4 transition-colors"
             :class="locationInfo.isEditing ? 'border-pink-500 cursor-crosshair' : 'border-slate-200'"
           >
-            <div ref="mapContainer" class="w-full h-full rounded-lg map-loading"></div>
+            <div
+              ref="mapContainer"
+              class="w-full h-full rounded-lg map-loading"
+            />
           </div>
 
           <!-- Edit Mode UI -->
-          <div v-if="locationInfo.isEditing" class="mt-6">
+          <div
+            v-if="locationInfo.isEditing"
+            class="mt-6"
+          >
             <div class="bg-gradient-to-r from-pink-500 to-purple-600 text-white p-4 rounded-lg mb-6 text-center">
-              <p class="m-0 font-medium">🗺️ Klik pada peta atau drag marker untuk memilih lokasi baru</p>
+              <p class="m-0 font-medium">
+                🗺️ Klik pada peta atau drag marker untuk memilih lokasi baru
+              </p>
             </div>
             
             <ElInput
@@ -63,13 +87,24 @@
 
             <!-- Edit Actions -->
             <div class="mt-6 flex gap-4 justify-center">
-              <ElButton type="primary" @click="saveLocation" :loading="isSaving">Simpan</ElButton>
-              <ElButton @click="locationInfo.isEditing = false">Batal</ElButton>
+              <ElButton
+                type="primary"
+                :loading="isSaving"
+                @click="saveLocation"
+              >
+                Simpan
+              </ElButton>
+              <ElButton @click="locationInfo.isEditing = false">
+                Batal
+              </ElButton>
             </div>
           </div>
           
           <!-- View Mode UI -->
-          <div v-else class="mt-6">
+          <div
+            v-else
+            class="mt-6"
+          >
             <p class="text-base text-slate-600 leading-relaxed mb-6 flex items-start gap-2 location-address">
               <span class="text-xl text-pink-500 mt-1">📍</span>
               {{ locationInfo.address }}
@@ -82,7 +117,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick, watch, onUnmounted } from 'vue';
+/* global L */
+import { ref, onMounted, nextTick, onUnmounted } from 'vue';
 import {
   ElButton,
   ElCard,
@@ -120,7 +156,7 @@ interface LocationBackendItem {
   alamat: string;
   latitude: string; 
   longitude: string; 
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface NominatimResponse {
@@ -134,9 +170,9 @@ interface NominatimResponse {
     office?: string;
     house_number?: string;
     road?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // --- Data Reaktif ---
@@ -329,9 +365,14 @@ const initMap = async () => {
 
     console.log('Leaflet map initialized successfully.');
 
-  } catch (error: any) {
+     
+  } catch (error) {
     console.error('Error initializing Leaflet map:', error);
-    ElMessage.error(`Gagal memuat peta: ${error.message || 'Tidak diketahui'}`);
+    let errorMessage = 'Tidak diketahui';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    ElMessage.error(`Gagal memuat peta: ${errorMessage}`);
   }
 };
 
@@ -458,13 +499,20 @@ const fetchLocation = async () => {
       updateMapAndMarkerPosition(locationInfo.value.lat, locationInfo.value.lng);
     }
 
-  } catch (err: any) {
+     
+  } catch (err) {
     console.error('❌ Error fetching location:', err);
-    const msg = `Gagal mengambil data lokasi: ${err.response?.status ? `server respons ${err.response.status}.` : err.message || 'Error tidak diketahui.'}`;
-    ElMessage.error(msg);
+    let msg = 'Error tidak diketahui.';
+    if (err instanceof Error) {
+      msg = err.message;
+      if ('response' in err && err.response && typeof err.response === 'object' && 'status' in err.response) {
+        msg = `server respons ${err.response.status}.`;
+      }
+    }
+    ElMessage.error(`Gagal mengambil data lokasi: ${msg}`);
     locationInfo.value.name = 'Error Memuat Lokasi';
     locationInfo.value.address = 'Gagal memuat data. Silakan coba lagi.';
-    locationInfo.value.lat = DEFAULT_LAT; 
+    locationInfo.value.lat = DEFAULT_LAT;
     locationInfo.value.lng = DEFAULT_LNG;
   } finally {
     isLoading.value = false;
@@ -498,14 +546,17 @@ const saveLocation = async () => {
       marker.dragging?.disable(); // Pastikan drag dinonaktifkan
     }
 
-  } catch (error: any) {
+     
+  } catch (error) {
     console.error('Error saving location data:', error);
     let errorMessage = 'Gagal menyimpan lokasi. Silakan coba lagi.';
-    if (error.response && error.response.data && error.response.data.errors) {
-      const errorMessages = Object.values(error.response.data.errors).flat().join('; ');
-      errorMessage = `Gagal menyimpan lokasi: ${errorMessages}`;
-    } else if (error.message) {
-      errorMessage = `Gagal menyimpan lokasi: ${error.message}`;
+    if (error instanceof Error) {
+      if ('response' in error && error.response && typeof error.response === 'object' && 'data' in error.response && error.response.data && typeof error.response.data === 'object' && 'errors' in error.response.data && error.response.data.errors) {
+        const errorMessages = Object.values(error.response.data.errors).flat().join('; ');
+        errorMessage = `Gagal menyimpan lokasi: ${errorMessages}`;
+      } else {
+        errorMessage = `Gagal menyimpan lokasi: ${error.message}`;
+      }
     }
     ElMessage.error(errorMessage);
   } finally {

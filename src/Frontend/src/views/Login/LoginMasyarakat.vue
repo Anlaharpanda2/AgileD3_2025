@@ -10,12 +10,6 @@ export default {
       errorMessage: '',
     };
   },
-  mounted() {
-    // Jika sudah login, langsung arahkan ke halaman data pendaftar
-    if (localStorage.getItem('isLoggedIn') === 'true') {
-      this.$router.push('/data/pelatihan');
-    }
-  },
   watch: {
     showPassword(newValue) {
       this.$nextTick(() => {
@@ -23,6 +17,12 @@ export default {
           this.$refs.nikInput.type = newValue ? 'text' : 'password';
         }
       });
+    }
+  },
+  mounted() {
+    // Jika sudah login, langsung arahkan ke halaman data pendaftar
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+      this.$router.push('/data/pelatihan');
     }
   },
   methods: {
@@ -69,108 +69,148 @@ export default {
 </script>
 
 <template>
-    <div class="coverpage">
-        <div class="overlap">
-          <div class="ellipse"></div>
-          <div class="div"></div>
-          <div class="login">
-            <div class="overlap-group">
-              <div class="rectangle"></div>
-              <img class="mask-group" src="https://c.animaapp.com/IJi6pJQY/img/mask-group@2x.png" />
-              <div class="group">
-                <img class="thunderbolt" src="https://c.animaapp.com/IJi6pJQY/img/thunderbolt-1@2x.png" />
-              </div>
-              <div class="keluarga-sejahtera">Keluarga<br />Sejahtera<br />Setara<br />Terlindung</div>
-            </div>
-            <div class="overlap-2">
-              <div class="group-2">
-                <div class="overlap-3">
-                  <div class="overlap-group-wrapper">
-                    <div class="overlap-group-2">
-                      <div class="text-wrapper">Atau</div>
-                      <img class="subtract" src="https://c.animaapp.com/IJi6pJQY/img/subtract.svg" />
-                    </div>
-                  </div>
-                  <div class="group-3">
-                    <a href="/login/operator">
-                      <div class="group-wrapper ">
-                        <img class="manage-accounts"src="https://c.animaapp.com/IJi6pJQY/img/manage-accounts-24dp-e8eaed-fill0-wght400-grad0-opsz24-1.svg"/>
-                        <div class="masuk-sebagai-wrapper">
-                          <p class="masuk-sebagai">
-                            <span class="span">Masuk Sebagai <span class="text-wrapper-2">Operator</span></span> 
-                          </p>
-                        </div>
-                      </div>
-                    </a>
-                    <a href="/login/pegawai">
-                      <div class="div-wrapper">
-                        <img class="img" src="https://c.animaapp.com/IJi6pJQY/img/mask-group-1@2x.png" />
-                        <div class="group-4">
-                          <p class="masuk-sebagai">
-                            <span class="span">Masuk Sebagai <span class="text-wrapper-2">Pegawai</span>  </span> 
-                          </p>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-                <div class="masuk">MASUK</div>
-                <p class="p">Silahkan Masukan Nama dan NIK sesuai KK</p>
-                <form @submit="validateForm">
-                  <div class="group-5">
-                    <div class="overlap-4">
-                      <input
-                        :type="showPassword ? 'text' : 'password'"
-                        v-model="nik"
-                        class="text-wrapper-3"
-                        placeholder="NIK"
-                        name="current-password"
-                        autocomplete="current-password"
-                      />
-                      <img class="frame" src="https://c.animaapp.com/IJi6pJQY/img/frame.svg" />
-                    </div>
-                  </div>
-                  <div class="group-6">
-                    <div class="overlap-4">
-                      <input
-                        type="text"
-                        v-model="nama"
-                        class="text-wrapper-3"
-                        placeholder="Nama"
-                        name="username"
-                        autocomplete="username"
-                      />
-                      <img class="frame" src="https://c.animaapp.com/IJi6pJQY/img/frame-1.svg" />
-                    </div>
-                  </div>
-
-                  <div class="group-8">
-                    <label class = "checkbox">
-                      <input type="checkbox" v-model="showPassword" />
-                      Tampilkan NIK
-                    </label>
-                  </div>
-                  <div class="group-7">
-                    <button type="submit" class="btn overlap-5 btn-gradient">
-                      <div class="text-wrapper-4">Login Now</div>
-                    </button>
-                  </div>
-                  <div v-if="errorMessage" class="error-message">
-                    {{ errorMessage }}
-                  </div>
-                </form>
-              </div>
-              <p class="belum-memiliki-akun">
-                <span class="text-wrapper-5">Belum memiliki akun?</span>
-                <span class="text-wrapper-6">&nbsp;&nbsp;</span>
-                <a href="/daftar/masyarakat">
-                  <span class="text-wrapper-7">Daftar</span>
-                </a>
-              </p>
-            </div>
+  <div class="coverpage">
+    <div class="overlap">
+      <div class="ellipse" />
+      <div class="div" />
+      <div class="login">
+        <div class="overlap-group">
+          <div class="rectangle" />
+          <img
+            class="mask-group"
+            src="https://c.animaapp.com/IJi6pJQY/img/mask-group@2x.png"
+          >
+          <div class="group">
+            <img
+              class="thunderbolt"
+              src="https://c.animaapp.com/IJi6pJQY/img/thunderbolt-1@2x.png"
+            >
+          </div>
+          <div class="keluarga-sejahtera">
+            Sumbar<br>Madani<br>yang unggul<br>dan berkelanjutan
           </div>
         </div>
+        <div class="overlap-2">
+          <div class="group-2">
+            <div class="overlap-3">
+              <div class="overlap-group-wrapper">
+                <div class="overlap-group-2">
+                  <div class="text-wrapper">
+                    Atau
+                  </div>
+                  <img
+                    class="subtract"
+                    src="https://c.animaapp.com/IJi6pJQY/img/subtract.svg"
+                  >
+                </div>
+              </div>
+              <div class="group-3">
+                <a href="/login/operator">
+                  <div class="group-wrapper ">
+                    <img
+                      class="manage-accounts"
+                      src="https://c.animaapp.com/IJi6pJQY/img/manage-accounts-24dp-e8eaed-fill0-wght400-grad0-opsz24-1.svg"
+                    >
+                    <div class="masuk-sebagai-wrapper">
+                      <p class="masuk-sebagai">
+                        <span class="span">Masuk Sebagai <span class="text-wrapper-2">Operator</span></span> 
+                      </p>
+                    </div>
+                  </div>
+                </a>
+                <a href="/login/pegawai">
+                  <div class="div-wrapper">
+                    <img
+                      class="img"
+                      src="https://c.animaapp.com/IJi6pJQY/img/mask-group-1@2x.png"
+                    >
+                    <div class="group-4">
+                      <p class="masuk-sebagai">
+                        <span class="span">Masuk Sebagai <span class="text-wrapper-2">Pegawai</span>  </span> 
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="masuk">
+              MASUK
+            </div>
+            <p class="p">
+              Silahkan Masukan Nama dan NIK sesuai KK
+            </p>
+            <form @submit="validateForm">
+              <div class="group-5">
+                <div class="overlap-4">
+                  <input
+                    v-model="nik"
+                    :type="showPassword ? 'text' : 'password'"
+                    class="text-wrapper-3"
+                    placeholder="NIK"
+                    name="current-password"
+                    autocomplete="current-password"
+                  >
+                  <img
+                    class="frame"
+                    src="https://c.animaapp.com/IJi6pJQY/img/frame.svg"
+                  >
+                </div>
+              </div>
+              <div class="group-6">
+                <div class="overlap-4">
+                  <input
+                    v-model="nama"
+                    type="text"
+                    class="text-wrapper-3"
+                    placeholder="Nama"
+                    name="username"
+                    autocomplete="username"
+                  >
+                  <img
+                    class="frame"
+                    src="https://c.animaapp.com/IJi6pJQY/img/frame-1.svg"
+                  >
+                </div>
+              </div>
+
+              <div class="group-8">
+                <label class="checkbox">
+                  <input
+                    v-model="showPassword"
+                    type="checkbox"
+                  >
+                  Tampilkan NIK
+                </label>
+              </div>
+              <div class="group-7">
+                <button
+                  type="submit"
+                  class="btn overlap-5 btn-gradient"
+                >
+                  <div class="text-wrapper-4">
+                    Login Now
+                  </div>
+                </button>
+              </div>
+              <div
+                v-if="errorMessage"
+                class="error-message"
+              >
+                {{ errorMessage }}
+              </div>
+            </form>
+          </div>
+          <p class="belum-memiliki-akun">
+            <span class="text-wrapper-5">Belum memiliki akun?</span>
+            <span class="text-wrapper-6">&nbsp;&nbsp;</span>
+            <a href="/daftar/masyarakat">
+              <span class="text-wrapper-7">Daftar</span>
+            </a>
+          </p>
+        </div>
       </div>
+    </div>
+  </div>
 </template>
 <style scoped>
 @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");

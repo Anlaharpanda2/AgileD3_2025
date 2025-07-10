@@ -1,14 +1,14 @@
 <template>
-  <Layout2>
+  <SimpleLayout>
     <!-- Form Popups -->
     <FormTambahBerita 
       v-if="showTambah && TambahData" 
-      :initialData="TambahData" 
+      :initial-data="TambahData" 
       @close="showTambah = false" 
     />
     <FormEditBerita 
       v-if="showEdit && editData" 
-      :initialData="editData" 
+      :initial-data="editData" 
       @close="showEdit = false" 
     />
     <FormExport 
@@ -16,14 +16,21 @@
       :data="pagedData" 
       @close="showExport = false" 
     />
-    <FormImport v-if="showImport" @close="showImport = false" />
+    <FormImport
+      v-if="showImport"
+      @close="showImport = false"
+    />
 
     <!-- Main Container -->
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
       <!-- Page Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">Data Berita</h1>
-        <p class="text-gray-600">Kelola dan pantau semua data berita dalam satu tempat</p>
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">
+          Data Berita
+        </h1>
+        <p class="text-gray-600">
+          Kelola dan pantau semua data berita dalam satu tempat
+        </p>
       </div>
 
       <!-- Stats Cards -->
@@ -31,12 +38,26 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm font-medium text-gray-600">Total Berita</p>
-              <p class="text-2xl font-bold text-gray-900">{{ tableData.length }}</p>
+              <p class="text-sm font-medium text-gray-600">
+                Total Berita
+              </p>
+              <p class="text-2xl font-bold text-gray-900">
+                {{ tableData.length }}
+              </p>
             </div>
             <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center">
-              <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+              <svg
+                class="w-6 h-6 text-pink-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+                />
               </svg>
             </div>
           </div>
@@ -45,12 +66,26 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm font-medium text-gray-600">Dipilih</p>
-              <p class="text-2xl font-bold text-gray-900">{{ selected.length }}</p>
+              <p class="text-sm font-medium text-gray-600">
+                Dipilih
+              </p>
+              <p class="text-2xl font-bold text-gray-900">
+                {{ selected.length }}
+              </p>
             </div>
             <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              <svg
+                class="w-6 h-6 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
             </div>
           </div>
@@ -59,12 +94,26 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm font-medium text-gray-600">Hasil Filter</p>
-              <p class="text-2xl font-bold text-gray-900">{{ filteredData.length }}</p>
+              <p class="text-sm font-medium text-gray-600">
+                Hasil Filter
+              </p>
+              <p class="text-2xl font-bold text-gray-900">
+                {{ filteredData.length }}
+              </p>
             </div>
             <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-              <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"/>
+              <svg
+                class="w-6 h-6 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"
+                />
               </svg>
             </div>
           </div>
@@ -73,12 +122,26 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm font-medium text-gray-600">Halaman</p>
-              <p class="text-2xl font-bold text-gray-900">{{ currentPage }}/{{ totalPages }}</p>
+              <p class="text-sm font-medium text-gray-600">
+                Halaman
+              </p>
+              <p class="text-2xl font-bold text-gray-900">
+                {{ currentPage }}/{{ totalPages }}
+              </p>
             </div>
             <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-              <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+              <svg
+                class="w-6 h-6 text-purple-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                />
               </svg>
             </div>
           </div>
@@ -97,25 +160,38 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">Tampilkan</label>
                 <div class="relative">
                   <button
-                    @click.stop="toggleDropdown"
                     class="bg-white border border-gray-300 rounded-lg px-4 py-2.5 pr-10 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors min-w-[80px]"
+                    @click.stop="toggleDropdown"
                   >
                     {{ itemsPerPage === Infinity ? 'All' : itemsPerPage }}
                   </button>
                   <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    <svg
+                      class="w-4 h-4 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 9l-7 7-7-7"
+                      />
                     </svg>
                   </div>
                   
                   <!-- Dropdown -->
-                  <div v-show="dropdownOpen" class="absolute z-10 mt-1 w-full bg-white shadow-lg border border-gray-200 rounded-lg">
+                  <div
+                    v-show="dropdownOpen"
+                    class="absolute z-10 mt-1 w-full bg-white shadow-lg border border-gray-200 rounded-lg"
+                  >
                     <ul style="padding: 0;">
                       <li
                         v-for="option in perPageOptions"
                         :key="option"
-                        @click="changeItemsPerPage(option)"
                         class="px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 cursor-pointer transition-colors"
+                        @click="changeItemsPerPage(option)"
                       >
                         {{ option === 'all' ? 'All' : option }}
                       </li>
@@ -129,14 +205,24 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">Pencarian</label>
                 <div class="relative">
                   <input
+                    v-model="search"
                     type="text"
                     placeholder="Cari Judul"
-                    v-model="search"
                     class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors"
-                  />
+                  >
                   <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    <svg
+                      class="w-5 h-5 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                      />
                     </svg>
                   </div>
                 </div>
@@ -147,11 +233,21 @@
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-2">&nbsp;</label>
                   <button
-                    @click="onFilterClick"
                     class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
+                    @click="onFilterClick"
                   >
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"/>
+                    <svg
+                      class="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"
+                      />
                     </svg>
                     Filter
                   </button>
@@ -159,11 +255,21 @@
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-2">&nbsp;</label>
                   <button
-                    @click="onSortClick"
                     class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
+                    @click="onSortClick"
                   >
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"/>
+                    <svg
+                      class="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
+                      />
                     </svg>
                     Sort
                   </button>
@@ -177,32 +283,62 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">&nbsp;</label>
                 <div class="flex gap-3">
                   <button
-                    @click="onTrashClick"
                     class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
+                    @click="onTrashClick"
                   >
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    <svg
+                      class="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
                     </svg>
                     Sampah
                   </button>
                   
                   <button
-                    @click="onMassDeleteClick"
                     :disabled="selected.length === 0"
                     class="inline-flex items-center px-4 py-2.5 border border-red-300 rounded-lg text-sm font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    @click="onMassDeleteClick"
                   >
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    <svg
+                      class="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
                     </svg>
                     Hapus Massal
                   </button>
                   
                   <button
-                    @click="openTambah"
                     class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-lg text-sm font-medium hover:from-pink-600 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200 shadow-md"
+                    @click="openTambah"
                   >
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    <svg
+                      class="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 4v16m8-8H4"
+                      />
                     </svg>
                     Tambah Berita
                   </button>
@@ -217,32 +353,39 @@
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="overflow-x-auto">
           <el-table
-              ref="elTable"
-              :data="pagedData"
-              v-loading="loading"
-              style="width: 100%"
-              @selection-change="onSelectionChange"
-              @row-click="goToDetail"
-              :header-cell-style="{
-                backgroundColor: '#3c4758',
-                color: '#ffffff',
-                fontWeight: '700',
-                textAlign: 'left',
-                borderBottom: '2px solid #e5e7eb',
-                padding: '16px 12px'
-              }"
-              :row-style="{
-                backgroundColor: '#ffffff'
-              }"
-              :cell-style="{
-                padding: '16px 12px',
-                borderBottom: '1px solid #f3f4f6'
-              }"
-              class="modern-table full-width-cells"
-            >
-            <el-table-column type="selection" width="55" />
+            ref="elTable"
+            v-loading="loading"
+            :data="pagedData"
+            style="width: 100%"
+            :header-cell-style="{
+              backgroundColor: '#3c4758',
+              color: '#ffffff',
+              fontWeight: '700',
+              textAlign: 'left',
+              borderBottom: '2px solid #e5e7eb',
+              padding: '16px 12px'
+            }"
+            :row-style="{
+              backgroundColor: '#ffffff'
+            }"
+            :cell-style="{
+              padding: '16px 12px',
+              borderBottom: '1px solid #f3f4f6'
+            }"
+            class="modern-table full-width-cells"
+            @selection-change="onSelectionChange"
+            @row-click="goToDetail"
+          >
+            <el-table-column
+              type="selection"
+              width="55"
+            />
             
-            <el-table-column prop="judul" label="Judul" min-width="200">
+            <el-table-column
+              prop="judul"
+              label="Judul"
+              min-width="200"
+            >
               <template #default="{ row }">
                 <div class="font-medium text-gray-900 hover:text-pink-600 transition-colors full-width-content line-clamp-2">
                   {{ row.judul }}
@@ -250,7 +393,11 @@
               </template>
             </el-table-column>
             
-            <el-table-column prop="jenis_konten" label="Jenis Konten" width="150">
+            <el-table-column
+              prop="jenis_konten"
+              label="Jenis Konten"
+              width="150"
+            >
               <template #default="{ row }">
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 full-width-content">
                   {{ row.jenis_konten }}
@@ -258,7 +405,11 @@
               </template>
             </el-table-column>
             
-            <el-table-column prop="isi" label="Isi Berita" min-width="300">
+            <el-table-column
+              prop="isi"
+              label="Isi Berita"
+              min-width="300"
+            >
               <template #default="{ row }">
                 <div class="text-gray-600 text-sm line-clamp-2 full-width-content">
                   {{ row.isi }}
@@ -266,7 +417,11 @@
               </template>
             </el-table-column>
             
-            <el-table-column prop="updated_at" label="Diperbarui" width="140">
+            <el-table-column
+              prop="updated_at"
+              label="Diperbarui"
+              width="140"
+            >
               <template #default="{ row }">
                 <div class="text-sm text-gray-500 full-width-content">
                   {{ new Date(row.updated_at).toLocaleDateString('id-ID') }}
@@ -274,7 +429,11 @@
               </template>
             </el-table-column>
             
-            <el-table-column prop="created_at" label="Dibuat" width="140">
+            <el-table-column
+              prop="created_at"
+              label="Dibuat"
+              width="140"
+            >
               <template #default="{ row }">
                 <div class="text-sm text-gray-500 full-width-content">
                   {{ new Date(row.created_at).toLocaleDateString('id-ID') }}
@@ -282,38 +441,65 @@
               </template>
             </el-table-column>
             
-            <el-table-column label="Gambar" width="100">
+            <el-table-column
+              label="Gambar"
+              width="100"
+            >
               <template #default="{ row }">
                 <div class="w-16 h-12 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center full-width-content">
                   <img
                     :src="row.foto || '/Berita/Placeholder.jpg'"
                     alt="Gambar Berita"
                     class="w-full h-full object-cover hover:scale-110 transition-transform duration-200"
-                  />
+                  >
                 </div>
               </template>
             </el-table-column>
             
-            <el-table-column label="Aksi" width="120" fixed="right">
+            <el-table-column
+              label="Aksi"
+              width="120"
+              fixed="right"
+            >
               <template #default="{ row }">
                 <div class="flex items-center gap-2 full-width-content">
                   <button
-                    @click="openEdit(row)"
                     class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors"
                     title="Edit"
+                    @click="openEdit(row)"
                   >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
                     </svg>
                   </button>
                 
                   <button
-                    @click="onDelete(row)"
                     class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition-colors"
                     title="Hapus"
+                    @click="onDelete(row)"
                   >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
                     </svg>
                   </button>
                 </div>
@@ -333,18 +519,31 @@
         
         <div class="flex items-center gap-2">
           <button
-            @click="prevPage"
             :disabled="currentPage === 1"
             class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            @click="prevPage"
           >
-            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            <svg
+              class="w-4 h-4 mr-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
             Sebelum
           </button>
           
           <div class="flex items-center gap-1">
-            <template v-for="item in visiblePages" :key="String(item)">
+            <template
+              v-for="item in visiblePages"
+              :key="String(item)"
+            >
               <button
                 v-if="item === '...'"
                 class="px-3 py-2 text-sm text-gray-500 cursor-default"
@@ -354,13 +553,13 @@
               </button>
               <button
                 v-else
-                @click="goToPage(item)"
                 :class="[
                   'px-3 py-2 text-sm font-medium rounded-lg transition-colors',
                   item === currentPage
                     ? 'bg-pink-500 text-white shadow-sm'
                     : 'text-gray-700 hover:bg-gray-100'
                 ]"
+                @click="goToPage(item)"
               >
                 {{ item }}
               </button>
@@ -368,29 +567,39 @@
           </div>
           
           <button
-            @click="nextPage"
             :disabled="currentPage === totalPages"
             class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            @click="nextPage"
           >
             Selanjutnya
-            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            <svg
+              class="w-4 h-4 ml-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           </button>
         </div>
       </div>
     </div>
-  </Layout2>
+  </SimpleLayout>
 </template>
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import api from "../../api.js";
-import Layout2 from "../../layouts/Layout2.vue";
+import SimpleLayout from "../../layouts/SimpleLayout.vue";
 import FormEditBerita from '../../components/DataBerita/FormEditDataBerita.vue'; 
 import FormTambahBerita from '../../components/DataBerita/FormTambahBerita.vue';
-import { ElNotification } from 'element-plus';
+import { ElNotification, TableColumnCtx } from 'element-plus';
 
 interface Berita {
   id: number;
@@ -413,8 +622,8 @@ const showExport = ref(false);
 const showImport = ref(false);
 const showEdit = ref(false);
 const showTambah = ref(false);
-const editData = ref(false);
-const TambahData = ref(false);
+const editData = ref(null);
+const TambahData = ref(null);
 const perPageOptions = [10, 20, 50, 100, "all"];
 const router = useRouter()
 
@@ -430,7 +639,7 @@ const openTambah = () => {
   loading.value = false;
 };
 
-const goToDetail = (row: any, column: any, event: MouseEvent) => {
+const goToDetail = (row: Berita, column: TableColumnCtx<Berita>) => {
   if (column.type === 'selection' || column.label === 'Aksi') {
     return
   }
@@ -449,10 +658,10 @@ function changeItemsPerPage(option: number | string) {
 
 const filteredData = computed(() => {
   const data = tableData.value.filter(
-    (item) =>
+    (item: Berita) =>
       item.judul.toLowerCase().includes(search.value.toLowerCase())
   );
-  return data.sort((a, b) => {
+  return data.sort((a: Berita, b: Berita) => {
     const dateA = new Date(a.updated_at || 0).getTime();
     const dateB = new Date(b.updated_at || 0).getTime();
     return dateB - dateA;

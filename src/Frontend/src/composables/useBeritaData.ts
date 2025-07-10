@@ -1,5 +1,6 @@
 import { ref } from 'vue';
 import api from '../api';
+import { AxiosError } from 'axios';
 /**
  * Interface untuk struktur data berita.
  */
@@ -29,7 +30,7 @@ export function useBeritaData() {
     error.value = null; 
     try {
       const response = await api.get('/kelola/berita');
-      let beritaData: any[] = [];
+      let beritaData: BeritaItem[] = [];
       if (response && response.data) {
         if (Array.isArray(response.data)) {
           beritaData = response.data;
@@ -53,13 +54,19 @@ export function useBeritaData() {
       if (!Array.isArray(beritaData)) {
         throw new Error('Format data API tidak valid: Respons bukan array yang diharapkan.');
       }
-      const filteredBerita = beritaData.filter((item: any) => 
+      const filteredBerita = beritaData.filter((item: BeritaItem) => 
         item && item.jenis_konten === 'berita'
       );
       news.value = filteredBerita;
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error fetching berita:', err);
-      error.value = `Gagal memuat berita: ${err.message || 'Terjadi kesalahan jaringan atau server.'}`;
+      let errorMessage = 'Terjadi kesalahan jaringan atau server.';
+      if (err instanceof AxiosError && err.message) {
+        errorMessage = err.message;
+      } else if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+      error.value = `Gagal memuat berita: ${errorMessage}`;
     } finally {
       loading.value = false;
     }

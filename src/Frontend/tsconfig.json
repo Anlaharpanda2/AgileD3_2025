@@ -5,6 +5,7 @@
     "moduleResolution": "Node",
     "lib": ["ESNext", "DOM"],
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "strict": false,
     "skipLibCheck": true,
     "allowJs": true,

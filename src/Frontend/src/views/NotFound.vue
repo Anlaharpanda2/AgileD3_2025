@@ -2,20 +2,34 @@
   <div class="element-error-page">
     <div class="div">
       <div class="left-panel">
-        <div class="element">404ERRORS</div>
+        <div class="element">
+          404ERRORS
+        </div>
         <div class="group">
-          <div class="text-wrapper">404</div>
+          <div class="text-wrapper">
+            404
+          </div>
           <div class="group-2">
-            <p class="p">Maaf halaman yang anda cari tidak tersedia di sistem DP3AP2KB Provinsi Sumatera Barat</p>
-            <div class="overlap-group-wrapper" @click="goToBeranda">
+            <p class="p">
+              Maaf halaman yang anda cari tidak tersedia di sistem DP3AP2KB Provinsi Sumatera Barat
+            </p>
+            <div
+              class="overlap-group-wrapper"
+              @click="goToBeranda"
+            >
               <div class="overlap-group">
-                <div class="text-wrapper-2">Kembali Ke Beranda</div>
+                <div class="text-wrapper-2">
+                  Kembali Ke Beranda
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <img class="img" src="/group-15-1.png" />
+      <img
+        class="img"
+        src="/group-15-1.png"
+      >
     </div>
   </div>
 </template>

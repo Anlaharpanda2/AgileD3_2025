@@ -1,10 +1,10 @@
 <template>
-  <Layout2>
+  <SimpleLayout>
     <SearchPengaduan />
-  </Layout2>
+  </SimpleLayout>
 </template>
 
 <script setup lang="ts">
 import SearchPengaduan from '@/components/Pengaduan/SearchPengaduan.vue';
-import Layout2 from '@/layouts/Layout2.vue';
+import SimpleLayout from '@/layouts/SimpleLayout.vue';
 </script>

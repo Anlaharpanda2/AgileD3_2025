@@ -1,49 +1,53 @@
 <template>
-  <Layout2>
+  <SimpleLayout>
     <!-- Form Popups -->
     <FormSortingDataPelatihan
       v-if="showSort"
       :visible="showSort"
       :columns="filterableColumns"
       :data="tableData"
-      @update:visible="showSort = $event"
       class="sm:full-screen"
+      @update:visible="showSort = $event"
     />
     <FormFilterDataPelatihan
       v-model="showFilter"
-      :columns="filterableColumns"
       v-model:active-filters="activeFilters"
+      :columns="filterableColumns"
       class="sm:full-screen"
     />
     <FormTambahDataPeltihan
       v-if="showTambah"
-      @close="showTambah = false"
       class="sm:full-screen"
+      @close="showTambah = false"
     />
     <FormEditDataPelatihan
       v-if="showEdit && editData"
-      :initialData="editData"
-      @close="showEdit = false"
+      :initial-data="editData"
       class="sm:full-screen"
+      @close="showEdit = false"
     />
 
     <!-- Main Container -->
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6">
       <!-- Page Header -->
-  <div class="mb-4">
-    <el-button
-      type="default"
-      @click="goBack"
-      plain
-      class="flex items-center gap-2 !text-pink-600 !border-pink-500 hover:!bg-pink-5 hover:!text-white hover:!bg-pink-400 hover:!border-pink-500"
-    >
-      <el-icon><ArrowLeft /></el-icon>
-      Kembali
-    </el-button>
-  </div>
+      <div class="mb-4">
+        <el-button
+          type="default"
+          plain
+          class="flex items-center gap-2 !text-pink-600 !border-pink-500 hover:!bg-pink-5 hover:!text-white hover:!bg-pink-400 hover:!border-pink-500"
+          @click="goBack"
+        >
+          <el-icon><ArrowLeft /></el-icon>
+          Kembali
+        </el-button>
+      </div>
       <div class="mb-6 sm:mb-8">
-        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Data Pelatihan Sampah</h1>
-        <p class="text-gray-600 text-sm sm:text-base">Kelola dan pantau semua data pelatihan yang telah dihapus</p>
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+          Data Pelatihan Sampah
+        </h1>
+        <p class="text-gray-600 text-sm sm:text-base">
+          Kelola dan pantau semua data pelatihan yang telah dihapus
+        </p>
       </div>
 
       <!-- Stats Cards -->
@@ -51,12 +55,26 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 hover:shadow-md transition-shadow">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-xs sm:text-sm font-medium text-gray-600">Total Peserta</p>
-              <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ tableData.length }}</p>
+              <p class="text-xs sm:text-sm font-medium text-gray-600">
+                Total Peserta
+              </p>
+              <p class="text-xl sm:text-2xl font-bold text-gray-900">
+                {{ tableData.length }}
+              </p>
             </div>
             <div class="w-10 h-10 sm:w-12 sm:h-12 bg-pink-100 rounded-lg flex items-center justify-center">
-              <svg class="w-5 h-5 sm:w-6 sm:h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h-10a2 2 0 01-2-2V7a2 2 0 012-2h10a2 2 0 012 2v11a2 2 0 01-2 2zM9 10h.01M9 14h.01M13 10h.01M13 14h.01M17 10h.01M17 14h.01M7 7h.01"/>
+              <svg
+                class="w-5 h-5 sm:w-6 sm:h-6 text-pink-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 20h-10a2 2 0 01-2-2V7a2 2 0 012-2h10a2 2 0 012 2v11a2 2 0 01-2 2zM9 10h.01M9 14h.01M13 10h.01M13 14h.01M17 10h.01M17 14h.01M7 7h.01"
+                />
               </svg>
             </div>
           </div>
@@ -65,12 +83,26 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 hover:shadow-md transition-shadow">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-xs sm:text-sm font-medium text-gray-600">Dipilih</p>
-              <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ selected.length }}</p>
+              <p class="text-xs sm:text-sm font-medium text-gray-600">
+                Dipilih
+              </p>
+              <p class="text-xl sm:text-2xl font-bold text-gray-900">
+                {{ selected.length }}
+              </p>
             </div>
             <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <svg class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              <svg
+                class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
             </div>
           </div>
@@ -79,12 +111,26 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 hover:shadow-md transition-shadow">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-xs sm:text-sm font-medium text-gray-600">Hasil Filter</p>
-              <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ filteredData.length }}</p>
+              <p class="text-xs sm:text-sm font-medium text-gray-600">
+                Hasil Filter
+              </p>
+              <p class="text-xl sm:text-2xl font-bold text-gray-900">
+                {{ filteredData.length }}
+              </p>
             </div>
             <div class="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center">
-              <svg class="w-5 h-5 sm:w-6 sm:h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"/>
+              <svg
+                class="w-5 h-5 sm:w-6 sm:h-6 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"
+                />
               </svg>
             </div>
           </div>
@@ -93,12 +139,26 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 hover:shadow-md transition-shadow">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-xs sm:text-sm font-medium text-gray-600">Halaman</p>
-              <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ currentPage }}/{{ totalPages }}</p>
+              <p class="text-xs sm:text-sm font-medium text-gray-600">
+                Halaman
+              </p>
+              <p class="text-xl sm:text-2xl font-bold text-gray-900">
+                {{ currentPage }}/{{ totalPages }}
+              </p>
             </div>
             <div class="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-              <svg class="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+              <svg
+                class="w-5 h-5 sm:w-6 sm:h-6 text-purple-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                />
               </svg>
             </div>
           </div>
@@ -129,27 +189,40 @@
                 >
                   <button
                     id="itemsPerPageBtn"
-                    @click.stop="toggleDropdown('itemsPerPage')"
                     class="bg-white border border-gray-300 rounded-lg px-4 py-2.5 pr-10 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors w-full sm:min-w-[80px] touch-highlight"
+                    @click.stop="toggleDropdown('itemsPerPage')"
                   >
                     {{ itemsPerPage === Infinity ? 'Semua' : itemsPerPage }}
                   </button>
                   <div class="absolute inset-y-0 right-4 flex items-center pr-3 pointer-events-none">
-                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    <svg
+                      class="w-4 h-4 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 9l-7 7-7-7"
+                      />
                     </svg>
                   </div>
 
                   <!-- Dropdown Items Per Page -->
                   <transition name="dropdown">
-                    <div v-show="dropdownOpen === 'itemsPerPage'" class="absolute z-30 mt-1 w-full bg-gradient-to-b from-gray-50 to-white shadow-lg border border-gray-200 rounded-lg dropdown-container">
+                    <div
+                      v-show="dropdownOpen === 'itemsPerPage'"
+                      class="absolute z-30 mt-1 w-full bg-gradient-to-b from-gray-50 to-white shadow-lg border border-gray-200 rounded-lg dropdown-container"
+                    >
                       <ul style="padding: 0;">
                         <li
                           v-for="(option, index) in perPageOptions"
                           :key="option"
-                          @click.stop="changeItemsPerPage(option)"
                           class="px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 cursor-pointer transition-all duration-300 touch-highlight dropdown-item"
                           :style="{ 'animation-delay': `${index * 0.1}s` }"
+                          @click.stop="changeItemsPerPage(option)"
                         >
                           {{ option === 'all' ? 'Semua' : option }}
                         </li>
@@ -163,14 +236,24 @@
               <div class="flex-1 max-w-md">
                 <div class="relative">
                   <input
+                    v-model="search"
                     type="text"
                     placeholder="Cari nama peserta..."
-                    v-model="search"
                     class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors text-sm"
-                  />
+                  >
                   <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    <svg
+                      class="w-5 h-5 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                      />
                     </svg>
                   </div>
                 </div>
@@ -181,34 +264,68 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2 sm:hidden">Aksi</label>
                 <button
                   id="mobileMenuBtn"
-                  @click.stop="toggleDropdown('mobileMenu')"
                   class="sm:hidden flex items-center justify-center w-12 h-12 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors touch-highlight"
+                  @click.stop="toggleDropdown('mobileMenu')"
                 >
-                  <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+                  <svg
+                    class="w-6 h-6 text-gray-700"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 6h16M4 12h16m-7 6h7"
+                    />
                   </svg>
                 </button>
                 <!-- Mobile Menu Dropdown -->
                 <transition name="dropdown">
-                  <div v-show="dropdownOpen === 'mobileMenu'" class="sm:hidden absolute z-30 mt-1 w-48 bg-gradient-to-b from-gray-50 to-white shadow-lg border border-gray-200 rounded-lg dropdown-container" style="right: 15%; top: 20%;">
+                  <div
+                    v-show="dropdownOpen === 'mobileMenu'"
+                    class="sm:hidden absolute z-30 mt-1 w-48 bg-gradient-to-b from-gray-50 to-white shadow-lg border border-gray-200 rounded-lg dropdown-container"
+                    style="right: 15%; top: 20%;"
+                  >
                     <div class="flex flex-col p-2">
                       <button
-                        @click.stop="showFilter = true; closeAllDropdowns()"
                         class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-all duration-300 touch-highlight dropdown-item"
                         :style="{ 'animation-delay': '0s' }"
+                        @click.stop="showFilter = true; closeAllDropdowns()"
                       >
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"/>
+                        <svg
+                          class="w-4 h-4 mr-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"
+                          />
                         </svg>
                         Filter
                       </button>
                       <button
-                        @click.stop="showSort = true; closeAllDropdowns()"
                         class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-all duration-300 touch-highlight dropdown-item"
                         :style="{ 'animation-delay': '0.1s' }"
+                        @click.stop="showSort = true; closeAllDropdowns()"
                       >
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"/>
+                        <svg
+                          class="w-4 h-4 mr-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
+                          />
                         </svg>
                         Urutkan
                       </button>
@@ -219,22 +336,42 @@
                 <div class="hidden sm:flex sm:gap-2">
                   <div>
                     <button
-                      @click="showFilter = true"
                       class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
+                      @click="showFilter = true"
                     >
-                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"/>
+                      <svg
+                        class="w-4 h-4 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"
+                        />
                       </svg>
                       Filter
                     </button>
                   </div>
                   <div>
                     <button
-                      @click="showSort = true"
                       class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
+                      @click="showSort = true"
                     >
-                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"/>
+                      <svg
+                        class="w-4 h-4 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
+                        />
                       </svg>
                       Urutkan
                     </button>
@@ -249,44 +386,81 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2 sm:hidden">Aksi Lain</label>
                 <button
                   id="mobileActionsBtn"
-                  @click.stop="toggleDropdown('mobileActions')"
                   class="sm:hidden flex items-center justify-center w-12 h-12 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors touch-highlight"
+                  @click.stop="toggleDropdown('mobileActions')"
                 >
-                  <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6h.01M12 12h.01M12 18h.01"/>
+                  <svg
+                    class="w-6 h-6 text-gray-700"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6h.01M12 12h.01M12 18h.01"
+                    />
                   </svg>
                 </button>
                 <!-- Mobile Actions Dropdown -->
                 <transition name="dropdown">
-                  <div v-show="dropdownOpen === 'mobileActions'" class="sm:hidden absolute z-30 mt-1 w-48 bg-gradient-to-b from-gray-50 to-white shadow-lg border border-gray-200 rounded-lg dropdown-container" style="right: 15%; top: 20%;">
+                  <div
+                    v-show="dropdownOpen === 'mobileActions'"
+                    class="sm:hidden absolute z-30 mt-1 w-48 bg-gradient-to-b from-gray-50 to-white shadow-lg border border-gray-200 rounded-lg dropdown-container"
+                    style="right: 15%; top: 20%;"
+                  >
                     <div class="flex flex-col p-2">
                       <button
-                        @click.stop="showAllColumns = !showAllColumns; closeAllDropdowns()"
                         class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-all duration-300 touch-highlight dropdown-item"
                         :style="{ 'animation-delay': '0s' }"
+                        @click.stop="showAllColumns = !showAllColumns; closeAllDropdowns()"
                       >
-                        <component :is="showAllColumns ? EyeOff : Eye" class="w-4 h-4 mr-2" />
+                        <component
+                          :is="showAllColumns ? EyeOff : Eye"
+                          class="w-4 h-4 mr-2"
+                        />
                         {{ showAllColumns ? 'Sembunyikan Kolom' : 'Tampilkan Semua Kolom' }}
                       </button>
                       <button
-                        @click.stop="onMassRestoreClick"
                         :disabled="selected.length === 0"
                         class="flex items-center px-4 py-2 text-sm text-green-700 hover:bg-green-50 hover:text-green-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed touch-highlight dropdown-item"
                         :style="{ 'animation-delay': '0.1s' }"
+                        @click.stop="onMassRestoreClick"
                       >
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        <svg
+                          class="w-4 h-4 mr-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                          />
                         </svg>
                         Pulihkan Massal
                       </button>
                       <button
-                        @click.stop="onMassDeletePermanentClick"
                         :disabled="selected.length === 0"
                         class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-50 hover:text-red-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed touch-highlight dropdown-item"
                         :style="{ 'animation-delay': '0.2s' }"
+                        @click.stop="onMassDeletePermanentClick"
                       >
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        <svg
+                          class="w-4 h-4 mr-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
                         </svg>
                         Hapus Massal Permanen
                       </button>
@@ -296,31 +470,54 @@
                 <!-- Desktop Right Controls -->
                 <div class="hidden sm:flex sm:gap-3">
                   <button
-                    @click="showAllColumns = !showAllColumns"
                     class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
                     :title="showAllColumns ? 'Sembunyikan Kolom' : 'Tampilkan Semua Kolom'"
+                    @click="showAllColumns = !showAllColumns"
                   >
-                    <component :is="showAllColumns ? EyeOff : Eye" class="w-4 h-4" />
+                    <component
+                      :is="showAllColumns ? EyeOff : Eye"
+                      class="w-4 h-4"
+                    />
                   </button>
                   <button
-                    @click="onMassRestoreClick"
                     :disabled="selected.length === 0"
                     class="!inline-flex !items-center !px-4 !py-2.5 !border !border-green-300 !rounded-lg !text-sm !font-medium bg-green-100 text-green-600 hover:bg-green-200 !hover:bg-green-50 !focus:outline-none !focus:ring-2 !focus:ring-green-500 !transition-colors !disabled:opacity-50 !disabled:cursor-not-allowed"
                     title="Pulihkan Massal"
+                    @click="onMassRestoreClick"
                   >
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    <svg
+                      class="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                      />
                     </svg>
                     Pulihkan Massal
                   </button>
                   <button
-                    @click="onMassDeletePermanentClick"
                     :disabled="selected.length === 0"
                     class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-lg text-sm font-medium hover:from-pink-600 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200 shadow-md w-full sm:w-auto touch-highlight"
                     title="Hapus Massal Permanen"
+                    @click="onMassDeletePermanentClick"
                   >
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    <svg
+                      class="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
                     </svg>
                     Hapus Massal Permanen
                   </button>
@@ -336,10 +533,9 @@
         <div class="overflow-x-auto">
           <el-table
             ref="elTable"
-            :data="pagedData"
             v-loading="loading"
+            :data="pagedData"
             style="width: 100%"
-            @selection-change="onSelectionChange"
             :header-cell-style="{
               backgroundColor: '#3c4758',
               color: '#ffffff',
@@ -356,10 +552,19 @@
               borderBottom: '1px solid #f3f4f6'
             }"
             class="modern-table full-width-cells"
+            @selection-change="onSelectionChange"
           >
-            <el-table-column type="selection" width="55" fixed="left" />
+            <el-table-column
+              type="selection"
+              width="55"
+              fixed="left"
+            />
 
-            <el-table-column prop="nama" label="Nama" min-width="150">
+            <el-table-column
+              prop="nama"
+              label="Nama"
+              min-width="150"
+            >
               <template #default="{ row }">
                 <div class="font-medium text-gray-900 hover:text-pink-600 transition-colors full-width-content line-clamp-2">
                   {{ row.nama }}
@@ -367,7 +572,11 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="nik" label="NIK" min-width="120">
+            <el-table-column
+              prop="nik"
+              label="NIK"
+              min-width="120"
+            >
               <template #default="{ row }">
                 <div class="text-gray-600 text-sm full-width-content">
                   {{ row.nik }}
@@ -375,7 +584,11 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="jenis_bimtek" label="Jenis Bimtek" min-width="140">
+            <el-table-column
+              prop="jenis_bimtek"
+              label="Jenis Bimtek"
+              min-width="140"
+            >
               <template #default="{ row }">
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 full-width-content">
                   {{ row.jenis_bimtek }}
@@ -383,7 +596,10 @@
               </template>
             </el-table-column>
 
-            <el-table-column label="Tanggal Kegiatan" min-width="160">
+            <el-table-column
+              label="Tanggal Kegiatan"
+              min-width="160"
+            >
               <template #default="{ row }">
                 <div class="text-gray-600 text-sm full-width-content">
                   {{ formatTanggalKegiatan(row.kegiatan_dimulai, row.kegiatan_berakhir) }}
@@ -391,7 +607,11 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="tempat_kegiatan" label="Tempat Kegiatan" min-width="140">
+            <el-table-column
+              prop="tempat_kegiatan"
+              label="Tempat Kegiatan"
+              min-width="140"
+            >
               <template #default="{ row }">
                 <div class="text-gray-600 text-sm full-width-content">
                   {{ row.tempat_kegiatan }}
@@ -399,7 +619,11 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="angkatan" label="Angkatan" min-width="100">
+            <el-table-column
+              prop="angkatan"
+              label="Angkatan"
+              min-width="100"
+            >
               <template #default="{ row }">
                 <div class="text-gray-600 text-sm full-width-content">
                   {{ row.angkatan }}
@@ -408,7 +632,12 @@
             </el-table-column>
 
             <!-- Columns to be conditionally displayed -->
-            <el-table-column v-if="showAllColumns" prop="tempat_tanggal_lahir" label="Tempat Tanggal Lahir" min-width="160">
+            <el-table-column
+              v-if="showAllColumns"
+              prop="tempat_tanggal_lahir"
+              label="Tempat Tanggal Lahir"
+              min-width="160"
+            >
               <template #default="{ row }">
                 <div class="text-gray-600 text-sm full-width-content">
                   {{ row.tempat_tanggal_lahir }}
@@ -416,7 +645,12 @@
               </template>
             </el-table-column>
 
-            <el-table-column v-if="showAllColumns" prop="pendidikan" label="Pendidikan" min-width="120">
+            <el-table-column
+              v-if="showAllColumns"
+              prop="pendidikan"
+              label="Pendidikan"
+              min-width="120"
+            >
               <template #default="{ row }">
                 <div class="text-gray-600 text-sm full-width-content">
                   {{ row.pendidikan }}
@@ -424,19 +658,31 @@
               </template>
             </el-table-column>
 
-            <el-table-column v-if="showAllColumns" prop="status" label="Status" min-width="100">
+            <el-table-column
+              v-if="showAllColumns"
+              prop="status"
+              label="Status"
+              min-width="100"
+            >
               <template #default="{ row }">
-                <span :class="['status-badge', {
-                  'bg-green-100 text-green-800': row.status === 'kawin',
-                  'bg-yellow-100 text-yellow-800': row.status === 'lajang',
-                  'bg-red-100 text-red-800': row.status === 'janda'
-                }]">
+                <span
+                  :class="['status-badge', {
+                    'bg-green-100 text-green-800': row.status === 'kawin',
+                    'bg-yellow-100 text-yellow-800': row.status === 'lajang',
+                    'bg-red-100 text-red-800': row.status === 'janda'
+                  }]"
+                >
                   {{ row.status }}
                 </span>
               </template>
             </el-table-column>
 
-            <el-table-column v-if="showAllColumns" prop="alamat" label="Alamat" min-width="180">
+            <el-table-column
+              v-if="showAllColumns"
+              prop="alamat"
+              label="Alamat"
+              min-width="180"
+            >
               <template #default="{ row }">
                 <div class="text-gray-600 text-sm line-clamp-2 full-width-content">
                   {{ row.alamat }}
@@ -444,7 +690,12 @@
               </template>
             </el-table-column>
 
-            <el-table-column v-if="showAllColumns" prop="jenis_usaha" label="Jenis Usaha" min-width="140">
+            <el-table-column
+              v-if="showAllColumns"
+              prop="jenis_usaha"
+              label="Jenis Usaha"
+              min-width="140"
+            >
               <template #default="{ row }">
                 <div class="text-gray-600 text-sm full-width-content">
                   {{ row.jenis_usaha }}
@@ -452,7 +703,12 @@
               </template>
             </el-table-column>
 
-            <el-table-column v-if="showAllColumns" prop="penghasilan_perbulan" label="Penghasilan/Bulan" min-width="150">
+            <el-table-column
+              v-if="showAllColumns"
+              prop="penghasilan_perbulan"
+              label="Penghasilan/Bulan"
+              min-width="150"
+            >
               <template #default="{ row }">
                 <div class="text-gray-600 text-sm full-width-content">
                   {{ row.penghasilan_perbulan }}
@@ -460,7 +716,12 @@
               </template>
             </el-table-column>
 
-            <el-table-column v-if="showAllColumns" prop="nomor_telefon" label="No. Telepon" min-width="130">
+            <el-table-column
+              v-if="showAllColumns"
+              prop="nomor_telefon"
+              label="No. Telepon"
+              min-width="130"
+            >
               <template #default="{ row }">
                 <div class="text-gray-600 text-sm full-width-content">
                   {{ row.nomor_telefon }}
@@ -468,25 +729,49 @@
               </template>
             </el-table-column>
 
-            <el-table-column label="Aksi" width="120" fixed="right">
+            <el-table-column
+              label="Aksi"
+              width="120"
+              fixed="right"
+            >
               <template #default="{ row }">
                 <div class="flex items-center gap-2 full-width-content">
                   <button
-                    @click.stop="onRestoreClick(row)"
                     class="w-8 h-8 flex items-center justify-center rounded-lg bg-green-100 text-green-600 hover:bg-green-200 transition-colors"
                     title="Pulihkan"
+                    @click.stop="onRestoreClick(row)"
                   >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                      />
                     </svg>
                   </button>
                   <button
-                    @click.stop="onDeleteClick(row)"
                     class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition-colors"
                     title="Hapus Permanen"
+                    @click.stop="onDeleteClick(row)"
                   >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
                     </svg>
                   </button>
                 </div>
@@ -511,10 +796,14 @@
                 :checked="selected.includes(row)"
                 @click.stop
                 @change="toggleSelection(row)"
-              />
+              >
               <div>
-                <p class="font-medium text-gray-900 text-sm">{{ row.nama }}</p>
-                <p class="text-xs text-gray-600">{{ row.nik }}</p>
+                <p class="font-medium text-gray-900 text-sm">
+                  {{ row.nama }}
+                </p>
+                <p class="text-xs text-gray-600">
+                  {{ row.nik }}
+                </p>
               </div>
             </div>
             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -527,14 +816,14 @@
           </div>
           <div class="flex gap-2">
             <button
-              @click.stop="onRestoreClick(row)"
               class="flex-1 py-2 bg-green-100 text-green-600 rounded-lg text-sm hover:bg-green-200 transition-colors touch-highlight"
+              @click.stop="onRestoreClick(row)"
             >
               Pulihkan
             </button>
             <button
-              @click.stop="onDeleteClick(row)"
               class="flex-1 py-2 bg-red-100 text-red-600 rounded-lg text-sm hover:bg-red-200 transition-colors touch-highlight"
+              @click.stop="onDeleteClick(row)"
             >
               Hapus Permanen
             </button>
@@ -552,18 +841,31 @@
 
         <div class="flex items-center gap-2">
           <button
-            @click.stop="prevPage"
             :disabled="currentPage === 1"
             class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-w-[44px] h-10 touch-highlight"
+            @click.stop="prevPage"
           >
-            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            <svg
+              class="w-4 h-4 mr-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
             <span class="sm:block hidden">Sebelum</span>
           </button>
 
           <div class="flex items-center gap-1">
-            <template v-for="item in visiblePages" :key="String(item)">
+            <template
+              v-for="item in visiblePages"
+              :key="String(item)"
+            >
               <button
                 v-if="item === '...'"
                 class="px-3 py-2 text-sm text-gray-500 cursor-default"
@@ -573,13 +875,13 @@
               </button>
               <button
                 v-else
-                @click.stop="goToPage(item)"
                 :class="[
                   'px-3 py-2 text-sm font-medium rounded-lg transition-colors min-w-[44px] h-10 touch-highlight',
                   item === currentPage
                     ? 'bg-pink-500 text-white shadow-sm'
                     : 'text-gray-700 hover:bg-gray-100'
                 ]"
+                @click.stop="goToPage(item)"
               >
                 {{ item }}
               </button>
@@ -587,25 +889,35 @@
           </div>
 
           <button
-            @click.stop="nextPage"
             :disabled="currentPage === totalPages"
             class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-w-[44px] h-10 touch-highlight"
+            @click.stop="nextPage"
           >
             <span class="sm:block hidden">Selanjutnya</span>
-            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            <svg
+              class="w-4 h-4 ml-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           </button>
         </div>
       </div>
     </div>
-  </Layout2>
+  </SimpleLayout>
 </template>
 
 <script lang="ts" setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import api from "../../api.js";
-import Layout2 from "../../layouts/Layout2.vue";
+import SimpleLayout from "../../layouts/SimpleLayout.vue";
 import FormEditDataPelatihan from "../../components/KelolaDataPelatihan/FormEditDataPelatihan.vue";
 import FormTambahDataPeltihan from "../../components/KelolaDataPelatihan/FormTambahDataPelatihan.vue";
 import FormFilterDataPelatihan from "../../components/KelolaDataPelatihan/FormFilterDataPelatihan.vue";
@@ -730,6 +1042,7 @@ const allColumns = computed(() => {
   }));
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const visibleColumns = computed(() => {
   if (showAllColumns.value) {
     return allColumns.value;
@@ -758,7 +1071,7 @@ const filteredData = computed(() => {
     const filterValue = activeFilters.value[key];
     if (filterValue !== null && filterValue !== '') {
       data = data.filter(item => {
-        const itemValue = (item as any)[key];
+        const itemValue = item[key as keyof Peserta];
         if (itemValue === null || itemValue === undefined) {
           return false;
         }

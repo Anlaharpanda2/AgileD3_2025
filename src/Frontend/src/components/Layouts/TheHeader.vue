@@ -31,14 +31,14 @@
                   alt="Pepsiku Burger Logo"
                   class="w-8 h-8 object-contain relative z-20 filter
                          hover:brightness-110 transition-all duration-300"
-                />
+                >
                 <!-- Glow effects hanya non-scroll -->
                 <div
                   v-if="!isScrolled"
                   class="absolute inset-0 rounded-2xl bg-gradient-to-br
                          from-pink-400/30 to-pink-600/30 opacity-0
                          group-hover:opacity-100 animate-pulse transition-all duration-700"
-                ></div>
+                />
               </div>
             </div>
 
@@ -50,12 +50,17 @@
                   ? 'text-gray-900 hover:text-gray-700 hover:drop-shadow-sm'
                   : 'group-hover:text-pink-500'"
               >
-                <span v-if="!isScrolled"
-                      class="bg-clip-text text-transparent bg-gradient-to-r
-                             from-pink-600 via-pink-500 to-pink-600 font-extrabold">
+                <span
+                  v-if="!isScrolled"
+                  class="bg-clip-text text-transparent bg-gradient-to-r
+                             from-pink-600 via-pink-500 to-pink-600 font-extrabold"
+                >
                   PEPSIKU
                 </span>
-                <span v-else class="text-gray-900 font-extrabold">PEPSIKU</span>
+                <span
+                  v-else
+                  class="text-gray-900 font-extrabold"
+                >PEPSIKU</span>
               </h1>
               <span
                 class="text-xs font-semibold tracking-widest uppercase transition-all duration-500"
@@ -71,8 +76,14 @@
 
         <!-- Navigation -->
         <nav class="hidden lg:block max-w-screen-xl">
-          <ul class="flex justify-center space-x-2" style="padding-right: 170px;">
-            <template v-for="item in navigationMenu" :key="item.name">
+          <ul
+            class="flex justify-center space-x-2"
+            style="padding-right: 170px;"
+          >
+            <template
+              v-for="item in navigationMenu"
+              :key="item.name"
+            >
               <!-- Single Item -->
               <li
                 v-if="!item.children"
@@ -81,12 +92,18 @@
                        transform hover:-translate-y-0.5 hover:shadow-md
                        hover:bg-pink-500 hover:!text-white"
                 :class="{
-                  'text-black':      !isScrolled,
-                  'text-gray-700':    isScrolled
+                  'text-black': !isScrolled,
+                  'text-gray-700': isScrolled
                 }"
               >
-                <router-link :to="item.to" class="flex items-center w-full h-full">
-                  <component :is="item.icon" class="w-4 h-4 mr-1" />
+                <router-link
+                  :to="item.to"
+                  class="flex items-center w-full h-full"
+                >
+                  <component
+                    :is="item.icon"
+                    class="w-4 h-4 mr-1"
+                  />
                   <span>{{ item.name }}</span>
                 </router-link>
               </li>
@@ -98,16 +115,19 @@
                        transition-all duration-200 ease-in-out cursor-pointer whitespace-nowrap
                        transform hover:-translate-y-0.5 hover:shadow-md
                        hover:bg-pink-500 hover:!text-white"
-                @mouseenter="openSubMenu(item.name)"
-                @mouseleave="closeSubMenu(item.name)"
                 :class="{
-                  'text-black':                     !isScrolled,
-                  'text-gray-700':                   isScrolled,
+                  'text-black': !isScrolled,
+                  'text-gray-700': isScrolled,
                   'bg-pink-600 text-white shadow-md': isSubMenuActive(item)
                 }"
+                @mouseenter="openSubMenu(item.name)"
+                @mouseleave="closeSubMenu(item.name)"
               >
                 <div class="flex items-center w-full h-full">
-                  <component :is="item.icon" class="w-4 h-4 mr-1" />
+                  <component
+                    :is="item.icon"
+                    class="w-4 h-4 mr-1"
+                  />
                   <span>{{ item.name }}</span>
                   <svg
                     class="ml-1 w-3 h-3 transition-transform duration-200"
@@ -143,8 +163,14 @@
                            flex items-center text-xs hover:bg-pink-500 hover:text-white"
                     :class="{ 'bg-pink-500 text-white': isChildActive(child, item.name) }"
                   >
-                    <router-link :to="child.to" class="flex items-center w-full h-full">
-                      <component :is="child.icon" class="w-4 h-4 mr-1" />
+                    <router-link
+                      :to="child.to"
+                      class="flex items-center w-full h-full"
+                    >
+                      <component
+                        :is="child.icon"
+                        class="w-4 h-4 mr-1"
+                      />
                       <span>{{ child.name }}</span>
                     </router-link>
                   </li>
@@ -159,7 +185,7 @@
           <button
             class="w-9 h-9 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
           >
-            <Avatar
+            <UserProfileAvatar
               class="w-9 h-9 rounded-full ring-1 transition-all duration-300"
               :class="isScrolled ? 'ring-gray-200' : 'ring-white/30'"
             />
@@ -171,7 +197,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, shallowRef, watch, computed } from 'vue'
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import sidebar from './SideBar.vue'
 import {
@@ -179,8 +205,8 @@ import {
   Pencil, ClipboardCheck, Database, FileQuestion,
   MessageCircle, Users2, UserCog
 } from 'lucide-vue-next'
-import Avatar from './Avatar.vue'
-import { isOperator, isPegawai, isMasyarakat, isNotLogin } from '../../services/AuthRoles'
+import UserProfileAvatar from './UserProfileAvatar.vue'
+
 
 const route = useRoute()
 
@@ -259,7 +285,7 @@ function isSubMenuActive(item) {
   return item.children?.some(c => route.path === c.to) || false
 }
 
-function isChildActive(child, parentName) {
+function isChildActive(child) {
   return route.path === child.to
 }
 

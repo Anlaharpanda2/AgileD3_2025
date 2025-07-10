@@ -1,20 +1,32 @@
 <template>
   <Transition name="dialog-fade">
-    <!-- Overlay filter, diklik untuk menutup form. .self memastikan hanya klik pada overlay langsung yang memicu penutupan. -->
-    <div v-if="localDialogVisible" class="filter-dialog-overlay" @click.self="handleClose">
+    <div
+      v-if="localDialogVisible"
+      class="filter-dialog-overlay"
+      @click.self="handleClose"
+    >
       <div class="filter-dialog">
         <div class="my-header">
           <h4>
-            <i class="fa-solid fa-filter dialog-icon"></i>
-            Filter Data Pelatihan
+            <IconFilter class="dialog-icon" />
+            Filter Data Berita
           </h4>
-          <!-- Menggunakan class el-button--close-custom yang telah disesuaikan sebelumnya -->
-          <el-button class="el-button--close-custom" circle :icon="Close" @click="handleClose" />
+          <el-button
+            class="el-button--close-custom"
+            circle
+            :icon="IconX"
+            @click="handleClose"
+          />
         </div>
         <div class="scrollable-form-container">
           <div class="filter-section filter-selection">
-            <h3 class="section-title">Pilih Kolom untuk Filter:</h3>
-            <el-checkbox-group v-model="localSelectedColumns" class="column-checkboxes">
+            <h3 class="section-title">
+              Pilih Kolom untuk Filter:
+            </h3>
+            <el-checkbox-group
+              v-model="localSelectedColumns"
+              class="column-checkboxes"
+            >
               <el-checkbox
                 v-for="col in columns"
                 :key="col"
@@ -25,36 +37,77 @@
                 class="column-checkbox"
               >
                 <span class="column-checkbox-label-text">{{ formatColumnName(col) }}</span>
+                <component
+                  :is="getColumnIcon(col)"
+                  class="column-icon"
+                />
               </el-checkbox>
             </el-checkbox-group>
           </div>
-          <div class="filter-section filter-inputs" v-if="localSelectedColumns.length > 0">
-            <h3 class="section-title">Masukkan Nilai Filter:</h3>
+
+          <div
+            v-if="localSelectedColumns.length > 0"
+            class="filter-section filter-inputs"
+          >
+            <h3 class="section-title">
+              Masukkan Nilai Filter:
+            </h3>
             <div
               v-for="col in localSelectedColumns"
               :key="col"
-              class="filter-input-item"
+              class="filter-input-group"
             >
-              <el-input
-                v-model="localActiveFilters[col]"
-                :placeholder="`Filter berdasarkan ${formatColumnName(col)}`"
-                clearable
-                size="large"
-                class="styled-input"
-              >
-                <template #prepend>
-                  <span class="input-prepend">{{ formatColumnName(col) }}</span>
-                </template>
-              </el-input>
+              <label :for="`filter-${col}`" class="input-label">{{ formatColumnName(col) }}:</label>
+              <div class="input-wrapper">
+                <input
+                  :id="`filter-${col}`"
+                  v-model="localActiveFilters[col]"
+                  type="text"
+                  :placeholder="`Masukkan filter untuk ${formatColumnName(col).toLowerCase()}`"
+                  class="filter-input"
+                >
+                <button
+                  v-if="localActiveFilters[col]"
+                  class="clear-button"
+                  @click="localActiveFilters[col] = ''"
+                >
+                  <IconX class="w-3 h-3" />
+                </button>
+              </div>
             </div>
           </div>
+          <div
+            v-else
+            class="empty-state"
+          >
+            <IconFilter class="empty-state-icon" />
+            <p class="empty-state-text">
+              Belum ada kolom yang dipilih. Silakan pilih kolom untuk mulai memfilter.
+            </p>
+          </div>
         </div>
-        <div class="dialog-footer">
-          <el-button @click="handleClearFilters" class="footer-button reset-button" :disabled="isLoading">
-            <i class="fa-solid fa-eraser mr-2"></i>Bersihkan Filter
+
+        <div class="my-footer">
+          <el-button
+            type="info"
+            class="reset-button"
+            :disabled="isLoading"
+            @click="handleClearFilters"
+          >
+            <IconTrash class="w-4 h-4 mr-2" />
+            Bersihkan Filter
           </el-button>
-          <el-button type="primary" @click="handleApplyFilters" class="footer-button apply-button" :loading="isLoading">
-            <i class="fa-solid fa-check-circle mr-2"></i>Terapkan Filter
+          <el-button
+            type="primary"
+            class="apply-button"
+            :disabled="isLoading || localSelectedColumns.length === 0"
+            @click="handleApplyFilters"
+          >
+            <div v-if="isLoading" class="loading-spinner" />
+            <span :class="{ 'opacity-0': isLoading }">
+              <IconCheck class="w-4 h-4 mr-2" />
+              Terapkan Filter
+            </span>
           </el-button>
         </div>
       </div>
@@ -63,8 +116,35 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
-import { Close } from '@element-plus/icons-vue';
+import { ref, watch, computed } from 'vue';
+
+// Hapus import Close dari Element Plus karena akan diganti dengan IconX dari Lucide
+import { ElButton, ElCheckboxGroup, ElCheckbox } from 'element-plus';
+import 'element-plus/es/components/button/style/css';
+import 'element-plus/es/components/checkbox-group/style/css';
+import 'element-plus/es/components/checkbox/style/css';
+
+// Import icon components dari lucide-vue-next
+import {
+  Filter as IconFilter,
+  X as IconX,
+  Check as IconCheck,
+  Trash as IconTrash,
+  Type as IconType,
+  UserPen as IconUserPen,
+  Folder as IconFolder,
+  Info as IconInfo,
+  Calendar as IconCalendar,
+  Eye as IconEye,
+  MessageCircle as IconMessageCircle,
+  Tags as IconTags,
+  Link as IconLink,
+  Hash as IconHash,
+  Plus as IconPlus,
+  Edit as IconEdit,
+  Columns as IconColumns
+} from 'lucide-vue-next';
+
 
 const props = defineProps<{
   modelValue: boolean;
@@ -72,15 +152,38 @@ const props = defineProps<{
   initialFilters?: { [key: string]: string | number | null };
 }>();
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void;
-  (e: 'update:activeFilters', filters: { [key: string]: string | number | null }): void;
-}>();
+const emit = defineEmits(['update:modelValue', 'update:activeFilters']);
 
 const localDialogVisible = ref(props.modelValue);
 const localSelectedColumns = ref<string[]>([]);
 const localActiveFilters = ref<{ [key: string]: string | number | null }>({});
 const isLoading = ref(false);
+
+// Mapping icon untuk setiap kolom menggunakan component Lucid-Vue-Next
+const getColumnIcon = (column: string) => {
+  const col = column.toLowerCase();
+
+  // Berita
+  if (col.includes('title') || col.includes('judul')) return IconType;
+  if (col.includes('author') || col.includes('penulis')) return IconUserPen;
+  if (col.includes('category') || col.includes('kategori')) return IconFolder;
+  if (col.includes('status')) return IconInfo;
+  if (col.includes('date') || col.includes('tanggal')) return IconCalendar;
+  if (col.includes('published_at') || col.includes('diterbitkan')) return IconCalendar; // Bisa juga CalendarCheck jika ada konotasi sudah publish
+  if (col.includes('views') || col.includes('dibaca')) return IconEye;
+  if (col.includes('comments') || col.includes('komentar')) return IconMessageCircle;
+  if (col.includes('tags')) return IconTags;
+  if (col.includes('source')) return IconLink;
+
+  // Identifikasi & Waktu umum
+  if (col.includes('id') || col.includes('code') || col.includes('kode')) return IconHash;
+  if (col.includes('created_at') || col.includes('dibuat')) return IconPlus;
+  if (col.includes('updated_at') || col.includes('diperbarui')) return IconEdit;
+
+  // Default icon
+  return IconColumns;
+};
+
 
 watch(() => props.modelValue, (newVal) => {
   localDialogVisible.value = newVal;
@@ -148,226 +251,289 @@ const handleClearFilters = () => {
 </script>
 
 <style scoped>
-/* Dialog transition styles */
+/* Transisi untuk dialog */
 .dialog-fade-enter-active,
 .dialog-fade-leave-active {
-  transition: opacity 0.4s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 .dialog-fade-enter-from,
 .dialog-fade-leave-to {
   opacity: 0;
+  transform: translateY(-20px) scale(0.95);
 }
-.dialog-fade-enter-active .filter-dialog,
-.dialog-fade-leave-active .filter-dialog {
-  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.4s ease-in-out;
-}
-.dialog-fade-enter-from .filter-dialog,
-.dialog-fade-leave-to .filter-dialog {
-  transform: translateY(50px) scale(0.95);
-  opacity: 0;
+.dialog-fade-enter-to,
+.dialog-fade-leave-from {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
-/* Overlay and dialog container */
+/* Overlay */
 .filter-dialog-overlay {
-  display: flex;
   position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.65); /* Slightly darker overlay */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  padding: 20px; /* Add padding for smaller screens */
+  padding: 20px;
+  box-sizing: border-box;
 }
+
+/* Dialog container */
 .filter-dialog {
-  width: 90%;
-  max-width: 700px; /* Slightly wider max-width */
-  border-radius: 16px; /* More rounded corners */
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15); /* Stronger shadow */
-  background-color: #ffffff; /* White background for the dialog content */
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
-  max-height: 95vh; /* Allow it to take more vertical space */
-  overflow: hidden; /* Ensure content doesn't overflow rounded corners */
+  overflow: hidden;
+  transform: scale(1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .filter-dialog {
-    width: 95vw;
-    margin: 10px;
-    border-radius: 12px; /* Slightly less rounded on small screens */
-  }
-  .column-checkboxes {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Adjust for smaller checkboxes on mobile */
-  }
-  .my-header h4 {
-    font-size: 1.3em;
-  }
-  .section-title {
-    font-size: 1.1em;
-  }
+.filter-dialog:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
-/* Header styles */
+/* Header */
 .my-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 30px; /* More padding */
-  background: linear-gradient(to right, #88D3D1, #69C5C2);
-  color: white;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px 16px 0 0; /* Match dialog border-radius */
-  flex-shrink: 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for header */
+  padding: 18px 24px;
+  border-bottom: 1px solid #eee;
+  background: linear-gradient(to right, #e0f2f7, #e0f7f2); /* Light blue-green gradient */
+  color: #333;
 }
+
 .my-header h4 {
   margin: 0;
-  font-size: 1.6em; /* Slightly larger title */
-  font-weight: 700; /* Bolder font weight */
+  font-size: 1.25rem;
+  font-weight: 600;
   display: flex;
   align-items: center;
-  text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2); /* More pronounced text shadow */
-  letter-spacing: 0.5px;
+  color: #2c3e50;
 }
+
 .dialog-icon {
-  margin-right: 12px; /* More space for icon */
-  font-size: 1.3em; /* Slightly larger icon */
-  opacity: 0.9;
+  margin-right: 10px;
+  color: #007bff; /* Primary blue color for icon */
+  font-size: 1.1em;
+}
+
+/* Close button Element Plus custom style */
+.el-button--close-custom {
+  border: none;
+  background-color: transparent;
+  color: #909399;
+  font-size: 20px;
+  transition: all 0.2s ease-in-out;
+}
+.el-button--close-custom:hover {
+  background-color: #f0f2f5;
+  color: #606266;
+  transform: rotate(90deg);
 }
 
 /* Scrollable form container */
 .scrollable-form-container {
   flex-grow: 1;
   overflow-y: auto;
-  padding: 25px 30px; /* More padding */
-  background-color: #f8f9fa; /* Light background for form content */
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
-/* Filter section styles */
+/* Custom scrollbar */
+.scrollable-form-container::-webkit-scrollbar {
+  width: 6px;
+}
+.scrollable-form-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+.scrollable-form-container::-webkit-scrollbar-thumb {
+  background: #c0c4cc;
+  border-radius: 3px;
+}
+.scrollable-form-container::-webkit-scrollbar-thumb:hover {
+  background: #a8abb2;
+}
+
+/* Section styling */
 .filter-section {
-  margin-bottom: 25px; /* More space between sections */
-  background-color: #ffffff;
-  padding: 25px;
-  border-radius: 12px; /* Consistent rounded corners */
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Nicer shadow */
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-/* Section title */
 .section-title {
-  margin-top: 0;
-  margin-bottom: 20px; /* More space below title */
-  color: #69C5C2;
-  font-size: 1.35em; /* Larger title */
-  font-weight: 700; /* Bolder font weight */
-  border-bottom: 3px solid #88D3D1; /* Thicker border */
-  padding-bottom: 8px; /* More padding below border */
-  position: relative;
-  letter-spacing: 0.3px;
-}
-.section-title::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -2px; /* Align with border-bottom */
-  width: 50px; /* Short accent line */
-  height: 3px;
-  background-color: #69C5C2;
-  border-radius: 2px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 10px;
 }
 
-/* Checkbox group layout */
+/* Checkbox styling */
 .column-checkboxes {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Adjusted min-width for better spacing */
-  gap: 15px; /* More gap */
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
 }
 
-/* Individual checkbox styling */
 .column-checkbox {
-  background-color: #F8FCFB; /* Very light, almost white background */
-  border: 1px solid #CFE9E8; /* Lighter primary border */
-  border-radius: 10px; /* More rounded */
-  padding: 12px 15px; /* More padding */
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Softer transition */
+  margin: 0 !important; /* Override Element Plus default margin */
+  border: 1px solid #dcdfe6;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.column-checkbox.is-checked {
+  border-color: #409eff;
+  background-color: #ecf5ff;
+  box-shadow: 0 2px 8px rgba(64, 158, 255, 0.1);
+}
+
+.column-checkbox:hover {
+  border-color: #a0cfff;
+  box-shadow: 0 4px 12px rgba(64, 158, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.column-checkbox .el-checkbox__input {
+  margin-right: 10px; /* Space between checkbox and label */
+}
+
+.column-checkbox-label-text {
+  flex-grow: 1;
   font-weight: 500;
   color: #333;
+  font-size: 0.95em;
+}
+
+.column-icon {
+  margin-left: 10px;
+  color: #909399;
+  font-size: 1.1em;
+  transition: color 0.2s ease-in-out;
+}
+
+.column-checkbox.is-checked .column-icon {
+  color: #409eff; /* Change icon color when checked */
+}
+
+/* Filter input group */
+.filter-input-group {
+  margin-bottom: 15px;
+}
+
+.input-label {
+  display: block;
+  font-size: 0.9em;
+  color: #606266;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.filter-input {
+  width: 100%;
+  padding: 10px 40px 10px 15px;
+  border: 1px solid #dcdfe6;
+  border-radius: 8px;
+  font-size: 1em;
+  color: #333;
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box; /* Ensures padding doesn't add to total width */
+}
+
+.filter-input:focus {
+  border-color: #409eff;
+  box-shadow: 0 0 0 3px rgba(64, 158, 255, 0.2);
+  outline: none;
+}
+
+.clear-button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #909399;
   cursor: pointer;
-  display: flex; /* Use flex for better alignment of text */
-  align-items: center;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.2s ease-in-out;
 }
-.column-checkbox:hover {
-  transform: translateY(-3px); /* More pronounced lift */
-  box-shadow: 0 6px 15px rgba(105, 197, 194, 0.25); /* Stronger primary shadow on hover */
-  border-color: #69C5C2;
-}
-.column-checkbox-label-text {
-  white-space: normal;
-  word-break: break-word;
-  line-height: 1.4; /* Better line height for readability */
-}
-.column-checkbox.is-checked {
-  background-color: #88D3D1; /* Light primary background when checked */
-  border-color: #69C5C2; /* Primary border when checked */
-  box-shadow: 0 0 0 3px #69C5C2; /* More prominent ring */
-  color: white; /* White text when checked for contrast */
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+.clear-button:hover {
+  color: #606266;
+  background-color: #f0f2f5;
 }
 
-/* Input field styling */
-.filter-input-item {
-  margin-bottom: 15px; /* More space between inputs */
+/* Empty state styling */
+.empty-state {
+  text-align: center;
+  padding: 50px 20px;
+  color: #909399;
+  font-size: 1.1em;
 }
-.styled-input .el-input-group__prepend {
-  min-width: 140px; /* Wider prepend */
-  text-align: right;
-  font-weight: 600; /* Bolder font */
-  color: #555;
-  background-color: #F5F9FB; /* Slightly off-white background */
-  border-right: 1px solid #DCE6E9;
+
+.empty-state-icon {
+  font-size: 3em;
+  margin-bottom: 20px;
+  color: #c0c4cc;
+}
+
+.empty-state-text {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Footer buttons */
+.my-footer {
   display: flex;
+  justify-content: flex-end;
+  padding: 18px 24px;
+  border-top: 1px solid #eee;
+  background-color: #fcfcfc;
+  gap: 15px; /* Spasi antar tombol */
+}
+
+.reset-button, .apply-button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
   align-items: center;
-  justify-content: flex-end;
-  padding-right: 15px;
-  border-radius: 8px 0 0 8px; /* Match input border-radius */
-}
-.styled-input .el-input__wrapper {
-  border-radius: 8px; /* More rounded */
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  padding: 8px 12px; /* Adjust padding for visual balance */
-}
-/* Input focus style */
-.styled-input .el-input__wrapper.is-focus {
-  border-color: #69C5C2;
-  box-shadow: 0 0 0 3px rgba(105, 197, 194, 0.25);
+  justify-content: center;
+  min-width: 150px;
 }
 
-/* Dialog footer styles */
-.dialog-footer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 15px; /* More gap between buttons */
-  padding: 20px 30px; /* More padding */
-  background-color: #f8f9fa;
-  border-top: 1px solid #e0e0e0;
-  border-radius: 0 0 16px 16px; /* Match dialog border-radius */
-  flex-shrink: 0;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow for footer */
-}
-.footer-button {
-  min-width: 150px; /* Wider buttons */
-  padding: 12px 20px; /* More padding */
-  font-size: 1.05em; /* Slightly larger font */
-  font-weight: bold;
-  border-radius: 10px; /* More rounded */
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  text-transform: uppercase; /* Uppercase text */
-  letter-spacing: 0.5px;
-}
-
-/* Reset button styling */
 .reset-button {
   background-color: #FEEEEE; /* Lighter red background */
   color: #EB5757; /* Deeper red text */
@@ -392,21 +558,33 @@ const handleClearFilters = () => {
 .apply-button:hover {
   background: linear-gradient(to right, #69C5C2, #5AAEA8); /* Darker gradient for hover */
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(105, 197, 194, 0.25); /* Stronger shadow on hover */
+  box-shadow: 0 8px 20px rgba(105, 197, 194, 0.35); /* More prominent shadow on hover */
 }
 
-/* Custom styling for the close button to match the primary color */
-.el-button--close-custom {
-  background-color: rgba(255, 255, 255, 0.2) !important; /* Semi-transparent white */
-  border-color: rgba(255, 255, 255, 0.3) !important;
-  color: white !important;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+.apply-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
-.el-button--close-custom:hover,
-.el-button--close-custom:focus {
-  background-color: rgba(255, 255, 255, 0.35) !important; /* More opaque white on hover */
-  border-color: rgba(255, 255, 255, 0.5) !important;
-  transform: scale(1.05); /* Slight scale up */
+
+/* Loading spinner */
+.loading-spinner {
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid #fff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  position: absolute;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.apply-button span {
+  transition: opacity 0.3s;
 }
 </style>

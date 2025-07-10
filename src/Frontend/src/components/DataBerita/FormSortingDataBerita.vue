@@ -1,14 +1,36 @@
 <template>
   <transition name="fade">
-    <div v-if="visible" class="form-overlay-wrapper">
-      <div class="overlay" @click.self="closeForm"></div>
+    <div
+      v-if="visible"
+      class="form-overlay-wrapper"
+    >
+      <div
+        class="overlay"
+        @click.self="closeForm"
+      />
       <div class="sorting-form-container">
-        <button @click="closeForm" class="close-button">
-          <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        <button
+          class="close-button"
+          @click="closeForm"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
-        <h2 class="form-title">Pengurutan Data</h2>
+        <h2 class="form-title">
+          Pengurutan Data
+        </h2>
         <el-form
           :model="form"
           label-position="top"
@@ -48,15 +70,15 @@
         </el-form>
         <div class="form-actions">
           <el-button
-            @click="cancelSort"
             class="custom-cancel-button"
+            @click="cancelSort"
           >
             Batal
           </el-button>
           <el-button
             type="primary"
-            @click="applySort"
             class="custom-apply-button"
+            @click="applySort"
           >
             Terapkan
           </el-button>
@@ -72,7 +94,7 @@ import { reactive } from 'vue';
 const props = defineProps<{
   visible: boolean;
   columns: string[];
-  data: any[];
+    data: Record<string, unknown>[];
 }>();
 
 const emits = defineEmits<{
@@ -102,21 +124,22 @@ function applySort(): void {
     console.warn("Kolom pengurutan belum dipilih.");
     return;
   }
+    // eslint-disable-next-line vue/no-mutating-props
   props.data.sort((a, b) => {
     const valueA = a[form.column];
     const valueB = b[form.column]; // Removed .toString() to handle numbers/dates directly
 
-    const isDate = !isNaN(Date.parse(valueA)) && !isNaN(Date.parse(valueB));
-    const isNumber = !isNaN(parseFloat(valueA)) && !isNaN(parseFloat(valueB));
+    const isDate = !isNaN(Date.parse(String(valueA))) && !isNaN(Date.parse(String(valueB)));
+    const isNumber = !isNaN(parseFloat(String(valueA))) && !isNaN(parseFloat(String(valueB)));
 
     if (isDate) {
       return form.order === 'asc'
-        ? new Date(valueA).getTime() - new Date(valueB).getTime()
-        : new Date(valueB).getTime() - new Date(valueA).getTime();
+        ? new Date(String(valueA)).getTime() - new Date(String(valueB)).getTime()
+        : new Date(String(valueB)).getTime() - new Date(String(valueA)).getTime();
     } else if (isNumber) {
       return form.order === 'asc'
-        ? parseFloat(valueA) - parseFloat(valueB)
-        : parseFloat(valueB) - parseFloat(valueA);
+        ? parseFloat(String(valueA)) - parseFloat(String(valueB))
+        : parseFloat(String(valueB)) - parseFloat(String(valueA));
     } else {
       return form.order === 'asc'
         ? String(valueA).localeCompare(String(valueB))

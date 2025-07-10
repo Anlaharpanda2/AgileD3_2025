@@ -232,11 +232,9 @@ import {
   Play as IconPlay,
   Square as IconSquare,
   Timer as IconTimer,
-  Navigation as IconNavigation,
   Flag as IconFlag,
   Globe as IconGlobe,
   Hash as IconHash,
-  CreditCard as IconCreditCard,
   AlignLeft as IconAlignLeft,
   StickyNote as IconStickyNote,
   MessageCircle as IconMessageCircle,
@@ -251,7 +249,10 @@ const props = defineProps<{
   initialFilters?: { [key: string]: string | number | null };
 }>();
 
-const emit = new Map<string, Function>();
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: boolean): void;
+  (e: 'update:activeFilters', filters: { [key: string]: string | number | null }): void;
+}>();
 
 const localDialogVisible = ref(props.modelValue);
 const localSelectedColumns = ref<string[]>([]);

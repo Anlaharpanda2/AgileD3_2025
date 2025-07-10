@@ -264,7 +264,6 @@ import {
   Globe as IconGlobe,
   Hash as IconHash,
   CreditCard as IconCreditCard,
-  Hash as IconNumber,
   AlignLeft as IconAlignLeft,
   StickyNote as IconStickyNote,
   MessageCircle as IconMessageCircle,

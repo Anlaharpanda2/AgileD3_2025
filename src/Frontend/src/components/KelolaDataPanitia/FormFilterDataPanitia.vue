@@ -240,7 +240,10 @@ const props = defineProps<{
   initialFilters?: { [key: string]: string | number | null };
 }>();
 
-const emit = new Map<string, Function>();
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: boolean): void;
+  (e: 'update:activeFilters', filters: { [key: string]: string | number | null }): void;
+}>();
 
 const localDialogVisible = ref(props.modelValue);
 const localSelectedColumns = ref<string[]>([]);

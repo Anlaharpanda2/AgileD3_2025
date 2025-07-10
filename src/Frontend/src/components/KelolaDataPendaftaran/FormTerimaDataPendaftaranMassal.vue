@@ -92,7 +92,7 @@
                       <!-- Field Icons - External -->
                       <div class="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center flex-shrink-0">
                         <svg
-                          v-if="field.component === 'el-date-picker'"
+                          v-if="field.component === ElDatePicker"
                           class="w-5 h-5 text-pink-500"
                           fill="none"
                           stroke="currentColor"
@@ -143,9 +143,18 @@
 
                       <!-- Input Field -->
                       <div class="flex-1">
-                        <component
-                          :is="field.component"
-                          v-if="field.component !== 'el-select'"
+                        <el-date-picker
+                          v-if="field.component === ElDatePicker"
+                          :id="field.key"
+                          v-model="form[field.key]"
+                          :type="field.type"
+                          :placeholder="`Masukkan ${field.label.toLowerCase()}`"
+                          :name="field.key"
+                          clearable
+                          class="w-full modern-input"
+                        />
+                        <el-input
+                          v-else-if="field.component === ElInput"
                           :id="field.key"
                           v-model="form[field.key]"
                           :type="field.type"
@@ -155,7 +164,7 @@
                           class="w-full modern-input"
                         />
                         <el-select
-                          v-else-if="field.key === 'status'"
+                          v-else-if="field.component === ElSelect"
                           :id="field.key"
                           v-model="form.status"
                           placeholder="Pilih Status"
@@ -259,12 +268,12 @@
 
 <script setup lang="ts">
 import { reactive, ref, watch, PropType } from 'vue';
-import { ElNotification, FormInstance, FormItemRule } from 'element-plus';
+import { ElNotification, FormInstance, FormItemRule, ElInput, ElDatePicker, ElSelect } from 'element-plus';
 import api from '../../api.js';
 import { AxiosError } from 'axios';
 
 const props = defineProps({
-  initialData: {
+  initialData: { 
     type: Array as PropType<Array<Record<string, unknown>>>,
     required: true,
   },
@@ -275,10 +284,10 @@ const formRef = ref<FormInstance | null>(null);
 const statusOptions = ['kawin', 'lajang', 'janda'];
 
 const fields = [
-  { key: 'kegiatan_dimulai', label: 'Kegiatan Dimulai', component: 'el-date-picker', type: 'date' },
-  { key: 'kegiatan_berakhir', label: 'Kegiatan Berakhir', component: 'el-date-picker', type: 'date' },
-  { key: 'tempat_kegiatan', label: 'Tempat Kegiatan', component: 'el-input', type: 'text' },
-  { key: 'angkatan', label: 'Angkatan', component: 'el-input', type: 'number' },
+  { key: 'kegiatan_dimulai', label: 'Kegiatan Dimulai', component: ElDatePicker, type: 'date' },
+  { key: 'kegiatan_berakhir', label: 'Kegiatan Berakhir', component: ElDatePicker, type: 'date' },
+  { key: 'tempat_kegiatan', label: 'Tempat Kegiatan', component: ElInput, type: 'text' },
+  { key: 'angkatan', label: 'Angkatan', component: ElInput, type: 'number' },
 ];
 
 // Initial form state from FormTerimaDataPendaftaranMassal.vue

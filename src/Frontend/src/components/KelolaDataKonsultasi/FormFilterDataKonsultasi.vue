@@ -229,6 +229,7 @@ import {
   StickyNote as IconStickyNote,
   Type as IconType,
   Columns as IconColumns,
+  Hash as IconHash,
   Trash as IconTrash
 } from 'lucide-vue-next';
 

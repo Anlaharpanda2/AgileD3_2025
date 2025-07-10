@@ -291,7 +291,7 @@ import api from '../../api.js';
 
 const emit = defineEmits(['close']);
 
-const formRef = ref(null);
+const formRef = ref<FormInstance | null>(null);
 const roleOptions = ['operator', 'pegawai', 'masyarakat'];
 
 const form = reactive({

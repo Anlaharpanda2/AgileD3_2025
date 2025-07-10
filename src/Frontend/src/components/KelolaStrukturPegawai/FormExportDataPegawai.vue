@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import * as XLSX from 'xlsx' // Re-added XLSX import
-// import ExcelJS from 'exceljs' // Removed ExcelJS import
+import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import jsPDF from 'jspdf'
 import autoTable, { UserOptions } from 'jspdf-autotable'
@@ -26,31 +25,21 @@ const props = defineProps<{
   data: Array<Record<string, unknown>>
 }>()
 
-// Kolom-kolom yang akan diekspor
 const exportColumns = [
   { key: "nama", label: "Nama" },
-  { key: "nik", label: "NIK" },
-  { key: "jenis_bimtek", label: "Jenis Bimtek" },
-  { key: "kegiatan_dimulai", label: "Kegiatan dimulai" },
-  { key: "kegiatan_berakhir", "label": "Kegiatan berakhir" },
-  { key: "tempat_kegiatan", label: "Tempat Kegiatan" },
-  { key: "angkatan", label: "Angkatan" },
+  { key: "idPegawai", label: "ID Pegawai" },
+  { key: "jabatan", label: "Jabatan" },
+  { key: "email", label: "Email" },
+  { key: "noHp", label: "No. HP" },
   { key: "alamat", label: "Alamat" },
-  { key: "tempat_tanggal_lahir", label: "tempat tanggal lahir" },
-  { key: "pendidikan", label: "Pendidikan" },
   { key: "status", label: "Status" },
-  { key: "jenis_usaha", label: "Jenis Usaha" },
-  { key: "penghasilan_perbulan", label: "Penghasilan perbulan" },
-  { key: "nomor_telefon", label: "No. Telp" },
 ]
 
-// State untuk input form
-const headerDokumen = ref('') // Mengubah judul menjadi headerDokumen
-const judulDokumen = ref('') // Menambahkan kolom judul dokumen baru
+const headerDokumen = ref('')
+const judulDokumen = ref('')
 const showLogo1 = ref(true)
 const showLogo2 = ref(true)
 
-// Fungsi untuk mendapatkan tanggal dan waktu saat ini
 function getCurrentDateTime(): string {
   const now = new Date()
   return now.toLocaleString('id-ID', {
@@ -59,23 +48,17 @@ function getCurrentDateTime(): string {
   })
 }
 
-// Fungsi untuk mendapatkan URL saat ini
 function getCurrentUrl(): string {
   return window.location.href
 }
 
-// Fungsi untuk mengekspor data ke format Word
 async function ExportWord(headerText: string, titleText: string, showLogo1: boolean, showLogo2: boolean) {
   const logoLeftBuffer = showLogo1
-    ? await fetch("/export/logo1.png") // Logo Tuah Sakato
-        .then(res => res.arrayBuffer())
-        .then(buffer => new Uint8Array(buffer))
+    ? await fetch("/export/logo1.png").then(res => res.arrayBuffer()).then(buffer => new Uint8Array(buffer))
     : null
 
   const logoRightBuffer = showLogo2
-    ? await fetch("/export/logo2.png") // Logo Padang Kota Tercinta
-        .then(res => res.arrayBuffer())
-        .then(buffer => new Uint8Array(buffer))
+    ? await fetch("/export/logo2.png").then(res => res.arrayBuffer()).then(buffer => new Uint8Array(buffer))
     : null
 
   const rows = [
@@ -159,13 +142,12 @@ async function ExportWord(headerText: string, titleText: string, showLogo1: bool
     ],
   })
 
-  // Tambahkan judul dokumen jika ada
   const documentChildren: (Paragraph | Table)[] = [new Paragraph({ text: "", spacing: { after: 200 } })];
   if (titleText) {
     documentChildren.push(new Paragraph({
-      children: [new TextRun({ text: titleText, bold: true, size: 24 })], // Ukuran font disamakan dengan headerText
+      children: [new TextRun({ text: titleText, bold: true, size: 24 })],
       alignment: AlignmentType.CENTER,
-      spacing: { after: 200 } // Spasi setelah judul
+      spacing: { after: 200 }
     }));
   }
   documentChildren.push(new Table({ rows }));
@@ -175,10 +157,9 @@ async function ExportWord(headerText: string, titleText: string, showLogo1: bool
   })
 
   const buffer = await Packer.toBlob(doc)
-  saveAs(buffer, 'exported_data.docx')
+  saveAs(buffer, 'exported_data_pegawai.docx')
 }
 
-// Fungsi untuk mengekspor data ke format PDF
 async function ExportPdf(headerText: string, titleText: string, showLogo1: boolean, showLogo2: boolean) {
   async function loadImageAsDataUrlWithSize(url: string): Promise<{ dataUrl: string, width: number, height: number }> {
     return new Promise((resolve, reject) => {
@@ -204,14 +185,14 @@ async function ExportPdf(headerText: string, titleText: string, showLogo1: boole
   const pageHeight = doc.internal.pageSize.getHeight()
   const margin = 40
   const fontSize8 = 8
-  const headerFontSize = 12 // Ukuran font untuk header (yang sebelumnya judul dokumen)
-  const titleFontSize = 12 // Ukuran font untuk judul baru, disamakan dengan headerFontSize
+  const headerFontSize = 12
+  const titleFontSize = 12
 
-  let currentY = 20 // Posisi Y awal
+  let currentY = 20
 
   const [logo1Data, logo2Data] = await Promise.all([
-    showLogo1 ? loadImageAsDataUrlWithSize('/export/logo1.png') : null, // Logo Tuah Sakato
-    showLogo2 ? loadImageAsDataUrlWithSize('/export/logo2.png') : null, // Logo Padang Kota Tercinta
+    showLogo1 ? loadImageAsDataUrlWithSize('/export/logo1.png') : null,
+    showLogo2 ? loadImageAsDataUrlWithSize('/export/logo2.png') : null,
   ])
 
   const fixedImgWidth = 60
@@ -225,7 +206,6 @@ async function ExportPdf(headerText: string, titleText: string, showLogo1: boole
   if (logo1Data) doc.addImage(logo1Data.dataUrl, 'PNG', logo1X, currentY, logo1Size.width, logo1Size.height)
   if (logo2Data) doc.addImage(logo2Data.dataUrl, 'PNG', logo2X, currentY, logo2Size.width, logo2Size.height)
 
-  // Header Dokumen
   doc.setFontSize(headerFontSize)
   doc.setFont(undefined, 'bold')
   const centerX = pageWidth / 2
@@ -247,9 +227,8 @@ async function ExportPdf(headerText: string, titleText: string, showLogo1: boole
 
   doc.setLineWidth(2)
   doc.line(margin, currentY, pageWidth - margin, currentY)
-  currentY += 15 // Spasi setelah garis header
+  currentY += 15
 
-  // Judul Dokumen (opsional)
   if (titleText) {
     doc.setFontSize(titleFontSize)
     doc.setFont(undefined, 'bold')
@@ -258,7 +237,7 @@ async function ExportPdf(headerText: string, titleText: string, showLogo1: boole
       doc.text(line, centerX, currentY, { align: 'center' })
       currentY += titleFontSize * 1.5
     })
-    currentY += 15 // Spasi setelah judul
+    currentY += 15
   }
 
   const head = [exportColumns.map(col => col.label)]
@@ -267,7 +246,7 @@ async function ExportPdf(headerText: string, titleText: string, showLogo1: boole
   const options: UserOptions = {
     head,
     body,
-    startY: currentY, // Mulai tabel setelah header dan judul
+    startY: currentY,
     margin: { left: margin, right: margin },
     headStyles: { fontSize: fontSize8 },
     bodyStyles: { fontSize: fontSize8 },
@@ -282,39 +261,36 @@ async function ExportPdf(headerText: string, titleText: string, showLogo1: boole
   }
 
   autoTable(doc, options)
-  doc.save("exported_data.pdf")
+  doc.save("exported_data_pegawai.pdf")
 }
 
-// Fungsi untuk mengekspor data ke format Excel menggunakan XLSX (SheetJS)
 async function ExportExcel() {
-  // Siapkan data dalam format array of arrays, termasuk header
-  const dataToExport = [
-    exportColumns.map(col => col.label), // Baris header
-    ...props.data.map(row => exportColumns.map(col => row[col.key] ?? '')) // Baris data
-  ];
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Data");
 
-  // Buat worksheet dari array of arrays
-  const ws = XLSX.utils.aoa_to_sheet(dataToExport);
+  worksheet.addRow(exportColumns.map(col => col.label));
 
-  // Buat workbook baru dan tambahkan worksheet
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Data"); // Nama sheet "Data"
+  props.data.forEach(row => {
+    const rowData = exportColumns.map(col => row[col.key] ?? '');
+    worksheet.addRow(rowData);
+  });
 
-  // Tulis workbook ke buffer
-  const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  worksheet.columns = exportColumns.map(col => ({
+    header: col.label,
+    key: col.key,
+    width: Math.max(col.label.length, 15)
+  }));
 
-  // Simpan file menggunakan file-saver
-  saveAs(new Blob([excelBuffer], { type: "application/octet-stream" }), "exported_data.xlsx");
+  const buffer = await workbook.xlsx.writeBuffer();
+  saveAs(new Blob([buffer], { type: "application/octet-stream" }), "exported_data_pegawai.xlsx");
 
   ElNotification({ message: 'Data berhasil diekspor ke Excel!', type: 'success', duration: 3000 });
 }
 
-// Handler utama untuk proses ekspor
 function ExportHandler(format: 'word' | 'pdf' | 'excel') {
   if (format === 'excel') {
     ExportExcel()
   } else {
-    // Validasi untuk Header Dokumen (sebelumnya judul dokumen)
     if (!headerDokumen.value.trim()) {
       ElNotification({ message: 'Header Dokumen tidak boleh kosong!', type: 'warning', duration: 3000 })
       return
@@ -327,15 +303,14 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
   }
 }
 </script>
+
+
 <template>
-  <!-- Backdrop dengan Glassmorphism Effect -->
   <div
     class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in p-4"
     @click.self="$emit('close')"
   >
-    <!-- Modal Container -->
     <div class="relative bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8 w-full max-w-md mx-auto animate-scale-in max-h-[90vh] overflow-y-auto md:max-h-auto">
-      <!-- Close Button -->
       <button
         class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all duration-200 hover:scale-110 group"
         @click="$emit('close')"
@@ -355,7 +330,6 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
         </svg>
       </button>
 
-      <!-- Header -->
       <div class="text-center mb-8">
         <div class="w-16 h-16 bg-gradient-to-br from-pink-300 to-pink-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
           <svg
@@ -373,16 +347,14 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
           </svg>
         </div>
         <h2 class="text-2xl font-bold text-gray-800 mb-2">
-          Export Data Pelatihan
+          Export Data Pegawai
         </h2>
         <p class="text-gray-600 text-sm">
           Pilih format export dan konfigurasi dokumen
         </p>
       </div>
 
-      <!-- Form Content -->
       <div class="space-y-6">
-        <!-- Header Dokumen Input -->
         <div class="space-y-2">
           <label class="block text-sm font-semibold text-gray-700 mb-2">
             <svg
@@ -425,7 +397,6 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
           </div>
         </div>
 
-        <!-- Judul Dokumen Input (baru) -->
         <div class="space-y-2">
           <label class="block text-sm font-semibold text-gray-700 mb-2">
             <svg
@@ -468,7 +439,6 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
           </div>
         </div>
 
-        <!-- Opsi Logo -->
         <div class="space-y-3">
           <label class="text-sm font-semibold text-gray-700 block">
             <svg
@@ -538,7 +508,6 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
           </div>
         </div>
 
-        <!-- Tombol Export -->
         <div class="space-y-3 pt-2">
           <p class="text-sm font-semibold text-gray-700 mb-3">
             <svg
@@ -557,7 +526,6 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
             Format Export
           </p>
           
-          <!-- Tombol Excel -->
           <button
             class="w-full flex items-center justify-center px-6 py-3 bg-gradient-to-r from-emerald-400 to-emerald-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-emerald-500 hover:to-emerald-600 transform hover:scale-105 transition-all duration-200 group"
             @click="ExportHandler('excel')"
@@ -577,7 +545,6 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
             <span class="ml-2 text-xs bg-white/30 px-2 py-1 rounded-full">XLSX</span>
           </button>
 
-          <!-- Tombol PDF -->
           <button
             class="w-full flex items-center justify-center px-6 py-3 bg-gradient-to-r from-rose-400 to-rose-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-rose-500 hover:to-rose-600 transform hover:scale-105 transition-all duration-200 group"
             @click="ExportHandler('pdf')"
@@ -597,7 +564,6 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
             <span class="ml-2 text-xs bg-white/30 px-2 py-1 rounded-full">PDF</span>
           </button>
 
-          <!-- Tombol Word -->
           <button
             class="w-full flex items-center justify-center px-6 py-3 bg-gradient-to-r from-sky-400 to-sky-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-sky-500 hover:to-sky-600 transform hover:scale-105 transition-all duration-200 group"
             @click="ExportHandler('word')"
@@ -618,7 +584,6 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
           </button>
         </div>
 
-        <!-- Info Data -->
         <div class="mt-6 p-4 bg-gradient-to-r from-pink-50 to-pink-100 rounded-xl border border-pink-200">
           <div class="flex items-center">
             <div class="w-8 h-8 bg-pink-400 rounded-lg flex items-center justify-center mr-3">
@@ -639,7 +604,7 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
                 {{ props.data.length }} Data Siap Export
               </p>
               <p class="text-xs text-pink-500">
-                Data pelatihan akan diekspor sesuai format yang dipilih
+                Data pegawai akan diekspor sesuai format yang dipilih
               </p>
             </div>
           </div>
@@ -678,40 +643,33 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
   animation: scale-in 0.3s ease-out forwards;
 }
 
-/* Custom scrollbar untuk modal jika kontennya melebihi tinggi layar */
-/* Pada desktop, modal akan menyesuaikan tinggi kontennya, scrollbar hanya muncul jika konten sangat tinggi */
-/* Pada mobile, modal akan dibatasi tingginya dan scrollbar akan muncul jika konten melebihi batas */
 .max-h-\[90vh\] {
-  max-height: 90vh; /* Membatasi tinggi modal agar tidak menabrak layar pada mobile */
+  max-height: 90vh;
 }
 
 .overflow-y-auto {
-  overflow-y: auto; /* Memungkinkan scrollbar muncul jika konten melebihi max-height */
+  overflow-y: auto;
 }
 
-/* Penyesuaian untuk tampilan mobile */
 @media (max-width: 768px) {
   .max-w-md {
-    max-width: 95%; /* Menggunakan lebar yang lebih besar di mobile */
+    max-width: 95%;
   }
   .p-8 {
-    padding: 1.5rem; /* Mengurangi padding di mobile */
+    padding: 1.5rem;
   }
 }
 
-/* Sembunyikan scrollbar pada desktop tetapi pertahankan fungsi scroll */
 @media (min-width: 769px) {
   .md\:max-h-auto {
-    max-height: auto !important; /* Biarkan modal menyesuaikan tinggi konten pada desktop */
+    max-height: auto !important;
   }
-  /* Sembunyikan scrollbar untuk WebKit (Chrome, Safari) */
   .md\:max-h-auto::-webkit-scrollbar {
     width: 0px;
-    background: transparent; /* make scrollbar transparent */
+    background: transparent;
   }
-  /* Sembunyikan scrollbar untuk Firefox */
   .md\:max-h-auto {
-    scrollbar-width: none; /* Firefox */
+    scrollbar-width: none;
   }
 }
 
@@ -721,16 +679,16 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Warna track scrollbar */
+  background: #f1f1f1;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #fbcfe8; /* pink-200, warna pastel pink untuk thumb */
+  background: #dbeafe; /* pink-200 */
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #f472b6; /* pink-400, sedikit lebih gelap saat hover */
+  background: #60a5fa; /* pink-400 */
 }
 </style>

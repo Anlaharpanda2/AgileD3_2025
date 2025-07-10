@@ -7,7 +7,7 @@
       name="modal"
       appear
     >
-      <div class="bg-white rounded-xl shadow-2xl max-w-5xl w-full max-h-[95vh] flex flex-col overflow-hidden">
+      <div class="bg-white rounded-xl shadow-2xl max-w-xl w-full max-h-[95vh] flex flex-col overflow-hidden">
         <!-- Header -->
         <div
           class="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700
@@ -33,10 +33,10 @@
               </div>
               <div>
                 <h2 class="text-xl sm:text-2xl font-bold text-white">
-                  Edit Data Konsultasi
+                  Edit Data Akses
                 </h2>
                 <p class="text-pink-100 text-xs sm:text-sm">
-                  Perbarui informasi peserta konsultasi
+                  Perbarui informasi akses pengguna
                 </p>
               </div>
             </div>
@@ -72,11 +72,11 @@
             label-position="top"
             class="space-y-6"
           >
-            <!-- Personal Information Section -->
+            <!-- User Information Section -->
             <div class="bg-gray-50 rounded-xl p-5 sm:p-6 border border-gray-100 shadow-sm">
               <div class="flex items-center space-x-3 mb-5">
                 <div class="p-2 bg-pink-100 rounded-lg">
-                  <!-- Personal info icon -->
+                  <!-- User info icon -->
                   <svg
                     class="w-5 h-5 text-pink-600"
                     fill="none"
@@ -92,16 +92,16 @@
                   </svg>
                 </div>
                 <h3 class="text-base sm:text-lg font-semibold text-gray-800">
-                  Informasi Personal
+                  Informasi Pengguna
                 </h3>
               </div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <el-form-item
                   label="Nama Lengkap"
-                  prop="nama"
+                  prop="name"
                 >
                   <el-input
-                    v-model="form.nama"
+                    v-model="form.name"
                     placeholder="Masukkan nama lengkap"
                     size="large"
                     class="modern-input"
@@ -124,12 +124,12 @@
                   </el-input>
                 </el-form-item>
                 <el-form-item
-                  label="NIK"
-                  prop="nik"
+                  label="Email"
+                  prop="email"
                 >
                   <el-input
-                    v-model="form.nik"
-                    placeholder="Masukkan NIK"
+                    v-model="form.email"
+                    placeholder="Masukkan email"
                     size="large"
                     class="modern-input"
                   >
@@ -144,172 +144,30 @@
                           stroke-linecap="round"
                           stroke-linejoin="round"
                           stroke-width="2"
-                          d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V4a2 2 0 114 0v2m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"
+                          d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m-4.5-1.5a2.5 2.5 0 01-5 0V12a9 9 0 109 9h-4.5z"
                         />
                       </svg>
                     </template>
                   </el-input>
                 </el-form-item>
                 <el-form-item
-                  label="Jenis Kelamin"
-                  prop="jenis_kelamin"
+                  label="Role"
+                  prop="role"
                 >
                   <el-select
-                    v-model="form.jenis_kelamin"
-                    placeholder="Pilih jenis kelamin"
+                    v-model="form.role"
+                    placeholder="Pilih role"
                     size="large"
                     class="w-full modern-select"
                     clearable
                   >
                     <el-option
-                      v-for="option in jenisKelaminOptions"
+                      v-for="option in roleOptions"
                       :key="option"
                       :label="capitalize(option)"
                       :value="option"
                     />
                   </el-select>
-                </el-form-item>
-                <el-form-item
-                  label="Nomor Telepon"
-                  prop="no_telepon"
-                >
-                  <el-input
-                    v-model="form.no_telepon"
-                    placeholder="Contoh: 081234567890"
-                    size="large"
-                    class="modern-input"
-                  >
-                    <template #prefix>
-                      <svg
-                        class="w-4 h-4 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                        />
-                      </svg>
-                    </template>
-                  </el-input>
-                </el-form-item>
-              </div>
-              <el-form-item
-                label="Alamat"
-                prop="alamat"
-                class="mt-4"
-              >
-                <el-input
-                  v-model="form.alamat"
-                  type="textarea"
-                  placeholder="Masukkan alamat lengkap"
-                  :rows="3"
-                  class="modern-textarea"
-                />
-              </el-form-item>
-            </div>
-
-            <!-- Training Information Section -->
-            <div class="bg-gray-50 rounded-xl p-5 sm:p-6 border border-gray-100 shadow-sm">
-              <div class="flex items-center space-x-3 mb-5">
-                <div class="p-2 bg-pink-100 rounded-lg">
-                  <!-- Training info icon -->
-                  <svg
-                    class="w-5 h-5 text-pink-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                    />
-                  </svg>
-                </div>
-                <h3 class="text-base sm:text-lg font-semibold text-gray-800">
-                  Informasi Konsultasi
-                </h3>
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                <el-form-item
-                  label="Topik"
-                  prop="topik"
-                >
-                  <el-input
-                    v-model="form.topik"
-                    placeholder="Masukkan topik konsultasi"
-                    size="large"
-                    class="modern-input"
-                  >
-                    <template #prefix>
-                      <svg
-                        class="w-4 h-4 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        />
-                      </svg>
-                    </template>
-                  </el-input>
-                </el-form-item>
-                <el-form-item
-                  label="Tanggal Konsultasi"
-                  prop="tanggal_konsultasi"
-                >
-                  <el-date-picker
-                    v-model="form.tanggal_konsultasi"
-                    type="date"
-                    placeholder="Pilih tanggal konsultasi"
-                    size="large"
-                    class="w-full modern-date"
-                    format="DD/MM/YYYY"
-                    value-format="YYYY-MM-DD"
-                  />
-                </el-form-item>
-                <el-form-item
-                  label="Status"
-                  prop="status"
-                  class="md:col-span-2"
-                >
-                  <el-input
-                    v-model="form.status"
-                    placeholder="Masukkan status konsultasi"
-                    size="large"
-                    class="modern-input"
-                  >
-                    <template #prefix>
-                      <svg
-                        class="w-4 h-4 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                        />
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                      </svg>
-                    </template>
-                  </el-input>
                 </el-form-item>
               </div>
             </div>
@@ -382,56 +240,39 @@ const props = defineProps({
 const emit = defineEmits(['close']);
 
 const formRef = ref<FormInstance | null>(null);
-const jenisKelaminOptions = ['laki-laki', 'perempuan'];
+const roleOptions = ['operator', 'pegawai', 'masyarakat'];
 
-// Form fields definition (tidak berubah fungsionalitas)
-
-
-// Reactive form state (tidak berubah fungsionalitas)
 const form = reactive({
   id: null,
-  nik: '',
-  nama: '',
-  jenis_kelamin: '',
-  tanggal_konsultasi: null,
-  topik: '',
-  status: '',
-  alamat: '',
-  no_telepon: '',
+  name: '',
+  email: '',
+  role: '',
 });
 
-// Function to apply initial data to the form (tidak berubah fungsionalitas)
 const applyInitialData = (data: Record<string, unknown>) => {
   if (data) {
-    form.id = data.id || null;
-    Object.assign(form, data);
-    if (form.tanggal_konsultasi && typeof form.tanggal_konsultasi === 'string') {
-      form.tanggal_konsultasi = new Date(form.tanggal_konsultasi);
-    }
+    form.id = data.id as number;
+    form.name = data.name as string;
+    form.email = data.email as string;
+    form.role = data.role as string;
   }
 };
 
-// Watcher for initialData prop changes (tidak berubah fungsionalitas)
 watch(() => props.initialData, (newVal) => {
   applyInitialData(newVal);
 }, { deep: true, immediate: true });
 
-// Form validation rules (tidak berubah fungsionalitas)
 const rules = {
-  nama: [{ required: true, message: 'Nama wajib diisi', trigger: 'blur' }],
-  nik: [{ required: true, message: 'NIK wajib diisi', trigger: 'blur' }],
-  jenis_kelamin: [{ required: true, message: 'Jenis kelamin wajib diisi', trigger: 'change' }],
-  tanggal_konsultasi: [{ type: 'date', required: true, message: 'Tanggal konsultasi wajib diisi', trigger: 'change' }],
-  topik: [{ required: true, message: 'Topik wajib diisi', trigger: 'blur' }],
-  status: [{ required: true, message: 'Status wajib diisi', trigger: 'blur' }],
-  alamat: [{ required: true, message: 'Alamat wajib diisi', trigger: 'blur' }],
-  no_telepon: [{ required: true, message: 'Nomor telepon wajib diisi', trigger: 'blur' }],
+  name: [{ required: true, message: 'Nama wajib diisi', trigger: 'blur' }],
+  email: [
+    { required: true, message: 'Email wajib diisi', trigger: 'blur' },
+    { type: 'email', message: 'Format email tidak valid', trigger: ['blur', 'change'] },
+  ],
+  role: [{ required: true, message: 'Role wajib diisi', trigger: 'change' }],
 };
 
-// Helper function to capitalize strings (tidak berubah fungsionalitas)
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-// Form submission logic (tidak berubah fungsionalitas)
 const submitForm = () => {
   formRef.value.validate(async (valid: boolean) => {
     if (!valid) {
@@ -440,15 +281,14 @@ const submitForm = () => {
     }
 
     const payload = {
-      ...form,
-      tanggal_konsultasi: form.tanggal_konsultasi instanceof Date
-        ? `${form.tanggal_konsultasi.getFullYear()}-${String(form.tanggal_konsultasi.getMonth() + 1).padStart(2, '0')}-${String(form.tanggal_konsultasi.getDate()).padStart(2, '0')}`
-        : form.tanggal_konsultasi,
+      name: form.name,
+      email: form.email,
+      role: form.role,
     };
 
     try {
       console.log('Kirim JSON untuk update:', JSON.stringify(payload));
-      const response = await api.put(`/kelola/konsultasi/${form.id}`, payload);
+      const response = await api.put(`/kelola/akses/${form.id}`, payload);
         ElNotification({
           title: 'Berhasil',
           message: response.data.message || 'Data berhasil diupdate!',
@@ -548,4 +388,3 @@ const submitForm = () => {
   width: 100%;
 }
 </style>
- 

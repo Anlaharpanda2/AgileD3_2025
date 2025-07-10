@@ -116,7 +116,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, computed } from 'vue';
+import { ref, watch } from 'vue';
 
 // Hapus import Close dari Element Plus karena akan diganti dengan IconX dari Lucide
 import { ElButton, ElCheckboxGroup, ElCheckbox } from 'element-plus';

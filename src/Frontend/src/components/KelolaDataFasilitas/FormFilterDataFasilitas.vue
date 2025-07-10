@@ -205,16 +205,14 @@ import {
   X as IconX,
   Check as IconCheck,
   Building as IconBuilding,
-  DoorOpen as IconDoorOpen, // Untuk fasilitas seperti ruangan
   Tag as IconTag,
   Info as IconInfo,
   Users as IconUsers,
   MapPin as IconMapPin,
   AlignLeft as IconAlignLeft,
   StickyNote as IconStickyNote,
-  CalendarCheck as IconCalendarCheck, // Untuk ketersediaan
-  Lightbulb as IconLightbulb, // Untuk kondisi
-  Package as IconPackage, // Alternatif untuk kondisi (jika benda)
+  CalendarCheck as IconCalendarCheck,
+  Lightbulb as IconLightbulb,
   Wrench as IconWrench,
   Hash as IconHash,
   Plus as IconPlus,
@@ -229,7 +227,10 @@ const props = defineProps<{
   initialFilters?: { [key: string]: string | number | null };
 }>();
 
-const emit = new Map<string, Function>();
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: boolean): void;
+  (e: 'update:activeFilters', filters: { [key: string]: string | number | null }): void;
+}>();
 
 const localDialogVisible = ref(props.modelValue);
 const localSelectedColumns = ref<string[]>([]);

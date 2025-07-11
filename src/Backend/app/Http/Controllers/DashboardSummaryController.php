@@ -123,46 +123,43 @@ class DashboardSummaryController extends Controller
         // --- Other Summaries ---
 
         // QuotaPendaftaran Summary
-
+// Ringkasan QuotaPendaftaran
 try {
-    $quota = QuotaPendaftaran::where('status', true)->latest()->first();
+    $quota = QuotaPendaftaran::first();
+    
+    // Hitung jumlah total DataPendaftaran
+    $registered_count = DataPendaftaran::count();
+    
+    // Log untuk debugging
+    \Log::info("QuotaPendaftaran: ", [$quota]);
+    \Log::info("Registered Count: $registered_count");
 
-    // 1. Ambil semua NIK yang accepted
-    $accepted_niks = DataPendaftaran::where('status_pendaftaran', 'accepted')
-        ->pluck('nik')
-        ->map(fn($nik) => trim((string)$nik)) // pastikan tidak ada spasi & jadi string
-        ->unique()
-        ->toArray();
-
-    \Log::info('Accepted NIKs:', $accepted_niks);
-
-    // 2. Ambil semua NIK dari data_pelatihan
-    $pelatihan_niks = DataPelatihan::pluck('nik')
-        ->map(fn($nik) => trim((string)$nik))
-        ->unique()
-        ->toArray();
-
-    \Log::info('Pelatihan NIKs:', $pelatihan_niks);
-
-    // 3. Cari irisan (NIK yang ada di kedua array)
-    $common = array_intersect($accepted_niks, $pelatihan_niks);
-    \Log::info('Common NIKs:', $common);
-
-    // 4. Hitung registered berdasarkan irisannya
-    $registered_count = count($common);
-    \Log::info('Registered count:', ['registered' => $registered_count]);
-
-    $summary['quota'] = [
-        'status'     => $quota ? ($quota->status ? 'open' : 'closed') : 'not_set',
-        'limit'      => $quota?->quota ?? 0,
-        'registered' => $registered_count,
-        'remaining'  => $quota ? max(0, intval($quota->quota) - $registered_count) : 0,
-    ];
+    if (!$quota) {
+        $summary['quota'] = [
+            'status' => 'tidak_diset',
+            'limit' => 0,
+            'registered' => $registered_count,
+            'remaining' => 0,
+            'message' => 'Tidak ada data kuota pendaftaran.'
+        ];
+    } else {
+        $summary['quota'] = [
+            'status' => $quota->status ? 'buka' : 'tutup',
+            'limit' => $quota->quota,
+            'registered' => $registered_count,
+            'remaining' => max(0, $quota->quota - $registered_count),
+        ];
+    }
 } catch (\Exception $e) {
-    $summary['quota'] = ['error' => $e->getMessage()];
+    \Log::error("Error di QuotaPendaftaran: " . $e->getMessage());
+    $summary['quota'] = [
+        'error' => 'Terjadi kesalahan: ' . $e->getMessage(),
+        'status' => 'tidak_diset',
+        'limit' => 0,
+        'registered' => 0,
+        'remaining' => 0,
+    ];
 }
-
-
         
         // CombinedScore Summary
         try {

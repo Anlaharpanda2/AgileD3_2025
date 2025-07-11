@@ -394,9 +394,9 @@ const masyarakatPendidikanChart = computed(() => createDonutChartData(summaryDat
   
     <div v-else class="space-y-6">
       <!-- Baris 1: Welcome & Stat Cards Utama -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
         <div class="lg:col-span-2 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-          <div class="p-6 flex flex-col sm:flex-row justify-between items-center h-full">
+          <div class="p-4 flex flex-col sm:flex-row justify-between items-center h-full">
             <div>
               <h2 class="text-2xl font-bold text-gray-800">Selamat Datang Kembali! 🎉</h2>
               <p class="mt-2 text-gray-600">
@@ -421,7 +421,7 @@ const masyarakatPendidikanChart = computed(() => createDonutChartData(summaryDat
           </div>
         </div>
         <div class="space-y-6">
-            <div class="bg-white p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center space-x-4">
+            <div class="bg-white p-4 mt-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center space-x-4">
                 <div class="bg-pink-100 p-3 rounded-lg"><DocumentChartBarIcon class="h-6 w-6 text-pink-600" /></div>
                 <div>
                     <p class="text-sm text-gray-500">Pendaftaran</p>

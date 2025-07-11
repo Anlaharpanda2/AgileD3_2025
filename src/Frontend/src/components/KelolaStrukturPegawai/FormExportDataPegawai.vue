@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-// import ExcelJS from 'exceljs' // Dihapus untuk dynamic import
 import { saveAs } from 'file-saver'
-// import jsPDF from 'jspdf' // Dihapus untuk dynamic import
-// import autoTable, { UserOptions } from 'jspdf-autotable' // Dihapus untuk dynamic import
 import {
   Document,
   Packer,
@@ -25,6 +22,7 @@ const props = defineProps<{
   data: Array<Record<string, unknown>>
 }>()
 
+// Kolom-kolom yang akan diekspor
 const exportColumns = [
   { key: "nama", label: "Nama" },
   { key: "idPegawai", label: "ID Pegawai" },
@@ -35,11 +33,13 @@ const exportColumns = [
   { key: "status", label: "Status" },
 ]
 
+// State untuk input form
 const headerDokumen = ref('')
 const judulDokumen = ref('')
 const showLogo1 = ref(true)
 const showLogo2 = ref(true)
 
+// Fungsi untuk mendapatkan tanggal dan waktu saat ini
 function getCurrentDateTime(): string {
   const now = new Date()
   return now.toLocaleString('id-ID', {
@@ -48,17 +48,23 @@ function getCurrentDateTime(): string {
   })
 }
 
+// Fungsi untuk mendapatkan URL saat ini
 function getCurrentUrl(): string {
   return window.location.href
 }
 
+// Fungsi untuk mengekspor data ke format Word
 async function ExportWord(headerText: string, titleText: string, showLogo1: boolean, showLogo2: boolean) {
   const logoLeftBuffer = showLogo1
-    ? await fetch("/export/logo1.png").then(res => res.arrayBuffer()).then(buffer => new Uint8Array(buffer))
+    ? await fetch("/export/logo1.png")
+        .then(res => res.arrayBuffer())
+        .then(buffer => new Uint8Array(buffer))
     : null
 
   const logoRightBuffer = showLogo2
-    ? await fetch("/export/logo2.png").then(res => res.arrayBuffer()).then(buffer => new Uint8Array(buffer))
+    ? await fetch("/export/logo2.png")
+        .then(res => res.arrayBuffer())
+        .then(buffer => new Uint8Array(buffer))
     : null
 
   const rows = [
@@ -160,6 +166,7 @@ async function ExportWord(headerText: string, titleText: string, showLogo1: bool
   saveAs(buffer, 'exported_data_pegawai.docx')
 }
 
+// Fungsi untuk mengekspor data ke format PDF
 async function ExportPdf(headerText: string, titleText: string, showLogo1: boolean, showLogo2: boolean) {
   const { default: jsPDF } = await import('jspdf');
   const { default: autoTable } = await import('jspdf-autotable');
@@ -245,7 +252,7 @@ async function ExportPdf(headerText: string, titleText: string, showLogo1: boole
   const head = [exportColumns.map(col => col.label)]
   const body = props.data.map(row => exportColumns.map(col => row[col.key] ?? ''))
 
-  const options: UserOptions = {
+  const options = {
     head,
     body,
     startY: currentY,
@@ -266,30 +273,37 @@ async function ExportPdf(headerText: string, titleText: string, showLogo1: boole
   doc.save("exported_data_pegawai.pdf")
 }
 
+// Fungsi untuk mengekspor data ke format Excel menggunakan XLSX
 async function ExportExcel() {
-  const ExcelJS = await import('exceljs');
-  const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet("Data");
+  const XLSX = await import('xlsx');
+  // Siapkan data dalam format array of arrays, termasuk header
+  const dataToExport = [
+    exportColumns.map(col => col.label), // Baris header
+    ...props.data.map(row => exportColumns.map(col => row[col.key] ?? '')) // Baris data
+  ];
 
-  worksheet.addRow(exportColumns.map(col => col.label));
+  // Buat worksheet dari array of arrays
+  const ws = XLSX.utils.aoa_to_sheet(dataToExport);
 
-  props.data.forEach(row => {
-    const rowData = exportColumns.map(col => row[col.key] ?? '');
-    worksheet.addRow(rowData);
-  });
-
-  worksheet.columns = exportColumns.map(col => ({
-    header: col.label,
-    key: col.key,
-    width: Math.max(col.label.length, 15)
+  // Atur lebar kolom
+  ws['!cols'] = exportColumns.map(col => ({
+    wch: Math.max(col.label.length, 15)
   }));
 
-  const buffer = await workbook.xlsx.writeBuffer();
-  saveAs(new Blob([buffer], { type: "application/octet-stream" }), "exported_data_pegawai.xlsx");
+  // Buat workbook baru dan tambahkan worksheet
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Data");
+
+  // Tulis workbook ke buffer
+  const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+  // Simpan file menggunakan file-saver
+  saveAs(new Blob([excelBuffer], { type: "application/octet-stream" }), "exported_data_pegawai.xlsx");
 
   ElNotification({ message: 'Data berhasil diekspor ke Excel!', type: 'success', duration: 3000 });
 }
 
+// Handler utama untuk proses ekspor
 function ExportHandler(format: 'word' | 'pdf' | 'excel') {
   if (format === 'excel') {
     ExportExcel()
@@ -306,7 +320,6 @@ function ExportHandler(format: 'word' | 'pdf' | 'excel') {
   }
 }
 </script>
-
 
 <template>
   <div

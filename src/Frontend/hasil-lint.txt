@@ -1,0 +1,35 @@
+
+> frontend@0.0.0 lint
+> eslint . --ext .js,.ts,.vue
+
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataFasilitas\FormExportDataFasilitas.vue
+  259:18  error  'UserOptions' is not defined  no-undef
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataKonsultasi\FormExportDataKonsultasi.vue
+  262:18  error  'UserOptions' is not defined  no-undef
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataPanitia\FormExportDataPanitia.vue
+  259:18  error  'UserOptions' is not defined  no-undef
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataPelatihan\FormExportDataPelatihan.vue
+  268:18  error  'UserOptions' is not defined  no-undef
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataPendaftaran\FormExportDataPendaftaran.vue
+  268:18  error  'UserOptions' is not defined  no-undef
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataPengaduan\FormExportDataPengaduan.vue
+  265:18  error  'UserOptions' is not defined  no-undef
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataTest\PosttestTaker.vue
+  407:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaStrukturPegawai\FormExportDataPegawai.vue
+  248:18  error  'UserOptions' is not defined  no-undef
+
+D:\PBL\AgileD3_2025\src\Frontend\src\views\KelolaAkses\DataAksesView.vue
+  803:10  error  'Eye' is defined but never used     @typescript-eslint/no-unused-vars
+  803:15  error  'EyeOff' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 10 problems (10 errors, 0 warnings)
+

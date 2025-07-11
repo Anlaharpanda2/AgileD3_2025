@@ -1,28 +1,21 @@
 <script setup lang="ts">
-
-import {
-  ElRow,
-  ElCol,
-  ElIcon
-} from 'element-plus'
-import {
-  Female
-} from '@element-plus/icons-vue'
+// CATATAN: Semua impor dari 'element-plus' dan '@element-plus/icons-vue' 
+// telah dihapus untuk mengurangi ukuran bundle.
+// Komponen sekarang tidak memiliki dependensi script.
 </script>
 
 <template>
   <!-- Tentang Kami -->
   <section class="py-16 md:py-24 bg-white">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <ElRow
-        :gutter="40"
-        align="middle"
-      >
-        <ElCol
-          :xs="24"
-          :md="12"
-          data-aos="fade-right"
-        >
+      <!-- 
+        CATATAN: ElRow dan ElCol diganti dengan div dan utility Flexbox dari Tailwind.
+        '-mx-4' pada parent dan 'px-4' pada child digunakan untuk menciptakan efek gutter.
+      -->
+      <div class="flex flex-wrap items-center -mx-4">
+        
+        <!-- Kolom Teks Konten -->
+        <div class="w-full md:w-1/2 px-4" data-aos="fade-right">
           <div class="md:pr-8">
             <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
               Tentang Kami
@@ -39,7 +32,7 @@ import {
             </p>
             
             <!-- Statistics Grid -->
-            <div class="grid grid-cols-2 gap-4 sm:gap-6 lg:gap-8 mt-8 sm:mt-12">
+            <div class="grid grid-cols-2 gap-4 sm:gap-6 mt-8 sm:mt-12">
               <div class="text-center">
                 <h3 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-pink-500 mb-2">
                   5000+
@@ -58,59 +51,30 @@ import {
               </div>
             </div>
           </div>
-        </ElCol>
+        </div>
         
-        <!-- Illustration - Hidden on mobile <470px -->
-        <ElCol
-          :xs="24"
-          :md="12"
-          data-aos="fade-left"
-          class="hidden sm:block"
-        >
+        <!-- Kolom Ilustrasi -->
+        <div class="w-full md:w-1/2 px-4 hidden sm:block" data-aos="fade-left">
           <div class="flex items-center justify-center h-96 mt-12 md:mt-0">
-            <div class="w-70 h-70 bg-gradient-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center animate-pulse">
-              <ElIcon
-                size="140"
-                color="#ec4899"
-              >
-                <Female />
-              </ElIcon>
+            <!-- 
+              CATATAN: Animasi pulse, width, dan height dari <style> scoped 
+              telah diganti dengan utility Tailwind.
+              Ikon Female dari Element Plus diganti dengan SVG inline.
+            -->
+            <div class="w-[17.5rem] h-[17.5rem] bg-gradient-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center animate-pulse">
+              <svg class="text-pink-500" xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4a5 5 0 1 0 0 10a5 5 0 0 0 0-10zm-7 7a7 7 0 1 1 14 0a7 7 0 0 1-14 0z"/><path d="M12 14a5 5 0 0 0-5 5v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a5 5 0 0 0-5-5z"/></svg>
             </div>
           </div>
-        </ElCol>
-      </ElRow>
+        </div>
+
+      </div>
     </div>
   </section>
 </template>
 
 <style scoped>
-/* Custom animation for pulse effect */
-@keyframes pulse {
-  0%, 100% { 
-    transform: scale(1); 
-  }
-  50% { 
-    transform: scale(1.05); 
-  }
-}
-
-.animate-pulse {
-  animation: pulse 2s ease-in-out infinite;
-}
-
-/* Custom width/height for illustration */
-.w-70 {
-  width: 17.5rem;
-}
-
-.h-70 {
-  height: 17.5rem;
-}
-
-/* Ensure illustration is hidden on very small screens */
-@media (max-width: 470px) {
-  .sm\:block {
-    display: none !important;
-  }
-}
+/* TAG STYLE INI SEKARANG KOSONG.
+  Semua styling, termasuk keyframes, class kustom, dan media query, 
+  telah dimigrasikan ke dalam class utility Tailwind di dalam template.
+*/
 </style>

@@ -9,6 +9,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BeritaTerbaru: typeof import('./src/components/Home/BeritaTerbaru.vue')['default']
+    CardStatisticsVertical: typeof import('./src/components/dashboard/CardStatisticsVertical.vue')['default']
     CombinedScoreTable: typeof import('./src/components/DataNilai/CombinedScoreTable.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -38,7 +39,6 @@ declare module 'vue' {
     FormEditDataPegawai: typeof import('./src/components/KelolaStrukturPegawai/FormEditDataPegawai.vue')['default']
     FormEditDataPelatihan: typeof import('./src/components/KelolaDataPelatihan/FormEditDataPelatihan.vue')['default']
     FormEditDataPengaduan: typeof import('./src/components/KelolaDataPengaduan/FormEditDataPengaduan.vue')['default']
-    FormExportDataAkses: typeof import('./src/components/KelolaAkses/FormExportDataAkses.vue')['default']
     FormExportDataFasilitas: typeof import('./src/components/KelolaDataFasilitas/FormExportDataFasilitas.vue')['default']
     FormExportDataKonsultasi: typeof import('./src/components/KelolaDataKonsultasi/FormExportDataKonsultasi.vue')['default']
     FormExportDataPanitia: typeof import('./src/components/KelolaDataPanitia/FormExportDataPanitia.vue')['default']
@@ -55,7 +55,6 @@ declare module 'vue' {
     FormFilterDataPelatihan: typeof import('./src/components/KelolaDataPelatihan/FormFilterDataPelatihan.vue')['default']
     FormFilterDataPendaftaran: typeof import('./src/components/KelolaDataPendaftaran/FormFilterDataPendaftaran.vue')['default']
     FormFilterDataPengaduan: typeof import('./src/components/KelolaDataPengaduan/FormFilterDataPengaduan.vue')['default']
-    FormImportDataAkses: typeof import('./src/components/KelolaAkses/FormImportDataAkses.vue')['default']
     FormImportDataFasilitas: typeof import('./src/components/KelolaDataFasilitas/FormImportDataFasilitas.vue')['default']
     FormImportDataKonsultasi: typeof import('./src/components/KelolaDataKonsultasi/FormImportDataKonsultasi.vue')['default']
     FormImportDataPanitia: typeof import('./src/components/KelolaDataPanitia/FormImportDataPanitia.vue')['default']
@@ -87,7 +86,8 @@ declare module 'vue' {
     KontakKami: typeof import('./src/components/Home/KontakKami.vue')['default']
     LayananUtama: typeof import('./src/components/Home/LayananUtama.vue')['default']
     LokasiPeta: typeof import('./src/components/Home/LokasiPeta.vue')['default']
-    NavBar: typeof import('./src/components/Layouts/NavBar.vue')['default']
+    MainContent: typeof import('./src/components/Home/MainContent.vue')['default']
+    MoreBtn: typeof import('./src/components/dashboard/MoreBtn.vue')['default']
     PelaporanPengaduan: typeof import('./src/components/Home/PelaporanPengaduan.vue')['default']
     PosttestFormBuilder: typeof import('./src/components/KelolaDataTest/PosttestFormBuilder.vue')['default']
     PosttestList: typeof import('./src/components/KelolaDataTest/PosttestList.vue')['default']

@@ -8,6 +8,7 @@
       :data="tableData"
       class="sm:full-screen"
       @update:visible="showSort = $event"
+      @apply-sort="handleApplySort"
     />
     <FormFilterDataAkses
       v-model="showFilter"
@@ -996,6 +997,11 @@ function formatDate(dateString: string): string {
   const date = new Date(dateString);
   const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
   return date.toLocaleDateString('id-ID', options);
+}
+
+// Fungsi untuk menangani data yang diurutkan dari FormSortingDataAkses
+function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: UserAkses[] }) {
+  tableData.value = payload.sortedData;
 }
 
 // Handles mass deletion of selected items

@@ -205,8 +205,7 @@ import {
   Pencil, ClipboardCheck, Database, FileQuestion,
   MessageCircle, Users2, UserCog
 } from 'lucide-vue-next'
-import UserProfileAvatar from './UserProfileAvatar.vue'
-
+import UserProfileAvatar from './UserProfileAvatar.vue' // Path relatif dari src/components/Layouts/
 
 const route = useRoute()
 
@@ -215,7 +214,6 @@ const getUserRole = () => localStorage.getItem('role') || ''
 // Raw menu array dengan pembatasan role
 const rawMenu = [
   { name: 'BERANDA', to: '/', icon: Home },
-
   {
     name: 'TEST', icon: FileText, children: [
       { name: 'Pretest', to: '/pretests', icon: Pencil },
@@ -224,21 +222,17 @@ const rawMenu = [
       { name: 'Data Soal', to: '/data/soal', icon: Database, roles: ['operator', 'pegawai'] },
     ]
   },
-
   { name: 'PELATIHAN', to: '/pelatihan', icon: BookUser, roles: ['masyarakat'] },
-
   {
     name: 'PELATIHAN', icon: BookUser, roles: ['operator', 'pegawai'], children: [
       { name: 'Data Pendaftar', to: '/data/pendaftaran', icon: Users2 },
       { name: 'Data Peserta', to: '/data/pelatihan', icon: UserCog },
     ]
   },
-
   { name: 'PENGADUAN', to: '/pengaduan', icon: MessageSquare, roles: ['masyarakat'] },
-
   {
     name: 'PENGADUAN', icon: MessageSquare, roles: ['operator', 'pegawai'], children: [
-      { name: 'Cari Pengaduan', to: '/cari/pengaduan', icon: MessageSquare },
+      { name: 'Cari Pengaduan', to: '/pengaduan/cari', icon: MessageSquare },
       { name: 'Data Pengaduan', to: '/data/pengaduan', icon: FileQuestion },
       { name: 'Data Konsultasi', to: '/data/konsultasi', icon: MessageCircle },
     ]
@@ -298,6 +292,46 @@ onMounted(() => {
   isHomeRoute.value = route.path === '/'
   isScrolled.value = route.path !== '/' || window.scrollY > 20
   window.addEventListener('scroll', handleScroll)
+
+  // Preload rute-rute yang didefinisikan di rawMenu berdasarkan role pengguna
+  setTimeout(() => {
+    const role = getUserRole()
+    const routesToPreload = []
+
+    // Rute umum (tanpa batasan role)
+    routesToPreload.push(
+      () => import('../../views/Home/HomeView.vue'), // untuk '/'
+      () => import('../../views/PengelolaDataTest/TakePretestView.vue'), // untuk '/pretests'
+      () => import('../../views/PengelolaDataTest/TakePosttestView.vue') // untuk '/posttests'
+    )
+
+    // Rute untuk role 'operator' atau 'pegawai'
+    if (['operator', 'pegawai'].includes(role)) {
+      routesToPreload.push(
+        () => import('../../views/DataNilai/DataNilaiView.vue'), // untuk '/data/nilai'
+        () => import('../../views/PengelolaDataTest/TaskManagementView.vue'), // untuk '/data/soal'
+        () => import('../../views/PengelolaDataPendaftaran/DataPendaftaranView.vue'), // untuk '/data/pendaftaran'
+        () => import('../../views/PengelolaDataPelatihan/DataPelatihanView.vue'), // untuk '/data/pelatihan'
+        () => import('../../views/PengelolaDataPengaduan/DataPengaduanView.vue'), // untuk '/data/pengaduan'
+        () => import('../../views/PengelolaDataKonsultasi/DataKonsultasiView.vue'), // untuk '/data/konsultasi'
+        () => import('../../components/Pengaduan/SearchPengaduan.vue') // untuk '/pengaduan/cari'
+      )
+    }
+
+    // Rute untuk role 'masyarakat'
+    if (role === 'masyarakat') {
+      routesToPreload.push(
+        () => import('../../views/DaftarMasyarakat/IkutPealtihanView.vue'), // untuk '/pelatihan' (diasumsikan '/Daftar/Pelatihan')
+        () => import('../../views/PengelolaDataPengaduan/BuatPengaduanView.vue') // untuk '/pengaduan' (diasumsikan '/pengaduan/buat')
+      )
+    }
+
+    routesToPreload.forEach((loadRoute) => {
+      loadRoute().catch((err) => {
+        console.warn('Gagal preload rute:', err)
+      })
+    })
+  }, 1000) // Penundaan 1 detik untuk memastikan muat awal selesai
 })
 
 onUnmounted(() => window.removeEventListener('scroll', handleScroll, { passive: true }))

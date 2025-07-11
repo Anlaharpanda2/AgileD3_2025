@@ -17,54 +17,6 @@
             </p>
           </div>
           
-          <!-- Statistics Cards -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 hover:shadow-lg transition-all duration-300">
-              <div class="flex items-center">
-                <div class="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center mr-4">
-                  <BarChart3 class="w-6 h-6 text-pink-600" />
-                </div>
-                <div>
-                  <p class="text-sm text-gray-600">
-                    Total Modul
-                  </p>
-                  <p class="text-2xl font-bold text-gray-900">
-                    {{ cards.length }}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 hover:shadow-lg transition-all duration-300">
-              <div class="flex items-center">
-                <div class="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center mr-4">
-                  <Users class="w-6 h-6 text-pink-600" />
-                </div>
-                <div>
-                  <p class="text-sm text-gray-600">
-                    Akses Aktif
-                  </p>
-                  <p class="text-2xl font-bold text-gray-900">
-                    8
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 hover:shadow-lg transition-all duration-300">
-              <div class="flex items-center">
-                <div class="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center mr-4">
-                  <Settings class="w-6 h-6 text-pink-600" />
-                </div>
-                <div>
-                  <p class="text-sm text-gray-600">
-                    Konfigurasi
-                  </p>
-                  <p class="text-2xl font-bold text-gray-900">
-                    100%
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 

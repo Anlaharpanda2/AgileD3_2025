@@ -19,6 +19,7 @@
     "@heroicons/vue": "^2.2.0",
     "@vueuse/motion": "^3.0.3",
     "aos": "^2.3.4",
+    "apexcharts": "^5.2.0",
     "axios": "^1.8.4",
     "datatables.net": "^2.3.0",
     "datatables.net-buttons": "^3.2.3",
@@ -26,7 +27,6 @@
     "datatables.net-dt": "^2.3.0",
     "docx": "^9.5.0",
     "element-plus": "^2.9.11",
-    "exceljs": "^4.4.0",
     "file-saver": "^2.0.5",
     "jspdf": "^3.0.1",
     "jspdf-autotable": "^5.0.2",
@@ -35,7 +35,9 @@
     "typescript": "^5.8.3",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
+    "vue3-apexcharts": "^1.8.0",
     "vue3-transitions": "^1.0.0",
+    "vuetify": "^3.9.0-beta.1",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

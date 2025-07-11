@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import * as XLSX from 'xlsx' // Re-added XLSX import
-// import ExcelJS from 'exceljs' // Removed ExcelJS import
+// import * as XLSX from 'xlsx' // Dihapus untuk dynamic import
+// import jsPDF from 'jspdf' // Dihapus untuk dynamic import
+// import autoTable, { UserOptions } from 'jspdf-autotable' // Dihapus untuk dynamic import
 import { saveAs } from 'file-saver'
-import jsPDF from 'jspdf'
-import autoTable, { UserOptions } from 'jspdf-autotable'
 import {
   Document,
   Packer,
@@ -180,6 +179,8 @@ async function ExportWord(headerText: string, titleText: string, showLogo1: bool
 
 // Fungsi untuk mengekspor data ke format PDF
 async function ExportPdf(headerText: string, titleText: string, showLogo1: boolean, showLogo2: boolean) {
+  const { default: jsPDF } = await import('jspdf');
+  const { default: autoTable } = await import('jspdf-autotable');
   async function loadImageAsDataUrlWithSize(url: string): Promise<{ dataUrl: string, width: number, height: number }> {
     return new Promise((resolve, reject) => {
       const img = new Image()
@@ -287,6 +288,7 @@ async function ExportPdf(headerText: string, titleText: string, showLogo1: boole
 
 // Fungsi untuk mengekspor data ke format Excel menggunakan XLSX (SheetJS)
 async function ExportExcel() {
+  const XLSX = await import('xlsx');
   // Siapkan data dalam format array of arrays, termasuk header
   const dataToExport = [
     exportColumns.map(col => col.label), // Baris header

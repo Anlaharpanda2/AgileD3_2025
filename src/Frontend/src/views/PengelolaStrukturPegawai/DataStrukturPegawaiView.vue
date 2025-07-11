@@ -8,6 +8,7 @@
       :data="tableData"
       class="sm:full-screen"
       @update:visible="showSort = $event"
+      @apply-sort="handleApplySort"
     />
     <FormFilterDataPegawai
       v-model="showFilter"
@@ -604,7 +605,7 @@
                       d="M12 4v16m8-8H4"
                     />
                   </svg>
-                  Tambah Pegawai
+                  Tambah Data
                 </button>
               </div>
             </div>
@@ -1123,6 +1124,11 @@ async function onMassDeleteClick() {
 
 async function goToTrash() {
   router.push('/data/struktur-pegawai/sampah');
+}
+
+// Fungsi untuk menangani data yang diurutkan dari FormSortingDataPegawai
+function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: Pegawai[] }) {
+  tableData.value = payload.sortedData;
 }
 
 async function onDelete(row: Pegawai) {

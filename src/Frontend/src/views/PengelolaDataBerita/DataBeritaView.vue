@@ -20,6 +20,15 @@
       v-if="showImport"
       @close="showImport = false"
     />
+    <FormSortingDataBerita
+      v-if="showSort"
+      :visible="showSort"
+      :columns="filterableColumns"
+      :data="tableData"
+      class="sm:full-screen"
+      @update:visible="showSort = $event"
+      @apply-sort="handleApplySort"
+    />
 
     <!-- Main Container -->
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
@@ -599,6 +608,9 @@ import api from "../../api.js";
 import SimpleLayout from "../../layouts/SimpleLayout.vue";
 import FormEditBerita from '../../components/DataBerita/FormEditDataBerita.vue'; 
 import FormTambahBerita from '../../components/DataBerita/FormTambahBerita.vue';
+import FormExport from '../../components/KelolaDataFasilitas/FormExportDataFasilitas.vue'; // Assuming this is the correct export form
+import FormImport from '../../components/KelolaDataFasilitas/FormImportDataFasilitas.vue'; // Assuming this is the correct import form
+import FormSortingDataBerita from '../../components/DataBerita/FormSortingDataBerita.vue';
 import { ElNotification, TableColumnCtx } from 'element-plus';
 
 interface Berita {
@@ -622,6 +634,7 @@ const showExport = ref(false);
 const showImport = ref(false);
 const showEdit = ref(false);
 const showTambah = ref(false);
+const showSort = ref(false);
 const editData = ref(null);
 const TambahData = ref(null);
 const perPageOptions = [10, 20, 50, 100, "all"];
@@ -661,11 +674,15 @@ const filteredData = computed(() => {
     (item: Berita) =>
       item.judul.toLowerCase().includes(search.value.toLowerCase())
   );
-  return data.sort((a: Berita, b: Berita) => {
-    const dateA = new Date(a.updated_at || 0).getTime();
-    const dateB = new Date(b.updated_at || 0).getTime();
-    return dateB - dateA;
-  });
+  return data;
+});
+
+const filterableColumns = computed(() => {
+  if (!tableData.value || tableData.value.length === 0) {
+    return [];
+  }
+  const exclude = ['id', 'created_at', 'updated_at', 'foto'];
+  return Object.keys(tableData.value[0] || {}).filter(key => !exclude.includes(key));
 });
 
 const totalPages = computed(() =>
@@ -703,7 +720,7 @@ const visiblePages = computed<(number | '...')[]>(() => {
   pages.push(1);
 
   let left = current - delta;
-  let right = current + delta;
+  let right = current - delta;
 
   if (left < 2) {
     right += (2 - left);
@@ -772,7 +789,14 @@ async function onDelete(row: Berita) {
 }
 
 function onFilterClick() {}
-function onSortClick() {}
+
+function onSortClick() {
+  showSort.value = true;
+}
+
+function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: Berita[] }) {
+  tableData.value = payload.sortedData;
+}
 
 async function fetchData() {
   try {

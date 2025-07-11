@@ -8,6 +8,7 @@
       :data="tableData"
       class="sm:full-screen"
       @update:visible="showSort = $event"
+      @apply-sort="handleApplySort"
     />
     <FormFilterDataPegawai
       v-model="showFilter"
@@ -846,6 +847,12 @@ const router = useRouter()
 function goBack() {
   router.push('/data/struktur-pegawai')
 }
+
+// Fungsi untuk menangani data yang diurutkan dari FormSortingDataPegawai
+function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: Pegawai[] }) {
+  tableData.value = payload.sortedData;
+}
+
 interface Pegawai {
   id: number;
   idPegawai: string;

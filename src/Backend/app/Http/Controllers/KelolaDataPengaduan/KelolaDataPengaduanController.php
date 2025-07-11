@@ -7,6 +7,7 @@ use App\Models\DataPengaduan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
 
 class KelolaDataPengaduanController extends Controller
 {
@@ -172,6 +173,36 @@ class KelolaDataPengaduanController extends Controller
         }
 
         return response()->json(['data' => $data]);
+    }
+    public function cariByKode(Request $request)
+    {
+        $request->validate([
+            'kode_pengaduan' => 'required|string',
+        ]);
+
+        $kode = trim($request->kode_pengaduan);
+
+        \Log::info("Masuk ke cariByKode. Input: " . $kode);
+
+        $data = DataPengaduan::withTrashed()
+            ->where('kode_pengaduan', $kode)
+            ->first();
+
+        if (!$data) {
+            $semuaKode = DataPengaduan::withTrashed()->pluck('kode_pengaduan');
+            \Log::warning("Kode tidak ditemukan: $kode");
+            \Log::info("Semua kode_pengaduan: " . $semuaKode->join(', '));
+
+            return response()->json([
+                'message' => 'Pengaduan dengan kode tersebut tidak ditemukan',
+                'debug_input' => $kode,
+                'debug_kode_tersedia' => $semuaKode,
+            ], 404);
+        }
+
+        return response()->json([
+            'data' => $data
+        ]);
     }
 
 }

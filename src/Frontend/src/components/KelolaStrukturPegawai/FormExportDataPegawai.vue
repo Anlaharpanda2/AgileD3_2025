@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import ExcelJS from 'exceljs'
+// import ExcelJS from 'exceljs' // Dihapus untuk dynamic import
 import { saveAs } from 'file-saver'
-import jsPDF from 'jspdf'
-import autoTable, { UserOptions } from 'jspdf-autotable'
+// import jsPDF from 'jspdf' // Dihapus untuk dynamic import
+// import autoTable, { UserOptions } from 'jspdf-autotable' // Dihapus untuk dynamic import
 import {
   Document,
   Packer,
@@ -161,6 +161,8 @@ async function ExportWord(headerText: string, titleText: string, showLogo1: bool
 }
 
 async function ExportPdf(headerText: string, titleText: string, showLogo1: boolean, showLogo2: boolean) {
+  const { default: jsPDF } = await import('jspdf');
+  const { default: autoTable } = await import('jspdf-autotable');
   async function loadImageAsDataUrlWithSize(url: string): Promise<{ dataUrl: string, width: number, height: number }> {
     return new Promise((resolve, reject) => {
       const img = new Image()
@@ -265,6 +267,7 @@ async function ExportPdf(headerText: string, titleText: string, showLogo1: boole
 }
 
 async function ExportExcel() {
+  const ExcelJS = await import('exceljs');
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Data");
 

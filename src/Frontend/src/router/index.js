@@ -1,193 +1,278 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-// --- Import semua komponen secara statis di sini ---
-// Halaman home
-import SimpleLayout from '../layouts/SimpleLayout.vue';
-import HomeView from '../views/Home/HomeView.vue';
-import FormSortingDataPelatihan from '../components/KelolaDataPelatihan/FormSortingDataPelatihan.vue';
-import KelolaAksesView from '../views/KelolaAkses/DataAksesView.vue';
-
-// Halaman login
-import LoginMasyarakat from '../views/Login/LoginMasyarakat.vue';
-import LoginPegawai from '../views/Login/LoginPegawai.vue';
-import LoginOperator from '../views/Login/LoginOperator.vue';
-
-// Halaman daftar masyarakat
-import DaftarMasyarakatView from '../views/DaftarMasyarakat/DaftarMasyarakatView.vue';
-import IkutPealtihanView from '../views/DaftarMasyarakat/IkutPealtihanView.vue';
-
-// Halaman lupa password
-import OtpView from '../views/ResetPassword/OtpView.vue';
-import ForgotView from '../views/ResetPassword/ForgotView.vue';
-import ResetPassword from '../views/ResetPassword/ResetPassword.vue';
-
-// Kelola data
-import KelolaDataView from '../views/KelolaData/KelolaDataView.vue';
-
-// Halaman kelola pelatihan
-import DataPelatihanView from '../views/PengelolaDataPelatihan/DataPelatihanView.vue';
-import DataPelatihanSampahView from '../views/PengelolaDataPelatihan/DataPelatihanSampahView.vue';
-
-// Halaman kelola struktur pegawai
-import DataStrukturPegawaiView from '../views/PengelolaStrukturPegawai/DataStrukturPegawaiView.vue';
-import DataStrukturPegawaiSampahView from '../views/PengelolaStrukturPegawai/DataStrukturPegawaiSampahView.vue';
-
-// Halaman kelola konsultasi
-import DataKonsultasiView from '../views/PengelolaDataKonsultasi/DataKonsultasiView.vue';
-import DataKonsultasiSampahView from '../views/PengelolaDataKonsultasi/DataKonsultasiSampahView.vue';
-
-// Halaman kelola pengaduan
-import DataPengaduanView from '../views/PengelolaDataPengaduan/DataPengaduanView.vue';
-import DataPengaduanSampahView from '../views/PengelolaDataPengaduan/DataPengaduanSampahView.vue';
-
-// Halaman kelola panitia
-import DataPanitiaView from '../views/PengelolaDataPanitia/DataPanitiaView.vue';
-import DataPanitiaSampahView from '../views/PengelolaDataPanitia/DataPanitiaSampahView.vue';
-
-// Halaman kelola fasilitas
-import DataFasilitasView from '../views/PengelolaDataFasilitas/DataFasilitasView.vue';
-import DataFasilitasSampahView from '../views/PengelolaDataFasilitas/DataFasilitasSampahView.vue';
-
-// Profile
-import ProfileMasyarakat from '../views/Profile/ProfileMasyarakat.vue';
-import MyScoresView from '../views/Profile/MyScoresView.vue';
-
-// Halaman kelola pendaftaran
-import DataPendaftaranView from '../views/PengelolaDataPendaftaran/DataPendaftaranView.vue';
-
-// Halaman pretest posttest
-import TaskManagementView from '../views/PengelolaDataTest/TaskManagementView.vue';
-import CreatePretestView from '../views/PengelolaDataTest/CreatePretestView.vue';
-import EditPretestView from '../views/PengelolaDataTest/EditPretestView.vue';
-import PretestDetailView from '../views/PengelolaDataTest/PretestDetailView.vue';
-import TakePretestView from '../views/PengelolaDataTest/TakePretestView.vue';
-import CreatePosttestView from '../views/PengelolaDataTest/CreatePosttestView.vue';
-import EditPosttestView from '../views/PengelolaDataTest/EditPosttestView.vue';
-import TakePosttestView from '../views/PengelolaDataTest/TakePosttestView.vue';
-
-// Halaman Data Nilai
-import DataNilaiView from '../views/DataNilai/DataNilaiView.vue';
-
-// Halaman pelaporan pengaduan
-import BuatPengaduanView from '../views/PengelolaDataPengaduan/BuatPengaduanView.vue';
-import KonfirmasiPengaduanView from '../views/PengelolaDataPengaduan/KonfirmasiPengaduanView.vue';
-import StatusPengaduan from '../views/PengelolaDataPengaduan/StatusPengaduan.vue';
-
-// Halaman data berita
-import DataBeritaSampahView from '../views/PengelolaDataBerita/DataBeritaSampahView.vue';
-import DataBeritaView from '../views/PengelolaDataBerita/DataBeritaView.vue';
-import DetailDataBeritaView from '../views/PengelolaDataBerita/DetailDataBeritaView.vue';
-import DetailDataPengumumanView from '../views/PengelolaDataBerita/DetailDataPengumumanView.vue';
-
-// Halaman not found dan tidak diizinkan
-import NotFound from '../views/NotFound.vue';
-import Unauthorized from '../views/Unauthorized.vue';
-
-// Footer
-import Konsultasi from '../views/Footer/Konsultasi.vue';
-import ProgramPelatihan from '../views/Footer/ProgramPelatihan.vue';
-import Pendampingan from '../views/Footer/Pendampingan.vue';
-import InfoPengaduan from '../views/Footer/InfoPengaduan.vue';
-import PusatBantuan from '../views/Footer/PusatBantuan.vue';
-import FAQ from '../views/Footer/FAQ.vue';
-import HubungiKami from '../views/Footer/HubungiKami.vue';
-import Feedback from '../views/Footer/Feedback.vue';
-// --- Akhir dari import statis ---
-
-
 const routes = [
   // Halaman home
-  { path: '/def2', component: SimpleLayout },
-  { path: '/', component: HomeView },
-  { path: '/form', component: FormSortingDataPelatihan },
+  { path: '/def2', component: () => import('../layouts/SimpleLayout.vue') },
+  { path: '/', component: () => import('../views/Home/HomeView.vue') },
+  { path: '/form', component: () => import('../components/KelolaDataPelatihan/FormSortingDataPelatihan.vue') },
+
+  // Halaman Dashboard
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: () => import('../views/dashboard/DashboardView.vue'),
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] }
+  },
+  
   // Halaman kelola akses
-  { path: '/data/akses', name: 'DataAkses', component: KelolaAksesView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
+  { 
+    path: '/data/akses', 
+    name: 'DataAkses', 
+    component: () => import('../views/KelolaAkses/DataAksesView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
+  
   // Halaman login
-  { path: '/login/masyarakat', name: 'LoginMasyarakat', component: LoginMasyarakat },
-  { path: '/login/pegawai', name: 'LoginPegawai', component: LoginPegawai },
-  { path: '/login/operator', name: 'LoginOperator', component: LoginOperator },
+  { path: '/login/masyarakat', name: 'LoginMasyarakat', component: () => import('../views/Login/LoginMasyarakat.vue') },
+  { path: '/login/pegawai', name: 'LoginPegawai', component: () => import('../views/Login/LoginPegawai.vue') },
+  { path: '/login/operator', name: 'LoginOperator', component: () => import('../views/Login/LoginOperator.vue') },
 
   // Halaman daftar masyarakat
-  { path: '/daftar/masyarakat', name: 'DaftarMasyarakat', component: DaftarMasyarakatView },
-  { path: '/Daftar/Pelatihan', name: 'IkutPelatihan', component: IkutPealtihanView },
+  { path: '/daftar/masyarakat', name: 'DaftarMasyarakat', component: () => import('../views/DaftarMasyarakat/DaftarMasyarakatView.vue') },
+  { path: '/Daftar/Pelatihan', name: 'IkutPelatihan', component: () => import('../views/DaftarMasyarakat/IkutPealtihanView.vue') },
 
   // Halaman lupa password
-  { path: '/reset/otp', name: 'resetOperatorOtp', component: OtpView },
-  { path: '/reset/forgot', name: 'resetOperatorForgot', component: ForgotView },
-  { path: '/reset/password', name: 'resetOperatorPassword', component: ResetPassword },
+  { path: '/reset/otp', name: 'resetOperatorOtp', component: () => import('../views/ResetPassword/OtpView.vue') },
+  { path: '/reset/forgot', name: 'resetOperatorForgot', component: () => import('../views/ResetPassword/ForgotView.vue') },
+  { path: '/reset/password', name: 'resetOperatorPassword', component: () => import('../views/ResetPassword/ResetPassword.vue') },
 
   // Kelola data
-  { path: '/Kelola/data', name: 'KelolaData', component: KelolaDataView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
+  { 
+    path: '/Kelola/data', 
+    name: 'KelolaData', 
+    component: () => import('../views/KelolaData/KelolaDataView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
 
   // Halaman kelola pelatihan
-  { path: '/data/pelatihan', name: 'DataPelatihan', component: DataPelatihanView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
-  { path: '/data/pelatihan/sampah', name: 'DataPelatihanSampah', component: DataPelatihanSampahView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
+  { 
+    path: '/data/pelatihan', 
+    name: 'DataPelatihan', 
+    component: () => import('../views/PengelolaDataPelatihan/DataPelatihanView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
+  { 
+    path: '/data/pelatihan/sampah', 
+    name: 'DataPelatihanSampah', 
+    component: () => import('../views/PengelolaDataPelatihan/DataPelatihanSampahView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
 
   // Halaman kelola struktur pegawai
-  { path: '/data/struktur-pegawai', name: 'DataStrukturPegawai', component: DataStrukturPegawaiView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
-  { path: '/data/struktur-pegawai/sampah', name: 'DataStrukturPegawaiSampah', component: DataStrukturPegawaiSampahView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
+  { 
+    path: '/data/struktur-pegawai', 
+    name: 'DataStrukturPegawai', 
+    component: () => import('../views/PengelolaStrukturPegawai/DataStrukturPegawaiView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
+  { 
+    path: '/data/struktur-pegawai/sampah', 
+    name: 'DataStrukturPegawaiSampah', 
+    component: () => import('../views/PengelolaStrukturPegawai/DataStrukturPegawaiSampahView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
 
   // Halaman kelola konsultasi
-  { path: '/data/konsultasi', name: 'DataKonsultasi', component: DataKonsultasiView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
-  { path: '/data/konsultasi/sampah', name: 'DataKonsultasiSampah', component: DataKonsultasiSampahView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
+  { 
+    path: '/data/konsultasi', 
+    name: 'DataKonsultasi', 
+    component: () => import('../views/PengelolaDataKonsultasi/DataKonsultasiView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
+  { 
+    path: '/data/konsultasi/sampah', 
+    name: 'DataKonsultasiSampah', 
+    component: () => import('../views/PengelolaDataKonsultasi/DataKonsultasiSampahView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
 
   // Halaman kelola pengaduan
-  { path: '/data/pengaduan', name: 'DataPengaduan', component: DataPengaduanView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
-  { path: '/data/pengaduan/sampah', name: 'DataPengaduanSampah', component: DataPengaduanSampahView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
+  { 
+    path: '/data/pengaduan', 
+    name: 'DataPengaduan', 
+    component: () => import('../views/PengelolaDataPengaduan/DataPengaduanView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
+  { 
+    path: '/data/pengaduan/sampah', 
+    name: 'DataPengaduanSampah', 
+    component: () => import('../views/PengelolaDataPengaduan/DataPengaduanSampahView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
 
   // Halaman kelola panitia
-  { path: '/data/panitia', name: 'DataPanitia', component: DataPanitiaView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
-  { path: '/data/panitia/sampah', name: 'DataPanitiaSampah', component: DataPanitiaSampahView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
+  { 
+    path: '/data/panitia', 
+    name: 'DataPanitia', 
+    component: () => import('../views/PengelolaDataPanitia/DataPanitiaView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
+  { 
+    path: '/data/panitia/sampah', 
+    name: 'DataPanitiaSampah', 
+    component: () => import('../views/PengelolaDataPanitia/DataPanitiaSampahView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
 
   // Halaman kelola fasilitas
-  { path: '/data/fasilitas', name: 'DataFasilitas', component: DataFasilitasView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
-  { path: '/data/fasilitas/sampah', name: 'DataFasilitasSampah', component: DataFasilitasSampahView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
+  { 
+    path: '/data/fasilitas', 
+    name: 'DataFasilitas', 
+    component: () => import('../views/PengelolaDataFasilitas/DataFasilitasView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
+  { 
+    path: '/data/fasilitas/sampah', 
+    name: 'DataFasilitasSampah', 
+    component: () => import('../views/PengelolaDataFasilitas/DataFasilitasSampahView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
 
   // Profile
-  { path: '/masyarakat/:id', name: 'DetailMasyarakat', component: ProfileMasyarakat, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
-  { path: '/Test', name: 'MyScores', component: MyScoresView, meta: { requiresAuth: true, role: ['masyarakat'] } },
+  { 
+    path: '/masyarakat/:id', 
+    name: 'DetailMasyarakat', 
+    component: () => import('../views/Profile/ProfileMasyarakat.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
+  { 
+    path: '/Test', 
+    name: 'MyScores', 
+    component: () => import('../views/Profile/MyScoresView.vue'), 
+    meta: { requiresAuth: true, role: ['masyarakat'] } 
+  },
 
   // Halaman kelola pendaftaran
-  { path: '/data/pendaftaran', name: 'Datapendaftaran', component: DataPendaftaranView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
+  { 
+    path: '/data/pendaftaran', 
+    name: 'Datapendaftaran', 
+    component: () => import('../views/PengelolaDataPendaftaran/DataPendaftaranView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
 
   // Halaman pretest posttest
-  { path: '/data/soal', name: 'TaskManagement', component: TaskManagementView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
-  { path: '/pretests/create', name: 'CreatePretest', component: CreatePretestView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
-  { path: '/pretests/:id/edit', name: 'EditPretest', component: EditPretestView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
-  { path: '/pretests/:id', name: 'PretestDetail', component: PretestDetailView },
-  { path: '/pretests', name: 'TakePretest', component: TakePretestView },
-  { path: '/posttests/create', name: 'CreatePosttest', component: CreatePosttestView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
-  { path: '/posttests/:id/edit', name: 'EditPosttest', component: EditPosttestView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
-  { path: '/posttests/:id', name: 'PosttestDetail', component: PretestDetailView }, // Menggunakan PretestDetailView
-  { path: '/posttests', name: 'TakePosttest', component: TakePosttestView },
+  { 
+    path: '/data/soal', 
+    name: 'TaskManagement', 
+    component: () => import('../views/PengelolaDataTest/TaskManagementView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
+  { 
+    path: '/pretests/create', 
+    name: 'CreatePretest', 
+    component: () => import('../views/PengelolaDataTest/CreatePretestView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
+  { 
+    path: '/pretests/:id/edit', 
+    name: 'EditPretest', 
+    component: () => import('../views/PengelolaDataTest/EditPretestView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
+  { path: '/pretests/:id', name: 'PretestDetail', component: () => import('../views/PengelolaDataTest/PretestDetailView.vue') },
+  { path: '/pretests', name: 'TakePretest', component: () => import('../views/PengelolaDataTest/TakePretestView.vue') },
+  { 
+    path: '/posttests/create', 
+    name: 'CreatePosttest', 
+    component: () => import('../views/PengelolaDataTest/CreatePosttestView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
+  { 
+    path: '/posttests/:id/edit', 
+    name: 'EditPosttest', 
+    component: () => import('../views/PengelolaDataTest/EditPosttestView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
+  { 
+    path: '/posttests/:id', 
+    name: 'PosttestDetail', 
+    component: () => import('../views/PengelolaDataTest/PretestDetailView.vue') // Assumed correction from PretestDetailView
+  },
+  { path: '/posttests', name: 'TakePosttest', component: () => import('../views/PengelolaDataTest/TakePosttestView.vue') },
 
   // Halaman Data Nilai
-  { path: '/data/nilai', name: 'DataNilai', component: DataNilaiView, meta: { requiresAuth: true, role: ['operator', 'pegawai'] } },
+  { 
+    path: '/data/nilai', 
+    name: 'DataNilai', 
+    component: () => import('../views/DataNilai/DataNilaiView.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
 
   // Halaman pelaporan pengaduan
-  { path: '/pengaduan/buat', name: 'BuatPengaduan', component: BuatPengaduanView },
-  { path: '/pengaduan/konfirmasi', name: 'KonfirmasiPengaduan', component: KonfirmasiPengaduanView },
-  { path: '/pengaduan/status/:id', name: 'StatusPengaduan', component: StatusPengaduan },
+  { path: '/pengaduan/buat', name: 'BuatPengaduan', component: () => import('../views/PengelolaDataPengaduan/BuatPengaduanView.vue') },
+  { path: '/pengaduan/konfirmasi', name: 'KonfirmasiPengaduan', component: () => import('../views/PengelolaDataPengaduan/KonfirmasiPengaduanView.vue') },
+  { path: '/pengaduan/status/:id', name: 'StatusPengaduan', component: () => import('../views/PengelolaDataPengaduan/StatusPengaduan.vue') },
+  { path: '/pengaduan/cari', name: 'CariPengaduan', component: () => import('@/components/Pengaduan/SearchPengaduan.vue') },
 
   // Halaman data berita
-  { path: '/data/berita/sampah', name: 'DataBeritaSampah', component: DataBeritaSampahView, meta: { requiresAuth: true } },
-  { path: '/data/berita', name: 'DataBerita', component: DataBeritaView, meta: { requiresAuth: true } },
-  { path: '/berita/:id', name: 'DetailBerita', component: DetailDataBeritaView },
-  { path: '/pengumuman/:id', name: 'DetailPengumuman', component: DetailDataPengumumanView },
+  { 
+    path: '/data/berita/sampah', 
+    name: 'DataBeritaSampah', 
+    component: () => import('../views/PengelolaDataBerita/DataBeritaSampahView.vue'), 
+    meta: { requiresAuth: true } 
+  },
+  { 
+    path: '/data/berita', 
+    name: 'DataBerita', 
+    component: () => import('../views/PengelolaDataBerita/DataBeritaView.vue'), 
+    meta: { requiresAuth: true } 
+  },
+  { path: '/berita/:id', name: 'DetailBerita', component: () => import('../views/PengelolaDataBerita/DetailDataBeritaView.vue') },
+  { path: '/pengumuman/:id', name: 'DetailPengumuman', component: () => import('../views/PengelolaDataBerita/DetailDataPengumumanView.vue') },
 
   // Halaman not found dan tidak diizinkan
-  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
-  { path: '/unauthorized', name: 'Unauthorized', component: Unauthorized },
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import('../views/NotFound.vue') },
+  { path: '/unauthorized', name: 'Unauthorized', component: () => import('../views/Unauthorized.vue') },
 
   // Footer
-  { path: '/info/konsultasi', name: 'infoKonsultasi', component: Konsultasi, meta: { requiresAuth: true, role: ['operator'] } },
-  { path: '/info/pelatihan', name: 'infoProgramPelatihan', component: ProgramPelatihan, meta: { requiresAuth: true, role: ['operator'] } },
-  { path: '/info/pendampingan', name: 'infoPendampingan', component: Pendampingan, meta: { requiresAuth: true, role: ['operator'] } },
-  { path: '/info/pengaduan', name: 'infoPengaduan', component: InfoPengaduan, meta: { requiresAuth: true, role: ['operator'] } },
-  { path: '/bantuan', name: 'PusatBantuan', component: PusatBantuan, meta: { requiresAuth: true, role: ['operator'] } },
-  { path: '/faq', name: 'FAQ', component: FAQ, meta: { requiresAuth: true, role: ['operator'] } },
-  { path: '/kontak', name: 'HubungiKami', component: HubungiKami, meta: { requiresAuth: true, role: ['operator'] } },
-  { path: '/feedback', name: 'Feedback', component: Feedback, meta: { requiresAuth: true, role: ['operator'] } },
+  { 
+    path: '/info/konsultasi', 
+    name: 'infoKonsultasi', 
+    component: () => import('../views/Footer/Konsultasi.vue'), 
+    meta: { requiresAuth: true, role: ['operator'] } 
+  },
+  { 
+    path: '/info/pelatihan', 
+    name: 'infoProgramPelatihan', 
+    component: () => import('../views/Footer/ProgramPelatihan.vue'), 
+    meta: { requiresAuth: true, role: ['operator'] } 
+  },
+  { 
+    path: '/info/pendampingan', 
+    name: 'infoPendampingan', 
+    component: () => import('../views/Footer/Pendampingan.vue'), 
+    meta: { requiresAuth: true, role: ['operator'] } 
+  },
+  { 
+    path: '/info/pengaduan', 
+    name: 'infoPengaduan', 
+    component: () => import('../views/Footer/InfoPengaduan.vue'), 
+    meta: { requiresAuth: true, role: ['operator'] } 
+  },
+  { 
+    path: '/bantuan', 
+    name: 'PusatBantuan', 
+    component: () => import('../views/Footer/PusatBantuan.vue'), 
+    meta: { requiresAuth: true, role: ['operator'] } 
+  },
+  { 
+    path: '/faq', 
+    name: 'FAQ', 
+    component: () => import('../views/Footer/FAQ.vue'), 
+    meta: { requiresAuth: true, role: ['operator'] } 
+  },
+  { 
+    path: '/kontak', 
+    name: 'HubungiKami', 
+    component: () => import('../views/Footer/HubungiKami.vue'), 
+    meta: { requiresAuth: true, role: ['operator'] } 
+  },
+  { 
+    path: '/feedback', 
+    name: 'Feedback', 
+    component: () => import('../views/Footer/Feedback.vue'), 
+    meta: { requiresAuth: true, role: ['operator'] } 
+  },
 ];
 
 const router = createRouter({

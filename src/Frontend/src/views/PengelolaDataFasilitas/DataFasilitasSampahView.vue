@@ -8,6 +8,7 @@
       :data="tableData"
       class="sm:full-screen"
       @update:visible="showSort = $event"
+      @apply-sort="handleApplySort"
     />
     <FormFilterDataFasilitas
       v-model="showFilter"
@@ -833,6 +834,12 @@ const router = useRouter()
 function goBack() {
   router.push('/data/fasilitas')
 }
+
+// Fungsi untuk menangani data yang diurutkan dari FormSortingDataFasilitas
+function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: Fasilitas[] }) {
+  tableData.value = payload.sortedData;
+}
+
 interface Fasilitas {
   id: number;
   nama_fasilitas: string;

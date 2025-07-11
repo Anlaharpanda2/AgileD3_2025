@@ -8,6 +8,7 @@
       :data="tableData"
       class="sm:full-screen"
       @update:visible="showSort = $event"
+      @apply-sort="handleApplySort"
     />
     <FormFilterDataPengaduan
       v-model="showFilter"
@@ -810,6 +811,12 @@ const router = useRouter();
 function goBack() {
   router.push('/data/pengaduan');
 }
+
+// Fungsi untuk menangani data yang diurutkan dari FormSortingDataPengaduan
+function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: Pengaduan[] }) {
+  tableData.value = payload.sortedData;
+}
+
 // Interface for Pengaduan data structure
 interface Pengaduan {
   id: number;

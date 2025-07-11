@@ -8,6 +8,7 @@
       :data="tableData"
       class="sm:full-screen"
       @update:visible="showSort = $event"
+      @apply-sort="handleApplySort"
     />
     <FormFilterDataPengaduan
       v-model="showFilter"
@@ -1191,6 +1192,11 @@ async function onDelete(row: Pengaduan) {
   } finally {
     loading.value = false; // Hide loading indicator
   }
+}
+
+// Fungsi untuk menangani data yang diurutkan dari FormSortingDataPengaduan
+function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: Pengaduan[] }) {
+  tableData.value = payload.sortedData;
 }
 
 /**

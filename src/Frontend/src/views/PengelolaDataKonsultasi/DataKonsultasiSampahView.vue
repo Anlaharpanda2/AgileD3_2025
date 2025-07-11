@@ -8,6 +8,7 @@
       :data="tableData"
       class="sm:full-screen"
       @update:visible="showSort = $event"
+      @apply-sort="handleApplySort"
     />
     <FormFilterDataKonsultasi
       v-model="showFilter"
@@ -875,6 +876,12 @@ const router = useRouter()
 function goBack() {
   router.push('/data/konsultasi')
 }
+
+// Fungsi untuk menangani data yang diurutkan dari FormSortingDataKonsultasi
+function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: Konsultasi[] }) {
+  tableData.value = payload.sortedData;
+}
+
 interface Konsultasi {
   id: number;
   nama_pelapor: string;

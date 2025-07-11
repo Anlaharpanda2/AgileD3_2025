@@ -31,6 +31,10 @@ use App\Http\Controllers\KelolaLokasi\KelolaLokasiController;
 
 //Api auth
 
+use App\Http\Controllers\DashboardSummaryController;
+
+Route::get('/dashboard/summary', [DashboardSummaryController::class, 'getSummary']);
+
 //login
 Route::post('/login/masyarakat', [AuthMasyarakatController::class, 'login']);
 Route::post('/login/pegawai', [AuthPegawaiController::class, 'login']);
@@ -83,6 +87,7 @@ Route::prefix('kelola/pengaduan')->group(function () {
     Route::put('/{dataPengaduan}', [KelolaDataPengaduanController::class, 'update']);
     Route::delete('/{dataPengaduan}', [KelolaDataPengaduanController::class, 'destroy']);
     Route::get('/{id}', [KelolaDataPengaduanController::class, 'show']);
+    Route::post('/cari', [KelolaDataPengaduanController::class, 'cariByKode']);
 });
 //4. pengelola konsultasi
 Route::prefix('kelola/Konsultasi')->group(function () {
@@ -229,7 +234,7 @@ Route::patch('/Panitia/{nik}/ubah-foto', [KelolaDataPanitiaController::class, 'u
 
 //api untuk kelola akses
 Route::get('/kelola/akses',[KelolaAksesController::class,'index']);
-Route::get('/pengaduan/user/{nik}', [PengaduanController::class, 'getByNik']);
+
 
 // api untuk kelola struktur pegawai
 Route::get('/kelola/pegawai', [StrukturPegawaiController::class, 'index']);

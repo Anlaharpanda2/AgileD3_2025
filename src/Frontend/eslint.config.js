@@ -6,14 +6,14 @@ import { defineConfig } from "eslint/config";
 
 
 export default defineConfig([
-  { files: ["**/*.{js,mjs,cjs,ts,mts,cts,vue}"], plugins: { js }, extends: ["js/recommended"], ignores: ["dist/**"] },
   {
-    files: ["dist/**"],
-    rules: {
-      "@typescript-eslint/no-unused-expressions": "off",
-      "@typescript-eslint/no-unused-vars": "off",
-      "@typescript-eslint/no-this-alias": "off",
-    },
+    // Top-level ignores for flat config
+    ignores: ["dist/**"],
+  },
+  {
+    files: ["**/*.{js,mjs,cjs,ts,mts,cts,vue}"],
+    plugins: { js },
+    extends: ["js/recommended"]
   },
   { files: ["**/*.{js,mjs,cjs,ts,mts,cts,vue}"], languageOptions: { globals: globals.browser } },
   tseslint.configs.recommended,

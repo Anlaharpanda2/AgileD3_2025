@@ -8,6 +8,7 @@
       :data="tableData"
       class="sm:full-screen"
       @update:visible="showSort = $event"
+      @apply-sort="handleApplySort"
     />
     <FormFilterDatapendaftaran
       v-model="showFilter"
@@ -1005,6 +1006,15 @@ function handleQuotaUpdated() {
   console.log('Kuota diperbarui di parent!');
   // Lakukan sesuatu setelah kuota diperbarui
 }
+
+// Fungsi untuk menangani data yang diurutkan dari FormSortingDatapendaftaran
+function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: pendaftar[] }) {
+  tableData.value = payload.sortedData;
+  // Opsional: Anda bisa menyimpan kolom dan urutan yang diterapkan jika diperlukan
+  // currentSortColumn.value = payload.column;
+  // currentSortOrder.value = payload.order;
+}
+
 // Toggles the visibility of a specific dropdown menu (dari kode1)
 function toggleDropdown(dropdownId: string) {
   dropdownOpen.value = dropdownOpen.value === dropdownId ? null : dropdownId;

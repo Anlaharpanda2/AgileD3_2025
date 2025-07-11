@@ -55,11 +55,13 @@
         
         <!-- Kolom Ilustrasi -->
         <div class="w-full md:w-1/2 px-4 hidden sm:block" data-aos="fade-left">
-          <div class="flex items-center justify-center h-96 mt-12 md:mt-0">
-            <div class="w-[17.5rem] h-[17.5rem] bg-gradient-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center animate-pulse">
-              <svg class="text-pink-500" xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4a5 5 0 1 0 0 10a5 5 0 0 0 0-10zm-7 7a7 7 0 1 1 14 0a7 7 0 0 1-14 0z"/><path d="M12 14a5 5 0 0 0-5 5v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a5 5 0 0 0-5-5z"/></svg>
+            <div class="flex items-center justify-center h-96 mt-12 md:mt-0">
+                <div class="w-[17.5rem] h-[17.5rem] bg-gradient-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center animate-pulse">
+                    <svg class="text-pink-500" xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="m12 9.5q-1.875 0-3.187-1.313T7.5 5q0-1.875 1.313-3.187T12 .5q1.875 0 3.188 1.313T16.5 5q0 1.875-1.312 3.188T12 9.5ZM12 21v-8h-2v-2h2v-2h2v2h2v2h-2v8Z"/>
+                    </svg>
+                </div>
             </div>
-          </div>
         </div>
 
       </div>

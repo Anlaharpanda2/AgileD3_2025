@@ -123,18 +123,46 @@ class DashboardSummaryController extends Controller
         // --- Other Summaries ---
 
         // QuotaPendaftaran Summary
-        try {
-            $quota = QuotaPendaftaran::first();
-            $accepted_count = DataPendaftaran::where('status_pendaftaran', 'accepted')->count();
-            $summary['quota'] = [
-                'status' => $quota ? ($quota->status ? 'open' : 'closed') : 'not_set',
-                'limit' => $quota ? $quota->quota : 0,
-                'registered' => $accepted_count,
-                'remaining' => $quota ? max(0, $quota->quota - $accepted_count) : 0,
-            ];
-        } catch (\Exception $e) {
-            $summary['quota'] = ['error' => $e->getMessage()];
-        }
+
+try {
+    $quota = QuotaPendaftaran::where('status', true)->latest()->first();
+
+    // 1. Ambil semua NIK yang accepted
+    $accepted_niks = DataPendaftaran::where('status_pendaftaran', 'accepted')
+        ->pluck('nik')
+        ->map(fn($nik) => trim((string)$nik)) // pastikan tidak ada spasi & jadi string
+        ->unique()
+        ->toArray();
+
+    \Log::info('Accepted NIKs:', $accepted_niks);
+
+    // 2. Ambil semua NIK dari data_pelatihan
+    $pelatihan_niks = DataPelatihan::pluck('nik')
+        ->map(fn($nik) => trim((string)$nik))
+        ->unique()
+        ->toArray();
+
+    \Log::info('Pelatihan NIKs:', $pelatihan_niks);
+
+    // 3. Cari irisan (NIK yang ada di kedua array)
+    $common = array_intersect($accepted_niks, $pelatihan_niks);
+    \Log::info('Common NIKs:', $common);
+
+    // 4. Hitung registered berdasarkan irisannya
+    $registered_count = count($common);
+    \Log::info('Registered count:', ['registered' => $registered_count]);
+
+    $summary['quota'] = [
+        'status'     => $quota ? ($quota->status ? 'open' : 'closed') : 'not_set',
+        'limit'      => $quota?->quota ?? 0,
+        'registered' => $registered_count,
+        'remaining'  => $quota ? max(0, intval($quota->quota) - $registered_count) : 0,
+    ];
+} catch (\Exception $e) {
+    $summary['quota'] = ['error' => $e->getMessage()];
+}
+
+
         
         // CombinedScore Summary
         try {

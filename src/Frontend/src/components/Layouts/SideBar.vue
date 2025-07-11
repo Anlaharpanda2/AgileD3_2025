@@ -166,7 +166,7 @@
                   <div
                     class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-pink-50 hover:text-pink-600 cursor-pointer transition-all duration-300"
                     :class="{ 'bg-pink-50 text-pink-600': activeIndex === '3-1' }"
-                    @click="navigate('/test/pretest', '3-1')"
+                    @click="navigate('/pretest', '3-1')"
                   >
                     <div class="w-2 h-2 bg-gray-400 rounded-full mr-3" />
                     <span class="text-sm font-medium">Pretest</span>
@@ -174,7 +174,7 @@
                   <div
                     class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-pink-50 hover:text-pink-600 cursor-pointer transition-all duration-300"
                     :class="{ 'bg-pink-50 text-pink-600': activeIndex === '3-2' }"
-                    @click="navigate('/test/posttest', '3-2')"
+                    @click="navigate('/posttest', '3-2')"
                   >
                     <div class="w-2 h-2 bg-gray-400 rounded-full mr-3" />
                     <span class="text-sm font-medium">Posttest</span>
@@ -182,10 +182,18 @@
                   <div
                     class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-pink-50 hover:text-pink-600 cursor-pointer transition-all duration-300"
                     :class="{ 'bg-pink-50 text-pink-600': activeIndex === '3-3' }"
-                    @click="navigate('/test/data-nilai', '3-3')"
+                    @click="navigate('/data/nilai', '3-3')"
                   >
                     <div class="w-2 h-2 bg-gray-400 rounded-full mr-3" />
                     <span class="text-sm font-medium">Data Nilai</span>
+                  </div>
+                  <div
+                    class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-pink-50 hover:text-pink-600 cursor-pointer transition-all duration-300"
+                    :class="{ 'bg-pink-50 text-pink-600': activeIndex === '3-3' }"
+                    @click="navigate('/data/soal', '3-3')"
+                  >
+                    <div class="w-2 h-2 bg-gray-400 rounded-full mr-3" />
+                    <span class="text-sm font-medium">Data Soal</span>
                   </div>
                 </div>
               </transition>
@@ -238,7 +246,7 @@
                   <div
                     class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-pink-50 hover:text-pink-600 cursor-pointer transition-all duration-300"
                     :class="{ 'bg-pink-50 text-pink-600': activeIndex === '4-1' }"
-                    @click="navigate('/pelatihan/pendaftar', '4-1')"
+                    @click="navigate('/data/pendaftaran', '4-1')"
                   >
                     <div class="w-2 h-2 bg-gray-400 rounded-full mr-3" />
                     <span class="text-sm font-medium">Data Pendaftar</span>
@@ -246,7 +254,7 @@
                   <div
                     class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-pink-50 hover:text-pink-600 cursor-pointer transition-all duration-300"
                     :class="{ 'bg-pink-50 text-pink-600': activeIndex === '4-2' }"
-                    @click="navigate('/pelatihan/peserta', '4-2')"
+                    @click="navigate('/data/pelatihan', '4-2')"
                   >
                     <div class="w-2 h-2 bg-gray-400 rounded-full mr-3" />
                     <span class="text-sm font-medium">Data Peserta Pelatihan</span>
@@ -302,7 +310,7 @@
                   <div
                     class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-pink-50 hover:text-pink-600 cursor-pointer transition-all duration-300"
                     :class="{ 'bg-pink-50 text-pink-600': activeIndex === '5-1' }"
-                    @click="navigate('/pengaduan/data', '5-1')"
+                    @click="navigate('/pengaduan/cari', '5-1')"
                   >
                     <div class="w-2 h-2 bg-gray-400 rounded-full mr-3" />
                     <span class="text-sm font-medium">Data Pengaduan</span>
@@ -310,7 +318,15 @@
                   <div
                     class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-pink-50 hover:text-pink-600 cursor-pointer transition-all duration-300"
                     :class="{ 'bg-pink-50 text-pink-600': activeIndex === '5-2' }"
-                    @click="navigate('/pengaduan/konsultasi', '5-2')"
+                    @click="navigate('/data/pengaduan', '5-2')"
+                  >
+                    <div class="w-2 h-2 bg-gray-400 rounded-full mr-3" />
+                    <span class="text-sm font-medium">Data Pengaduan</span>
+                  </div>
+                  <div
+                    class="flex items-center px-4 py-2 text-gray-600 rounded-lg hover:bg-pink-50 hover:text-pink-600 cursor-pointer transition-all duration-300"
+                    :class="{ 'bg-pink-50 text-pink-600': activeIndex === '5-3' }"
+                    @click="navigate('/data/konsultasi', '5-3')"
                   >
                     <div class="w-2 h-2 bg-gray-400 rounded-full mr-3" />
                     <span class="text-sm font-medium">Data Konsultasi</span>

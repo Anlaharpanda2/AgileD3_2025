@@ -362,7 +362,7 @@
             <div
               class="group flex items-center px-4 py-3 text-gray-700 rounded-xl hover:bg-gray-50 hover:text-pink-600 cursor-pointer transition-all duration-300"
               :class="{ 'bg-pink-50 text-pink-600 shadow-sm': activeIndex === '7' }"
-              @click="navigate('/kelola-akses', '7')"
+              @click="navigate('/data/akses', '7')"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -11,6 +11,7 @@ declare module 'vue' {
     BeritaTerbaru: typeof import('./src/components/Home/BeritaTerbaru.vue')['default']
     CardStatisticsVertical: typeof import('./src/components/dashboard/CardStatisticsVertical.vue')['default']
     CombinedScoreTable: typeof import('./src/components/DataNilai/CombinedScoreTable.vue')['default']
+    DemoButton: typeof import('./src/components/common/DemoButton.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']

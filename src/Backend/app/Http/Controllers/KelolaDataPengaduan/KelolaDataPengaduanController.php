@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\KelolaDataPengaduan;
 
 use App\Http\Controllers\Controller;
+use App\Models\DataKonsultasi;
 use App\Models\DataPengaduan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -205,4 +206,38 @@ class KelolaDataPengaduanController extends Controller
         ]);
     }
 
+    public function pindahkanKeKonsultasi($id)
+    {
+        try {
+            $dataPengaduan = DataPengaduan::find($id);
+
+            if (!$dataPengaduan) {
+                return response()->json(['message' => 'Data pengaduan tidak ditemukan'], 404);
+            }
+
+            $dataKonsultasi = DataKonsultasi::create([
+                'nama_pelapor' => $dataPengaduan->nama_pelapor,
+                'nama_korban' => $dataPengaduan->nama_korban,
+                'deskripsi' => $dataPengaduan->deskripsi,
+                'alamat' => $dataPengaduan->alamat,
+                'waktu_kejadian' => $dataPengaduan->waktu_kejadian,
+                'kasus' => $dataPengaduan->kasus,
+                'no_hp' => $dataPengaduan->no_hp,
+                'saksi' => $dataPengaduan->saksi,
+                'status' => 'diproses',
+                'lampiran' => $dataPengaduan->getRawOriginal('lampiran'),
+            ]);
+
+            $dataPengaduan->forceDelete();
+
+            return response()->json([
+                'message' => 'Data pengaduan berhasil dipindahkan ke konsultasi.',
+                'data' => $dataKonsultasi,
+            ], 200);
+
+        } catch (\Exception $e) {
+            Log::error('Gagal memindahkan data ke konsultasi: ' . $e->getMessage());
+            return response()->json(['message' => 'Terjadi kesalahan saat memindahkan data.'], 500);
+        }
+    }
 }

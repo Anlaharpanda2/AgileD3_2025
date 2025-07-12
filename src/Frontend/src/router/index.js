@@ -130,9 +130,12 @@ const routes = [
 
   // Profile
   { 
-    path: '/masyarakat/:id', 
-    name: 'DetailMasyarakat', 
-    component: () => import('../views/Profile/ProfileMasyarakat.vue'), 
+    meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
+  },
+  { 
+    path: '/admin/:id', 
+    name: 'AdminProfile', 
+    component: () => import('../views/AdminProfile.vue'), 
     meta: { requiresAuth: true, role: ['operator', 'pegawai'] } 
   },
   { 

@@ -2,113 +2,194 @@
   <Transition name="dialog-fade">
     <div
       v-if="localDialogVisible"
-      class="filter-dialog-overlay"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm p-4"
       @click.self="handleClose"
     >
-      <div class="filter-dialog">
-        <div class="my-header">
-          <h4>
-            <IconFilter class="dialog-icon" />
-            Filter Data Berita
-          </h4>
-          <el-button
-            class="el-button--close-custom"
-            circle
-            :icon="IconX"
-            @click="handleClose"
-          />
-        </div>
-        <div class="scrollable-form-container">
-          <div class="filter-section filter-selection">
-            <h3 class="section-title">
-              Pilih Kolom untuk Filter:
-            </h3>
-            <el-checkbox-group
-              v-model="localSelectedColumns"
-              class="column-checkboxes"
+      <div class="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl shadow-gray-500/10 overflow-hidden transform transition-all duration-300 max-h-[90vh] flex flex-col">
+        <div class="relative bg-gradient-to-r from-pink-50 to-rose-50 border-b border-gray-100">
+          <div class="flex items-center justify-between p-6">
+            <div class="flex items-center space-x-3">
+              <div class="flex items-center justify-center w-10 h-10 bg-pink-100 rounded-full">
+                <IconFilter class="text-pink-600 w-4 h-4" />
+              </div>
+              <div>
+                <h2 class="text-xl font-bold text-gray-800">
+                  Filter Data Berita
+                </h2>
+                <p class="text-sm text-gray-600">
+                  Pilih kolom dan masukkan kriteria filter
+                </p>
+              </div>
+            </div>
+            <button 
+              class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all duration-200"
+              @click="handleClose"
             >
-              <el-checkbox
+              <IconX class="w-4 h-4" />
+            </button>
+          </div>
+          <div class="absolute bottom-0 left-6 right-6 h-px bg-gradient-to-r from-pink-200 via-pink-300 to-transparent" />
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6 space-y-8">
+          <div class="space-y-4">
+            <div class="flex items-center space-x-2">
+              <div class="w-1 h-6 bg-pink-400 rounded-full" />
+              <h3 class="text-lg font-semibold text-gray-800">
+                Pilih Kolom untuk Filter
+              </h3>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <label 
                 v-for="col in columns"
                 :key="col"
-                :label="col"
-                :value="col"
-                size="large"
-                border
-                class="column-checkbox"
+                class="relative flex items-center p-4 bg-gray-50 hover:bg-pink-50 border border-gray-200 hover:border-pink-200 rounded-xl cursor-pointer transition-all duration-200 group"
+                :class="{ 'bg-pink-50 border-pink-300 shadow-sm': localSelectedColumns.includes(col) }"
               >
-                <span class="column-checkbox-label-text">{{ formatColumnName(col) }}</span>
-                <component
-                  :is="getColumnIcon(col)"
-                  class="column-icon"
+                <input 
+                  v-model="localSelectedColumns" 
+                  type="checkbox"
+                  :value="col"
+                  class="sr-only"
+                >
+                <div
+                  class="flex items-center justify-center w-8 h-8 rounded-lg mr-3 transition-all duration-200"
+                  :class="localSelectedColumns.includes(col) 
+                    ? 'bg-pink-500 text-white' 
+                    : 'bg-gray-200 text-gray-600 group-hover:bg-pink-100 group-hover:text-pink-600'"
+                >
+                  <component 
+                    :is="getColumnIcon(col)"
+                    class="w-4 h-4"
+                  />
+                </div>
+                <div
+                  class="flex items-center justify-center w-5 h-5 border-2 rounded-md mr-3 transition-all duration-200"
+                  :class="localSelectedColumns.includes(col) 
+                    ? 'bg-pink-500 border-pink-500 text-white' 
+                    : 'border-gray-300 group-hover:border-pink-400'"
+                >
+                  <IconCheck
+                    v-if="localSelectedColumns.includes(col)"
+                    class="w-3 h-3"
+                  />
+                </div>
+                <span class="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+                  {{ formatColumnName(col) }}
+                </span>
+                <div
+                  v-if="localSelectedColumns.includes(col)" 
+                  class="absolute top-2 right-2 w-2 h-2 bg-pink-400 rounded-full animate-pulse"
                 />
-              </el-checkbox>
-            </el-checkbox-group>
+              </label>
+            </div>
           </div>
 
           <div
             v-if="localSelectedColumns.length > 0"
-            class="filter-section filter-inputs"
+            class="space-y-4"
           >
-            <h3 class="section-title">
-              Masukkan Nilai Filter:
-            </h3>
-            <div
-              v-for="col in localSelectedColumns"
-              :key="col"
-              class="filter-input-group"
-            >
-              <label :for="`filter-${col}`" class="input-label">{{ formatColumnName(col) }}:</label>
-              <div class="input-wrapper">
-                <input
-                  :id="`filter-${col}`"
-                  v-model="localActiveFilters[col]"
-                  type="text"
-                  :placeholder="`Masukkan filter untuk ${formatColumnName(col).toLowerCase()}`"
-                  class="filter-input"
-                >
-                <button
-                  v-if="localActiveFilters[col]"
-                  class="clear-button"
-                  @click="localActiveFilters[col] = ''"
-                >
-                  <IconX class="w-3 h-3" />
-                </button>
+            <div class="flex items-center space-x-2">
+              <div class="w-1 h-6 bg-pink-400 rounded-full" />
+              <h3 class="text-lg font-semibold text-gray-800">
+                Masukkan Nilai Filter
+              </h3>
+              <div class="flex items-center justify-center w-6 h-6 bg-pink-100 text-pink-600 rounded-full text-xs font-bold">
+                {{ localSelectedColumns.length }}
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <div 
+                v-for="col in localSelectedColumns" 
+                :key="col"
+                class="group"
+              >
+                <div class="relative">
+                  <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                    <div class="flex items-center justify-center w-6 h-6 bg-pink-100 text-pink-600 rounded-md mr-2">
+                      <component
+                        :is="getColumnIcon(col)"
+                        class="w-3 h-3"
+                      />
+                    </div>
+                    {{ formatColumnName(col) }}
+                  </label>
+                  
+                  <div class="relative">
+                    <input
+                      v-model="localActiveFilters[col]"
+                      type="text"
+                      :placeholder="`Masukkan filter untuk ${formatColumnName(col).toLowerCase()}`"
+                      class="w-full px-4 py-3 pr-10 text-gray-700 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-200 focus:border-pink-400 transition-all duration-200 placeholder-gray-400"
+                    >
+                    <button 
+                      v-if="localActiveFilters[col]"
+                      class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                      @click="localActiveFilters[col] = ''"
+                    >
+                      <IconX class="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+
           <div
-            v-else
-            class="empty-state"
+            v-if="localSelectedColumns.length === 0"
+            class="text-center py-12"
           >
-            <IconFilter class="empty-state-icon" />
-            <p class="empty-state-text">
-              Belum ada kolom yang dipilih. Silakan pilih kolom untuk mulai memfilter.
+            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <IconFilter class="text-gray-400 w-8 h-8" />
+            </div>
+            <h3 class="text-lg font-medium text-gray-600 mb-2">
+              Belum Ada Kolom Dipilih
+            </h3>
+            <p class="text-gray-500">
+              Pilih kolom di atas untuk mulai membuat filter
             </p>
           </div>
         </div>
 
-        <div class="my-footer">
-          <el-button
-            type="info"
-            class="reset-button"
-            :disabled="isLoading"
-            @click="handleClearFilters"
+        <div class="border-t border-gray-100 bg-gray-50/50 px-6 py-4">
+          <div class="flex flex-col sm:flex-row gap-3 sm:justify-end">
+            <button
+              :disabled="isLoading"
+              class="inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-700 focus:ring-2 focus:ring-gray-200 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              @click="handleClearFilters"
+            >
+              <IconTrash class="w-4 h-4 mr-2" />
+              Bersihkan Filter
+            </button>
+            
+            <button
+              :disabled="isLoading || localSelectedColumns.length === 0"
+              class="inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 rounded-lg focus:ring-2 focus:ring-pink-200 shadow-sm hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
+              @click="handleApplyFilters"
+            >
+              <div
+                v-if="isLoading"
+                class="absolute inset-0 flex items-center justify-center"
+              >
+                <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              </div>
+              
+              <span :class="{ 'opacity-0': isLoading }">
+                <IconCheck class="w-4 h-4 mr-2" />
+                Terapkan Filter
+              </span>
+            </button>
+          </div>
+          
+          <div
+            v-if="localSelectedColumns.length > 0"
+            class="flex items-center justify-center mt-3 text-xs text-gray-500"
           >
-            <IconTrash class="w-4 h-4 mr-2" />
-            Bersihkan Filter
-          </el-button>
-          <el-button
-            type="primary"
-            class="apply-button"
-            :disabled="isLoading || localSelectedColumns.length === 0"
-            @click="handleApplyFilters"
-          >
-            <div v-if="isLoading" class="loading-spinner" />
-            <span :class="{ 'opacity-0': isLoading }">
-              <IconCheck class="w-4 h-4 mr-2" />
-              Terapkan Filter
-            </span>
-          </el-button>
+            <IconInfo class="w-3 h-3 mr-1" />
+            {{ localSelectedColumns.length }} kolom dipilih untuk filter
+          </div>
         </div>
       </div>
     </div>
@@ -117,15 +198,7 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
-
-// Hapus import Close dari Element Plus karena akan diganti dengan IconX dari Lucide
-import { ElButton, ElCheckboxGroup, ElCheckbox } from 'element-plus';
-import 'element-plus/es/components/button/style/css';
-import 'element-plus/es/components/checkbox-group/style/css';
-import 'element-plus/es/components/checkbox/style/css';
-
-// Import icon components dari lucide-vue-next
-import {
+import { 
   Filter as IconFilter,
   X as IconX,
   Check as IconCheck,
@@ -145,7 +218,6 @@ import {
   Columns as IconColumns
 } from 'lucide-vue-next';
 
-
 const props = defineProps<{
   modelValue: boolean;
   columns: string[];
@@ -159,31 +231,23 @@ const localSelectedColumns = ref<string[]>([]);
 const localActiveFilters = ref<{ [key: string]: string | number | null }>({});
 const isLoading = ref(false);
 
-// Mapping icon untuk setiap kolom menggunakan component Lucid-Vue-Next
 const getColumnIcon = (column: string) => {
   const col = column.toLowerCase();
-
-  // Berita
   if (col.includes('title') || col.includes('judul')) return IconType;
   if (col.includes('author') || col.includes('penulis')) return IconUserPen;
   if (col.includes('category') || col.includes('kategori')) return IconFolder;
   if (col.includes('status')) return IconInfo;
   if (col.includes('date') || col.includes('tanggal')) return IconCalendar;
-  if (col.includes('published_at') || col.includes('diterbitkan')) return IconCalendar; // Bisa juga CalendarCheck jika ada konotasi sudah publish
+  if (col.includes('published_at') || col.includes('diterbitkan')) return IconCalendar;
   if (col.includes('views') || col.includes('dibaca')) return IconEye;
   if (col.includes('comments') || col.includes('komentar')) return IconMessageCircle;
   if (col.includes('tags')) return IconTags;
   if (col.includes('source')) return IconLink;
-
-  // Identifikasi & Waktu umum
   if (col.includes('id') || col.includes('code') || col.includes('kode')) return IconHash;
   if (col.includes('created_at') || col.includes('dibuat')) return IconPlus;
   if (col.includes('updated_at') || col.includes('diperbarui')) return IconEdit;
-
-  // Default icon
   return IconColumns;
 };
-
 
 watch(() => props.modelValue, (newVal) => {
   localDialogVisible.value = newVal;
@@ -229,7 +293,7 @@ const handleClose = () => {
 
 const handleApplyFilters = async () => {
   isLoading.value = true;
-  await new Promise(resolve => setTimeout(resolve, 800)); // Simulate async operation
+  await new Promise(resolve => setTimeout(resolve, 800));
   const filtersToEmit: { [key: string]: string | number | null } = {};
   for (const col of localSelectedColumns.value) {
     const value = localActiveFilters.value[col];
@@ -251,340 +315,55 @@ const handleClearFilters = () => {
 </script>
 
 <style scoped>
-/* Transisi untuk dialog */
 .dialog-fade-enter-active,
 .dialog-fade-leave-active {
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
 .dialog-fade-enter-from,
 .dialog-fade-leave-to {
   opacity: 0;
-  transform: translateY(-20px) scale(0.95);
-}
-.dialog-fade-enter-to,
-.dialog-fade-leave-from {
-  opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: scale(0.95) translateY(-20px);
 }
 
-/* Overlay */
-.filter-dialog-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  padding: 20px;
-  box-sizing: border-box;
+.overflow-y-auto::-webkit-scrollbar {
+  width: 4px;
 }
 
-/* Dialog container */
-.filter-dialog {
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 800px;
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transform: scale(1);
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 2px;
 }
 
-.filter-dialog:hover {
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 2px;
 }
 
-/* Header */
-.my-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px 24px;
-  border-bottom: 1px solid #eee;
-  background: linear-gradient(to right, #e0f2f7, #e0f7f2); /* Light blue-green gradient */
-  color: #333;
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
-.my-header h4 {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  color: #2c3e50;
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
-.dialog-icon {
-  margin-right: 10px;
-  color: #007bff; /* Primary blue color for icon */
-  font-size: 1.1em;
-}
-
-/* Close button Element Plus custom style */
-.el-button--close-custom {
-  border: none;
-  background-color: transparent;
-  color: #909399;
-  font-size: 20px;
-  transition: all 0.2s ease-in-out;
-}
-.el-button--close-custom:hover {
-  background-color: #f0f2f5;
-  color: #606266;
-  transform: rotate(90deg);
-}
-
-/* Scrollable form container */
-.scrollable-form-container {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-}
-
-/* Custom scrollbar */
-.scrollable-form-container::-webkit-scrollbar {
-  width: 6px;
-}
-.scrollable-form-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 3px;
-}
-.scrollable-form-container::-webkit-scrollbar-thumb {
-  background: #c0c4cc;
-  border-radius: 3px;
-}
-.scrollable-form-container::-webkit-scrollbar-thumb:hover {
-  background: #a8abb2;
-}
-
-/* Section styling */
-.filter-section {
-  background-color: #f9f9f9;
-  border: 1px solid #eee;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.section-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 15px;
-  border-bottom: 2px solid #e0e0e0;
-  padding-bottom: 10px;
-}
-
-/* Checkbox styling */
-.column-checkboxes {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 12px;
-}
-
-.column-checkbox {
-  margin: 0 !important; /* Override Element Plus default margin */
-  border: 1px solid #dcdfe6;
-  border-radius: 8px;
-  transition: all 0.2s ease-in-out;
-  padding: 12px 15px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #fff;
-  cursor: pointer;
-}
-
-.column-checkbox.is-checked {
-  border-color: #409eff;
-  background-color: #ecf5ff;
-  box-shadow: 0 2px 8px rgba(64, 158, 255, 0.1);
-}
-
-.column-checkbox:hover {
-  border-color: #a0cfff;
-  box-shadow: 0 4px 12px rgba(64, 158, 255, 0.08);
-  transform: translateY(-2px);
-}
-
-.column-checkbox .el-checkbox__input {
-  margin-right: 10px; /* Space between checkbox and label */
-}
-
-.column-checkbox-label-text {
-  flex-grow: 1;
-  font-weight: 500;
-  color: #333;
-  font-size: 0.95em;
-}
-
-.column-icon {
-  margin-left: 10px;
-  color: #909399;
-  font-size: 1.1em;
-  transition: color 0.2s ease-in-out;
-}
-
-.column-checkbox.is-checked .column-icon {
-  color: #409eff; /* Change icon color when checked */
-}
-
-/* Filter input group */
-.filter-input-group {
-  margin-bottom: 15px;
-}
-
-.input-label {
-  display: block;
-  font-size: 0.9em;
-  color: #606266;
-  margin-bottom: 8px;
-  font-weight: 500;
-}
-
-.input-wrapper {
-  position: relative;
-}
-
-.filter-input {
-  width: 100%;
-  padding: 10px 40px 10px 15px;
-  border: 1px solid #dcdfe6;
-  border-radius: 8px;
-  font-size: 1em;
-  color: #333;
-  transition: all 0.2s ease-in-out;
-  box-sizing: border-box; /* Ensures padding doesn't add to total width */
-}
-
-.filter-input:focus {
-  border-color: #409eff;
-  box-shadow: 0 0 0 3px rgba(64, 158, 255, 0.2);
-  outline: none;
-}
-
-.clear-button {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: #909399;
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 50%;
-  transition: all 0.2s ease-in-out;
-}
-.clear-button:hover {
-  color: #606266;
-  background-color: #f0f2f5;
-}
-
-/* Empty state styling */
-.empty-state {
-  text-align: center;
-  padding: 50px 20px;
-  color: #909399;
-  font-size: 1.1em;
-}
-
-.empty-state-icon {
-  font-size: 3em;
-  margin-bottom: 20px;
-  color: #c0c4cc;
-}
-
-.empty-state-text {
-  margin: 0;
-  line-height: 1.5;
-}
-
-/* Footer buttons */
-.my-footer {
-  display: flex;
-  justify-content: flex-end;
-  padding: 18px 24px;
-  border-top: 1px solid #eee;
-  background-color: #fcfcfc;
-  gap: 15px; /* Spasi antar tombol */
-}
-
-.reset-button, .apply-button {
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 150px;
-}
-
-.reset-button {
-  background-color: #FEEEEE; /* Lighter red background */
-  color: #EB5757; /* Deeper red text */
-  border: 1px solid #FBCACD; /* Lighter red border */
-  box-shadow: 0 2px 8px rgba(235, 87, 87, 0.1); /* Subtle red shadow */
-}
-.reset-button:hover {
-  background-color: #FAEAEA;
-  border-color: #E88F92;
-  color: #D63030;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 15px rgba(245, 108, 108, 0.2);
-}
-
-/* Apply button styling */
-.apply-button {
-  background: linear-gradient(to right, #88D3D1, #69C5C2);
-  border: none;
-  color: white;
-  box-shadow: 0 4px 10px rgba(105, 197, 194, 0.25); /* Initial shadow for apply button */
-}
-.apply-button:hover {
-  background: linear-gradient(to right, #69C5C2, #5AAEA8); /* Darker gradient for hover */
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(105, 197, 194, 0.35); /* More prominent shadow on hover */
-}
-
-.apply-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-/* Loading spinner */
-.loading-spinner {
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top: 3px solid #fff;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: spin 1s linear infinite;
-  position: absolute;
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.apply-button span {
-  transition: opacity 0.3s;
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
 </style>

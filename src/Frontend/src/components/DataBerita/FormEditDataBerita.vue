@@ -1,77 +1,100 @@
 <template>
-  <div class="form-overlay">
-    <transition name="popup">
-      <div
-        v-if="isMounted"
-        class="form-popup"
-      >
-        <div class="form-header background text-center text-white py-3 rounded-top">
-          <h3 class="mb-0">
-            Form Edit Data Berita
-          </h3>
+  <div
+    class="fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+    @click.self="$emit('close')"
+  >
+    <transition
+      name="modal"
+      appear
+    >
+      <div class="bg-white rounded-xl shadow-2xl max-w-5xl w-full max-h-[95vh] flex flex-col overflow-hidden">
+        <!-- Header -->
+        <div
+          class="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700
+ px-6 py-4 sm:px-8 sm:py-6 rounded-t-xl"
+        >
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <div class="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+                <!-- Icon for header -->
+                <svg
+                  class="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white">
+                  Edit Data Berita
+                </h2>
+                <p class="text-pink-100 text-xs sm:text-sm">
+                  Perbarui informasi berita
+                </p>
+              </div>
+            </div>
+            <button
+              class="p-2 hover:bg-white/20 rounded-lg transition-colors duration-200"
+              aria-label="Tutup"
+              @click="$emit('close')"
+            >
+              <!-- Close icon -->
+              <svg
+                class="w-6 h-6 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
 
-        <div class="form-body">
+        <!-- Form Body -->
+        <div class="flex-grow overflow-y-auto p-6 sm:p-8">
           <el-form
             ref="formRef"
             :model="form"
             :rules="rules"
-            label-width="140px"
             label-position="top"
-            class="p-4"
+            class="space-y-6"
           >
-            <el-row :gutter="20">
-              <el-col
-                :span="24"
-                :md="12"
-                class="mb-3"
-              >
+            <div class="bg-gray-50 rounded-xl p-5 sm:p-6 border border-gray-100 shadow-sm">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <el-form-item
                   label="Judul Berita"
                   prop="judul"
-                  required
+                  class="md:col-span-2"
                 >
                   <el-input
                     v-model="form.judul"
-                    type="text"
-                    placeholder="Judul Berita"
-                    clearable
+                    placeholder="Masukkan judul berita"
+                    size="large"
+                    class="modern-input"
                   />
                 </el-form-item>
-              </el-col>
-
-              <el-col
-                :span="24"
-                class="mb-3"
-              >
-                <el-form-item
-                  label="Isi Berita"
-                  prop="isi"
-                  required
-                >
-                  <el-input
-                    v-model="form.isi"
-                    type="textarea"
-                    placeholder="Isi Berita"
-                    rows="6"
-                    clearable
-                  />
-                </el-form-item>
-              </el-col>
-
-              <el-col
-                :span="24"
-                :md="12"
-                class="mb-3"
-              >
                 <el-form-item
                   label="Jenis Konten"
                   prop="jenis_konten"
-                  required
                 >
                   <el-select
                     v-model="form.jenis_konten"
-                    placeholder="Pilih Jenis Konten"
+                    placeholder="Pilih jenis konten"
+                    size="large"
+                    class="w-full modern-select"
                     clearable
                   >
                     <el-option
@@ -88,40 +111,6 @@
                     />
                   </el-select>
                 </el-form-item>
-              </el-col>
-
-              
-              <el-col
-                :span="24"
-                :md="12"
-                class="mb-3"
-              >
-                <el-form-item label="Tanggal Buat">
-                  <el-input
-                    v-model="form.created_at"
-                    readonly
-                    placeholder="Tanggal Buat"
-                  />
-                </el-form-item>
-              </el-col>
-              <el-col
-                :span="24"
-                :md="12"
-                class="mb-3"
-              >
-                <el-form-item label="Tanggal Update">
-                  <el-input
-                    v-model="form.updated_at"
-                    readonly
-                    placeholder="Tanggal Update"
-                  />
-                </el-form-item>
-              </el-col>
-
-              <el-col
-                :span="24"
-                class="mb-3"
-              >
                 <el-form-item label="Gambar">
                   <div
                     v-if="currentImageUrl"
@@ -138,7 +127,7 @@
                   </div>
                   
                   <el-upload
-                    class="upload-demo"
+                    class="w-full"
                     drag
                     accept=".jpg,.jpeg,.png"
                     :before-upload="beforeUpload"
@@ -148,35 +137,74 @@
                     :auto-upload="false"
                     :on-change="handleChange"
                   >
-                    <i class="el-icon-upload" />
                     <div class="el-upload__text">
-                      Drop file gambar di sini, atau klik untuk upload
+                      Drop file gambar di sini, atau <em>klik untuk upload</em>
                     </div>
-                    <template #tip>
-                      <div class="el-upload__tip">
-                        Hanya JPG dan PNG. Maksimal 1 file. (Kosongkan jika tidak ingin mengubah gambar)
-                      </div>
-                    </template>
                   </el-upload>
                 </el-form-item>
-              </el-col>
-            </el-row>
+                <el-form-item
+                  label="Isi Berita"
+                  prop="isi"
+                  class="md:col-span-2"
+                >
+                  <el-input
+                    v-model="form.isi"
+                    type="textarea"
+                    placeholder="Masukkan isi berita"
+                    :rows="6"
+                    class="modern-textarea"
+                  />
+                </el-form-item>
+              </div>
+            </div>
 
-            <el-form-item class="d-flex justify-content-end gap-3 mt-4">
-              <el-button
-                class="btn-cancel"
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 justify-end pt-6 border-t border-gray-200">
+              <button
+                type="button"
+                class="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-xl font-medium hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 shadow-sm"
                 @click="$emit('close')"
               >
-                Batal
-              </el-button>
-              <el-button
-                type="primary"
-                class="btn-submit"
+                <div class="flex items-center justify-center space-x-2">
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                  <span>Batal</span>
+                </div>
+              </button>
+              <button
+                type="button"
+                class="px-6 py-3 bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
                 @click="submitForm"
               >
-                Simpan
-              </el-button>
-            </el-form-item>
+                <div class="flex items-center justify-center space-x-2">
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  <span>Simpan Perubahan</span>
+                </div>
+              </button>
+            </div>
           </el-form>
         </div>
       </div>
@@ -185,7 +213,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, watch, computed, onMounted } from 'vue'
+import { reactive, ref, watch, computed } from 'vue'
 import api from '../../api.js';
 import { ElNotification } from 'element-plus'
 
@@ -197,59 +225,43 @@ const emit = defineEmits(['close'])
 
 const formRef = ref(null)
 
-const isMounted = ref(false)
-onMounted(() => {
-  isMounted.value = true
-})
-
-// Reactive form dengan default fallback
 const form = reactive({
   judul: '',
   isi: '',
   jenis_konten: '',
-  created_at: '',
-  updated_at: '',
-  foto: null, // for new image file
-  currentFoto: '', // for existing image path
+  foto: null,
+  currentFoto: '',
 })
 
 const fileList = ref([])
 
-// Computed property to get current image URL
 const currentImageUrl = computed(() => {
   if (!form.currentFoto) return null
   
   const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
   
-  // If it's already a full URL, return as is
   if (form.currentFoto.startsWith('http://') || form.currentFoto.startsWith('https://')) {
     return form.currentFoto
   }
   
-  // If it starts with storage/, construct the URL
   if (form.currentFoto.startsWith('storage/')) {
     return `${baseUrl}/${form.currentFoto}`
   }
   
-  // If it starts with /, it's an absolute path
   if (form.currentFoto.startsWith('/')) {
     return `${baseUrl}${form.currentFoto}`
   }
   
-  // If it's just the filename, assume it's in storage/berita/
   return `${baseUrl}/storage/berita/${form.currentFoto}`
 })
 
-// Watch for initialData changes
 watch(() => props.initialData, (newVal) => {
   if (newVal) {
     Object.assign(form, {
       judul: newVal.judul || '',
       isi: newVal.isi || '',
       jenis_konten: newVal.jenis_konten || '',
-      created_at: newVal.created_at || '',
-      updated_at: newVal.updated_at || '',
-      currentFoto: newVal.foto || newVal.gambar || '', // Handle both foto and gambar fields
+      currentFoto: newVal.foto || newVal.gambar || '',
       foto: null
     })
   }
@@ -303,15 +315,12 @@ const submitForm = () => {
       payload.append('isi', form.isi)
       payload.append('jenis_konten', form.jenis_konten)
       
-      // Only append image if a new one is selected
       if (form.foto) {
         payload.append('foto', form.foto)
       }
 
-      // Use PUT method with _method override for Laravel
       payload.append('_method', 'PUT')
 
-      // Assuming we have an ID from initialData
       const response = await api.post(`/kelola/berita/${props.initialData.id}`, payload, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -339,71 +348,54 @@ const submitForm = () => {
 </script>
 
 <style scoped>
-.background {
-  background: #69C5C2;
+.modal-enter-active,
+.modal-leave-active {
+  transition: all 0.3s ease;
 }
-.form-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(2px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1050;
-  padding: 1rem;
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+  transform: scale(0.9) translateY(-20px);
 }
-.form-popup {
+
+:deep(.modern-input .el-input__wrapper),
+:deep(.modern-select .el-input__wrapper),
+:deep(.modern-textarea .el-textarea__inner) {
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  padding: 8px 12px;
+}
+
+:deep(.modern-input .el-input__wrapper:hover),
+:deep(.modern-select .el-input__wrapper:hover),
+:deep(.modern-textarea .el-textarea__inner:hover) {
+  border-color: #f472b6;
+}
+
+:deep(.modern-input.is-focus .el-input__wrapper),
+:deep(.modern-select.is-focus .el-input__wrapper),
+:deep(.modern-textarea .el-textarea__inner:focus) {
+  border-color: #f472b6;
+  box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.15);
+}
+
+:deep(.el-form-item) {
+  margin-bottom: 0;
+}
+
+:deep(.el-form-item__label) {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+:deep(.el-input),
+:deep(.el-select),
+:deep(.el-textarea) {
   width: 100%;
-  max-width: 850px;
-  max-height: 95vh;
-  background-color: #ffffff;
-  border-radius: 1rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-  display: flex;
-  flex-direction: column;
-  animation: popupIn 0.3s ease;
-  overflow: hidden;
-}
-.form-body {
-  overflow-y: auto;
-  padding: 1rem;
-}
-.btn-submit {
-  background-color: #69C5C2;
-  border: none;
-  color: white;
-  padding: 0.5rem 1.5rem;
-  border-radius: 6px;
-  transition: background-color 0.2s ease;
-}
-.btn-submit:hover {
-  background-color: #1e8e86;
-}
-.btn-cancel {
-  background-color: #eeeeee;
-  color: #333;
-  padding: 0.5rem 1.2rem;
-  border-radius: 6px;
-  transition: background-color 0.2s ease;
-}
-.btn-cancel:hover {
-  background-color: #dddddd;
-}
-.current-image {
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 4px;
-  background-color: #f9f9f9;
-}
-@keyframes popupIn {
-  from {
-    opacity: 0;
-    transform: scale(0.92);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
 }
 </style>

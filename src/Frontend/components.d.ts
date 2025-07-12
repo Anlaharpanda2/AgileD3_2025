@@ -81,6 +81,7 @@ declare module 'vue' {
     FormTambahDataPengaduan: typeof import('./src/components/KelolaDataPengaduan/FormTambahDataPengaduan.vue')['default']
     FormTerimaDataPendaftaran: typeof import('./src/components/KelolaDataPendaftaran/FormTerimaDataPendaftaran.vue')['default']
     FormTerimaDataPendaftaranMassal: typeof import('./src/components/KelolaDataPendaftaran/FormTerimaDataPendaftaranMassal.vue')['default']
+    FormTindakLanjut: typeof import('./src/components/KelolaDataPengaduan/FormTindakLanjut.vue')['default']
     HomePengumuman: typeof import('./src/components/Home/HomePengumuman.vue')['default']
     HomeSlider: typeof import('./src/components/Home/HomeSlider.vue')['default']
     KontakKami: typeof import('./src/components/Home/KontakKami.vue')['default']

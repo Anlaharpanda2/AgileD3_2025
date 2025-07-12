@@ -29,6 +29,12 @@
       @update:visible="showSort = $event"
       @apply-sort="handleApplySort"
     />
+    <FormFilterDataBerita
+      v-model="showFilter"
+      v-model:active-filters="activeFilters"
+      :columns="filterableColumns"
+      class="sm:full-screen"
+    />
 
     <!-- Main Container -->
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
@@ -609,8 +615,9 @@ import SimpleLayout from "../../layouts/SimpleLayout.vue";
 import FormEditBerita from '../../components/DataBerita/FormEditDataBerita.vue'; 
 import FormTambahBerita from '../../components/DataBerita/FormTambahBerita.vue';
 import FormExport from '../../components/KelolaDataFasilitas/FormExportDataFasilitas.vue'; // Assuming this is the correct export form
-import FormImport from '../../components/KelolaDataFasilitas/FormImportDataFasilitas.vue'; // Assuming this is the correct import form
+import FormImport from '../../components/KelolaDataFasilitas/FormImportDataFasilitas.vue';
 import FormSortingDataBerita from '../../components/DataBerita/FormSortingDataBerita.vue';
+import FormFilterDataBerita from '../../components/DataBerita/FormFilterDataBerita.vue';
 import { ElNotification, TableColumnCtx } from 'element-plus';
 
 interface Berita {
@@ -635,8 +642,10 @@ const showImport = ref(false);
 const showEdit = ref(false);
 const showTambah = ref(false);
 const showSort = ref(false);
+const showFilter = ref(false);
 const editData = ref(null);
 const TambahData = ref(null);
+const activeFilters = ref<{ [key: string]: string | number | null }>({});
 const perPageOptions = [10, 20, 50, 100, "all"];
 const router = useRouter()
 
@@ -670,10 +679,29 @@ function changeItemsPerPage(option: number | string) {
 }
 
 const filteredData = computed(() => {
-  const data = tableData.value.filter(
-    (item: Berita) =>
-      item.judul.toLowerCase().includes(search.value.toLowerCase())
-  );
+  let data = tableData.value;
+
+  // Apply search filter based on 'judul'
+  if (search.value) {
+    data = data.filter(
+      (item: Berita) => item.judul.toLowerCase().includes(search.value.toLowerCase())
+    );
+  }
+
+  // Apply dynamic filters from activeFilters
+  for (const key in activeFilters.value) {
+    const filterValue = activeFilters.value[key];
+
+    if (filterValue !== null && filterValue !== '') {
+      data = data.filter(item => {
+        const itemValue = item[key as keyof Berita];
+        if (itemValue === null || itemValue === undefined) {
+          return false;
+        }
+        return String(itemValue).toLowerCase().includes(String(filterValue).toLowerCase());
+      });
+    }
+  }
   return data;
 });
 
@@ -788,7 +816,9 @@ async function onDelete(row: Berita) {
   }
 }
 
-function onFilterClick() {}
+function onFilterClick() {
+  showFilter.value = true;
+}
 
 function onSortClick() {
   showSort.value = true;

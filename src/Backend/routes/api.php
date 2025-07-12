@@ -25,6 +25,7 @@ use App\Http\Controllers\KelolaDataTest\PosttestController;
 use App\Http\Controllers\KelolaDataPelatihan\KelolaDataPelatihanController;
 //Profile
 use App\Http\Controllers\Profile\ProfileMasyarakatController;
+use App\Http\Controllers\AdminController;
 
 use App\Http\Controllers\CombinedScoreController;
 use App\Http\Controllers\KelolaLokasi\KelolaLokasiController;
@@ -88,6 +89,7 @@ Route::prefix('kelola/pengaduan')->group(function () {
     Route::delete('/{dataPengaduan}', [KelolaDataPengaduanController::class, 'destroy']);
     Route::get('/{id}', [KelolaDataPengaduanController::class, 'show']);
     Route::post('/cari', [KelolaDataPengaduanController::class, 'cariByKode']);
+    Route::post('/pindahkan/{id}', [KelolaDataPengaduanController::class, 'pindahkanKeKonsultasi']);
 });
 //4. pengelola konsultasi
 Route::prefix('kelola/Konsultasi')->group(function () {
@@ -193,6 +195,12 @@ Route::prefix('kelola/pelatihan')->group(function () {
 Route::prefix('profile/masyarakat')->group(function () {
     Route::get('{nik}', [ProfileMasyarakatController::class, 'show']);
     Route::patch('{nik}/ubah-foto', [ProfileMasyarakatController::class, 'ubahFoto']);
+});
+
+//2. Profile Pegawai dan Operator
+Route::prefix('profile/admin')->group(function () {
+    Route::get('/', [AdminController::class, 'index']);
+    Route::get('/{id}', [AdminController::class, 'show']);
 });
 
 //ikutpelatihan

@@ -1,0 +1,19 @@
+[vue/compiler-sfc] Identifier 'router' has already been declared. (21:6)
+
+D:/PBL/AgileD3_2025/src/Frontend/src/views/PengelolaDataBerita/DataBeritaSampahView.vue
+811|  }
+812|  
+813|  const router = useRouter()
+   |        ^
+814|  
+815|  function goBack() {
+    at constructor (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:367:19)
+    at TypeScriptParserMixin.raise (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:6627:19)
+    at TypeScriptScopeHandler.checkRedeclarationInScope (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:1644:19)
+    at TypeScriptScopeHandler.declareName (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:1610:12)
+    at TypeScriptScopeHandler.declareName (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:4910:11)
+    at TypeScriptParserMixin.declareNameFromIdentifier (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:7591:16)
+    at TypeScriptParserMixin.checkIdentifier (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:7587:12)
+    at TypeScriptParserMixin.checkLVal (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:7526:12)
+    at TypeScriptParserMixin.parseVarId (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:13412:10)
+    at TypeScriptParserMixin.parseVarId (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:9767:11

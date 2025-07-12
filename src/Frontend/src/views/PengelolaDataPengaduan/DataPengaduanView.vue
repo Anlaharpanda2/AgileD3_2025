@@ -38,6 +38,13 @@
       class="sm:full-screen"
       @close="showImport = false"
     />
+    <FormTindakLanjut
+      v-if="showTindakLanjut && tindakLanjutId"
+      :visible="showTindakLanjut"
+      :pengaduan-id="tindakLanjutId"
+      @close="showTindakLanjut = false"
+      @submit="handleTindakLanjutSubmit"
+    />
 
     <!-- Main Container -->
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6">
@@ -742,6 +749,13 @@
                     </svg>
                   </button>
                   <button
+                    class="w-8 h-8 flex items-center justify-center rounded-lg bg-green-100 text-green-600 hover:bg-green-200 transition-colors"
+                    title="Tindak Lanjut"
+                    @click.stop="openTindakLanjut(row.id)"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                  </button>
+                  <button
                     class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition-colors"
                     title="Hapus"
                     @click.stop="onDelete(row)"
@@ -911,6 +925,7 @@ import FormEditDataPengaduan from "../../components/KelolaDataPengaduan/FormEdit
 import FormTambahDataPengaduan from "../../components/KelolaDataPengaduan/FormTambahDataPengaduan.vue";
 import FormFilterDataPengaduan from "../../components/KelolaDataPengaduan/FormFilterDataPengaduan.vue";
 import FormSortingDataPengaduan from "../../components/KelolaDataPengaduan/FormSortingDataPengaduan.vue";
+import FormTindakLanjut from "../../components/KelolaDataPengaduan/FormTindakLanjut.vue";
 import { ElNotification } from 'element-plus';
 import { Eye, EyeOff } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
@@ -958,6 +973,8 @@ const showEdit = ref(false);
 const showTambah = ref(false);
 const showSort = ref(false);
 const showFilter = ref(false);
+const showTindakLanjut = ref(false);
+const tindakLanjutId = ref<number | null>(null);
 
 const editData = ref<Pengaduan | null>(null);
 const perPageOptions = [10, 20, 50, 100, "all"];
@@ -969,6 +986,38 @@ const showAllColumns = ref(false); // Controls visibility of additional table co
 const openEdit = (row: Pengaduan) => {
   editData.value = { ...row }; // Create a copy to avoid direct mutation
   showEdit.value = true;
+};
+
+const openTindakLanjut = (id: number) => {
+  tindakLanjutId.value = id;
+  showTindakLanjut.value = true;
+};
+
+const handleTindakLanjutSubmit = async (data: { id: number; tindakan: string; keterangan: string }) => {
+  if (data.tindakan === 'konsultasi') {
+    loading.value = true;
+    try {
+      await api.post(`/kelola/pengaduan/pindahkan/${data.id}`);
+      await fetchData();
+      ElNotification({
+        title: 'Berhasil',
+        message: 'Data pengaduan telah dipindahkan ke konsultasi.',
+        type: 'success',
+        duration: 3000,
+      });
+    } catch (err) {
+      console.error('Gagal memindahkan data:', err);
+      ElNotification({
+        title: 'Error',
+        message: 'Gagal memindahkan data pengaduan.',
+        type: 'error',
+        duration: 3000,
+      });
+    } finally {
+      loading.value = false;
+    }
+  }
+  showTindakLanjut.value = false;
 };
 
 // Toggles the visibility of a specific dropdown menu

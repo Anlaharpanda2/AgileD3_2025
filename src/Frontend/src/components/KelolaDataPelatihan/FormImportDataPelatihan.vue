@@ -392,7 +392,12 @@ const submitFile = async () => {
         errorMessage = err.message;
       }
     }
-    ElMessage.error(errorMessage);
+    ElNotification({
+      title: 'Gagal',
+      message: errorMessage,
+      type: 'error',
+      duration: 5000,
+    });
     console.error('Import error:', err);
   } finally {
     loading.value = false // Nonaktifkan status loading

@@ -1,6 +1,6 @@
 <template>
   <!-- Hero Section -->
-  <section class="relative min-h-[600px] lg:min-h-[700px] w-full overflow-hidden bg-gradient-to-br from-purple-50 via-fuchsia-50 to-pink-50 flex items-center pt-20">
+  <section class="relative min-h-[600px] w-full overflow-hidden bg-gradient-to-br from-purple-50 via-fuchsia-50 to-pink-50 flex items-center pt-20">
     <!-- Decorative background shapes -->
     <div class="absolute -top-[280px] -right-[200px] w-[550px] h-[550px] bg-pink-400/20 rounded-full z-[1] md:bg-pink-400/30"></div>
     <div class="absolute top-[-50%] right-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle,rgba(236,72,153,0.08)_0%,transparent_60%)] animate-[float_6s_ease-in-out_infinite] z-0"></div>
@@ -55,8 +55,7 @@
         <div class="absolute z-10 p-8 lg:p-12 text-center bg-white/70 backdrop-blur-lg rounded-2xl shadow-2xl shadow-slate-500/10 animate-[float_3s_ease-in-out_infinite]">
           <!-- Inline SVG for Female Icon -->
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-auto text-pink-500">
-            <path fill-rule="evenodd" d="M11.47 4.72a.75.75 0 0 1 1.06 0l3.75 3.75a.75.75 0 0 1-1.06 1.06L12 6.31l-3.22 3.22a.75.75 0 0 1-1.06-1.06l3.75-3.75ZM12 18a.75.75 0 0 0 .75-.75V8.25a.75.75 0 0 0-1.5 0V17.25A.75.75 0 0 0 12 18Z" clip-rule="evenodd" />
-            <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0-1.5a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" />
+            <path fill="currentColor" d="M12 4.006A5 5 0 0 1 12.252 14h-.504A5 5 0 0 1 12 4.006m1 11.93a7.002 7.002 0 0 0-1-13.93a7 7 0 0 0-1 13.93V17H8v2h3v3h2v-3h3v-2h-3z"/>
           </svg>
           <p class="mt-4 font-semibold text-slate-700">Pemberdayaan<br>Perempuan</p>
         </div>
@@ -68,18 +67,12 @@
           </svg>
           <p class="mt-2 text-sm font-semibold text-slate-600">Pengendalian<br>Penduduk</p>
         </div>
-
+        
         <div class="absolute top-[10%] right-[13%] p-6 text-center bg-white/70 backdrop-blur-lg rounded-2xl shadow-xl shadow-slate-500/10 animate-[float_3s_ease-in-out_infinite] [animation-delay:-2s]">
           <!-- Inline SVG for Gender Icon -->
-          <div class="relative w-12 h-12 mx-auto text-emerald-500">
-             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 absolute -top-1 -left-1">
-                <path fill-rule="evenodd" d="M11.47 4.72a.75.75 0 0 1 1.06 0l3.75 3.75a.75.75 0 0 1-1.06 1.06L12 6.31l-3.22 3.22a.75.75 0 0 1-1.06-1.06l3.75-3.75ZM12 18a.75.75 0 0 0 .75-.75V8.25a.75.75 0 0 0-1.5 0V17.25A.75.75 0 0 0 12 18Z" clip-rule="evenodd" />
-                <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0-1.5a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" />
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 absolute -bottom-1 -right-1">
-                <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clip-rule="evenodd" />
-              </svg>
-          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 14 14" class="w-12 h-12 mx-auto text-emerald-500">
+            <path fill="currentColor" fill-rule="evenodd" d="M9.5 0a.5.5 0 0 0-.354.854l.808.808l-1.013 1.013a4.125 4.125 0 1 0-3.066 7.403v1.172H5a.625.625 0 1 0 0 1.25h.875v.875a.625.625 0 1 0 1.25 0V12.5H8a.625.625 0 1 0 0-1.25h-.875v-1.172a4.126 4.126 0 0 0 2.7-6.52l1.013-1.013l.808.809A.5.5 0 0 0 12.5 3V.5A.5.5 0 0 0 12 0zm-.967 3.967l-.003-.003a2.875 2.875 0 1 0 .007.007zM4.875 5c0-.345.28-.625.625-.625h2a.625.625 0 1 1 0 1.25h-2A.625.625 0 0 1 4.875 5M5.5 6.375a.625.625 0 1 0 0 1.25h2a.625.625 0 1 0 0-1.25z" clip-rule="evenodd"/>
+          </svg>
           <p class="mt-2 text-sm font-semibold text-slate-600">Kesetaraan<br>Gender</p>
         </div>
       </div>

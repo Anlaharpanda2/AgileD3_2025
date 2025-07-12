@@ -80,7 +80,7 @@
                 <!-- Profile Button -->
                 <button
                   class="w-full flex items-center p-3 text-gray-700 hover:bg-pink-50 hover:text-pink-600 rounded-xl transition-all duration-300 group"
-                  @click="goToDetailMasyarakat"
+                  @click="handleProfileClick"
                 >
                   <div class="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center mr-3 group-hover:bg-pink-200 transition-colors duration-300">
                     <svg
@@ -287,18 +287,29 @@ onUnmounted(() => {
   document.removeEventListener('click', closeDropdown);
 });
 
-function goToDetailMasyarakat() {
-  const savedNik = localStorage.getItem('savedNIK')
+const handleProfileClick = () => {
+  const savedNik = localStorage.getItem('savedNIK');
+  const role = localStorage.getItem('role');
+  const userId = localStorage.getItem('userId');
+
   if (savedNik) {
     router.push({
       name: 'DetailMasyarakat',
-      params: { id: savedNik }
-    })
+      params: { id: savedNik },
+    });
+  } else if (role === 'pegawai' || role === 'operator') {
+    if (userId) {
+      router.push(`/admin/${userId}`);
+    } else {
+      console.warn('userId tidak ditemukan di localStorage untuk peran pegawai/operator');
+    }
   } else {
-    console.warn('NIK belum tersedia di localStorage')
+    // Tidak melakukan apa-apa jika bukan masyarakat, pegawai, atau operator
+    console.log('Peran tidak dikenali atau tidak ada tindakan yang perlu diambil.');
   }
+
   closeDropdown();
-}
+};
 
 const handleLogout = async () => {
   try {

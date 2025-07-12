@@ -11,6 +11,7 @@ use App\imports\PelatihanImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class KelolaDataPelatihanController extends Controller
 {
@@ -210,14 +211,68 @@ public function update(Request $request, DataPelatihan $dataPelatihan)
         ]);
 
         try {
+            $rows = Excel::toCollection(new PelatihanImport, $request->file('file'))->first();
+            $errors = [];
+            $niksInFile = [];
+
+            foreach ($rows as $index => $row) {
+                $rowIndex = $index + 2; // Baris Excel dimulai dari 1, dan baris pertama adalah header
+
+                $validator = Validator::make($row->toArray(), [
+                    'nama' => 'required|string|max:255',
+                    'nik' => 'required|string|max:16|min:16',
+                    'jenis_bimtek' => 'required|string|max:255',
+                    'kegiatan_dimulai' => 'required|date',
+                    'kegiatan_berakhir' => 'required|date|after_or_equal:kegiatan_dimulai',
+                    'tempat_kegiatan' => 'required|string|max:255',
+                    'angkatan' => 'required|integer|min:1',
+                    'tempat_tanggal_lahir' => 'required|string|max:255',
+                    'pendidikan' => 'required|string|max:255',
+                    'status' => 'required|in:kawin,lajang,janda',
+                    'alamat' => 'required|string',
+                    'jenis_usaha' => 'required|string|max:255',
+                    'penghasilan_perbulan' => 'required|string|max:255',
+                    'nomor_telefon' => 'required|string|max:255',
+                ]);
+
+                if ($validator->fails()) {
+                    foreach ($validator->errors()->all() as $error) {
+                        $errors[] = "Baris {$rowIndex}: {$error}";
+                    }
+                }
+
+                // Validasi NIK unik di database
+                if (DataPelatihan::where('nik', $row['nik'])->exists()) {
+                    $errors[] = "Baris {$rowIndex}: NIK '{$row['nik']}' sudah terdaftar di database.";
+                }
+
+                // Validasi NIK unik di dalam file
+                if (in_array($row['nik'], $niksInFile)) {
+                    $errors[] = "Baris {$rowIndex}: NIK '{$row['nik']}' duplikat di dalam file ini.";
+                }
+                $niksInFile[] = $row['nik'];
+            }
+
+            if (!empty($errors)) {
+                return response()->json(['error' => $errors[0]], 422);
+            }
+
             Excel::import(new PelatihanImport, $request->file('file'));
 
             return response()->json([
                 'message' => 'Data pelatihan berhasil diimpor',
             ], 200);
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errors = [];
+            foreach ($failures as $failure) {
+                $errors[] = "Baris {$failure->row()}: " . implode(", ", $failure->errors());
+            }
+            return response()->json(['error' => $errors[0]], 422);
         } catch (\Exception $e) {
+            Log::error('Import Error: ' . $e->getMessage());
             return response()->json([
-                'error' => 'Gagal mengimpor data: ' . $e->getMessage(),
+                'error' => 'Data tidak valid',
             ], 500);
         }
     }

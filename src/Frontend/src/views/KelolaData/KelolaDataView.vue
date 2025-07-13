@@ -316,7 +316,7 @@ const cards = ref<CardData[]>([
     icon: 'lock',
     buttonText: 'Kelola Data',
     buttonColor: 'pink',
-    route: '/data/admin',
+    route: '/data/akses',
     category: 'admin'
   },
   {
@@ -336,7 +336,7 @@ const cards = ref<CardData[]>([
     icon: 'user',
     buttonText: 'Kelola Data',
     buttonColor: 'pink',
-    route: '/data/pegawai',
+    route: '/data/struktur-pegawai',
     category: 'admin'
   },
   {
@@ -356,7 +356,7 @@ const cards = ref<CardData[]>([
     icon: 'clipboard',
     buttonText: 'Kelola Data',
     buttonColor: 'pink',
-    route: '/data/pretests',
+    route: '/data/soal',
     category: 'training'
   },
   {
@@ -366,7 +366,7 @@ const cards = ref<CardData[]>([
     icon: 'book',
     buttonText: 'Kelola Data',
     buttonColor: 'pink',
-    route: '/data/peserta',
+    route: '/data/pelatihan',
     category: 'training'
   }
 ])

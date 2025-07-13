@@ -173,8 +173,8 @@ const menuItems: MenuItem[] = [
     icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
     key: 'test',
     children: [
-      { id: '3-1', label: 'Pretest', url: '/pretest', icon: '' },
-      { id: '3-2', label: 'Posttest', url: '/posttest', icon: '' },
+      { id: '3-1', label: 'Pretest', url: '/pretests', icon: '' },
+      { id: '3-2', label: 'Posttest', url: '/posttests', icon: '' },
       { id: '3-3', label: 'Data Nilai', url: '/data/nilai', icon: '' },
       { id: '3-4', label: 'Data Soal', url: '/data/soal', icon: '' }
     ]

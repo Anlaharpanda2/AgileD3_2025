@@ -9,42 +9,29 @@ use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 
-class KonsultasiImport implements 
-    ToModel, 
-    WithHeadingRow, 
-    WithBatchInserts, 
-    WithChunkReading, 
-    SkipsEmptyRows
+class KonsultasiImport implements ToModel, WithHeadingRow, WithBatchInserts, WithChunkReading, SkipsEmptyRows
 {
-    public function headingRow(): int
-    {
-        return 1;
-    }
-
-    public function batchSize(): int
-    {
-        return 1000; 
-    }
-
-    public function chunkSize(): int
-    {
-        return 1000; 
-    }
-
     public function model(array $row)
     {
         return new DataKonsultasi([
-            'alamat' => $row['alamat'] ?? null,
-            'deskripsi_data_konsultasi' => $row['deskripsi_data_konsultasi'] ?? null,
-            'id_konsultasi' => $row['id_konsultasi'] ?? null,
-            'jenis_kelamin' => $row['jenis_kelamin'] ?? null,
-            'kasus' => $row['kasus'] ?? null,
-            'nama' => $row['nama'] ?? null,
-            'nama_korban' => $row['nama_korban'] ?? null,
-            'no_hp' => $row['no_hp'] ?? null,
-            'saksi' => $row['saksi'] ?? null,
-            'status' => $row['status'] ?? null,
-            'umur' => $row['umur'] ?? null,
+            'nik_pemohon' => $row['nik_pemohon'] ?? $row['nik'] ?? null,
+            'nama_pemohon' => $row['nama_pemohon'] ?? $row['nama'] ?? null,
+            'topik_konsultasi' => $row['topik_konsultasi'] ?? $row['topik'] ?? null,
+            'jadwal_konsultasi' => $this->transformDate($row['jadwal_konsultasi'] ?? $row['jadwal'] ?? null),
+            'status_konsultasi' => $row['status_konsultasi'] ?? $row['status'] ?? 'pending',
         ]);
+    }
+
+    public function headingRow(): int { return 1; }
+    public function batchSize(): int { return 1000; }
+    public function chunkSize(): int { return 1000; }
+
+    private function transformDate($value)
+    {
+        if (!$value) return null;
+        if (is_numeric($value)) {
+            return \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value)->format('Y-m-d');
+        }
+        return date('Y-m-d', strtotime($value));
     }
 }

@@ -1,19 +1,40 @@
-[vue/compiler-sfc] Identifier 'router' has already been declared. (21:6)
-
-D:/PBL/AgileD3_2025/src/Frontend/src/views/PengelolaDataBerita/DataBeritaSampahView.vue
-811|  }
-812|  
-813|  const router = useRouter()
-   |        ^
-814|  
-815|  function goBack() {
-    at constructor (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:367:19)
-    at TypeScriptParserMixin.raise (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:6627:19)
-    at TypeScriptScopeHandler.checkRedeclarationInScope (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:1644:19)
-    at TypeScriptScopeHandler.declareName (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:1610:12)
-    at TypeScriptScopeHandler.declareName (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:4910:11)
-    at TypeScriptParserMixin.declareNameFromIdentifier (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:7591:16)
-    at TypeScriptParserMixin.checkIdentifier (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:7587:12)
-    at TypeScriptParserMixin.checkLVal (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:7526:12)
-    at TypeScriptParserMixin.parseVarId (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:13412:10)
-    at TypeScriptParserMixin.parseVarId (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:9767:11
+chunk-CYLFN3VO.js?v=69d581be:2125 [Vue warn]: Unhandled error during execution of component event handler 
+  at <ElTable ref="elTable" data= (10) [Proxy(Object), Proxy(Object), Proxy(Object), Proxy(Object), Proxy(Object), Proxy(Object), Proxy(Object), Proxy(Object), Proxy(Object), Proxy(Object)] style= {width: '100%'}  ... > 
+  at <SimpleLayout> 
+  at <DataPelatihanView onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< Proxy(Object) {__v_skip: true} > > 
+  at <RouterView> 
+  at <App>
+warn$1 @ chunk-CYLFN3VO.js?v=69d581be:2125
+logError @ chunk-CYLFN3VO.js?v=69d581be:2336
+handleError @ chunk-CYLFN3VO.js?v=69d581be:2328
+callWithErrorHandling @ chunk-CYLFN3VO.js?v=69d581be:2274
+callWithAsyncErrorHandling @ chunk-CYLFN3VO.js?v=69d581be:2279
+emit @ chunk-CYLFN3VO.js?v=69d581be:8533
+handleEvent @ chunk-XWH4RZO7.js?v=69d581be:46586
+handleClick @ chunk-XWH4RZO7.js?v=69d581be:46594
+onClick @ chunk-XWH4RZO7.js?v=69d581be:46884
+callWithErrorHandling @ chunk-CYLFN3VO.js?v=69d581be:2272
+callWithAsyncErrorHandling @ chunk-CYLFN3VO.js?v=69d581be:2279
+invoker @ chunk-CYLFN3VO.js?v=69d581be:11271
+chunk-CYLFN3VO.js?v=69d581be:2125 [Vue warn]: Unhandled error during execution of native event handler 
+  at <ElTableBody context= {uid: 68, vnode: {…}, type: {…}, parent: {…}, appContext: {…}, …} highlight=false row-class-name=undefined  ... > 
+  at <ElScrollbar ref="scrollBarRef" view-style= {display: 'inline-block', verticalAlign: 'middle'} wrap-style= {}  ... > 
+  at <ElTable ref="elTable" data= (10) [Proxy(Object), Proxy(Object), Proxy(Object), Proxy(Object), Proxy(Object), Proxy(Object), Proxy(Object), Proxy(Object), Proxy(Object), Proxy(Object)] style= {width: '100%'}  ... > 
+  at <SimpleLayout> 
+  at <DataPelatihanView onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< Proxy(Object) {__v_skip: true} > > 
+  at <RouterView> 
+  at <App>
+warn$1 @ chunk-CYLFN3VO.js?v=69d581be:2125
+logError @ chunk-CYLFN3VO.js?v=69d581be:2336
+handleError @ chunk-CYLFN3VO.js?v=69d581be:2328
+callWithErrorHandling @ chunk-CYLFN3VO.js?v=69d581be:2274
+callWithAsyncErrorHandling @ chunk-CYLFN3VO.js?v=69d581be:2279
+invoker @ chunk-CYLFN3VO.js?v=69d581be:11271
+chunk-CYLFN3VO.js?v=69d581be:2341 Uncaught Error: No match for
+ {"name":"DetailMasyarakat","params":{"id":"3181286509595801"}}
+    at createRouterError (vue-router.js?v=69d581be:761:19)
+    at Object.resolve (vue-router.js?v=69d581be:1215:15)
+    at resolve (vue-router.js?v=69d581be:2433:34)
+    at pushWithRedirect (vue-router.js?v=69d581be:2513:46)
+    at Object.push (vue-router.js?v=69d581be:2481:12)
+    at handleRowClick (DataPelatihanView.vue:1033:10)

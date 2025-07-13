@@ -646,7 +646,7 @@
             }"
             class="modern-table full-width-cells"
             @selection-change="onSelectionChange"
-            @row-click="goToDetail"
+            @row-click="handleRowClick"
           >
             <el-table-column
               type="selection"
@@ -880,8 +880,8 @@
         <div
           v-for="row in pagedData"
           :key="row.id"
-          class="bg-white rounded-xl shadow-sm border border-gray-100 p-4"
-          @click="goToDetail(row, { type: 'data' }, $event)"
+          class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 cursor-pointer hover:shadow-lg transition-shadow duration-300"
+          @click="handleCardClick(row)"
         >
           <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-2">
@@ -1025,11 +1025,15 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-const goToDetail = (row: Peserta, column: Record<string, unknown>, event: MouseEvent) => {
-  // Prevent navigation if the click is on the selection checkbox or action buttons
-  if (column.type === 'selection' || column.label === 'Aksi' || event.target instanceof HTMLElement && event.target.closest('.action-button')) {
+const handleRowClick = (row: Peserta, column: { type?: string; label?: string }) => {
+  // Prevent navigation if click is on selection or action columns
+  if (column && (column.type === 'selection' || column.label === 'Aksi')) {
     return;
   }
+  router.push({ name: 'DetailMasyarakat', params: { id: row.nik } });
+};
+
+const handleCardClick = (row: Peserta) => {
   router.push({ name: 'DetailMasyarakat', params: { id: row.nik } });
 };
 
@@ -1422,6 +1426,10 @@ onBeforeUnmount(() => {
 
 .modern-table :deep(.el-table__body-wrapper) {
   border-radius: 0;
+}
+
+.modern-table :deep(.el-table__row) {
+  cursor: pointer;
 }
 
 .modern-table :deep(.el-table__row:hover) {

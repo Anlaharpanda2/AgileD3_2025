@@ -82,6 +82,7 @@ Route::prefix('kelola/pengaduan')->group(function () {
     Route::put('/restore/{id}', [KelolaDataPengaduanController::class, 'restore']);
     Route::delete('/permanent', [KelolaDataPengaduanController::class, 'forceDeleteMassal']);
     Route::delete('/permanent/{id}', [KelolaDataPengaduanController::class, 'forceDelete']);
+    Route::post('/impor', [KelolaDataPengaduanController::class, 'impor']);
     Route::delete('/', [KelolaDataPengaduanController::class, 'destroyMassal']);
     Route::get('/', [KelolaDataPengaduanController::class, 'index']);
     Route::post('/', [KelolaDataPengaduanController::class, 'store']);
@@ -98,6 +99,7 @@ Route::prefix('kelola/Konsultasi')->group(function () {
     Route::put('/restore/{id}', [KelolaDataKonsultasiController::class, 'restore']);
     Route::delete('/permanent', [KelolaDataKonsultasiController::class, 'forceDeleteMassal']);
     Route::delete('/permanent/{id}', [KelolaDataKonsultasiController::class, 'forceDelete']);
+    Route::post('/impor', [KelolaDataKonsultasiController::class, 'impor']);
     Route::delete('/', [KelolaDataKonsultasiController::class, 'destroyMassal']);
     Route::get('/', [KelolaDataKonsultasiController::class, 'index']);
     Route::post('/', [KelolaDataKonsultasiController::class, 'store']);
@@ -111,6 +113,7 @@ Route::prefix('kelola/panitia')->group(function () {
     Route::put('/restore/{id}', [KelolaDataPanitiaController::class, 'restore']);
     Route::delete('/permanent', [KelolaDataPanitiaController::class, 'forceDeleteMassal']);
     Route::delete('/permanent/{id}', [KelolaDataPanitiaController::class, 'forceDelete']);
+    Route::post('/impor', [KelolaDataPanitiaController::class, 'impor']);
     Route::delete('/', [KelolaDataPanitiaController::class, 'destroyMassal']);
     Route::get('/', [KelolaDataPanitiaController::class, 'index']);
     Route::post('/', [KelolaDataPanitiaController::class, 'store']);
@@ -131,6 +134,7 @@ Route::prefix('kelola/fasilitas')->group(function () {
     Route::put('/restore/{id}', [KelolaDataFasilitasController::class, 'restore']);
     Route::delete('/permanent', [KelolaDataFasilitasController::class, 'forceDeleteMassal']);
     Route::delete('/permanent/{id}', [KelolaDataFasilitasController::class, 'forceDelete']);
+    Route::post('/impor', [KelolaDataFasilitasController::class, 'impor']);
     Route::delete('/', [KelolaDataFasilitasController::class, 'destroyMassal']);
     Route::get('/', [KelolaDataFasilitasController::class, 'index']);
     Route::post('/', [KelolaDataFasilitasController::class, 'store']);
@@ -144,6 +148,7 @@ Route::prefix('kelola/struktur-pegawai')->group(function () {
     Route::put('/restore/{id}', [KelolaStrukturPegawaiController::class, 'restore']);
     Route::delete('/permanent', [KelolaStrukturPegawaiController::class, 'forceDeleteMassal']);
     Route::delete('/permanent/{id}', [KelolaStrukturPegawaiController::class, 'forceDelete']);
+    Route::post('/impor', [KelolaStrukturPegawaiController::class, 'impor']);
     Route::delete('/', [KelolaStrukturPegawaiController::class, 'destroyMassal']);
     Route::get('/', [KelolaStrukturPegawaiController::class, 'index']);
     Route::post('/', [KelolaStrukturPegawaiController::class, 'store']);

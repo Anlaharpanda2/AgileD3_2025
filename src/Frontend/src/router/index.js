@@ -144,6 +144,12 @@ const routes = [
     component: () => import('../views/Profile/MyScoresView.vue'), 
     meta: { requiresAuth: true, role: ['masyarakat'] } 
   },
+  {
+    path: '/masyarakat/:id',
+    name: 'DetailMasyarakat',
+    component: () => import('../views/Profile/ProfileMasyarakat.vue'),
+    meta: { requiresAuth: true, role: ['operator', 'pegawai', 'masyarakat'] }
+  },
 
   // Halaman kelola pendaftaran
   { 

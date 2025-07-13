@@ -6,8 +6,25 @@ use App\Http\Controllers\Controller;
 use App\Models\StrukturPegawai;
 use Illuminate\Http\Request;
 
+use App\Imports\StrukturPegawaiImport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class KelolaStrukturPegawaiController extends Controller
 {
+    public function impor(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx'
+        ]);
+
+        try {
+            Excel::import(new StrukturPegawaiImport, $request->file('file'));
+            return response()->json(['message' => 'Data struktur pegawai berhasil diimpor.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage()], 500);
+        }
+    }
+
     public function index()
     {
         return StrukturPegawai::all();

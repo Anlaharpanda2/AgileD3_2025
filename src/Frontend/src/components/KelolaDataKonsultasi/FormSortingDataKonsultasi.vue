@@ -15,7 +15,6 @@
       appear
     >
       <div
-        v-if="visible"
         class="relative z-10 w-full max-w-sm sm:max-w-md"
       >
         <div class="bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">

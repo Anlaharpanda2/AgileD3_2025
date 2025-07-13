@@ -194,7 +194,7 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits<{
-  (e: 'apply-sort', payload: { column: string; order: 'asc' | 'desc' }): void;
+  (e: 'apply-sort', payload: { column: string; order: 'asc' | 'desc'; sortedData: Record<string, unknown>[] }): void;
   (e: 'cancel-sort'): void;
   (e: 'update:visible', value: boolean): void;
 }>();
@@ -220,7 +220,8 @@ function applySort(): void {
     console.warn("Kolom pengurutan belum dipilih.");
     return;
   }
-  props.data.sort((a, b) => {
+  const sortedCopy = [...props.data];
+  sortedCopy.sort((a, b) => {
     const valueA = a[form.column];
     const valueB = b[form.column];
 
@@ -241,7 +242,7 @@ function applySort(): void {
         : String(valueB).localeCompare(String(valueA));
     }
   });
-  emits('apply-sort', { column: form.column, order: form.order });
+  emits('apply-sort', { column: form.column, order: form.order, sortedData: sortedCopy });
   closeForm();
 }
 

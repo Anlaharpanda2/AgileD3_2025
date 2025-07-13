@@ -325,7 +325,7 @@ watch(() => props.modelValue, (newVal) => {
 }, { immediate: true });
 
 watch(localDialogVisible, (newVal) => {
-  emit.get('update:modelValue')?.(newVal);
+  emit('update:modelValue', newVal);
 });
 
 watch(localSelectedColumns, (newSelected, oldSelected) => {
@@ -361,7 +361,7 @@ const handleApplyFilters = async () => {
       filtersToEmit[col] = value;
     }
   }
-  emit.get('update:activeFilters')?.(filtersToEmit);
+  emit('update:activeFilters', filtersToEmit);
   localDialogVisible.value = false;
   isLoading.value = false;
 };
@@ -369,7 +369,7 @@ const handleApplyFilters = async () => {
 const handleClearFilters = () => {
   localSelectedColumns.value = [];
   localActiveFilters.value = {};
-  emit.get('update:activeFilters')?.({});
+  emit('update:activeFilters', {});
   localDialogVisible.value = false;
 };
 </script>

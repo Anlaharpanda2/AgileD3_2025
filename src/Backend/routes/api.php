@@ -93,7 +93,7 @@ Route::prefix('kelola/pengaduan')->group(function () {
     Route::post('/pindahkan/{id}', [KelolaDataPengaduanController::class, 'pindahkanKeKonsultasi']);
 });
 //4. pengelola konsultasi
-Route::prefix('kelola/Konsultasi')->group(function () {
+Route::prefix('kelola/konsultasi')->group(function () {
     Route::get('/trash', [KelolaDataKonsultasiController::class, 'trash']);
     Route::put('/restore', [KelolaDataKonsultasiController::class, 'restoreMassal']);
     Route::put('/restore/{id}', [KelolaDataKonsultasiController::class, 'restore']);
@@ -105,6 +105,7 @@ Route::prefix('kelola/Konsultasi')->group(function () {
     Route::post('/', [KelolaDataKonsultasiController::class, 'store']);
     Route::put('/{dataKonsultasi}', [KelolaDataKonsultasiController::class, 'update']);
     Route::delete('/{dataKonsultasi}', [KelolaDataKonsultasiController::class, 'destroy']);
+    Route::patch('/{dataKonsultasi}/complete', [KelolaDataKonsultasiController::class, 'complete']);
 });
 //5. pengelola data panitia kegiatan
 Route::prefix('kelola/panitia')->group(function () {

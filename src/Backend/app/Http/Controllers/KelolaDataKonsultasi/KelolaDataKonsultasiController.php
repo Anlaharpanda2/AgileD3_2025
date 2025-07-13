@@ -103,6 +103,16 @@ class KelolaDataKonsultasiController extends Controller
         return response()->json(['message' => 'Data berhasil dihapus']);
     }
 
+    public function complete(DataKonsultasi $dataKonsultasi)
+    {
+        if ($dataKonsultasi->status === 'diproses') {
+            $dataKonsultasi->status = 'selesai';
+            $dataKonsultasi->save();
+            return response()->json(['message' => 'Status konsultasi berhasil diubah menjadi selesai.']);
+        }
+        return response()->json(['message' => 'Status konsultasi sudah selesai.'], 400);
+    }
+
     public function trash()
     {
         return DataKonsultasi::onlyTrashed()->get();

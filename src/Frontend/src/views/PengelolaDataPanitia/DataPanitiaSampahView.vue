@@ -8,6 +8,7 @@
       :data="tableData"
       class="sm:full-screen"
       @update:visible="showSort = $event"
+      @apply-sort="handleSort"
     />
     <FormFilterDataPanitia
       v-model="showFilter"
@@ -989,6 +990,11 @@ const visiblePages = computed<(number | '...')[]>(() => {
 function onSelectionChange(rows: Panitia[]) {
   selected.value = rows;
 }
+
+const handleSort = (payload: { column: string; order: 'asc' | 'desc'; sortedData: Record<string, unknown>[] }) => {
+  tableData.value = payload.sortedData as unknown as Panitia[];
+  showSort.value = false;
+};
 
 function toggleSelection(row: Panitia) {
   const index = selected.value.findIndex(item => item.id === row.id);

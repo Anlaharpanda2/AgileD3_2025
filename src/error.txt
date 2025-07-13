@@ -1,28 +1,30 @@
-DataKonsultasiView.vue:1266  PATCH http://127.0.0.1:8000/api/kelola/konsultasi/1/complete 404 (Not Found)
-dispatchXhrRequest @ axios.js?v=69d581be:1651
-xhr @ axios.js?v=69d581be:1531
-dispatchRequest @ axios.js?v=69d581be:2006
-_request @ axios.js?v=69d581be:2227
-request @ axios.js?v=69d581be:2118
-httpMethod @ axios.js?v=69d581be:2256
-wrap @ axios.js?v=69d581be:8
-completeConsultation @ DataKonsultasiView.vue:1266
-(anonymous) @ DataKonsultasiView.vue:780
-cache.<computed>.cache.<computed> @ chunk-CYLFN3VO.js?v=69d581be:12237
-callWithErrorHandling @ chunk-CYLFN3VO.js?v=69d581be:2272
-callWithAsyncErrorHandling @ chunk-CYLFN3VO.js?v=69d581be:2279
-invoker @ chunk-CYLFN3VO.js?v=69d581be:11271
-api.js:14 Error 404: {message: 'The route api/kelola/konsultasi/1/complete could not be found.', exception: 'Symfony\\Component\\HttpKernel\\Exception\\NotFoundHttpException', file: 'D:\\PBL\\AgileD3_2025\\src\\Backend\\vendor\\laravel\\fra…rc\\Illuminate\\Routing\\AbstractRouteCollection.php', line: 45, trace: Array(30)}
-(anonymous) @ api.js:14
-Promise.then
-_request @ axios.js?v=69d581be:2234
-request @ axios.js?v=69d581be:2118
-httpMethod @ axios.js?v=69d581be:2256
-wrap @ axios.js?v=69d581be:8
-completeConsultation @ DataKonsultasiView.vue:1266
-(anonymous) @ DataKonsultasiView.vue:780
-cache.<computed>.cache.<computed> @ chunk-CYLFN3VO.js?v=69d581be:12237
-callWithErrorHandling @ chunk-CYLFN3VO.js?v=69d581be:2272
-callWithAsyncErrorHandling @ chunk-CYLFN3VO.js?v=69d581be:2279
-invoker @ chunk-CYLFN3VO.js?v=69d581be:11271
-DataKonsultasiView.vue:1275 Gagal mengubah status konsultasi: AxiosError {message: 'Request failed with status code 404', name: 'AxiosError', code: 'ERR_BAD_REQUEST', config: {…}, request: XMLHttpRequest, …}
+chunk-CYLFN3VO.js?v=69d581be:7070 Uncaught (in promise) TypeError: Cannot set properties of null (setting '__vnode')
+    at patchElement (chunk-CYLFN3VO.js?v=69d581be:7070:18)
+    at processElement (chunk-CYLFN3VO.js?v=69d581be:6953:7)
+    at patch (chunk-CYLFN3VO.js?v=69d581be:6808:11)
+    at patchBlockChildren (chunk-CYLFN3VO.js?v=69d581be:7176:7)
+    at processFragment (chunk-CYLFN3VO.js?v=69d581be:7254:9)
+    at patch (chunk-CYLFN3VO.js?v=69d581be:6794:9)
+    at patchBlockChildren (chunk-CYLFN3VO.js?v=69d581be:7176:7)
+    at patchElement (chunk-CYLFN3VO.js?v=69d581be:7094:7)
+    at processElement (chunk-CYLFN3VO.js?v=69d581be:6953:7)
+    at patch (chunk-CYLFN3VO.js?v=69d581be:6808:11)
+DataPanitiaView.vue:523 Unhandled error during execution of component update 
+Proxy(Object) {…}
+ at <SimpleLayout>
+at <DataPanitiaView>
+at <RouterView>
+at <App> 
+(4) [{…}, {…}, {…}, {…}]
+chunk-CYLFN3VO.js?v=69d581be:10602 Uncaught (in promise) TypeError: Cannot read properties of null (reading 'nextSibling')
+    at nextSibling (chunk-CYLFN3VO.js?v=69d581be:10602:31)
+    at getNextHostNode (chunk-CYLFN3VO.js?v=69d581be:8116:16)
+    at patch (chunk-CYLFN3VO.js?v=69d581be:6770:16)
+    at patchBlockChildren (chunk-CYLFN3VO.js?v=69d581be:7176:7)
+    at processFragment (chunk-CYLFN3VO.js?v=69d581be:7254:9)
+    at patch (chunk-CYLFN3VO.js?v=69d581be:6794:9)
+    at patchBlockChildren (chunk-CYLFN3VO.js?v=69d581be:7176:7)
+    at patchElement (chunk-CYLFN3VO.js?v=69d581be:7094:7)
+    at processElement (chunk-CYLFN3VO.js?v=69d581be:6953:7)
+    at patch (chunk-CYLFN3VO.js?v=69d581be:6808:11)
+﻿

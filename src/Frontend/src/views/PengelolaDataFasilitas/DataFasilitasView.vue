@@ -8,6 +8,7 @@
       :data="tableData"
       class="sm:full-screen"
       @update:visible="showSort = $event"
+      @apply-sort="handleSort"
     />
     <FormFilterDataFasilitas
       v-model="showFilter"
@@ -971,6 +972,11 @@ const openEdit = (row: Fasilitas) => {
   editData.value = { ...row }; // Create a copy to avoid direct mutation
   showEdit.value = true;
   // loading.value = false; // This line might be redundant here, loading is managed by fetchData
+};
+
+const handleSort = (payload: { column: string; order: 'asc' | 'desc'; sortedData: Record<string, unknown>[] }) => {
+  tableData.value = payload.sortedData as unknown as Fasilitas[];
+  showSort.value = false;
 };
 
 // Toggles the visibility of a specific dropdown menu

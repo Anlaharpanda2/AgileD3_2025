@@ -5,69 +5,98 @@
 </p>
 
 ## 📌 Deskripsi Proyek
-Website ini dibuat untuk **Dinas Pemberdayaan Perempuan & Perlindungan Anak Provinsi Sumatera Barat** dalam rangka **manajemen dan pengelolaan data internal kedinasan**. 
-
-Fitur utama dari sistem ini adalah:
-- **CRUD** (Create, Read, Update, Delete) untuk **10 jenis data yang dikelola admin**.
-- Sistem berbasis **Laravel** dengan **MySQL** sebagai database.
-- Antarmuka admin yang mudah digunakan untuk mengelola data dinas.
+Website ini dibuat untuk **Dinas Pemberdayaan Perempuan & Perlindungan Anak Provinsi Sumatera Barat** dalam rangka **manajemen dan pengelolaan data internal kedinasan**. Proyek ini dibangun dengan arsitektur terpisah antara backend dan frontend.
 
 ## 🚀 Teknologi yang Digunakan
-- **Framework:** Laravel 10
+- **Backend:** Laravel 11
+- **Frontend:** Vue 3 + Vite
 - **Database:** MySQL
-- **Frontend:** Blade, Bootstrap
 - **Version Control:** Git & GitHub
+
+## 📂 Struktur Proyek
+Proyek ini dibagi menjadi dua direktori utama:
+- `src/Backend`: Berisi seluruh kode sumber untuk sisi server (API) yang dibangun dengan Laravel.
+- `src/Frontend`: Berisi seluruh kode sumber untuk sisi klien yang dibangun dengan Vue.
 
 ## 🛠️ Instalasi dan Konfigurasi
 ### 1️⃣ Clone Repository
 ```bash
 git clone https://github.com/Anlaharpanda2/AgileD3_2025.git
-cd proyek-dinas
+cd AgileD3_2025
 ```
 
-### 2️⃣ Instal Dependensi
-```bash
-composer install
-npm install
-```
+### 2️⃣ Konfigurasi Backend (Laravel)
+1.  Masuk ke direktori backend.
+    ```bash
+    cd src/Backend
+    ```
+2.  Install dependensi Composer.
+    ```bash
+    composer install
+    ```
+3.  Salin file `.env.example` menjadi `.env`.
+    ```bash
+    cp .env.example .env
+    ```
+4.  Sesuaikan konfigurasi database Anda di dalam file `.env`.
+    ```env
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=nama_database_anda
+    DB_USERNAME=root
+    DB_PASSWORD=
+    ```
+5.  Generate application key.
+    ```bash
+    php artisan key:generate
+    ```
+6.  Jalankan migrasi database.
+    ```bash
+    php artisan migrate --seed
+    ```
 
-### 3️⃣ Konfigurasi Environment
-Buat file `.env` dari contoh yang tersedia:
-```bash
-cp .env.example .env
-```
-Lalu, sesuaikan konfigurasi database di `.env` (kami kelompok 3 menggunakan database mysql):
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=laravel
-DB_USERNAME=root
-DB_PASSWORD=
-```
+### 3️⃣ Konfigurasi Frontend (Vue)
+1.  Buka terminal baru dan masuk ke direktori frontend.
+    ```bash
+    cd src/Frontend
+    ```
+2.  Install dependensi NPM.
+    ```bash
+    npm install
+    ```
+3.  Pastikan file `.env` di frontend (jika ada) sudah menunjuk ke URL API backend yang benar. Contoh:
+    ```env
+    VITE_API_URL=http://127.0.0.1:8000/api
+    ```
 
-### 4️⃣ Generate Key dan Migrasi Database
-```bash
-php artisan key:generate
-php artisan migrate --seed
-```
+## 🖥️ Menjalankan Proyek
+Anda perlu menjalankan dua proses secara terpisah di dua terminal.
 
-### 5️⃣ Jalankan Server
-```bash
-php artisan serve
-```
-Akses website melalui IP yang ditampilkan
+1.  **Jalankan Server Backend (Laravel):**
+    - Di dalam direktori `src/Backend`:
+    ```bash
+    php artisan serve
+    ```
+    Server backend akan berjalan di `http://127.0.0.1:8000`.
+
+2.  **Jalankan Server Frontend (Vue):**
+    - Di dalam direktori `src/Frontend`:
+    ```bash
+    npm run dev
+    ```
+    Aplikasi frontend akan dapat diakses melalui alamat yang ditampilkan di terminal (biasanya `http://localhost:5173`).
 
 ## 🤝 Kontribusi
 Jika ingin berkontribusi dalam pengembangan proyek ini, silakan:
-1. **Fork** repositori ini.
-2. Buat branch baru (`git checkout -b fitur-baru`).
-3. Commit perubahan (`git commit -m 'Menambahkan fitur X'`).
-4. Push ke branch (`git push origin fitur-baru`).
-5. Buat **Pull Request** dan tunggu review dari tim.
+1.  **Fork** repositori ini.
+2.  Buat branch baru (`git checkout -b fitur-baru`).
+3.  Commit perubahan (`git commit -m 'Menambahkan fitur X'`).
+4.  Push ke branch (`git push origin fitur-baru`).
+5.  Buat **Pull Request** dan tunggu review dari tim.
 
 ## 📜 Lisensi
-Proyek ini menggunakan lisensi **MIT License**. Lihat file `LICENSE` untuk informasi lebih lanjut.
+Proyek ini menggunakan lisensi **MIT License**.
 
 ---
 

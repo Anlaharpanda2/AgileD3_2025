@@ -87,7 +87,7 @@ export default {
             >
           </div>
           <div class="keluarga-sejahtera">
-            Sumbar<br>Madani<br>yang unggul<br>dan berkelanjutan
+            Keluarga<br>Sejahtera<br>Setara<br>Terlindung
           </div>
         </div>
         <div class="overlap-2">

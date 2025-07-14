@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '../views/Home/HomeView.vue';
+
 
 const routes = [
   // Halaman home
   { path: '/def2', component: () => import('../layouts/SimpleLayout.vue') },
-  { path: '/', component: () => import('../views/Home/HomeView.vue') },
+  { path: '/', component: HomeView },
   { path: '/form', component: () => import('../components/KelolaDataPelatihan/FormSortingDataPelatihan.vue') },
 
   // Halaman Dashboard
@@ -149,6 +151,12 @@ const routes = [
     name: 'DetailMasyarakat',
     component: () => import('../views/Profile/ProfileMasyarakat.vue'),
     meta: { requiresAuth: true, role: ['operator', 'pegawai', 'masyarakat'] }
+  },
+  {
+    path: '/status-pelatihan',
+    name: 'StatusPelatihan',
+    component: () => import('../views/StatusPelatihanView.vue'),
+    meta: { requiresAuth: true }
   },
 
   // Halaman kelola pendaftaran

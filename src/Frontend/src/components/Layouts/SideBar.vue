@@ -126,7 +126,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 // Tipe untuk menu items
@@ -137,6 +137,8 @@ interface MenuItem {
   icon: string;
   key?: string;
   children?: MenuItem[];
+  roles?: string[];
+  excludeRoles?: string[];
 }
 
 type MenuKey = 'test' | 'pelatihan' | 'pengaduan';
@@ -152,6 +154,8 @@ const openSubmenus = reactive<Record<MenuKey, boolean>>({
   pengaduan: false
 });
 
+const getUserRole = () => localStorage.getItem('role') || '';
+
 // Definisi menu items sebagai konstanta untuk optimasi
 const menuItems: MenuItem[] = [
   {
@@ -164,7 +168,8 @@ const menuItems: MenuItem[] = [
     id: '2',
     label: 'Dashboard',
     url: '/dashboard',
-    icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z'
+    icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
+    roles: ['operator', 'pegawai']
   },
   {
     id: '3',
@@ -175,8 +180,8 @@ const menuItems: MenuItem[] = [
     children: [
       { id: '3-1', label: 'Pretest', url: '/pretests', icon: '' },
       { id: '3-2', label: 'Posttest', url: '/posttests', icon: '' },
-      { id: '3-3', label: 'Data Nilai', url: '/data/nilai', icon: '' },
-      { id: '3-4', label: 'Data Soal', url: '/data/soal', icon: '' }
+      { id: '3-3', label: 'Data Nilai', url: '/data/nilai', icon: '', roles: ['operator', 'pegawai'] },
+      { id: '3-4', label: 'Data Soal', url: '/data/soal', icon: '', roles: ['operator', 'pegawai'] }
     ]
   },
   {
@@ -185,6 +190,7 @@ const menuItems: MenuItem[] = [
     url: '',
     icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
     key: 'pelatihan',
+    roles: ['operator', 'pegawai'],
     children: [
       { id: '4-1', label: 'Data Pendaftar', url: '/data/pendaftaran', icon: '' },
       { id: '4-2', label: 'Data Peserta Pelatihan', url: '/data/pelatihan', icon: '' }
@@ -196,8 +202,9 @@ const menuItems: MenuItem[] = [
     url: '',
     icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
     key: 'pengaduan',
+    roles: ['operator', 'pegawai'],
     children: [
-      { id: '5-1', label: 'Data Pengaduan', url: '/pengaduan/cari', icon: '' },
+      { id: '5-1', label: 'Cari Pengaduan', url: '/pengaduan/cari', icon: '' },
       { id: '5-2', label: 'Data Pengaduan', url: '/data/pengaduan', icon: '' },
       { id: '5-3', label: 'Data Konsultasi', url: '/data/konsultasi', icon: '' }
     ]
@@ -206,15 +213,41 @@ const menuItems: MenuItem[] = [
     id: '6',
     label: 'Kelola Data',
     url: '/kelola/data',
-    icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10'
+    icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10',
+    roles: ['operator', 'pegawai']
   },
   {
     id: '7',
     label: 'Kelola Akses',
     url: '/data/akses',
-    icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z'
+    icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z',
+    roles: ['operator', 'pegawai']
   }
 ];
+
+const filteredMenuItems = computed(() => {
+  const role = getUserRole();
+  return menuItems.filter(item => {
+    if (item.excludeRoles && item.excludeRoles.includes(role)) {
+      return false;
+    }
+    if (item.roles && !item.roles.includes(role)) {
+      return false;
+    }
+    if (!item.roles && !item.excludeRoles && !['operator', 'pegawai'].includes(role)) {
+        return false;
+    }
+    if (item.children) {
+      item.children = item.children.filter(child => {
+        if (child.excludeRoles && child.excludeRoles.includes(role)) return false;
+        if (child.roles && !child.roles.includes(role)) return false;
+        return true;
+      });
+      return item.children.length > 0;
+    }
+    return true;
+  });
+});
 
 // Functions
 const toggleSubmenu = (menu: MenuKey) => {

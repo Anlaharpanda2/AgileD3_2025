@@ -37,17 +37,17 @@
       </div>
     </div>
 
-    <!-- Announcements List (Layout Tunggal dengan Scroll Vertikal di Kiri) -->
+    <!-- Announcements List (Responsive: Horizontal Scroll on Mobile, Vertical on Desktop) -->
     <div
       v-else
       id="announcement-scroll-container"
-      class="flex-grow overflow-y-auto direction-rtl scrollbar-thin scrollbar-thumb-pink-300 scrollbar-track-pink-50 scrollbar-thumb-rounded-full"
+      class="flex-grow overflow-y-hidden overflow-x-auto lg:overflow-y-auto lg:overflow-x-hidden scrollbar-thin scrollbar-thumb-pink-300 scrollbar-track-pink-50 scrollbar-thumb-rounded-full"
     >
-      <div class="space-y-3 p-4 direction-ltr">
+      <div class="flex p-4 gap-4 lg:flex-col lg:gap-3">
         <div
           v-for="(announcement, index) in announcements"
           :key="announcement.id"
-          class="bg-white border border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md hover:border-pink-200 transition-all duration-300 cursor-pointer"
+          class="flex-shrink-0 w-80 lg:w-full bg-white border border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md hover:border-pink-200 transition-all duration-300 cursor-pointer"
           data-aos="fade-up"
           data-aos-anchor="#announcement-scroll-container"
           :data-aos-delay="index * 50"
@@ -128,16 +128,6 @@ onMounted(async () => {
 </script>
 
 <style>
-/* Trik untuk scrollbar di kiri. 
-  Container diberi arah rtl, dan konten di dalamnya diberi arah ltr.
-*/
-.direction-rtl {
-  direction: rtl;
-}
-.direction-ltr {
-  direction: ltr;
-}
-
 /* Plugin `tailwind-scrollbar` dan `@tailwindcss/line-clamp`
   diasumsikan sudah terpasang di konfigurasi Tailwind Anda.
 */

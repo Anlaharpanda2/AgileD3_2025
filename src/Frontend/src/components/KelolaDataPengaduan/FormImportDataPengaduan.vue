@@ -292,6 +292,8 @@ import { ref } from 'vue'
 import { ElMessage, ElNotification, UploadFile, UploadFiles } from 'element-plus'
 import api from '../../api.js'
 
+defineEmits(['close']);
+
 const fileList = ref<File[]>([])
 const loading = ref(false)
 

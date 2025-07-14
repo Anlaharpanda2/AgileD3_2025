@@ -3,11 +3,21 @@
   <button
     v-show="!isSidebarVisible"
     class="fixed z-[10001] p-2 text-gray-600 bg-white rounded-xl shadow-lg hover:shadow-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-opacity-50 transition-all duration-300 group"
-    @click="openSidebar"
     aria-label="Buka menu sidebar"
+    @click="openSidebar"
   >
-    <svg class="w-6 h-6 group-hover:text-pink-500 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+    <svg
+      class="w-6 h-6 group-hover:text-pink-500 transition-colors duration-300"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M4 6h16M4 12h16M4 18h16"
+      />
     </svg>
   </button>
 
@@ -31,16 +41,30 @@
           <div class="absolute inset-0 bg-white/10 backdrop-blur-sm" />
           <div class="relative z-10 flex justify-between items-center">
             <div>
-              <h2 class="text-xl font-bold mb-1">Admin Panel</h2>
-              <p class="text-pink-100 text-sm">Sistem Manajemen</p>
+              <h2 class="text-xl font-bold mb-1">
+                Admin Panel
+              </h2>
+              <p class="text-pink-100 text-sm">
+                Sistem Manajemen
+              </p>
             </div>
             <button 
               class="p-2 text-pink-100 hover:text-white hover:bg-white/20 rounded-lg transition-all duration-300" 
-              @click="closeSidebar"
               aria-label="Tutup sidebar"
+              @click="closeSidebar"
             >
-              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>
@@ -50,7 +74,10 @@
         <div class="flex-1 overflow-y-auto py-4 px-3">
           <nav class="space-y-2">
             <!-- Menu Items -->
-            <template v-for="item in menuItems" :key="item.id">
+            <template
+              v-for="item in menuItems"
+              :key="item.id"
+            >
               <!-- Single Menu Item -->
               <div
                 v-if="!item.children"
@@ -58,21 +85,46 @@
                 :class="{ 'bg-pink-50 text-pink-600 shadow-sm': activeIndex === item.id }"
                 @click="navigate(item.url, item.id)"
               >
-                <component :is="'svg'" class="w-5 h-5 mr-3 group-hover:text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="item.icon"/>
+                <component
+                  :is="'svg'"
+                  class="w-5 h-5 mr-3 group-hover:text-pink-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    :d="item.icon"
+                  />
                 </component>
                 <span class="font-medium">{{ item.label }}</span>
               </div>
 
               <!-- Menu with Submenu -->
-              <div v-else class="mb-2">
+              <div
+                v-else
+                class="mb-2"
+              >
                 <div
                   class="group flex items-center justify-between px-4 py-3 text-gray-700 rounded-xl hover:bg-gray-50 cursor-pointer transition-all duration-300"
                   @click="toggleSubmenu(item.key)"
                 >
                   <div class="flex items-center">
-                    <component :is="'svg'" class="w-5 h-5 mr-3 group-hover:text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="item.icon"/>
+                    <component
+                      :is="'svg'"
+                      class="w-5 h-5 mr-3 group-hover:text-pink-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        :d="item.icon"
+                      />
                     </component>
                     <span class="font-medium">{{ item.label }}</span>
                   </div>
@@ -83,7 +135,12 @@
                     viewBox="0 0 24 24" 
                     stroke="currentColor"
                   >
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </div>
                 <transition name="submenu">
@@ -114,8 +171,18 @@
             class="group flex items-center px-4 py-3 text-gray-700 rounded-xl hover:bg-red-50 hover:text-red-600 cursor-pointer transition-all duration-300"
             @click="handleLogout"
           >
-            <svg class="w-5 h-5 mr-3 group-hover:text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            <svg
+              class="w-5 h-5 mr-3 group-hover:text-red-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              />
             </svg>
             <span class="font-medium">Logout</span>
           </div>
@@ -126,7 +193,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue';
+import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 
 // Tipe untuk menu items
@@ -154,7 +221,7 @@ const openSubmenus = reactive<Record<MenuKey, boolean>>({
   pengaduan: false
 });
 
-const getUserRole = () => localStorage.getItem('role') || '';
+
 
 // Definisi menu items sebagai konstanta untuk optimasi
 const menuItems: MenuItem[] = [
@@ -225,29 +292,7 @@ const menuItems: MenuItem[] = [
   }
 ];
 
-const filteredMenuItems = computed(() => {
-  const role = getUserRole();
-  return menuItems.filter(item => {
-    if (item.excludeRoles && item.excludeRoles.includes(role)) {
-      return false;
-    }
-    if (item.roles && !item.roles.includes(role)) {
-      return false;
-    }
-    if (!item.roles && !item.excludeRoles && !['operator', 'pegawai'].includes(role)) {
-        return false;
-    }
-    if (item.children) {
-      item.children = item.children.filter(child => {
-        if (child.excludeRoles && child.excludeRoles.includes(role)) return false;
-        if (child.roles && !child.roles.includes(role)) return false;
-        return true;
-      });
-      return item.children.length > 0;
-    }
-    return true;
-  });
-});
+
 
 // Functions
 const toggleSubmenu = (menu: MenuKey) => {

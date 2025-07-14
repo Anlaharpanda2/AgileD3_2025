@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import type { UserOptions } from 'jspdf-autotable'
 // import * as XLSX from 'xlsx' // Dihapus untuk dynamic import
 // import jsPDF from 'jspdf' // Dihapus untuk dynamic import
 // import autoTable, { UserOptions } from 'jspdf-autotable' // Dihapus untuk dynamic import
@@ -24,6 +25,10 @@ import { ElNotification } from 'element-plus'
 const props = defineProps<{
   data: Array<Record<string, unknown>>
 }>()
+
+defineEmits(['close'])
+
+
 
 // Kolom-kolom yang akan diekspor
 const exportColumns = [

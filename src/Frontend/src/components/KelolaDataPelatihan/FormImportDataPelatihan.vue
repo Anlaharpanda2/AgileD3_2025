@@ -315,7 +315,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ElMessage, ElNotification, UploadFile, UploadFiles } from 'element-plus'
-import api from '../../api.js' // Pastikan path ini benar sesuai struktur proyek Anda
+import api from '../../api.js'
+
+defineEmits(['close']); // Pastikan path ini benar sesuai struktur proyek Anda
 
 const fileList = ref<File[]>([])
 const loading = ref(false)

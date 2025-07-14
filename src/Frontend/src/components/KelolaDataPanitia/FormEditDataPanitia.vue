@@ -278,7 +278,10 @@ import { ElNotification } from 'element-plus';
 import api from '../../api.js'; // Pastikan path ini benar
 
 const props = defineProps({
-  initialData: Object,
+  initialData: {
+    type: Object,
+    required: true
+  },
 });
 
 const emit = defineEmits(['close']);

@@ -800,7 +800,6 @@ import FormTambahDataAkses from "../../components/KelolaAkses/FormTambahDataAkse
 import FormFilterDataAkses from "../../components/KelolaAkses/FormFilterDataAkses.vue";
 import FormSortingDataAkses from "../../components/KelolaAkses/FormSortingDataAkses.vue";
 import { ElNotification } from 'element-plus';
-import { Eye, EyeOff } from 'lucide-vue-next';
 
 const goToDetail = (row: UserAkses, column: Record<string, unknown>, event: MouseEvent) => {
   // Prevent navigation if the click is on the selection checkbox or action buttons

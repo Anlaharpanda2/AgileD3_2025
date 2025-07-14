@@ -61,10 +61,22 @@
                 class="w-64"
               >
                 <template #prefix>
-                  <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                  <svg
+                    class="w-5 h-5 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  ><path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  /></svg>
                 </template>
               </el-input>
-              <el-button @click="showFilter = true">Filter</el-button>
+              <el-button @click="showFilter = true">
+                Filter
+              </el-button>
             </div>
           </div>
         </div>
@@ -279,7 +291,11 @@
 
         <div class="p-6 flex justify-between items-center">
           <div>
-            <el-select v-model="itemsPerPage" placeholder="Items per page" style="width: 120px;">
+            <el-select
+              v-model="itemsPerPage"
+              placeholder="Items per page"
+              style="width: 120px;"
+            >
               <el-option
                 v-for="option in perPageOptions"
                 :key="option"
@@ -453,12 +469,7 @@ const pagedData = computed(() => {
   return filteredData.value.slice(start, end);
 });
 
-const totalPages = computed(() => {
-    if (itemsPerPage.value === Infinity) {
-        return 1;
-    }
-  return Math.ceil(filteredData.value.length / itemsPerPage.value);
-});
+
 
 const handleApplyFilter = (filter: { column: string; value: string }) => {
   appliedFilter.value = filter;

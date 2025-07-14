@@ -87,14 +87,14 @@
             </button>
           </div>
         </div>
-         <div class="mt-4">
-            <input
-              type="text"
-              v-model="searchQuery"
-              placeholder="Cari berdasarkan nama atau deskripsi..."
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
-            />
-          </div>
+        <div class="mt-4">
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Cari berdasarkan nama atau deskripsi..."
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+          >
+        </div>
       </div>
 
       <!-- Table Container -->
@@ -302,23 +302,46 @@
             </tbody>
           </table>
         </div>
-         <!-- Pagination -->
+        <!-- Pagination -->
         <div class="p-4 flex justify-between items-center">
           <div>
-            <label for="itemsPerPage" class="text-sm text-gray-600">Items per page:</label>
-            <select v-model="itemsPerPage" id="itemsPerPage" class="ml-2 border-gray-300 rounded-md text-sm">
-              <option :value="10">10</option>
-              <option :value="20">20</option>
-              <option :value="50">50</option>
-              <option :value="pretests.length">All</option>
+            <label
+              for="itemsPerPage"
+              class="text-sm text-gray-600"
+            >Items per page:</label>
+            <select
+              id="itemsPerPage"
+              v-model="itemsPerPage"
+              class="ml-2 border-gray-300 rounded-md text-sm"
+            >
+              <option :value="10">
+                10
+              </option>
+              <option :value="20">
+                20
+              </option>
+              <option :value="50">
+                50
+              </option>
+              <option :value="pretests.length">
+                All
+              </option>
             </select>
           </div>
           <div class="flex items-center">
-            <button @click="prevPage" :disabled="currentPage === 1" class="bg-white border border-gray-300 px-3 py-1 rounded-md text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+            <button
+              :disabled="currentPage === 1"
+              class="bg-white border border-gray-300 px-3 py-1 rounded-md text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              @click="prevPage"
+            >
               Sebelumnya
             </button>
             <span class="px-4 text-sm">Halaman {{ currentPage }} dari {{ totalPages }}</span>
-            <button @click="nextPage" :disabled="currentPage === totalPages" class="bg-white border border-gray-300 px-3 py-1 rounded-md text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+            <button
+              :disabled="currentPage === totalPages"
+              class="bg-white border border-gray-300 px-3 py-1 rounded-md text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              @click="nextPage"
+            >
               Berikutnya
             </button>
           </div>

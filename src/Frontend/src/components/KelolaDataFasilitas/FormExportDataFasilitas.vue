@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import type { UserOptions } from 'jspdf-autotable'
 // import * as XLSX from 'xlsx' // Dihapus untuk dynamic import
 import { saveAs } from 'file-saver'
 // import jsPDF from 'jspdf' // Dihapus untuk dynamic import
@@ -24,6 +25,10 @@ import { ElNotification } from 'element-plus'
 const props = defineProps<{
   data: Array<Record<string, unknown>>
 }>()
+
+defineEmits(['close'])
+
+
 
 // Kolom-kolom yang akan diekspor
 const exportColumns = [
@@ -245,8 +250,8 @@ async function ExportPdf(headerText: string, titleText: string, showLogo1: boole
   if (titleText) {
     doc.setFontSize(titleFontSize)
     doc.setFont(undefined, 'bold')
-    const titleLines = doc.splitTextToSize(titleText, pageWidth - (margin * 2))
-    titleLines.forEach(line => {
+    const titleLines = doc.splitTextToSize(titleText || '', pageWidth - (margin * 2))
+    titleLines.forEach((line: string) => {
       doc.text(line, centerX, currentY, { align: 'center' })
       currentY += titleFontSize * 1.5
     })

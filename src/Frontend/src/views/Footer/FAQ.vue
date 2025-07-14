@@ -45,6 +45,7 @@
             v-if="openIndex === index"
             class="px-5 py-4 text-gray-700 bg-white text-justify leading-relaxed"
           >
+            <!-- eslint-disable-next-line vue/no-v-html -->
             <p v-html="faq.answer" />
           </div>
         </transition>

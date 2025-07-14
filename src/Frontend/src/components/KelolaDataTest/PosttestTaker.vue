@@ -166,10 +166,10 @@
                       class="option-item block cursor-pointer"
                     >
                       <input
+                        v-model="userAnswers[question.id!]"
                         type="radio"
                         :name="`question-${question.id}`"
                         :value="optionKey.toUpperCase()"
-                        v-model="userAnswers[question.id!]"
                         class="hidden"
                       >
                       <div
@@ -404,7 +404,7 @@ const submitPosttest = async () => {
   }
 };
 
-const getQuestionOptions = (question: any) => {
+const getQuestionOptions = (question: Posttest['questions'][number]) => {
   return {
     a: question.option_a,
     b: question.option_b,

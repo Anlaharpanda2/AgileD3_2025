@@ -8,7 +8,11 @@
     <div class="space-y-4">
       <div>
         <label class="block text-sm font-medium text-gray-700">Kolom</label>
-        <el-select v-model="filterColumn" placeholder="Pilih Kolom" class="w-full">
+        <el-select
+          v-model="filterColumn"
+          placeholder="Pilih Kolom"
+          class="w-full"
+        >
           <el-option
             v-for="col in filterableColumns"
             :key="col.value"
@@ -30,7 +34,10 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="handleClose">Batal</el-button>
-        <el-button type="primary" @click="submitFilter">Terapkan Filter</el-button>
+        <el-button
+          type="primary"
+          @click="submitFilter"
+        >Terapkan Filter</el-button>
       </span>
     </template>
   </el-dialog>

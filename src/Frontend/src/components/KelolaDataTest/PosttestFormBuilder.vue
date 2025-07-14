@@ -50,8 +50,8 @@
           class="mb-6"
         >
           <QuestionEditor
-            :modelValue="question"
-            @update:modelValue="updateQuestion(index, $event)"
+            :model-value="question"
+            @update:model-value="updateQuestion(index, $event)"
             @remove="removeQuestion(index)"
           />
         </div>

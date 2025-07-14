@@ -990,10 +990,8 @@ import FormTambahDataKonsultasi from "../../components/KelolaDataKonsultasi/Form
 import FormFilterDataKonsultasi from "../../components/KelolaDataKonsultasi/FormFilterDataKonsultasi.vue";
 import FormSortingDataKonsultasi from "../../components/KelolaDataKonsultasi/FormSortingDataKonsultasi.vue";
 import { ElNotification } from 'element-plus';
-import { Eye, EyeOff } from 'lucide-vue-next';
-import { useRouter } from 'vue-router';
 
-const router = useRouter();
+
 
 
 // Interface for Konsultasi data structure

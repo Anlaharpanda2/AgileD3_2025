@@ -16,7 +16,6 @@
               Manajemen data dan pengaturan sistem dengan interface yang modern dan intuitif
             </p>
           </div>
-          
         </div>
       </div>
 
@@ -222,9 +221,7 @@ import { useRouter } from 'vue-router'
 import SimpleLayout from '@/layouts/SimpleLayout.vue'
 import { 
   Database, 
-  BarChart3, 
   Users, 
-  Settings, 
   Search, 
   Grid3X3, 
   List,

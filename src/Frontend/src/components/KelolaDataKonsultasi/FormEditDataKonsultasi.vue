@@ -376,7 +376,10 @@ import api from '../../api.js';
 import { AxiosError } from 'axios';
 
 const props = defineProps({
-  initialData: Object,
+  initialData: {
+    type: Object,
+    required: true
+  },
 });
 
 const emit = defineEmits(['close']);
@@ -388,7 +391,17 @@ const jenisKelaminOptions = ['laki-laki', 'perempuan'];
 
 
 // Reactive form state (tidak berubah fungsionalitas)
-const form = reactive({
+const form = reactive<{
+  id: number | null;
+  nik: string;
+  nama: string;
+  jenis_kelamin: string;
+  tanggal_konsultasi: Date | null;
+  topik: string;
+  status: string;
+  alamat: string;
+  no_telepon: string;
+}>({
   id: null,
   nik: '',
   nama: '',

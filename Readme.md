@@ -1,44 +1,56 @@
-# Project Website DP3AP2KB Provinsi Sumatera Barat
+# 🚀 Project Website DP3AP2KB Provinsi Sumatera Barat
 
 <p align="center">
-  <img src="assets/logo/logo.png" width="33%">
+  <img src="assets/logo/logo.png" alt="Logo DP3AP2KB" width="300">
 </p>
 
-## 📌 Deskripsi Proyek
-Website ini dibuat untuk **Dinas Pemberdayaan Perempuan & Perlindungan Anak Provinsi Sumatera Barat** dalam rangka **manajemen dan pengelolaan data internal kedinasan**. Proyek ini dibangun dengan arsitektur terpisah antara backend dan frontend.
+<p align="center">
+  Sebuah platform digital untuk manajemen dan pengelolaan data internal kedinasan pada Dinas Pemberdayaan Perempuan & Perlindungan Anak Provinsi Sumatera Barat.
+</p>
 
-## 🚀 Teknologi yang Digunakan
-- **Backend:** Laravel 11
-- **Frontend:** Vue 3 + Vite
-- **Database:** MySQL
-- **Version Control:** Git & GitHub
+<p align="center">
+  <img src="https://img.shields.io/badge/Laravel-11-FF2D20?style=for-the-badge&logo=laravel" alt="Laravel 11">
+  <img src="https://img.shields.io/badge/Vue.js-3-4FC08D?style=for-the-badge&logo=vue.js" alt="Vue 3">
+  <img src="https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite" alt="Vite">
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql" alt="MySQL">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="License MIT">
+</p>
+
+---
 
 ## 📂 Struktur Proyek
-Proyek ini dibagi menjadi dua direktori utama:
-- `src/Backend`: Berisi seluruh kode sumber untuk sisi server (API) yang dibangun dengan Laravel.
-- `src/Frontend`: Berisi seluruh kode sumber untuk sisi klien yang dibangun dengan Vue.
 
-## 🛠️ Instalasi dan Konfigurasi
-### 1️⃣ Clone Repository
+Proyek ini memiliki arsitektur yang terpisah antara backend dan frontend, yang berada dalam direktori `src`:
+
+-   `src/Backend`: Direktori untuk seluruh kode sumber sisi server (API) yang dibangun dengan **Laravel**.
+-   `src/Frontend`: Direktori untuk seluruh kode sumber sisi klien yang dibangun dengan **Vue 3 + Vite**.
+
+---
+
+## 🛠️ Panduan Instalasi dan Konfigurasi
+
+Untuk memulai, clone repositori ini ke mesin lokal Anda.
+
 ```bash
 git clone https://github.com/Anlaharpanda2/AgileD3_2025.git
 cd AgileD3_2025
 ```
 
-### 2️⃣ Konfigurasi Backend (Laravel)
-1.  Masuk ke direktori backend.
+### ⚙️ Backend (Laravel)
+
+1.  **Masuk ke direktori backend.**
     ```bash
     cd src/Backend
     ```
-2.  Install dependensi Composer.
+2.  **Install dependensi Composer.**
     ```bash
     composer install
     ```
-3.  Salin file `.env.example` menjadi `.env`.
+3.  **Konfigurasi Environment.** Salin file `.env.example` menjadi `.env` dan sesuaikan dengan konfigurasi database Anda.
     ```bash
     cp .env.example .env
     ```
-4.  Sesuaikan konfigurasi database Anda di dalam file `.env`.
+    Contoh isi `.env`:
     ```env
     DB_CONNECTION=mysql
     DB_HOST=127.0.0.1
@@ -47,57 +59,75 @@ cd AgileD3_2025
     DB_USERNAME=root
     DB_PASSWORD=
     ```
-5.  Generate application key.
+4.  **Generate Application Key & Migrasi Database.**
     ```bash
     php artisan key:generate
-    ```
-6.  Jalankan migrasi database.
-    ```bash
     php artisan migrate --seed
     ```
 
-### 3️⃣ Konfigurasi Frontend (Vue)
-1.  Buka terminal baru dan masuk ke direktori frontend.
+### 🎨 Frontend (Vue)
+
+1.  **Masuk ke direktori frontend** (melalui terminal baru atau setelah kembali ke root).
     ```bash
     cd src/Frontend
     ```
-2.  Install dependensi NPM.
+2.  **Install dependensi NPM.**
     ```bash
     npm install
     ```
-3.  Pastikan file `.env` di frontend (jika ada) sudah menunjuk ke URL API backend yang benar. Contoh:
+3.  **Konfigurasi Environment.** Pastikan file `.env` di frontend sudah menunjuk ke URL API backend yang benar.
     ```env
     VITE_API_URL=http://127.0.0.1:8000/api
     ```
 
+---
+
 ## 🖥️ Menjalankan Proyek
-Anda perlu menjalankan dua proses secara terpisah di dua terminal.
 
-1.  **Jalankan Server Backend (Laravel):**
-    - Di dalam direktori `src/Backend`:
-    ```bash
-    php artisan serve
-    ```
-    Server backend akan berjalan di `http://127.0.0.1:8000`.
+Anda perlu menjalankan dua proses secara terpisah di dua terminal yang berbeda.
 
-2.  **Jalankan Server Frontend (Vue):**
-    - Di dalam direktori `src/Frontend`:
-    ```bash
-    npm run dev
-    ```
-    Aplikasi frontend akan dapat diakses melalui alamat yang ditampilkan di terminal (biasanya `http://localhost:5173`).
+### Terminal 1: Menjalankan Backend (Laravel)
 
-## 🤝 Kontribusi
-Jika ingin berkontribusi dalam pengembangan proyek ini, silakan:
-1.  **Fork** repositori ini.
-2.  Buat branch baru (`git checkout -b fitur-baru`).
-3.  Commit perubahan (`git commit -m 'Menambahkan fitur X'`).
-4.  Push ke branch (`git push origin fitur-baru`).
-5.  Buat **Pull Request** dan tunggu review dari tim.
+```bash
+# Masuk ke direktori backend
+cd src/Backend
 
-## 📜 Lisensi
-Proyek ini menggunakan lisensi **MIT License**.
+# Jalankan server
+php artisan serve
+```
+> ✨ Server backend akan berjalan di `http://127.0.0.1:8000`.
+
+### Terminal 2: Menjalankan Frontend (Vue)
+
+```bash
+# Masuk ke direktori frontend
+cd src/Frontend
+
+# Jalankan server development
+npm run dev
+```
+> ✨ Aplikasi frontend dapat diakses di `http://localhost:5173` (atau alamat lain yang muncul di terminal).
 
 ---
 
-Dikelola oleh **Anla Harpanda, Vania Ulimaz Rivani, Agel Deska Wisamulya & Nadya Hermalia Putri** 🎯
+## 🤝 Kontribusi
+
+Kami sangat terbuka untuk kontribusi! Jika Anda ingin membantu, silakan ikuti langkah-langkah berikut:
+
+1.  **Fork** repositori ini.
+2.  Buat *branch* baru (`git checkout -b fitur-baru`).
+3.  *Commit* perubahan Anda (`git commit -m 'Menambahkan fitur X'`).
+4.  *Push* ke *branch* Anda (`git push origin fitur-baru`).
+5.  Buat **Pull Request** dan tunggu review dari tim kami.
+
+---
+
+## 📜 Lisensi
+
+Proyek ini dilisensikan di bawah **MIT License**.
+
+---
+
+<p align="center">
+  Dikelola dengan ❤️ oleh <b>Anla Harpanda, Vania Ulimaz Rivani, Agel Deska Wisamulya & Nadya Hermalia Putri</b>
+</p>

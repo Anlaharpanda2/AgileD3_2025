@@ -106,11 +106,11 @@ Buka dua terminal terpisah:
 
 Setelah sistem berjalan, gunakan akun demo berikut untuk masuk:
 
-| Peran       | Username / NIK                | Password   |
+| Peran       | Username / nama                | Password/NIK   |
 | :---------- | :---------------------------- | :--------- |
-| **Masyarakat** | NIK: `1234567890123456`        | `(sesuai NIK)` |
-| **Operator**  | Username: `operator`          | `Aa12345!` |
-| **Pegawai**   | Username: `pegawai`           | `Aa12345!` |
+| **Masyarakat** | nama: `Demo`        | NIK: `1234567890123456` |
+| **Operator**  | Username: `Operator`          | `Aa12345!` |
+| **Pegawai**   | Username: `Pegawai`           | `Aa12345!` |
 
 ---
 

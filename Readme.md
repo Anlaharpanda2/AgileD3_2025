@@ -27,6 +27,22 @@ Proyek ini memiliki arsitektur yang terpisah antara backend dan frontend, yang b
 
 ---
 
+## 📚 Pustaka Utama yang Digunakan
+
+### Backend (Laravel)
+- **[Laravel Sanctum](https://laravel.com/docs/11.x/sanctum)**: Untuk otentikasi API yang ringan.
+- **[Maatwebsite/excel](https://docs.laravel-excel.com/3.1/getting-started/)**: Untuk fungsionalitas ekspor dan impor data dengan format Excel.
+
+### Frontend (Vue)
+- **[Vue Router](https://router.vuejs.org/)**: Pustaka routing resmi untuk Vue.js.
+- **[Axios](https://axios-http.com/)**: Klien HTTP berbasis Promise untuk browser dan Node.js.
+- **[Element Plus](https://element-plus.org/)**: Pustaka komponen UI yang lengkap untuk Vue 3.
+- **[Vuetify](https://vuetifyjs.com/)**: Kerangka kerja Material Design untuk Vue.
+- **[ApexCharts](https://apexcharts.com/)**: Komponen grafik untuk visualisasi data.
+- **[Tailwind CSS](https://tailwindcss.com/)**: Kerangka kerja CSS untuk desain yang cepat dan kustom.
+
+---
+
 ## 🛠️ Panduan Instalasi dan Konfigurasi
 
 Untuk memulai, clone repositori ini ke mesin lokal Anda.
@@ -107,6 +123,20 @@ cd src/Frontend
 npm run dev
 ```
 > ✨ Aplikasi frontend dapat diakses di `http://localhost:5173` (atau alamat lain yang muncul di terminal).
+
+---
+
+## 🔑 Akun untuk Login
+
+Setelah berhasil menjalankan backend dan frontend, Anda dapat masuk ke dalam sistem menggunakan akun demo berikut yang telah disiapkan melalui seeder:
+
+| Peran       | Username / NIK                | Password   |
+| :---------- | :---------------------------- | :--------- |
+| **Masyarakat** | NIK: `1234567890123456`        | `(sesuai NIK)` |
+| **Operator**  | Username: `operator`          | `Aa12345!` |
+| **Pegawai**   | Username: `pegawai`           | `Aa12345!` |
+
+> **Catatan**: Untuk peran **Masyarakat**, *password* yang digunakan saat login sama dengan **NIK** yang didaftarkan.
 
 ---
 

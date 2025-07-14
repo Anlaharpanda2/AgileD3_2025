@@ -18,16 +18,9 @@
 
 ---
 
-## 📂 Struktur Proyek
+## 📚 Third-Party / Library yang Digunakan
 
-Proyek ini memiliki arsitektur yang terpisah antara backend dan frontend, yang berada dalam direktori `src`:
-
--   `src/Backend`: Direktori untuk seluruh kode sumber sisi server (API) yang dibangun dengan **Laravel**.
--   `src/Frontend`: Direktori untuk seluruh kode sumber sisi klien yang dibangun dengan **Vue 3 + Vite**.
-
----
-
-## 📚 Pustaka Utama yang Digunakan
+Proyek ini dibangun dengan arsitektur terpisah dan menggunakan beberapa pustaka utama untuk menunjang fungsionalitasnya.
 
 ### Backend (Laravel)
 - **[Laravel Sanctum](https://laravel.com/docs/11.x/sanctum)**: Untuk otentikasi API yang ringan.
@@ -43,7 +36,7 @@ Proyek ini memiliki arsitektur yang terpisah antara backend dan frontend, yang b
 
 ---
 
-## 🛠️ Panduan Instalasi dan Konfigurasi
+## 🛠️ Langkah Instalasi & Cara Menjalankan
 
 Untuk memulai, clone repositori ini ke mesin lokal Anda.
 
@@ -52,83 +45,55 @@ git clone https://github.com/Anlaharpanda2/AgileD3_2025.git
 cd AgileD3_2025
 ```
 
-### ⚙️ Backend (Laravel)
+### 1. Konfigurasi Backend (Laravel)
 
-1.  **Masuk ke direktori backend.**
-    ```bash
-    cd src/Backend
-    ```
-2.  **Install dependensi Composer.**
-    ```bash
-    composer install
-    ```
-3.  **Konfigurasi Environment.** Salin file `.env.example` menjadi `.env` dan sesuaikan dengan konfigurasi database Anda.
-    ```bash
-    cp .env.example .env
-    ```
-    Contoh isi `.env`:
-    ```env
-    DB_CONNECTION=mysql
-    DB_HOST=127.0.0.1
-    DB_PORT=3306
-    DB_DATABASE=nama_database_anda
-    DB_USERNAME=root
-    DB_PASSWORD=
-    ```
-4.  **Generate Application Key & Migrasi Database.**
-    ```bash
-    php artisan key:generate
-    php artisan migrate --seed
-    ```
+- **Masuk ke direktori & install dependensi.**
+  ```bash
+  cd src/Backend
+  composer install
+  ```
+- **Konfigurasi environment.**
+  ```bash
+  cp .env.example .env
+  ```
+  Lalu sesuaikan file `.env` dengan konfigurasi database Anda.
+- **Generate key & migrasi database.**
+  ```bash
+  php artisan key:generate
+  php artisan migrate --seed
+  ```
 
-### 🎨 Frontend (Vue)
+### 2. Konfigurasi Frontend (Vue)
 
-1.  **Masuk ke direktori frontend** (melalui terminal baru atau setelah kembali ke root).
-    ```bash
-    cd src/Frontend
-    ```
-2.  **Install dependensi NPM.**
-    ```bash
-    npm install
-    ```
-3.  **Konfigurasi Environment.** Pastikan file `.env` di frontend sudah menunjuk ke URL API backend yang benar.
-    ```env
-    VITE_API_URL=http://127.0.0.1:8000/api
-    ```
+- **Masuk ke direktori & install dependensi.**
+  ```bash
+  cd src/Frontend
+  npm install
+  ```
+- **Konfigurasi environment.** Pastikan file `.env` menunjuk ke URL API backend yang benar (contoh: `VITE_API_URL=http://127.0.0.1:8000/api`).
 
----
+### 3. Menjalankan Proyek
 
-## 🖥️ Menjalankan Proyek
+Buka dua terminal terpisah:
 
-Anda perlu menjalankan dua proses secara terpisah di dua terminal yang berbeda.
+- **Terminal 1 (Backend):**
+  ```bash
+  cd src/Backend
+  php artisan serve
+  ```
+- **Terminal 2 (Frontend):**
+  ```bash
+  cd src/Frontend
+  npm run dev
+  ```
 
-### Terminal 1: Menjalankan Backend (Laravel)
-
-```bash
-# Masuk ke direktori backend
-cd src/Backend
-
-# Jalankan server
-php artisan serve
-```
-> ✨ Server backend akan berjalan di `http://127.0.0.1:8000`.
-
-### Terminal 2: Menjalankan Frontend (Vue)
-
-```bash
-# Masuk ke direktori frontend
-cd src/Frontend
-
-# Jalankan server development
-npm run dev
-```
-> ✨ Aplikasi frontend dapat diakses di `http://localhost:5173` (atau alamat lain yang muncul di terminal).
+> ✨ Backend akan berjalan di `http://127.0.0.1:8000` dan Frontend di `http://localhost:5173`.
 
 ---
 
-## 🔑 Akun untuk Login
+## 🔑 Akun untuk Akses Login
 
-Setelah berhasil menjalankan backend dan frontend, Anda dapat masuk ke dalam sistem menggunakan akun demo berikut yang telah disiapkan melalui seeder:
+Setelah sistem berjalan, gunakan akun demo berikut untuk masuk:
 
 | Peran       | Username / NIK                | Password   |
 | :---------- | :---------------------------- | :--------- |
@@ -136,25 +101,11 @@ Setelah berhasil menjalankan backend dan frontend, Anda dapat masuk ke dalam sis
 | **Operator**  | Username: `operator`          | `Aa12345!` |
 | **Pegawai**   | Username: `pegawai`           | `Aa12345!` |
 
-> **Catatan**: Untuk peran **Masyarakat**, *password* yang digunakan saat login sama dengan **NIK** yang didaftarkan.
-
 ---
 
-## 🤝 Kontribusi
+## 🌐 Link Demo
 
-Kami sangat terbuka untuk kontribusi! Jika Anda ingin membantu, silakan ikuti langkah-langkah berikut:
-
-1.  **Fork** repositori ini.
-2.  Buat *branch* baru (`git checkout -b fitur-baru`).
-3.  *Commit* perubahan Anda (`git commit -m 'Menambahkan fitur X'`).
-4.  *Push* ke *branch* Anda (`git push origin fitur-baru`).
-5.  Buat **Pull Request** dan tunggu review dari tim kami.
-
----
-
-## 📜 Lisensi
-
-Proyek ini dilisensikan di bawah **MIT License**.
+*Link demo untuk proyek ini akan ditambahkan di sini jika sudah tersedia.*
 
 ---
 

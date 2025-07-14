@@ -1,12 +1,23 @@
-# 🚀 Project Website DP3AP2KB Provinsi Sumatera Barat
+# 🚀 Pepsikuburger: Platform Layanan Masyarakat DP3AP2KB Sumbar
 
 <p align="center">
-  <img src="assets/logo/logo.png" alt="Logo DP3AP2KB" width="300">
+  <img src="assets/logo/logo.png" alt="Logo Pepsikuburger" width="300">
 </p>
 
 <p align="center">
-  Sebuah platform digital untuk manajemen dan pengelolaan data internal kedinasan pada Dinas Pemberdayaan Perempuan & Perlindungan Anak Provinsi Sumatera Barat.
+  <b>Pepsikuburger</b> (Pelayanan Publik Terintegrasi Kuat, Bergerak Responsif) adalah website resmi dari DP3AP2KB Sumatera Barat. Platform ini hadir untuk mendukung pelayanan publik yang lebih cepat, transparan, dan terintegrasi.
 </p>
+
+### ✨ Fitur Utama
+
+#### Untuk Masyarakat:
+- **Ikut Pelatihan**: Meningkatkan pemberdayaan perempuan melalui program pelatihan yang tersedia.
+- **Lapor Kasus**: Melaporkan kasus kekerasan terhadap perempuan dan anak secara langsung melalui website.
+- **Pre-test & Post-test**: Mengikuti ujian pelatihan secara online tanpa proses manual.
+
+#### Untuk Internal Dinas:
+- **Dashboard Admin**: Menyajikan visualisasi data yang komprehensif dan interaktif.
+- **Manajemen Data**: Dilengkapi 11 fitur CRUD dan 16 *tools* interaktif untuk memudahkan pengelolaan data dinas.
 
 <p align="center">
   <img src="https://img.shields.io/badge/Laravel-11-FF2D20?style=for-the-badge&logo=laravel" alt="Laravel 11">

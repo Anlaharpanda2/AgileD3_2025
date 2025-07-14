@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('username')->unique();
-            $table->enum('role', ['pegawai', 'operator', 'masyarakat'])->default('masyarakat');
+            $table->enum('role', ['pegawai', 'operator'])->default('pegawai');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

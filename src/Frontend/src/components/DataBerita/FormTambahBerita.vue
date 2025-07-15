@@ -214,7 +214,7 @@ const form = reactive({
   judul: '',
   isi: '',
   jenis_konten: '',
-  gambar: null,
+  foto: null,
 })
 
 const fileList = ref([])
@@ -223,7 +223,7 @@ const rules = {
   judul: [{ required: true, message: 'Judul wajib diisi', trigger: 'blur' }],
   isi: [{ required: true, message: 'Isi berita wajib diisi', trigger: 'blur' }],
   jenis_konten: [{ required: true, message: 'Jenis konten wajib dipilih', trigger: 'change' }],
-  gambar: [{ required: true, message: 'Gambar wajib diupload', trigger: 'change' }],
+  foto: [{ required: true, message: 'Gambar wajib diupload', trigger: 'change' }],
 }
 
 const beforeUpload = (file) => {
@@ -241,12 +241,12 @@ const beforeUpload = (file) => {
 }
 
 const handleChange = (file, fileListParam) => {
-  form.gambar = file.raw || null
+  form.foto = file.raw || null
   fileList.value = fileListParam.slice(-1)
 }
 
 const onRemove = () => {
-  form.gambar = null
+  form.foto = null
   fileList.value = []
 }
 
@@ -267,13 +267,9 @@ const submitForm = () => {
       payload.append('judul', form.judul)
       payload.append('isi', form.isi)
       payload.append('jenis_konten', form.jenis_konten)
-      if (form.gambar) payload.append('foto', form.gambar)
+      if (form.foto) payload.append('foto', form.foto)
 
-      const response = await api.post('/kelola/berita', payload, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+      const response = await api.post('/kelola/berita', payload)
 
       ElNotification({
         title: 'Berhasil',

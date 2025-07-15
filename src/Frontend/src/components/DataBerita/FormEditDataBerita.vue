@@ -218,7 +218,10 @@ import api from '../../api.js';
 import { ElNotification } from 'element-plus'
 
 const props = defineProps({
-  initialData: Object,
+  initialData: {
+    type: Object,
+    required: true
+  },
 })
 
 const emit = defineEmits(['close'])
@@ -236,24 +239,8 @@ const form = reactive({
 const fileList = ref([])
 
 const currentImageUrl = computed(() => {
-  if (!form.currentFoto) return null
-  
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
-  
-  if (form.currentFoto.startsWith('http://') || form.currentFoto.startsWith('https://')) {
-    return form.currentFoto
-  }
-  
-  if (form.currentFoto.startsWith('storage/')) {
-    return `${baseUrl}/${form.currentFoto}`
-  }
-  
-  if (form.currentFoto.startsWith('/')) {
-    return `${baseUrl}${form.currentFoto}`
-  }
-  
-  return `${baseUrl}/storage/berita/${form.currentFoto}`
-})
+  return props.initialData?.foto || null;
+});
 
 watch(() => props.initialData, (newVal) => {
   if (newVal) {
@@ -319,13 +306,10 @@ const submitForm = () => {
         payload.append('foto', form.foto)
       }
 
-      payload.append('_method', 'PUT')
+      // Use POST request with method spoofing for file uploads
+      payload.append('_method', 'PUT');
 
-      const response = await api.post(`/kelola/berita/${props.initialData.id}`, payload, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+      const response = await api.post(`/kelola/berita/${props.initialData.id}`, payload);
 
       ElNotification({
         title: 'Berhasil',

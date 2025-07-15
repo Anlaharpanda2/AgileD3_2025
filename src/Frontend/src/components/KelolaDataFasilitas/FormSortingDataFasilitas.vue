@@ -204,7 +204,7 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits<{
-  (e: 'apply-sort', payload: { column: string; order: 'asc' | 'desc' }): void;
+  (e: 'apply-sort', payload: { column: string; order: 'asc' | 'desc'; sortedData: Record<string, unknown>[] }): void;
   (e: 'cancel-sort'): void;
   (e: 'update:visible', value: boolean): void;
 }>();
@@ -247,8 +247,8 @@ function applySort(): void {
     console.warn("Kolom pengurutan belum dipilih.");
     return;
   }
-    // eslint-disable-next-line vue/no-mutating-props
-  props.data.sort((a, b) => {
+  const sortedCopy = [...props.data];
+  sortedCopy.sort((a, b) => {
     const valueA = a[form.column];
     const valueB = b[form.column];
 
@@ -269,8 +269,8 @@ function applySort(): void {
         : String(valueB).localeCompare(String(valueA));
     }
   });
-  emits('apply-sort', { column: form.column, order: form.order });
-  closeForm(); // Close form, but state is preserved
+  emits('apply-sort', { column: form.column, order: form.order, sortedData: sortedCopy });
+  closeForm();
 }
 
 function cancelSort(): void {

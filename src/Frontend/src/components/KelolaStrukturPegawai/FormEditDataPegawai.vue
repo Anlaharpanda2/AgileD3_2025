@@ -105,8 +105,7 @@
                     placeholder="Masukkan nama lengkap"
                     size="large"
                     class="modern-input"
-                  >
-                  </el-input>
+                  />
                 </el-form-item>
                 <el-form-item
                   label="ID Pegawai"
@@ -117,8 +116,7 @@
                     placeholder="Masukkan ID Pegawai"
                     size="large"
                     class="modern-input"
-                  >
-                  </el-input>
+                  />
                 </el-form-item>
                 <el-form-item
                   label="Email"
@@ -129,8 +127,7 @@
                     placeholder="Masukkan email"
                     size="large"
                     class="modern-input"
-                  >
-                  </el-input>
+                  />
                 </el-form-item>
                 <el-form-item
                   label="Nomor HP"
@@ -141,8 +138,7 @@
                     placeholder="Masukkan nomor HP"
                     size="large"
                     class="modern-input"
-                  >
-                  </el-input>
+                  />
                 </el-form-item>
                 <el-form-item
                   label="Jabatan"
@@ -153,8 +149,7 @@
                     placeholder="Masukkan jabatan"
                     size="large"
                     class="modern-input"
-                  >
-                  </el-input>
+                  />
                 </el-form-item>
                 <el-form-item
                   label="Status"
@@ -252,7 +247,10 @@ import api from '../../api.js';
 import { AxiosError } from 'axios';
 
 const props = defineProps({
-  initialData: Object,
+  initialData: {
+    type: Object,
+    required: true
+  },
 });
 
 const emit = defineEmits(['close']);

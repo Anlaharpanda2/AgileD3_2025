@@ -331,6 +331,7 @@ const rules = {
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 const submitForm = () => {
+  if (!formRef.value) return;
   formRef.value.validate(async (valid: boolean) => {
     if (!valid) {
       ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });
@@ -351,7 +352,7 @@ const submitForm = () => {
       console.error('Error submitting form:', error);
       let errorMessage = 'Gagal menyimpan data. Terjadi kesalahan jaringan atau server.';
       if (error instanceof Error) {
-        if ('response' in error && error.response && typeof error.response === 'object' && 'data' in error.response && error.response.data && typeof error.response.data === 'object' && 'message' in error.response.data) {
+        if ('response' in error && error.response && typeof error.response === 'object' && 'data' in error.response && error.response.data && typeof error.response.data === 'object' && 'message' in error.response.data && typeof error.response.data.message === 'string') {
           errorMessage = error.response.data.message;
         } else {
           errorMessage = error.message;

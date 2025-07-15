@@ -1,5 +1,6 @@
 <template>
-  <div class="p-4">
+  <div class="p-4 relative">
+    <button @click="fillWithDemoData" class="demo-button">Demo Pretest</button>
     <el-card class="shadow-lg rounded-lg bg-white">
       <template #header>
         <div class="flex items-center justify-between mb-4">
@@ -50,8 +51,8 @@
           class="mb-6"
         >
           <QuestionEditor
-            :modelValue="question"
-            @update:modelValue="updateQuestion(index, $event)"
+            :model-value="question"
+            @update:model-value="updateQuestion(index, $event)"
             @remove="removeQuestion(index)"
           />
         </div>
@@ -112,6 +113,40 @@ const pretestId = ref<number | null>(null);
 
 const { pretestForm, addQuestion, removeQuestion, setPretestForm } = usePretestForm();
 
+const fillWithDemoData = () => {
+  pretestForm.value.title = 'Pretest Demo Kewirausahaan';
+  pretestForm.value.description = 'Tes awal untuk mengukur pemahaman dasar tentang konsep kewirausahaan.';
+  pretestForm.value.questions = [
+    {
+      question_text: 'Apa yang dimaksud dengan Business Plan?',
+      option_a: 'Rencana liburan perusahaan',
+      option_b: 'Dokumen tertulis yang menjelaskan tujuan bisnis dan cara mencapainya',
+      option_c: 'Laporan keuangan tahunan',
+      option_d: 'Daftar karyawan perusahaan',
+      correct_answer: 'B',
+      order: 1
+    },
+    {
+      question_text: 'Manakah yang BUKAN merupakan bagian dari analisis SWOT?',
+      option_a: 'Strengths (Kekuatan)',
+      option_b: 'Weaknesses (Kelemahan)',
+      option_c: 'Opportunities (Peluang)',
+      option_d: 'Outcomes (Hasil)',
+      correct_answer: 'D',
+      order: 2
+    },
+    {
+      question_text: 'Target pasar adalah...',
+      option_a: 'Semua orang yang ada di pasar',
+      option_b: 'Kelompok konsumen tertentu yang menjadi fokus pemasaran',
+      option_c: 'Pesaing utama dalam industri',
+      option_d: 'Lokasi fisik tempat berjualan',
+      correct_answer: 'B',
+      order: 3
+    }
+  ];
+};
+
 const updateQuestion = (index: number, updatedQuestion: Question) => {
   pretestForm.value.questions[index] = updatedQuestion;
 };
@@ -139,7 +174,7 @@ const savePretest = async () => {
       await pretestService.createPretest(pretestForm.value);
       ElMessage.success('Pretest created successfully!');
     }
-    router.push({ name: 'PretestManagement' }); // Navigate back to list
+    router.push('/data/soal'); // Arahkan kembali ke rute '/data/soal'
   } catch (error) {
     ElMessage.error('Failed to save pretest.');
     console.error(error);
@@ -148,5 +183,25 @@ const savePretest = async () => {
 </script>
 
 <style scoped>
+.demo-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #8B4513; /* A brown color */
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
+
+.demo-button:hover {
+  background-color: #A0522D; /* A slightly lighter brown */
+}
 /* Tailwind handles most styling */
 </style>

@@ -18,6 +18,10 @@ export default {
     }
   },
   methods: {
+    fillWithDemoData() {
+      this.username = 'Operator';
+      this.password = 'Aa12345!';
+    },
     async validateForm(event) {
       event.preventDefault();
       this.errorMessage = '';
@@ -111,6 +115,7 @@ export default {
       <div class="ellipse" />
       <div class="div" />
       <div class="login">
+        <button @click="fillWithDemoData" class="demo-button">Demo Login</button>
         <div class="overlap-group">
           <div class="rectangle" />
           <img
@@ -250,6 +255,26 @@ export default {
   </div>
 </template>
 <style scoped>
+.demo-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #8B4513; /* A brown color */
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
+
+.demo-button:hover {
+  background-color: #A0522D; /* A slightly lighter brown */
+}
 @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
 @import url("https://fonts.googleapis.com/css?family=Poppins:700,400|Roboto:400");
 * {

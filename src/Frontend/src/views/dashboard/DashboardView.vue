@@ -9,12 +9,10 @@ import {
   NewspaperIcon,
   UserCircleIcon,
   BuildingOfficeIcon,
-  UsersIcon,
   AcademicCapIcon,
   BriefcaseIcon,
   UserGroupIcon,
-  TicketIcon,
-  CheckBadgeIcon
+  TicketIcon
 } from '@heroicons/vue/24/outline';
 
 
@@ -233,7 +231,6 @@ const recentActivityChart = computed(() => {
         for (let i = 6; i >= 0; i--) {
             const date = new Date(singleDate);
             date.setDate(date.getDate() - i);
-            const dateStr = date.toISOString().split('T')[0];
             
             if (i === 0) {
                 // Hari ini (tanggal aktual) - tampilkan semua data
@@ -339,16 +336,7 @@ const recentActivityChart = computed(() => {
     };
 });
 
-// Fungsi helper untuk mendapatkan warna berdasarkan key
-const getColorByKey = (key) => {
-    const colorMap = {
-        'pendaftaran': colors.pink,
-        'fasilitas': colors.green,
-        'struktur_pegawai': colors.yellow,
-        'berita': colors.orange
-    };
-    return colorMap[key] || colors.pink;
-};
+
 
 
 // --- 4. Donut Charts ---
@@ -375,328 +363,575 @@ const createDonutChartData = (dataObject, mainColor) => {
 const pendaftaranPendidikanChart = computed(() => createDonutChartData(summaryData.value.pendaftaran.by_pendidikan, colors.pink));
 const pelatihanAngkatanChart = computed(() => createDonutChartData(summaryData.value.pelatihan.by_angkatan, colors.teal));
 const fasilitasKategoriChart = computed(() => createDonutChartData(summaryData.value.fasilitas.by_kategori, colors.green));
-const panitiaJabatanChart = computed(() => createDonutChartData(summaryData.value.panitia.by_jabatan, colors.purple));
-const testKategoriChart = computed(() => createDonutChartData(summaryData.value.test.by_kategori, colors.orange));
-const masyarakatPendidikanChart = computed(() => createDonutChartData(summaryData.value.masyarakat.by_pendidikan, colors.blue));
 
 </script>
 
 <template>
-<SimpleLayout>
-
-    <div v-if="loading" class="flex justify-center items-center h-64">
-      <p class="text-gray-500 animate-pulse">Memuat data dashboard...</p>
+  <SimpleLayout>
+    <div
+      v-if="loading"
+      class="flex justify-center items-center h-64"
+    >
+      <p class="text-gray-500 animate-pulse">
+        Memuat data dashboard...
+      </p>
     </div>
-    <div v-else-if="error" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md" role="alert">
-      <p class="font-bold">Terjadi Kesalahan</p>
+    <div
+      v-else-if="error"
+      class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md"
+      role="alert"
+    >
+      <p class="font-bold">
+        Terjadi Kesalahan
+      </p>
       <p>{{ error }}</p>
     </div>
   
-    <div v-else class="space-y-6">
+    <div
+      v-else
+      class="space-y-6"
+    >
       <!-- Baris 1: Welcome & Stat Cards Utama -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
         <div class="lg:col-span-2 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
           <div class="p-4 flex flex-col sm:flex-row justify-between items-center h-full">
             <div>
-              <h2 class="text-2xl font-bold text-gray-800">Selamat Datang Kembali! 🎉</h2>
+              <h2 class="text-2xl font-bold text-gray-800">
+                Selamat Datang Kembali! 🎉
+              </h2>
               <p class="mt-2 text-gray-600">
                 Anda mengelola total <span class="font-semibold text-pink-500">{{ totalManagedData }}</span> data.
               </p>
-                <router-link
+              <router-link
+                v-slot="{ navigate }"
                 to="/kelola/data"
                 custom
-                v-slot="{ navigate }"
-                >
+              >
                 <button
-                    @click="navigate"
-                    class="mt-4 px-4 py-2 bg-pink-500 text-white font-semibold rounded-lg hover:bg-pink-600 transition-colors focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
+                  class="mt-4 px-4 py-2 bg-pink-500 text-white font-semibold rounded-lg hover:bg-pink-600 transition-colors focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
+                  @click="navigate"
                 >
-                    Lihat Data
+                  Lihat Data
                 </button>
-                </router-link>
+              </router-link>
             </div>
             <div class="mt-6 sm:mt-0">
-               <img src="/src/assets/images/cards/illustration-john-light.png" alt="Ilustrasi" class="h-40">
+              <img
+                src="/src/assets/images/cards/illustration-john-light.png"
+                alt="Ilustrasi"
+                class="h-40"
+              >
             </div>
           </div>
         </div>
         <div class="space-y-6">
-            <div class="bg-white p-4 mt-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center space-x-4">
-                <div class="bg-pink-100 p-3 rounded-lg"><DocumentChartBarIcon class="h-6 w-6 text-pink-600" /></div>
-                <div>
-                    <p class="text-sm text-gray-500">Pendaftaran</p>
-                    <p class="text-2xl font-bold text-gray-800">{{ summaryData.pendaftaran?.total || 0 }}</p>
-                </div>
+          <div class="bg-white p-4 mt-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center space-x-4">
+            <div class="bg-pink-100 p-3 rounded-lg">
+              <DocumentChartBarIcon class="h-6 w-6 text-pink-600" />
             </div>
-             <div class="bg-white p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center space-x-4">
-                <div class="bg-blue-100 p-3 rounded-lg"><AcademicCapIcon class="h-6 w-6 text-blue-600" /></div>
-                <div>
-                    <p class="text-sm text-gray-500">Pelatihan</p>
-                    <p class="text-2xl font-bold text-gray-800">{{ summaryData.pelatihan?.total || 0 }}</p>
-                </div>
+            <div>
+              <p class="text-sm text-gray-500">
+                Pendaftaran
+              </p>
+              <p class="text-2xl font-bold text-gray-800">
+                {{ summaryData.pendaftaran?.total || 0 }}
+              </p>
             </div>
+          </div>
+          <div class="bg-white p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center space-x-4">
+            <div class="bg-blue-100 p-3 rounded-lg">
+              <AcademicCapIcon class="h-6 w-6 text-blue-600" />
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">
+                Pelatihan
+              </p>
+              <p class="text-2xl font-bold text-gray-800">
+                {{ summaryData.pelatihan?.total || 0 }}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
   
       <!-- Baris 2: Diagram Batang Berdampingan dengan Pilihan -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <!-- Diagram Batang KIRI -->
-          <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div class="sm:flex justify-between items-start mb-4">
-                  <h3 class="text-lg font-bold text-gray-800">Tren Operasional</h3>
-                  <nav class="mt-2 sm:mt-0 flex space-x-4" aria-label="Tabs">
-                      <button v-for="tab in leftBarTabs" :key="tab.key" @click="activeLeftBarTab = tab.key"
-                              :class="[activeLeftBarTab === tab.key ? `border-blue-500 text-blue-600` : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300', 'whitespace-nowrap pb-1 px-1 border-b-2 font-medium text-sm transition-colors']">
-                          {{ tab.label }}
-                      </button>
-                  </nav>
-              </div>
-              <VueApexCharts :key="activeLeftBarTab" type="bar" height="310" :options="leftBarChart.options" :series="leftBarChart.series" />
+        <!-- Diagram Batang KIRI -->
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <div class="sm:flex justify-between items-start mb-4">
+            <h3 class="text-lg font-bold text-gray-800">
+              Tren Operasional
+            </h3>
+            <nav
+              class="mt-2 sm:mt-0 flex space-x-4"
+              aria-label="Tabs"
+            >
+              <button
+                v-for="tab in leftBarTabs"
+                :key="tab.key"
+                :class="[activeLeftBarTab === tab.key ? `border-blue-500 text-blue-600` : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300', 'whitespace-nowrap pb-1 px-1 border-b-2 font-medium text-sm transition-colors']"
+                @click="activeLeftBarTab = tab.key"
+              >
+                {{ tab.label }}
+              </button>
+            </nav>
           </div>
-          <!-- Diagram Batang KANAN -->
-          <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-               <div class="sm:flex justify-between items-start mb-4">
-                  <h3 class="text-lg font-bold text-gray-800">Tren Pendaftaran & Aset</h3>
-                   <nav class="mt-2 sm:mt-0 flex space-x-4" aria-label="Tabs">
-                      <button v-for="tab in rightBarTabs" :key="tab.key" @click="activeRightBarTab = tab.key"
-                              :class="[activeRightBarTab === tab.key ? `border-pink-500 text-pink-600` : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300', 'whitespace-nowrap pb-1 px-1 border-b-2 font-medium text-sm transition-colors']">
-                          {{ tab.label }}
-                      </button>
-                  </nav>
-              </div>
-              <VueApexCharts :key="activeRightBarTab" type="bar" height="310" :options="rightBarChart.options" :series="rightBarChart.series" />
+          <VueApexCharts
+            :key="activeLeftBarTab"
+            type="bar"
+            height="310"
+            :options="leftBarChart.options"
+            :series="leftBarChart.series"
+          />
+        </div>
+        <!-- Diagram Batang KANAN -->
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <div class="sm:flex justify-between items-start mb-4">
+            <h3 class="text-lg font-bold text-gray-800">
+              Tren Pendaftaran & Aset
+            </h3>
+            <nav
+              class="mt-2 sm:mt-0 flex space-x-4"
+              aria-label="Tabs"
+            >
+              <button
+                v-for="tab in rightBarTabs"
+                :key="tab.key"
+                :class="[activeRightBarTab === tab.key ? `border-pink-500 text-pink-600` : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300', 'whitespace-nowrap pb-1 px-1 border-b-2 font-medium text-sm transition-colors']"
+                @click="activeRightBarTab = tab.key"
+              >
+                {{ tab.label }}
+              </button>
+            </nav>
           </div>
+          <VueApexCharts
+            :key="activeRightBarTab"
+            type="bar"
+            height="310"
+            :options="rightBarChart.options"
+            :series="rightBarChart.series"
+          />
+        </div>
       </div>
       
-  <!-- Baris 3: Aktivitas Terbaru (Area Chart) & Quota -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <!-- Area Chart dengan perbaikan -->
-      <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <!-- Baris 3: Aktivitas Terbaru (Area Chart) & Quota -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Area Chart dengan perbaikan -->
+        <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-              <div>
-                  <h3 class="text-lg font-bold text-gray-800">Grafik Aktivitas Terbaru</h3>
-                  <p class="text-sm text-gray-500 mt-1">
-                      Menampilkan tren aktivitas {{ areaChartTabs.find(t => t.key === activeAreaChartTab)?.label.toLowerCase() || 'data' }} 
-                      dalam 7 hari terakhir
-                  </p>
-              </div>
-              <nav class="flex flex-wrap gap-2 mt-3 sm:mt-0" aria-label="Tabs">
-                  <button 
-                      v-for="tab in areaChartTabs" 
-                      :key="tab.key" 
-                      @click="activeAreaChartTab = tab.key"
-                      :class="[
-                          activeAreaChartTab === tab.key 
-                              ? `bg-${tab.color}-100 text-${tab.color}-600 ring-2 ring-${tab.color}-200` 
-                              : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700', 
-                          'px-3 py-2 rounded-lg font-medium text-sm transition-all duration-200 flex items-center space-x-2'
-                      ]"
-                  >
-                      <component :is="tab.icon" class="h-4 w-4" />
-                      <span>{{ tab.label }}</span>
-                  </button>
-              </nav>
+            <div>
+              <h3 class="text-lg font-bold text-gray-800">
+                Grafik Aktivitas Terbaru
+              </h3>
+              <p class="text-sm text-gray-500 mt-1">
+                Menampilkan tren aktivitas {{ areaChartTabs.find(t => t.key === activeAreaChartTab)?.label.toLowerCase() || 'data' }} 
+                dalam 7 hari terakhir
+              </p>
+            </div>
+            <nav
+              class="flex flex-wrap gap-2 mt-3 sm:mt-0"
+              aria-label="Tabs"
+            >
+              <button 
+                v-for="tab in areaChartTabs" 
+                :key="tab.key" 
+                :class="[
+                  activeAreaChartTab === tab.key 
+                    ? `bg-${tab.color}-100 text-${tab.color}-600 ring-2 ring-${tab.color}-200` 
+                    : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700', 
+                  'px-3 py-2 rounded-lg font-medium text-sm transition-all duration-200 flex items-center space-x-2'
+                ]"
+                @click="activeAreaChartTab = tab.key"
+              >
+                <component
+                  :is="tab.icon"
+                  class="h-4 w-4"
+                />
+                <span>{{ tab.label }}</span>
+              </button>
+            </nav>
           </div>
           
           <!-- Chart Container dengan loading state -->
           <div class="relative">
-              <div v-if="loading" class="flex justify-center items-center h-48">
-                  <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-              </div>
+            <div
+              v-if="loading"
+              class="flex justify-center items-center h-48"
+            >
+              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500" />
+            </div>
               
-              <div v-else-if="!summaryData[activeAreaChartTab]?.area_chart || summaryData[activeAreaChartTab].area_chart.length === 0" 
-                   class="flex flex-col justify-center items-center h-48 text-gray-500">
-                  <component :is="areaChartTabs.find(t => t.key === activeAreaChartTab)?.icon" class="h-12 w-12 mb-2 opacity-50" />
-                  <p class="text-sm">Belum ada data aktivitas {{ areaChartTabs.find(t => t.key === activeAreaChartTab)?.label.toLowerCase() }}</p>
-              </div>
+            <div
+              v-else-if="!summaryData[activeAreaChartTab]?.area_chart || summaryData[activeAreaChartTab].area_chart.length === 0" 
+              class="flex flex-col justify-center items-center h-48 text-gray-500"
+            >
+              <component
+                :is="areaChartTabs.find(t => t.key === activeAreaChartTab)?.icon"
+                class="h-12 w-12 mb-2 opacity-50"
+              />
+              <p class="text-sm">
+                Belum ada data aktivitas {{ areaChartTabs.find(t => t.key === activeAreaChartTab)?.label.toLowerCase() }}
+              </p>
+            </div>
               
-              <div v-else>
-                  <!-- Statistik singkat -->
-                  <div class="grid grid-cols-2 gap-4 mb-4">
-                      <div class="bg-gray-50 p-3 rounded-lg">
-                          <p class="text-sm text-gray-500">Total Aktivitas</p>
-                          <p class="text-xl font-bold text-gray-800">
-                              {{ summaryData[activeAreaChartTab]?.area_chart?.length || 0 }}
-                          </p>
-                      </div>
-                      <div class="bg-gray-50 p-3 rounded-lg">
-                          <p class="text-sm text-gray-500">Aktivitas Hari Ini</p>
-                          <p class="text-xl font-bold text-gray-800">
-                              {{ summaryData[activeAreaChartTab]?.area_chart?.filter(item => {
-                                  const today = new Date().toISOString().split('T')[0];
-                                  return item.date.split(' ')[0] === today;
-                              }).length || 0 }}
-                          </p>
-                      </div>
-                  </div>
-                  
-                  <!-- Area Chart -->
-                  <VueApexCharts 
-                      :key="`area-chart-${activeAreaChartTab}`" 
-                      type="area" 
-                      height="200" 
-                      :options="recentActivityChart.options" 
-                      :series="recentActivityChart.series" 
-                  />
-                  
-                  <!-- Aktivitas Terbaru List -->
-                  <div class="mt-4 border-t pt-4">
-                      <h4 class="text-sm font-semibold text-gray-700 mb-2">Aktivitas Terbaru:</h4>
-                      <div class="space-y-2 max-h-24 overflow-y-auto">
-                          <div 
-                              v-for="(item, index) in summaryData[activeAreaChartTab]?.area_chart?.slice(0, 3)" 
-                              :key="index"
-                              class="flex items-center space-x-3 text-sm"
-                          >
-                              <div class="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0"></div>
-                              <span class="text-gray-600 truncate">{{ item.data }}</span>
-                              <span class="text-gray-400 text-xs flex-shrink-0">
-                                  {{ new Date(item.date).toLocaleDateString('id-ID', { 
-                                      day: '2-digit', 
-                                      month: 'short', 
-                                      hour: '2-digit', 
-                                      minute: '2-digit' 
-                                  }) }}
-                              </span>
-                          </div>
-                          <div v-if="summaryData[activeAreaChartTab]?.area_chart?.length > 3" 
-                               class="text-xs text-gray-500 text-center pt-1">
-                              +{{ summaryData[activeAreaChartTab].area_chart.length - 3 }} aktivitas lainnya
-                          </div>
-                      </div>
-                  </div>
+            <div v-else>
+              <!-- Statistik singkat -->
+              <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="bg-gray-50 p-3 rounded-lg">
+                  <p class="text-sm text-gray-500">
+                    Total Aktivitas
+                  </p>
+                  <p class="text-xl font-bold text-gray-800">
+                    {{ summaryData[activeAreaChartTab]?.area_chart?.length || 0 }}
+                  </p>
+                </div>
+                <div class="bg-gray-50 p-3 rounded-lg">
+                  <p class="text-sm text-gray-500">
+                    Aktivitas Hari Ini
+                  </p>
+                  <p class="text-xl font-bold text-gray-800">
+                    {{ summaryData[activeAreaChartTab]?.area_chart?.filter(item => {
+                      const today = new Date().toISOString().split('T')[0];
+                      return item.date.split(' ')[0] === today;
+                    }).length || 0 }}
+                  </p>
+                </div>
               </div>
+                  
+              <!-- Area Chart -->
+              <VueApexCharts 
+                :key="`area-chart-${activeAreaChartTab}`" 
+                type="area" 
+                height="200" 
+                :options="recentActivityChart.options" 
+                :series="recentActivityChart.series" 
+              />
+                  
+              <!-- Aktivitas Terbaru List -->
+              <div class="mt-4 border-t pt-4">
+                <h4 class="text-sm font-semibold text-gray-700 mb-2">
+                  Aktivitas Terbaru:
+                </h4>
+                <div class="space-y-2 max-h-24 overflow-y-auto">
+                  <div 
+                    v-for="(item, index) in summaryData[activeAreaChartTab]?.area_chart?.slice(0, 3)" 
+                    :key="index"
+                    class="flex items-center space-x-3 text-sm"
+                  >
+                    <div class="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0" />
+                    <span class="text-gray-600 truncate">{{ item.data }}</span>
+                    <span class="text-gray-400 text-xs flex-shrink-0">
+                      {{ new Date(item.date).toLocaleDateString('id-ID', { 
+                        day: '2-digit', 
+                        month: 'short', 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                      }) }}
+                    </span>
+                  </div>
+                  <div
+                    v-if="summaryData[activeAreaChartTab]?.area_chart?.length > 3" 
+                    class="text-xs text-gray-500 text-center pt-1"
+                  >
+                    +{{ summaryData[activeAreaChartTab].area_chart.length - 3 }} aktivitas lainnya
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-      </div>
+        </div>
       
-      <!-- Quota Card tetap sama -->
-      <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <!-- Quota Card tetap sama -->
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
           <div class="flex items-center space-x-3 mb-4">
-              <TicketIcon class="h-7 w-7 text-purple-500" />
-              <h4 class="text-lg font-bold text-gray-800">Informasi Quota</h4>
+            <TicketIcon class="h-7 w-7 text-purple-500" />
+            <h4 class="text-lg font-bold text-gray-800">
+              Informasi Quota
+            </h4>
           </div>
           <div class="text-center bg-purple-50 text-purple-700 font-bold py-2 rounded-lg capitalize">
-              Status: {{ summaryData.quota.status }}
+            Status: {{ summaryData.quota.status }}
           </div>
           <div class="grid grid-cols-3 text-center divide-x divide-gray-200 mt-4">
-              <div><p class="text-2xl font-bold text-gray-800">{{ summaryData.quota.registered }}</p><p class="text-xs text-gray-500">Terdaftar</p></div>
-              <div><p class="text-2xl font-bold text-gray-800">{{ summaryData.quota.remaining }}</p><p class="text-xs text-gray-500">Sisa</p></div>
-              <div><p class="text-2xl font-bold text-gray-800">{{ summaryData.quota.limit }}</p><p class="text-xs text-gray-500">Limit</p></div>
+            <div>
+              <p class="text-2xl font-bold text-gray-800">
+                {{ summaryData.quota.registered }}
+              </p><p class="text-xs text-gray-500">
+                Terdaftar
+              </p>
+            </div>
+            <div>
+              <p class="text-2xl font-bold text-gray-800">
+                {{ summaryData.quota.remaining }}
+              </p><p class="text-xs text-gray-500">
+                Sisa
+              </p>
+            </div>
+            <div>
+              <p class="text-2xl font-bold text-gray-800">
+                {{ summaryData.quota.limit }}
+              </p><p class="text-xs text-gray-500">
+                Limit
+              </p>
+            </div>
           </div>
+        </div>
       </div>
-  </div>
   
       <!-- Baris 4: Radial Bar Charts by Status/Category -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <!-- Pendaftaran by Status -->
-          <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center">
-              <h3 class="text-lg font-bold text-gray-800">Proporsi Pendaftaran</h3>
-              <div class="w-full">
-                  <VueApexCharts type="radialBar" height="220" :options="pendaftaranStatusChart.options" :series="pendaftaranStatusChart.series" />
-              </div>
-              <p class="-mt-14 text-xl font-semibold text-gray-600 capitalize">{{ currentPendaftaranStatusTab }}</p>
-               <div class="mt-4 w-full border-t pt-4">
-                  <nav class="flex justify-center space-x-4" aria-label="Tabs">
-                      <button v-for="tab in Object.keys(summaryData.pendaftaran.by_status)" :key="tab" @click="currentPendaftaranStatusTab = tab"
-                              :class="[currentPendaftaranStatusTab === tab ? 'text-pink-600 font-bold' : 'text-gray-500 hover:text-gray-700', 'text-sm capitalize']">
-                          {{ tab }}
-                      </button>
-                  </nav>
-              </div>
+        <!-- Pendaftaran by Status -->
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center">
+          <h3 class="text-lg font-bold text-gray-800">
+            Proporsi Pendaftaran
+          </h3>
+          <div class="w-full">
+            <VueApexCharts
+              type="radialBar"
+              height="220"
+              :options="pendaftaranStatusChart.options"
+              :series="pendaftaranStatusChart.series"
+            />
           </div>
-          <!-- Fasilitas by Status -->
-          <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center">
-              <h3 class="text-lg font-bold text-gray-800">Proporsi Fasilitas</h3>
-              <div class="w-full">
-                  <VueApexCharts type="radialBar" height="220" :options="fasilitasStatusChart.options" :series="fasilitasStatusChart.series" />
-              </div>
-              <p class="-mt-14 text-xl font-semibold text-gray-600 capitalize">{{ currentFasilitasStatusTab }}</p>
-               <div class="mt-4 w-full border-t pt-4">
-                  <nav class="flex justify-center space-x-4" aria-label="Tabs">
-                      <button v-for="tab in Object.keys(summaryData.fasilitas.by_status)" :key="tab" @click="currentFasilitasStatusTab = tab"
-                              :class="[currentFasilitasStatusTab === tab ? 'text-green-600 font-bold' : 'text-gray-500 hover:text-gray-700', 'text-sm capitalize']">
-                          {{ tab }}
-                      </button>
-                  </nav>
-              </div>
+          <p class="-mt-14 text-xl font-semibold text-gray-600 capitalize">
+            {{ currentPendaftaranStatusTab }}
+          </p>
+          <div class="mt-4 w-full border-t pt-4">
+            <nav
+              class="flex justify-center space-x-4"
+              aria-label="Tabs"
+            >
+              <button
+                v-for="tab in Object.keys(summaryData.pendaftaran.by_status)"
+                :key="tab"
+                :class="[currentPendaftaranStatusTab === tab ? 'text-pink-600 font-bold' : 'text-gray-500 hover:text-gray-700', 'text-sm capitalize']"
+                @click="currentPendaftaranStatusTab = tab"
+              >
+                {{ tab }}
+              </button>
+            </nav>
           </div>
-          <!-- Pegawai by Status -->
-          <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center">
-              <h3 class="text-lg font-bold text-gray-800">Proporsi Pegawai</h3>
-              <div class="w-full">
-                  <VueApexCharts type="radialBar" height="220" :options="pegawaiStatusChart.options" :series="pegawaiStatusChart.series" />
-              </div>
-              <p class="-mt-14 text-xl font-semibold text-gray-600 capitalize">{{ currentPegawaiStatusTab }}</p>
-               <div class="mt-4 w-full border-t pt-4">
-                  <nav class="flex justify-center space-x-4" aria-label="Tabs">
-                      <button v-for="tab in Object.keys(summaryData.struktur_pegawai.by_status)" :key="tab" @click="currentPegawaiStatusTab = tab"
-                              :class="[currentPegawaiStatusTab === tab ? 'text-yellow-600 font-bold' : 'text-gray-500 hover:text-gray-700', 'text-sm capitalize']">
-                          {{ tab }}
-                      </button>
-                  </nav>
-              </div>
+        </div>
+        <!-- Fasilitas by Status -->
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center">
+          <h3 class="text-lg font-bold text-gray-800">
+            Proporsi Fasilitas
+          </h3>
+          <div class="w-full">
+            <VueApexCharts
+              type="radialBar"
+              height="220"
+              :options="fasilitasStatusChart.options"
+              :series="fasilitasStatusChart.series"
+            />
           </div>
-          <!-- Berita by Jenis Konten -->
-          <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center">
-              <h3 class="text-lg font-bold text-gray-800">Proporsi Konten</h3>
-              <div class="w-full">
-                  <VueApexCharts type="radialBar" height="220" :options="beritaKontenChart.options" :series="beritaKontenChart.series" />
-              </div>
-              <p class="-mt-14 text-s font-semibold text-gray-600 capitalize">{{ currentBeritaKontenTab }}</p>
-               <div class="mt-4 w-full border-t pt-4">
-                  <nav class="flex justify-center space-x-4" aria-label="Tabs">
-                      <button v-for="tab in Object.keys(summaryData.berita.by_jenis_konten)" :key="tab" @click="currentBeritaKontenTab = tab"
-                              :class="[currentBeritaKontenTab === tab ? 'text-orange-600 font-bold' : 'text-gray-500 hover:text-gray-700', 'text-sm capitalize']">
-                          {{ tab }}
-                      </button>
-                  </nav>
-              </div>
+          <p class="-mt-14 text-xl font-semibold text-gray-600 capitalize">
+            {{ currentFasilitasStatusTab }}
+          </p>
+          <div class="mt-4 w-full border-t pt-4">
+            <nav
+              class="flex justify-center space-x-4"
+              aria-label="Tabs"
+            >
+              <button
+                v-for="tab in Object.keys(summaryData.fasilitas.by_status)"
+                :key="tab"
+                :class="[currentFasilitasStatusTab === tab ? 'text-green-600 font-bold' : 'text-gray-500 hover:text-gray-700', 'text-sm capitalize']"
+                @click="currentFasilitasStatusTab = tab"
+              >
+                {{ tab }}
+              </button>
+            </nav>
           </div>
+        </div>
+        <!-- Pegawai by Status -->
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center">
+          <h3 class="text-lg font-bold text-gray-800">
+            Proporsi Pegawai
+          </h3>
+          <div class="w-full">
+            <VueApexCharts
+              type="radialBar"
+              height="220"
+              :options="pegawaiStatusChart.options"
+              :series="pegawaiStatusChart.series"
+            />
+          </div>
+          <p class="-mt-14 text-xl font-semibold text-gray-600 capitalize">
+            {{ currentPegawaiStatusTab }}
+          </p>
+          <div class="mt-4 w-full border-t pt-4">
+            <nav
+              class="flex justify-center space-x-4"
+              aria-label="Tabs"
+            >
+              <button
+                v-for="tab in Object.keys(summaryData.struktur_pegawai.by_status)"
+                :key="tab"
+                :class="[currentPegawaiStatusTab === tab ? 'text-yellow-600 font-bold' : 'text-gray-500 hover:text-gray-700', 'text-sm capitalize']"
+                @click="currentPegawaiStatusTab = tab"
+              >
+                {{ tab }}
+              </button>
+            </nav>
+          </div>
+        </div>
+        <!-- Berita by Jenis Konten -->
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center">
+          <h3 class="text-lg font-bold text-gray-800">
+            Proporsi Konten
+          </h3>
+          <div class="w-full">
+            <VueApexCharts
+              type="radialBar"
+              height="220"
+              :options="beritaKontenChart.options"
+              :series="beritaKontenChart.series"
+            />
+          </div>
+          <p class="-mt-14 text-s font-semibold text-gray-600 capitalize">
+            {{ currentBeritaKontenTab }}
+          </p>
+          <div class="mt-4 w-full border-t pt-4">
+            <nav
+              class="flex justify-center space-x-4"
+              aria-label="Tabs"
+            >
+              <button
+                v-for="tab in Object.keys(summaryData.berita.by_jenis_konten)"
+                :key="tab"
+                :class="[currentBeritaKontenTab === tab ? 'text-orange-600 font-bold' : 'text-gray-500 hover:text-gray-700', 'text-sm capitalize']"
+                @click="currentBeritaKontenTab = tab"
+              >
+                {{ tab }}
+              </button>
+            </nav>
+          </div>
+        </div>
       </div>
       
       <!-- Baris 5: Donut Charts -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <h3 class="text-lg font-bold text-gray-800">Pendidikan Pendaftar</h3>
-              <p class="text-sm text-gray-500 mb-4">{{ pendaftaranPendidikanChart.total }} Total</p>
-              <div class="my-4 flex justify-center"><VueApexCharts type="donut" height="150" :options="pendaftaranPendidikanChart.options" :series="pendaftaranPendidikanChart.series" /></div>
-              <div class="space-y-2">
-                  <div v-for="label in pendaftaranPendidikanChart.labels.slice(0,4)" :key="label" class="flex items-center">
-                      <div class="flex-shrink-0 bg-pink-100 p-2 rounded-lg mr-3"><UserCircleIcon class="h-5 w-5 text-pink-600" /></div>
-                      <div class="flex-grow"><p class="font-semibold text-gray-700 text-sm">{{ label }}</p></div>
-                      <div class="font-bold text-gray-800 text-sm">{{ summaryData.pendaftaran.by_pendidikan[label] }}</div>
-                  </div>
-                   <p v-if="pendaftaranPendidikanChart.labels.length > 4" class="text-xs text-center text-gray-500 mt-1">+{{ pendaftaranPendidikanChart.labels.length - 4 }} lainnya</p>
-              </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <h3 class="text-lg font-bold text-gray-800">
+            Pendidikan Pendaftar
+          </h3>
+          <p class="text-sm text-gray-500 mb-4">
+            {{ pendaftaranPendidikanChart.total }} Total
+          </p>
+          <div class="my-4 flex justify-center">
+            <VueApexCharts
+              type="donut"
+              height="150"
+              :options="pendaftaranPendidikanChart.options"
+              :series="pendaftaranPendidikanChart.series"
+            />
           </div>
-          <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <h3 class="text-lg font-bold text-gray-800">Kategori Fasilitas</h3>
-              <p class="text-sm text-gray-500 mb-4">{{ fasilitasKategoriChart.total }} Total</p>
-              <div class="my-4 flex justify-center"><VueApexCharts type="donut" height="150" :options="fasilitasKategoriChart.options" :series="fasilitasKategoriChart.series" /></div>
-              <div class="space-y-2">
-                  <div v-for="label in fasilitasKategoriChart.labels" :key="label" class="flex items-center">
-                      <div class="flex-shrink-0 bg-green-100 p-2 rounded-lg mr-3"><BuildingOfficeIcon class="h-5 w-5 text-green-600" /></div>
-                      <div class="flex-grow"><p class="font-semibold text-gray-700 text-sm">{{ label }}</p></div>
-                      <div class="font-bold text-gray-800 text-sm">{{ summaryData.fasilitas.by_kategori[label] }}</div>
-                  </div>
+          <div class="space-y-2">
+            <div
+              v-for="label in pendaftaranPendidikanChart.labels.slice(0,4)"
+              :key="label"
+              class="flex items-center"
+            >
+              <div class="flex-shrink-0 bg-pink-100 p-2 rounded-lg mr-3">
+                <UserCircleIcon class="h-5 w-5 text-pink-600" />
               </div>
-          </div>
-          <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <h3 class="text-lg font-bold text-gray-800">Pelatihan per Angkatan</h3>
-              <p class="text-sm text-gray-500 mb-4">{{ pelatihanAngkatanChart.total }} Total</p>
-              <div class="my-4 flex justify-center"><VueApexCharts type="donut" height="150" :options="pelatihanAngkatanChart.options" :series="pelatihanAngkatanChart.series" /></div>
-              <div class="space-y-2">
-                  <div v-for="label in pelatihanAngkatanChart.labels.slice(0,4)" :key="label" class="flex items-center">
-                      <div class="flex-shrink-0 bg-teal-100 p-2 rounded-lg mr-3"><UserGroupIcon class="h-5 w-5 text-teal-600" /></div>
-                      <div class="flex-grow"><p class="font-semibold text-gray-700 text-sm">Angkatan {{ label }}</p></div>
-                      <div class="font-bold text-gray-800 text-sm">{{ summaryData.pelatihan.by_angkatan[label] }}</div>
-                  </div>
-                   <p v-if="pelatihanAngkatanChart.labels.length > 4" class="text-xs text-center text-gray-500 mt-1">+{{ pelatihanAngkatanChart.labels.length - 4 }} lainnya</p>
+              <div class="flex-grow">
+                <p class="font-semibold text-gray-700 text-sm">
+                  {{ label }}
+                </p>
               </div>
+              <div class="font-bold text-gray-800 text-sm">
+                {{ summaryData.pendaftaran.by_pendidikan[label] }}
+              </div>
+            </div>
+            <p
+              v-if="pendaftaranPendidikanChart.labels.length > 4"
+              class="text-xs text-center text-gray-500 mt-1"
+            >
+              +{{ pendaftaranPendidikanChart.labels.length - 4 }} lainnya
+            </p>
           </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <h3 class="text-lg font-bold text-gray-800">
+            Kategori Fasilitas
+          </h3>
+          <p class="text-sm text-gray-500 mb-4">
+            {{ fasilitasKategoriChart.total }} Total
+          </p>
+          <div class="my-4 flex justify-center">
+            <VueApexCharts
+              type="donut"
+              height="150"
+              :options="fasilitasKategoriChart.options"
+              :series="fasilitasKategoriChart.series"
+            />
+          </div>
+          <div class="space-y-2">
+            <div
+              v-for="label in fasilitasKategoriChart.labels"
+              :key="label"
+              class="flex items-center"
+            >
+              <div class="flex-shrink-0 bg-green-100 p-2 rounded-lg mr-3">
+                <BuildingOfficeIcon class="h-5 w-5 text-green-600" />
+              </div>
+              <div class="flex-grow">
+                <p class="font-semibold text-gray-700 text-sm">
+                  {{ label }}
+                </p>
+              </div>
+              <div class="font-bold text-gray-800 text-sm">
+                {{ summaryData.fasilitas.by_kategori[label] }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <h3 class="text-lg font-bold text-gray-800">
+            Pelatihan per Angkatan
+          </h3>
+          <p class="text-sm text-gray-500 mb-4">
+            {{ pelatihanAngkatanChart.total }} Total
+          </p>
+          <div class="my-4 flex justify-center">
+            <VueApexCharts
+              type="donut"
+              height="150"
+              :options="pelatihanAngkatanChart.options"
+              :series="pelatihanAngkatanChart.series"
+            />
+          </div>
+          <div class="space-y-2">
+            <div
+              v-for="label in pelatihanAngkatanChart.labels.slice(0,4)"
+              :key="label"
+              class="flex items-center"
+            >
+              <div class="flex-shrink-0 bg-teal-100 p-2 rounded-lg mr-3">
+                <UserGroupIcon class="h-5 w-5 text-teal-600" />
+              </div>
+              <div class="flex-grow">
+                <p class="font-semibold text-gray-700 text-sm">
+                  Angkatan {{ label }}
+                </p>
+              </div>
+              <div class="font-bold text-gray-800 text-sm">
+                {{ summaryData.pelatihan.by_angkatan[label] }}
+              </div>
+            </div>
+            <p
+              v-if="pelatihanAngkatanChart.labels.length > 4"
+              class="text-xs text-center text-gray-500 mt-1"
+            >
+              +{{ pelatihanAngkatanChart.labels.length - 4 }} lainnya
+            </p>
+          </div>
+        </div>
       </div>
     </div>
-</SimpleLayout>
+  </SimpleLayout>
 </template>
 
 <style>

@@ -315,7 +315,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ElMessage, ElNotification, UploadFile, UploadFiles } from 'element-plus'
-import api from '../../api.js' // Pastikan path ini benar sesuai struktur proyek Anda
+import api from '../../api.js'
+
+defineEmits(['close']); // Pastikan path ini benar sesuai struktur proyek Anda
 
 const fileList = ref<File[]>([])
 const loading = ref(false)
@@ -347,7 +349,9 @@ const beforeUpload = (file: File) => {
 const handleChange = (file: UploadFile, fileListRaw: UploadFiles) => {
   // Ambil file terakhir, bisa .raw jika <el-upload> atau langsung File jika <input>
   const lastFile = fileListRaw.slice(-1)[0]
-  fileList.value = [lastFile.raw || lastFile]
+  if (lastFile && lastFile.raw) {
+    fileList.value = [lastFile.raw]
+  }
 }
 
 /**
@@ -387,7 +391,7 @@ const submitFile = async () => {
     let errorMessage = 'Terjadi kesalahan saat mengimpor data.';
     if (err instanceof Error) {
       if ('response' in err && err.response && typeof err.response === 'object' && 'data' in err.response && err.response.data && typeof err.response.data === 'object' && 'error' in err.response.data) {
-        errorMessage = err.response.data.error;
+        errorMessage = String(err.response.data.error);
       } else {
         errorMessage = err.message;
       }

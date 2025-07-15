@@ -6,7 +6,7 @@
     "lib": ["ESNext", "DOM"],
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": false,
+    "strict": true,
     "skipLibCheck": true,
     "allowJs": true,
     "resolveJsonModule": true,

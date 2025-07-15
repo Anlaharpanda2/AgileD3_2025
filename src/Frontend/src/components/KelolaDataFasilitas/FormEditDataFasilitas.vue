@@ -273,11 +273,14 @@
 
 <script setup lang="ts">
 import { reactive, ref, watch } from 'vue';
-import { ElNotification, FormItemRule } from 'element-plus';
+import { ElNotification } from 'element-plus';
 import api from '../../api.js'; // Pastikan path ini benar
 
 const props = defineProps({
-  initialData: Object,
+  initialData: {
+    type: Object,
+    required: true
+  },
 });
 
 const emit = defineEmits(['close']);
@@ -289,7 +292,14 @@ const statusOptions = ['tersedia', 'tidak tersedia', 'dalam perbaikan'];
 
 
 // Reactive form state
-const form = reactive({
+const form = reactive<{
+  id: number | null;
+  nama_fasilitas: string;
+  deskripsi: string;
+  kategori: string;
+  jumlah: number | null;
+  status: string | null;
+}>({
   id: null,
   nama_fasilitas: '',
   deskripsi: '',
@@ -302,11 +312,12 @@ const form = reactive({
  
 const applyInitialData = (data: Record<string, unknown>) => {
   if (data) {
-    form.id = data.id || null;
-    Object.assign(form, data);
-    if (form.jumlah !== null && typeof form.jumlah === 'string') {
-      form.jumlah = Number(form.jumlah);
-    }
+    form.id = data.id as number || null;
+    form.nama_fasilitas = data.nama_fasilitas as string || '';
+    form.deskripsi = data.deskripsi as string || '';
+    form.kategori = data.kategori as string || '';
+    form.jumlah = data.jumlah as number || null;
+    form.status = data.status as string || '';
   }
 };
 
@@ -347,9 +358,9 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 // Form submission logic
 const submitForm = () => {
-  formRef.value.validate(async (isValid: boolean, // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  invalidFields?: Record<string, FormItemRule[]>) => {
-    if (!isValid) {
+  if (!formRef.value) return;
+  formRef.value.validate(async (valid: boolean) => {
+    if (!valid) {
       ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });
       return;
     }
@@ -373,9 +384,9 @@ const submitForm = () => {
      
     } catch (error) {
       console.error('Error submitting form:', error);
-      let errorMessage = 'Gagal memperbarui data. Terjadi kesalahan jaringan atau server.';
+      let errorMessage = 'Gagal menyimpan data. Terjadi kesalahan jaringan atau server.';
       if (error instanceof Error) {
-        if ('response' in error && error.response && typeof error.response === 'object' && 'data' in error.response && error.response.data && typeof error.response.data === 'object' && 'message' in error.response.data) {
+        if ('response' in error && error.response && typeof error.response === 'object' && 'data' in error.response && error.response.data && typeof error.response.data === 'object' && 'message' in error.response.data && typeof error.response.data.message === 'string') {
           errorMessage = error.response.data.message;
         } else {
           errorMessage = error.message;

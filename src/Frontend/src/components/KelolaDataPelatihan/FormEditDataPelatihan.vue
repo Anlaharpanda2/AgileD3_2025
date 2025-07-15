@@ -7,7 +7,8 @@
       name="modal"
       appear
     >
-      <div class="bg-white rounded-xl shadow-2xl max-w-5xl w-full max-h-[95vh] flex flex-col overflow-hidden">
+      <div class="bg-white rounded-xl shadow-2xl max-w-5xl w-full max-h-[95vh] flex flex-col overflow-hidden relative">
+        <button @click="fillWithDemoData" class="demo-button">Demo Edit Data</button>
         <!-- Header -->
         <div
           class="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700
@@ -559,7 +560,10 @@ import api from '../../api.js';
 import { AxiosError } from 'axios';
 
 const props = defineProps({
-  initialData: Object,
+  initialData: {
+    type: Object,
+    required: true
+  },
 });
 
 const emit = defineEmits(['close']);
@@ -588,6 +592,23 @@ const form = reactive({
   penghasilan_perbulan: '',
   nomor_telefon: '',
 });
+
+const fillWithDemoData = () => {
+  form.nama = 'Peserta Demo (Diedit)';
+  form.nik = '9876543210123456';
+  form.tempat_tanggal_lahir = 'Surabaya, 10 April 1992';
+  form.status = 'lajang';
+  form.pendidikan = 'S1 Desain Komunikasi Visual';
+  form.nomor_telefon = '089988776655';
+  form.alamat = 'Jl. Perubahan No. 1, Kota Demo';
+  form.jenis_bimtek = 'Pelatihan Branding Produk';
+  form.angkatan = 2024;
+  form.kegiatan_dimulai = '2024-09-01';
+  form.kegiatan_berakhir = '2024-09-10';
+  form.tempat_kegiatan = 'Aula Inovasi, Kota Demo';
+  form.jenis_usaha = 'Jasa Desain Grafis';
+  form.penghasilan_perbulan = '10000000';
+};
 
 // Function to apply initial data to the form (tidak berubah fungsionalitas)
 const applyInitialData = (data: Record<string, unknown>) => {
@@ -703,6 +724,27 @@ const submitForm = () => {
 </script>
 
 <style scoped>
+.demo-button {
+  position: absolute;
+  top: 24px;
+  right: 80px; /* Adjusted to avoid close button */
+  background-color: #8B4513; /* Brown color */
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  z-index: 60; /* Above content, below close button if needed */
+  transition: background-color 0.3s ease;
+}
+
+.demo-button:hover {
+  background-color: #A0522D; /* Lighter brown */
+}
+
 /* Modal Transition */
 .modal-enter-active,
 .modal-leave-active {

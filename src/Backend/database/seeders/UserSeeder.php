@@ -10,21 +10,21 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // Buat user pertama
+        // Akun Operator
         User::factory()->create([
-            'name' => 'anla harpanda',
-            'username' => 'anla',
+            'name' => 'Operator',
+            'username' => 'operator',
             'role' => 'operator',
-            'email' => 'anlaharpanda@gmail.com',
+            'email' => 'operator@example.com',
             'password' => Hash::make('Aa12345!')
         ]);
 
-        // Buat user kedua
+        // Akun Pegawai
         User::factory()->create([
-            'name' => 'anla harpanda',
-            'username' => 'aan',
+            'name' => 'Pegawai',
+            'username' => 'pegawai',
             'role' => 'pegawai',
-            'email' => 'anlaharpanda2@gmail.com',
+            'email' => 'pegawai@example.com',
             'password' => Hash::make('Aa12345!')
         ]);
     }

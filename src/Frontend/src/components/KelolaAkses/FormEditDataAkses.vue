@@ -234,7 +234,10 @@ import api from '../../api.js';
 import { AxiosError } from 'axios';
 
 const props = defineProps({
-  initialData: Object,
+  initialData: {
+    type: Object,
+    required: true
+  },
 });
 
 const emit = defineEmits(['close']);
@@ -242,7 +245,12 @@ const emit = defineEmits(['close']);
 const formRef = ref<FormInstance | null>(null);
 const roleOptions = ['operator', 'pegawai', 'masyarakat'];
 
-const form = reactive({
+const form = reactive<{
+  id: number | null;
+  name: string;
+  email: string;
+  role: string;
+}>({
   id: null,
   name: '',
   email: '',
@@ -274,6 +282,7 @@ const rules = {
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 const submitForm = () => {
+  if (!formRef.value) return;
   formRef.value.validate(async (valid: boolean) => {
     if (!valid) {
       ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });

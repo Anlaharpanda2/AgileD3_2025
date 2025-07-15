@@ -1,5 +1,6 @@
 <template>
-  <div class="p-4">
+  <div class="p-4 relative">
+    <button @click="fillWithDemoData" class="demo-button">Demo Posttest</button>
     <el-card class="shadow-lg rounded-lg bg-white">
       <template #header>
         <div class="flex items-center justify-between mb-4">
@@ -50,8 +51,8 @@
           class="mb-6"
         >
           <QuestionEditor
-            :modelValue="question"
-            @update:modelValue="updateQuestion(index, $event)"
+            :model-value="question"
+            @update:model-value="updateQuestion(index, $event)"
             @remove="removeQuestion(index)"
           />
         </div>
@@ -112,6 +113,40 @@ const posttestId = ref<number | null>(null);
 
 const { posttestForm, addQuestion, removeQuestion, setPosttestForm } = usePosttestForm();
 
+const fillWithDemoData = () => {
+  posttestForm.value.title = 'Posttest Demo Pemasaran Digital';
+  posttestForm.value.description = 'Tes akhir untuk mengukur pemahaman mendalam tentang konsep pemasaran digital.';
+  posttestForm.value.questions = [
+    {
+      question_text: 'Apa itu SEO (Search Engine Optimization)?',
+      option_a: 'Strategi iklan berbayar di media sosial',
+      option_b: 'Proses mengoptimalkan situs web agar mendapat peringkat tinggi di hasil pencarian organik',
+      option_c: 'Email marketing untuk menjangkau pelanggan',
+      option_d: 'Membuat konten video viral',
+      correct_answer: 'B',
+      order: 1
+    },
+    {
+      question_text: 'Manakah metrik yang paling penting untuk mengukur keberhasilan kampanye email marketing?',
+      option_a: 'Jumlah email yang dikirim',
+      option_b: 'Tingkat buka (Open Rate)',
+      option_c: 'Tingkat konversi (Conversion Rate)',
+      option_d: 'Jumlah pelanggan yang berhenti berlangganan',
+      correct_answer: 'C',
+      order: 2
+    },
+    {
+      question_text: 'A/B testing dalam pemasaran digital digunakan untuk...',
+      option_a: 'Menguji dua versi dari halaman web atau email untuk melihat mana yang berkinerja lebih baik',
+      option_b: 'Menargetkan dua audiens yang berbeda secara bersamaan',
+      option_c: 'Menjalankan iklan di dua platform yang berbeda',
+      option_d: 'Menganalisis performa website di browser A dan B',
+      correct_answer: 'A',
+      order: 3
+    }
+  ];
+};
+
 const updateQuestion = (index: number, updatedQuestion: Question) => {
   posttestForm.value.questions[index] = updatedQuestion;
 };
@@ -164,5 +199,26 @@ const savePosttest = async () => {
 </script>
 
 <style scoped>
+.demo-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #8B4513; /* A brown color */
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
+
+.demo-button:hover {
+  background-color: #A0522D; /* A slightly lighter brown */
+}
 /* Tailwind handles most styling */
 </style>
+

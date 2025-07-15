@@ -1,0 +1,10 @@
+
+> frontend@0.0.0 lint
+> eslint . --ext .js,.ts,.vue
+
+
+D:\PBL\AgileD3_2025\src\Frontend\src\components\Layouts\TheFooter.vue
+  56:17  warning  'v-html' directive can lead to XSS attack  vue/no-v-html
+
+✖ 1 problem (0 errors, 1 warning)
+

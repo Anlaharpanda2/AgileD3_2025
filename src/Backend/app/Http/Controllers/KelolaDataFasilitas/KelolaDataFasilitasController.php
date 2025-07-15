@@ -7,8 +7,25 @@ use App\Models\DataFasilitas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+use App\Imports\FasilitasImport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class KelolaDataFasilitasController extends Controller
 {
+    public function impor(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx'
+        ]);
+
+        try {
+            Excel::import(new FasilitasImport, $request->file('file'));
+            return response()->json(['message' => 'Data fasilitas berhasil diimpor.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage()], 500);
+        }
+    }
+
     public function index()
     {
         $dataFasilitas = DataFasilitas::all();

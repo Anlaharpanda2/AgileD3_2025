@@ -8,6 +8,7 @@
       :data="tableData"
       class="sm:full-screen"
       @update:visible="showSort = $event"
+      @apply-sort="handleSort"
     />
     <FormFilterDataKonsultasi
       v-model="showFilter"
@@ -646,7 +647,6 @@
             }"
             class="modern-table full-width-cells"
             @selection-change="onSelectionChange"
-            @row-click="goToDetail"
           >
             <el-table-column
               type="selection"
@@ -774,6 +774,27 @@
               <template #default="{ row }">
                 <div class="flex items-center gap-2 full-width-content">
                   <button
+                    v-if="row.status === 'diproses'"
+                    class="w-8 h-8 flex items-center justify-center rounded-lg bg-green-100 text-green-600 hover:bg-green-200 transition-colors"
+                    title="Selesai"
+                    @click.stop="completeConsultation(row)"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </button>
+                  <button
                     class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors"
                     title="Edit"
                     @click.stop="openEdit(row)"
@@ -824,7 +845,6 @@
           v-for="row in pagedData"
           :key="row.id"
           class="bg-white rounded-xl shadow-sm border border-gray-100 p-4"
-          @click="goToDetail(row, { type: 'data' }, $event)"
         >
           <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-2">
@@ -853,6 +873,13 @@
             <p>Status {{ row.status }}</p>
           </div>
           <div class="flex gap-2">
+            <button
+              v-if="row.status === 'diproses'"
+              class="flex-1 py-2 bg-green-100 text-green-600 rounded-lg text-sm hover:bg-green-200 transition-colors touch-highlight"
+              @click.stop="completeConsultation(row)"
+            >
+              Selesai
+            </button>
             <button
               class="flex-1 py-2 bg-blue-100 text-blue-600 rounded-lg text-sm hover:bg-blue-200 transition-colors touch-highlight"
               @click.stop="openEdit(row)"
@@ -963,18 +990,9 @@ import FormTambahDataKonsultasi from "../../components/KelolaDataKonsultasi/Form
 import FormFilterDataKonsultasi from "../../components/KelolaDataKonsultasi/FormFilterDataKonsultasi.vue";
 import FormSortingDataKonsultasi from "../../components/KelolaDataKonsultasi/FormSortingDataKonsultasi.vue";
 import { ElNotification } from 'element-plus';
-import { Eye, EyeOff } from 'lucide-vue-next';
-import { useRouter } from 'vue-router';
 
-const router = useRouter();
 
-const goToDetail = (row: Konsultasi, column: Record<string, unknown>, event: MouseEvent) => {
-  // Prevent navigation if the click is on the selection checkbox or action buttons
-  if (column.type === 'selection' || column.label === 'Aksi' || event.target instanceof HTMLElement && event.target.closest('.action-button')) {
-    return;
-  }
-  router.push({ name: 'DetailMasyarakat', params: { id: row.nik } });
-};
+
 
 // Interface for Konsultasi data structure
 interface Konsultasi {
@@ -1017,6 +1035,11 @@ const openEdit = (row: Konsultasi) => {
   editData.value = { ...row }; // Create a copy to avoid direct mutation
   showEdit.value = true;
   // loading.value = false; // This line might be redundant here, loading is managed by fetchData
+};
+
+const handleSort = (payload: { column: string; order: 'asc' | 'desc'; sortedData: Record<string, unknown>[] }) => {
+  tableData.value = payload.sortedData as unknown as Konsultasi[];
+  showSort.value = false;
 };
 
 // Toggles the visibility of a specific dropdown menu
@@ -1239,6 +1262,30 @@ async function onDelete(row: Konsultasi) {
     });
   } finally {
     loading.value = false; // Hide loading indicator
+  }
+}
+
+async function completeConsultation(row: Konsultasi) {
+  loading.value = true;
+  try {
+    await api.patch(`/kelola/konsultasi/${row.id}/complete`);
+    await fetchData();
+    ElNotification({
+      title: 'Berhasil',
+      message: 'Status konsultasi berhasil diubah menjadi selesai.',
+      type: 'success',
+      duration: 3000,
+    });
+  } catch (error) {
+    console.error('Gagal mengubah status konsultasi:', error);
+    ElNotification({
+      title: 'Error',
+      message: 'Gagal mengubah status konsultasi.',
+      type: 'error',
+      duration: 3000,
+    });
+  } finally {
+    loading.value = false;
   }
 }
 

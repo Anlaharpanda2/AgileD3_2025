@@ -205,31 +205,49 @@ import {
   Pencil, ClipboardCheck, Database, FileQuestion,
   MessageCircle, Users2, UserCog
 } from 'lucide-vue-next'
-import UserProfileAvatar from './UserProfileAvatar.vue' // Path relatif dari src/components/Layouts/
+import UserProfileAvatar from './UserProfileAvatar.vue'
 
 const route = useRoute()
 
 const getUserRole = () => localStorage.getItem('role') || ''
 
+// Mendapatkan daftar role efektif (asli + virtual)
+const getEffectiveRoles = () => {
+  const role = getUserRole()
+  const roles = [role]
+
+  // Tambahkan role virtual 'bukanOP' jika bukan operator dan bukan pegawai
+  if (role !== 'operator' && role !== 'pegawai') {
+    roles.push('bukanOP')
+  }
+
+  return roles
+}
+
 // Raw menu array dengan pembatasan role
 const rawMenu = [
   { name: 'BERANDA', to: '/', icon: Home },
+
   {
-    name: 'TEST', icon: FileText, children: [
+    name: 'TEST', icon: FileText, roles: ['operator', 'pegawai', 'masyarakat'], children: [
       { name: 'Pretest', to: '/pretests', icon: Pencil },
       { name: 'Posttest', to: '/posttests', icon: ClipboardCheck },
       { name: 'Data Nilai', to: '/data/nilai', icon: Database, roles: ['operator', 'pegawai'] },
       { name: 'Data Soal', to: '/data/soal', icon: Database, roles: ['operator', 'pegawai'] },
     ]
   },
-  { name: 'PELATIHAN', to: '/pelatihan', icon: BookUser, roles: ['masyarakat'] },
+
+  // 👇 hanya untuk masyarakat (atau bukan operator & pegawai)
+  { name: 'PELATIHAN', to: '/status-pelatihan', icon: BookUser, roles: ['bukanOP'] },
+
   {
     name: 'PELATIHAN', icon: BookUser, roles: ['operator', 'pegawai'], children: [
       { name: 'Data Pendaftar', to: '/data/pendaftaran', icon: Users2 },
       { name: 'Data Peserta', to: '/data/pelatihan', icon: UserCog },
     ]
   },
-  { name: 'PENGADUAN', to: '/pengaduan', icon: MessageSquare, roles: ['masyarakat'] },
+
+  { name: 'PENGADUAN', to: '/pengaduan/cari', icon: MessageSquare, roles: ['bukanOP'] },
   {
     name: 'PENGADUAN', icon: MessageSquare, roles: ['operator', 'pegawai'], children: [
       { name: 'Cari Pengaduan', to: '/pengaduan/cari', icon: MessageSquare },
@@ -241,14 +259,16 @@ const rawMenu = [
 
 // Filter menu berdasarkan role user
 const navigationMenu = computed(() => {
-  const role = getUserRole()
+  const effectiveRoles = getEffectiveRoles()
 
   const filterMenu = (item) => {
-    if (item.roles && !item.roles.includes(role)) return false
+    // Cek role utama
+    if (item.roles && !item.roles.some(r => effectiveRoles.includes(r))) return false
 
+    // Filter children (submenu)
     if (item.children) {
       const filteredChildren = item.children.filter(child =>
-        !child.roles || child.roles.includes(role)
+        !child.roles || child.roles.some(r => effectiveRoles.includes(r))
       )
       if (filteredChildren.length === 0) return false
       return { ...item, children: filteredChildren }

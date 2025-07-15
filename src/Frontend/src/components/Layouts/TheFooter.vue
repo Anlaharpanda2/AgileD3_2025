@@ -44,6 +44,7 @@
               :class="social.hoverColor"
               class="group relative w-12 h-12 bg-slate-700/80 backdrop-blur-sm rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg border border-slate-600/50"
             >
+              <!-- eslint-disable-next-line vue/no-v-html -->
               <svg
                 class="w-6 h-6 text-slate-300 group-hover:text-white transition-colors duration-300"
                 fill="currentColor"

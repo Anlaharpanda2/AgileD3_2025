@@ -3,32 +3,40 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\DataNilai;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DataNilaiSeeder extends Seeder
 {
-    public function run()
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
     {
-        $data = [
+        DB::table('combined_scores')->insert([
             [
-                'nik' => '3201011234560001',
+                'user_nik' => '1234567890123456',
+                'user_name' => 'Anla Harpanda',
+                'pretest_score' => 78,
+                'posttest_score' => 90,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'user_nik' => '9876543210987654',
+                'user_name' => 'Ewan Putra',
                 'pretest_score' => 65,
                 'posttest_score' => 85,
-                'kategori' => 'Pelatihan Dasar',
-                'tanggal' => Carbon::now()->subDays(5)->toDateString(),
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
-                'nik' => '3201011234560002',
-                'pretest_score' => 70,
+                'user_nik' => '1928374655647382',
+                'user_name' => 'Rina Sari',
+                'pretest_score' => 80,
                 'posttest_score' => 88,
-                'kategori' => 'Pelatihan Lanjutan',
-                'tanggal' => Carbon::now()->subDays(3)->toDateString(),
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
-        ];
-
-        foreach ($data as $item) {
-            DataNilai::create($item);
-        }
+        ]);
     }
 }

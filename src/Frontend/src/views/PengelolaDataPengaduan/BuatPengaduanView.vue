@@ -1,7 +1,8 @@
 <template>
   <SimpleLayout>
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
-      <div class="max-w-4xl mx-auto">
+      <div class="max-w-4xl mx-auto relative">
+        <button @click="fillWithDemoData" class="demo-button">Demo Pengaduan</button>
         <!-- Header Section -->
         <div class="text-center mb-8">
           <div class="inline-flex items-center justify-center w-16 h-16 bg-pink-500 rounded-full mb-4">
@@ -444,6 +445,17 @@ const rules = {
   deskripsi: [{ required: true, message: 'Deskripsi kejadian wajib diisi', trigger: 'blur' }],
 }
 
+function fillWithDemoData() {
+  form.nama_pelapor = 'Andi';
+  form.no_hp = '081234567890';
+  form.alamat = 'Jl. Merdeka No. 10, Jakarta';
+  form.nama_korban = 'Budi';
+  form.kasus = 'Kekerasan dalam Rumah Tangga';
+  form.waktu_kejadian = new Date();
+  form.saksi = 'Citra';
+  form.deskripsi = 'Terjadi perdebatan hebat yang berujung pada kekerasan fisik. Pelaku memukul korban beberapa kali.';
+}
+
 function onFileChange(e) {
   const file = e.target.files[0]
   if (file) {
@@ -561,6 +573,27 @@ function submitForm() {
 </script>
 
 <style scoped>
+.demo-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #8B4513; /* A brown color */
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
+
+.demo-button:hover {
+  background-color: #A0522D; /* A slightly lighter brown */
+}
+
 /* Custom styles untuk Element Plus components */
 :deep(.el-input__wrapper) {
   border-radius: 0.75rem;

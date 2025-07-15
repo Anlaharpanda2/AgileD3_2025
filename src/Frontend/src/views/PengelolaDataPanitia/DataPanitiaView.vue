@@ -8,6 +8,7 @@
       :data="tableData"
       class="sm:full-screen"
       @update:visible="showSort = $event"
+      @apply-sort="handleSort"
     />
     <FormFilterDataPanitia
       v-model="showFilter"
@@ -979,6 +980,11 @@ function getImageUrl(row: Panitia): string {
 const openEdit = (row: Panitia) => {
   editData.value = { ...row }; // Create a copy to avoid direct mutation
   showEdit.value = true;
+};
+
+const handleSort = (payload: { column: string; order: 'asc' | 'desc'; sortedData: Record<string, unknown>[] }) => {
+  tableData.value = payload.sortedData as unknown as Panitia[];
+  showSort.value = false;
 };
 
 // Toggles the visibility of a specific dropdown menu

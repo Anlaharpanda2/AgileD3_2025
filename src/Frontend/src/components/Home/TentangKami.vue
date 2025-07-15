@@ -13,9 +13,11 @@
         '-mx-4' pada parent dan 'px-4' pada child digunakan untuk menciptakan efek gutter.
       -->
       <div class="flex flex-wrap items-center -mx-4">
-        
         <!-- Kolom Teks Konten -->
-        <div class="w-full md:w-1/2 px-4" data-aos="fade-right">
+        <div
+          class="w-full md:w-1/2 px-4"
+          data-aos="fade-right"
+        >
           <div class="md:pr-8">
             <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
               Tentang Kami
@@ -54,16 +56,28 @@
         </div>
         
         <!-- Kolom Ilustrasi -->
-        <div class="w-full md:w-1/2 px-4 hidden sm:block" data-aos="fade-left">
+        <div
+          class="w-full md:w-1/2 px-4 hidden sm:block"
+          data-aos="fade-left"
+        >
           <div class="flex items-center justify-center h-96 mt-12 md:mt-0">
             <div class="w-[17.5rem] h-[17.5rem] bg-gradient-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center animate-pulse">
-              <svg class="text-pink-500" xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 24 24" fill="currentColor">
-                  <path fill="currentColor" d="M12 4.006A5 5 0 0 1 12.252 14h-.504A5 5 0 0 1 12 4.006m1 11.93a7.002 7.002 0 0 0-1-13.93a7 7 0 0 0-1 13.93V17H8v2h3v3h2v-3h3v-2h-3z"/>
+              <svg
+                class="text-pink-500"
+                xmlns="http://www.w3.org/2000/svg"
+                width="140"
+                height="140"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  fill="currentColor"
+                  d="M12 4.006A5 5 0 0 1 12.252 14h-.504A5 5 0 0 1 12 4.006m1 11.93a7.002 7.002 0 0 0-1-13.93a7 7 0 0 0-1 13.93V17H8v2h3v3h2v-3h3v-2h-3z"
+                />
               </svg>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </section>

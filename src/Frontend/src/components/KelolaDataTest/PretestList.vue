@@ -35,7 +35,7 @@
                 Daftar Pretest
               </h2>
               <p class="text-sm text-gray-500">
-                {{ pretests.length }} pretest tersedia
+                {{ filteredPretests.length }} pretest tersedia
               </p>
             </div>
           </div>
@@ -87,6 +87,14 @@
             </button>
           </div>
         </div>
+        <div class="mt-4">
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Cari berdasarkan nama atau deskripsi..."
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+          >
+        </div>
       </div>
 
       <!-- Table Container -->
@@ -114,7 +122,7 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               <tr
-                v-for="pretest in pretests"
+                v-for="pretest in paginatedPretests"
                 :key="pretest.id"
                 class="hover:bg-gray-50 transition-colors duration-200"
               >
@@ -263,7 +271,7 @@
               </tr>
               
               <!-- Empty State -->
-              <tr v-if="pretests.length === 0">
+              <tr v-if="paginatedPretests.length === 0">
                 <td
                   colspan="5"
                   class="px-6 py-12 text-center"
@@ -283,35 +291,60 @@
                       />
                     </svg>
                     <h3 class="text-lg font-medium text-gray-900 mb-2">
-                      Belum ada pretest
+                      Data tidak ditemukan
                     </h3>
                     <p class="text-gray-500 mb-4">
-                      Mulai dengan membuat pretest pertama Anda
+                      Tidak ada pretest yang cocok dengan pencarian Anda.
                     </p>
-                    <button 
-                      class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-all duration-200"
-                      @click="$router.push({ name: 'CreatePretest' })"
-                    >
-                      <svg
-                        class="w-4 h-4 mr-2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                        />
-                      </svg>
-                      Buat Pretest Baru
-                    </button>
                   </div>
                 </td>
               </tr>
             </tbody>
           </table>
+        </div>
+        <!-- Pagination -->
+        <div class="p-4 flex justify-between items-center">
+          <div>
+            <label
+              for="itemsPerPage"
+              class="text-sm text-gray-600"
+            >Items per page:</label>
+            <select
+              id="itemsPerPage"
+              v-model="itemsPerPage"
+              class="ml-2 border-gray-300 rounded-md text-sm"
+            >
+              <option :value="10">
+                10
+              </option>
+              <option :value="20">
+                20
+              </option>
+              <option :value="50">
+                50
+              </option>
+              <option :value="pretests.length">
+                All
+              </option>
+            </select>
+          </div>
+          <div class="flex items-center">
+            <button
+              :disabled="currentPage === 1"
+              class="bg-white border border-gray-300 px-3 py-1 rounded-md text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              @click="prevPage"
+            >
+              Sebelumnya
+            </button>
+            <span class="px-4 text-sm">Halaman {{ currentPage }} dari {{ totalPages }}</span>
+            <button
+              :disabled="currentPage === totalPages"
+              class="bg-white border border-gray-300 px-3 py-1 rounded-md text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              @click="nextPage"
+            >
+              Berikutnya
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -327,7 +360,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import pretestService, { Pretest } from '@/services/pretestService';
@@ -336,6 +369,10 @@ import PretestVisibilityModal from './PretestVisibilityModal.vue';
 const router = useRouter();
 const pretests = ref<Pretest[]>([]);
 const showVisibilityModal = ref(false);
+const searchQuery = ref('');
+const currentPage = ref(1);
+const itemsPerPage = ref(10);
+
 
 const fetchPretests = async () => {
   try {
@@ -343,6 +380,40 @@ const fetchPretests = async () => {
   } catch (error) {
     ElMessage.error('Failed to fetch pretests.');
     console.error(error);
+  }
+};
+
+const filteredPretests = computed(() => {
+  if (!searchQuery.value) {
+    return pretests.value;
+  }
+  return pretests.value.filter(pretest =>
+    (pretest.title && pretest.title.toLowerCase().includes(searchQuery.value.toLowerCase())) ||
+    (pretest.description && pretest.description.toLowerCase().includes(searchQuery.value.toLowerCase()))
+  );
+});
+
+const totalPages = computed(() => {
+  if (itemsPerPage.value === pretests.value.length) return 1;
+  return Math.ceil(filteredPretests.value.length / Number(itemsPerPage.value));
+});
+
+const paginatedPretests = computed(() => {
+  if (itemsPerPage.value === pretests.value.length) return filteredPretests.value;
+  const start = (currentPage.value - 1) * Number(itemsPerPage.value);
+  const end = start + Number(itemsPerPage.value);
+  return filteredPretests.value.slice(start, end);
+});
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
   }
 };
 

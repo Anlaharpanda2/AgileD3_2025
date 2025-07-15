@@ -22,7 +22,10 @@ class DatabaseSeeder extends Seeder
             QuotaPendaftaranSeeder::class,
             StrukturPegawaiSeeder::class,
             UserSeeder::class,
+            UserMasyarakatSeeder::class,
             UsersMasyarakat::class,
+            PretestSeeder::class,
+            PosttestSeeder::class,
         ]);
     }
 }

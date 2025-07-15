@@ -1,19 +1,15 @@
-[vue/compiler-sfc] Identifier 'router' has already been declared. (21:6)
+[plugin:vite:vue] [vue/compiler-sfc] Unexpected token, expected "}" (102:15)
 
-D:/PBL/AgileD3_2025/src/Frontend/src/views/PengelolaDataBerita/DataBeritaSampahView.vue
-811|  }
-812|  
-813|  const router = useRouter()
-   |        ^
-814|  
-815|  function goBack() {
-    at constructor (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:367:19)
-    at TypeScriptParserMixin.raise (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:6627:19)
-    at TypeScriptScopeHandler.checkRedeclarationInScope (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:1644:19)
-    at TypeScriptScopeHandler.declareName (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:1610:12)
-    at TypeScriptScopeHandler.declareName (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:4910:11)
-    at TypeScriptParserMixin.declareNameFromIdentifier (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:7591:16)
-    at TypeScriptParserMixin.checkIdentifier (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:7587:12)
-    at TypeScriptParserMixin.checkLVal (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:7526:12)
-    at TypeScriptParserMixin.parseVarId (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:13412:10)
-    at TypeScriptParserMixin.parseVarId (D:\PBL\AgileD3_2025\src\Frontend\node_modules\@babel\parser\lib\index.js:9767:11
+D:/PBL/AgileD3_2025/src/Frontend/src/components/KelolaDataPelatihan/FormTambahDataPelatihan.vue
+654|        ...form,
+655|        kegiatan_dimulai: form.kegiatan_dimulai instanceof Date
+656|          ? `${'''${form.kegiatan_dimulai.getFullYear()}-${String(form.kegiatan_dimulai.getMonth() + 1).padStart(2, '0')}-${String(form.kegiatan_dimulai.getDate()).padStart(2, '0')}'''}`
+657|          : form.kegiatan_dimulai,
+658|        kegiatan_berakhir: form.kegiatan_berakhir instanceof Date
+D:/PBL/AgileD3_2025/src/Frontend/src/components/KelolaDataPelatihan/FormTambahDataPelatihan.vue:102:15
+110|                      <template #prefix>
+111|                        <svg
+112|                          class="w-4 h-4 text-gray-400"
+   |                ^
+113|                          fill="none"
+114|                          stroke="currentColor"

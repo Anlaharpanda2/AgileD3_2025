@@ -7,7 +7,8 @@
       name="modal"
       appear
     >
-      <div class="bg-white rounded-xl shadow-2xl max-w-5xl w-full max-h-[95vh] flex flex-col overflow-hidden">
+      <div class="bg-white rounded-xl shadow-2xl max-w-5xl w-full max-h-[95vh] flex flex-col overflow-hidden relative">
+        <button @click="fillWithDemoData" class="demo-button">Demo Tambah Data</button>
         <!-- Header -->
         <div
           class="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700
@@ -583,6 +584,23 @@ const form = reactive({
   nomor_telefon: '',
 });
 
+const fillWithDemoData = () => {
+  form.nama = 'Peserta Demo';
+  form.nik = '1234567890987659';
+  form.tempat_tanggal_lahir = 'Bandung, 20 Mei 1995';
+  form.status = 'kawin';
+  form.pendidikan = 'S1 Manajemen';
+  form.nomor_telefon = '081122334455';
+  form.alamat = 'Jl. Presentasi No. 404, Kota Demo';
+  form.jenis_bimtek = 'Pelatihan Pemasaran Online';
+  form.angkatan = 2025;
+  form.kegiatan_dimulai = '2025-08-01';
+  form.kegiatan_berakhir = '2025-08-10';
+  form.tempat_kegiatan = 'Gedung Serbaguna, Kota Demo';
+  form.jenis_usaha = 'Toko Online Pakaian';
+  form.penghasilan_perbulan = '7500000';
+};
+
 // Removed applyInitialData and watch as they are not relevant for a "tambah" form
 
 // Form validation rules (copied from FormTambahDataPelatihan.vue)
@@ -676,6 +694,27 @@ const submitForm = () => {
 </script>
 
 <style scoped>
+.demo-button {
+  position: absolute;
+  top: 24px;
+  right: 80px; /* Adjusted to avoid close button */
+  background-color: #8B4513; /* Brown color */
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  z-index: 60; /* Above content, below close button if needed */
+  transition: background-color 0.3s ease;
+}
+
+.demo-button:hover {
+  background-color: #A0522D; /* Lighter brown */
+}
+
 /* Modal Transition */
 .modal-enter-active,
 .modal-leave-active {

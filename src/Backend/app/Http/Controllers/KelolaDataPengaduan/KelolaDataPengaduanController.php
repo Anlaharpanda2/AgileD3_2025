@@ -10,8 +10,25 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 
+use App\Imports\PengaduanImport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class KelolaDataPengaduanController extends Controller
 {
+    public function impor(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx'
+        ]);
+
+        try {
+            Excel::import(new PengaduanImport, $request->file('file'));
+            return response()->json(['message' => 'Data pengaduan berhasil diimpor.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage()], 500);
+        }
+    }
+
     public function index()
     {
         return DataPengaduan::all();

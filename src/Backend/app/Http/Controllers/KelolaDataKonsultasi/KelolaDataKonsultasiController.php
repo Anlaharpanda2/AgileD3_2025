@@ -8,8 +8,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
+use App\Imports\KonsultasiImport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class KelolaDataKonsultasiController extends Controller
 {
+    public function impor(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx'
+        ]);
+
+        try {
+            Excel::import(new KonsultasiImport, $request->file('file'));
+            return response()->json(['message' => 'Data konsultasi berhasil diimpor.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage()], 500);
+        }
+    }
+
     public function index()
     {
         return DataKonsultasi::all();
@@ -84,6 +101,16 @@ class KelolaDataKonsultasiController extends Controller
     {
         $dataKonsultasi->delete();
         return response()->json(['message' => 'Data berhasil dihapus']);
+    }
+
+    public function complete(DataKonsultasi $dataKonsultasi)
+    {
+        if ($dataKonsultasi->status === 'diproses') {
+            $dataKonsultasi->status = 'selesai';
+            $dataKonsultasi->save();
+            return response()->json(['message' => 'Status konsultasi berhasil diubah menjadi selesai.']);
+        }
+        return response()->json(['message' => 'Status konsultasi sudah selesai.'], 400);
     }
 
     public function trash()

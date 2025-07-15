@@ -9,10 +9,10 @@ use App\Models\DataPanitia;
 use App\Models\DataPendaftaran;
 use App\Models\DataPelatihan;
 use App\Models\DataTest;
-use App\Models\QuotaPendaftaran;
-use App\Models\StrukturPegawai;
 use App\Models\User;
 use App\Models\UserMasyarakat;
+use App\Models\StrukturPegawai;
+use App\Models\QuotaPendaftaran;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 

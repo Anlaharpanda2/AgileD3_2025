@@ -339,7 +339,7 @@
                           stroke-linejoin="round"
                           stroke-width="2"
                           d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"
-                          />
+                        />
                       </svg>
                       Filter
                     </button>
@@ -400,7 +400,6 @@
                     style="right: 15%; top: 20%;"
                   >
                     <div class="flex flex-col p-2">
-                      
                       <button
                         :disabled="selected.length === 0"
                         class="flex items-center px-4 py-2 text-sm text-green-700 hover:bg-green-50 hover:text-green-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed touch-highlight dropdown-item"
@@ -448,7 +447,6 @@
                 </transition>
                 <!-- Desktop Right Controls -->
                 <div class="hidden sm:flex sm:gap-3">
-                  
                   <button
                     :disabled="selected.length === 0"
                     class="!inline-flex !items-center !px-4 !py-2.5 !border !border-green-300 !rounded-lg !text-sm !font-medium bg-green-100 text-green-600 hover:bg-green-200 !hover:bg-green-50 !focus:outline-none !focus:ring-2 !focus:ring-green-500 !transition-colors !disabled:opacity-50 !disabled:cursor-not-allowed"
@@ -597,7 +595,11 @@
             >
               <template #default="{ row }">
                 <div class="text-gray-600 text-sm full-width-content">
-                  <img :src="row.foto" alt="Foto Berita" class="w-16 h-16 object-cover rounded-md" />
+                  <img
+                    :src="row.foto"
+                    alt="Foto Berita"
+                    class="w-16 h-16 object-cover rounded-md"
+                  >
                 </div>
               </template>
             </el-table-column>
@@ -796,7 +798,6 @@ import SimpleLayout from "../../layouts/SimpleLayout.vue";
 import FormFilterDataBerita from "../../components/DataBerita/FormFilterDataBerita.vue";
 import FormSortingDataBerita from "../../components/DataBerita/FormSortingDataBerita.vue";
 import { ElNotification, ElMessageBox, ElMessage } from 'element-plus';
-import { Eye, EyeOff } from 'lucide-vue-next';
 import { useRouter } from 'vue-router'
 import { ArrowLeft } from '@element-plus/icons-vue'
 
@@ -855,21 +856,9 @@ function changeItemsPerPage(option: number | string) {
 
 const activeFilters = ref<{ [key: string]: string | number | null }>({});
 
-const columnMapping: { [key: string]: string } = {
-  judul: "Judul",
-  jenis_konten: "Jenis Konten",
-  isi: "Isi Berita",
-  foto: "Gambar",
-  created_at: "Dibuat",
-  updated_at: "Diperbarui",
-};
 
-const allColumns = computed(() => {
-  return Object.keys(columnMapping).map(key => ({
-    key: key,
-    label: columnMapping[key]
-  }));
-});
+
+
 
 const filterableColumns = computed(() => {
   if (!tableData.value || tableData.value.length === 0) {

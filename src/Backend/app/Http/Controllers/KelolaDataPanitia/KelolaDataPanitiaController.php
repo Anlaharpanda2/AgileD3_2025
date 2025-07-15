@@ -7,8 +7,25 @@ use App\Models\DataPanitia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
+use App\Imports\PanitiaImport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class KelolaDataPanitiaController extends Controller
 {
+    public function impor(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx'
+        ]);
+
+        try {
+            Excel::import(new PanitiaImport, $request->file('file'));
+            return response()->json(['message' => 'Data panitia berhasil diimpor.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage()], 500);
+        }
+    }
+
     public function index()
     {
         return DataPanitia::all();

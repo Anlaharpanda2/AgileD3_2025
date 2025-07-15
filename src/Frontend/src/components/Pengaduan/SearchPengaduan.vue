@@ -59,8 +59,18 @@
                 <div class="flex-1">
                   <div class="flex items-center gap-3 mb-2">
                     <div class="w-10 h-10 bg-gradient-to-r from-pink-500 to-pink-600 rounded-full flex items-center justify-center">
-                      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                      <svg
+                        class="w-5 h-5 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        />
                       </svg>
                     </div>
                     <div>
@@ -74,7 +84,10 @@
                   </div>
                 </div>
                 <div class="flex flex-col items-end gap-2">
-                  <div class="status-badge" :class="getStatusBadgeClass(pengaduanData.status)">
+                  <div
+                    class="status-badge"
+                    :class="getStatusBadgeClass(pengaduanData.status)"
+                  >
                     {{ pengaduanData.status }}
                   </div>
                   <div class="text-xs text-gray-500">
@@ -89,46 +102,108 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div class="info-item">
                   <div class="info-icon bg-pink-100 text-pink-600">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
                     </svg>
                   </div>
                   <div>
-                    <p class="text-sm font-medium text-gray-500">Nama Pelapor</p>
-                    <p class="font-semibold text-gray-800">{{ pengaduanData.nama_pelapor }}</p>
+                    <p class="text-sm font-medium text-gray-500">
+                      Nama Pelapor
+                    </p>
+                    <p class="font-semibold text-gray-800">
+                      {{ pengaduanData.nama_pelapor }}
+                    </p>
                   </div>
                 </div>
                 <div class="info-item">
                   <div class="info-icon bg-pink-100 text-pink-600">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                      />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
                     </svg>
                   </div>
                   <div>
-                    <p class="text-sm font-medium text-gray-500">Lokasi</p>
-                    <p class="font-semibold text-gray-800 truncate">{{ pengaduanData.alamat }}</p>
+                    <p class="text-sm font-medium text-gray-500">
+                      Lokasi
+                    </p>
+                    <p class="font-semibold text-gray-800 truncate">
+                      {{ pengaduanData.alamat }}
+                    </p>
                   </div>
                 </div>
               </div>
 
               <div class="mb-6">
-                <p class="text-sm font-medium text-gray-500 mb-2">Deskripsi Singkat</p>
-                <p class="text-gray-700 line-clamp-2 leading-relaxed">{{ pengaduanData.deskripsi }}</p>
+                <p class="text-sm font-medium text-gray-500 mb-2">
+                  Deskripsi Singkat
+                </p>
+                <p class="text-gray-700 line-clamp-2 leading-relaxed">
+                  {{ pengaduanData.deskripsi }}
+                </p>
               </div>
 
               <!-- Action Button -->
               <div class="flex justify-between items-center pt-4 border-t border-gray-100">
                 <div class="flex items-center text-sm text-gray-500">
-                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                  <svg
+                    class="w-4 h-4 mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
                   </svg>
                   Lihat Detail
                 </div>
                 <div class="action-arrow text-pink-500">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                  <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 7l5 5m0 0l-5 5m5-5H6"
+                    />
                   </svg>
                 </div>
               </div>

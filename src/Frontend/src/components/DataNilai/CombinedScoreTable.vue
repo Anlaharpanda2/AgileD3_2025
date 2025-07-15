@@ -1,4 +1,10 @@
 <template>
+  <FormFilterDataNilai
+    :visible="showFilter"
+    :filterable-columns="filterableColumns"
+    @update:visible="showFilter = $event"
+    @apply-filter="handleApplyFilter"
+  />
   <div class="min-h-screen bg-gradient-to-br from-gray-50 to-pink-50 p-6">
     <div class="max-w-7xl mx-auto">
       <!-- Header Section -->
@@ -42,35 +48,35 @@
       <!-- Table Section -->
       <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden">
         <div class="p-6 border-b border-gray-200/50">
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between flex-wrap gap-4">
             <div class="flex items-center space-x-2">
               <div class="w-2 h-2 bg-pink-500 rounded-full animate-pulse" />
               <span class="text-lg font-semibold text-gray-700">Data Nilai Peserta</span>
             </div>
-            <div
-              v-if="loading"
-              class="flex items-center space-x-2 text-gray-500"
-            >
-              <svg
-                class="animate-spin w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
+            <div class="flex items-center space-x-4">
+              <el-input
+                v-model="search"
+                placeholder="Cari Nama Peserta"
+                clearable
+                class="w-64"
               >
-                <circle
-                  class="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  stroke-width="4"
-                />
-                <path
-                  class="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                />
-              </svg>
-              <span class="text-sm">Memuat data...</span>
+                <template #prefix>
+                  <svg
+                    class="w-5 h-5 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  ><path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  /></svg>
+                </template>
+              </el-input>
+              <el-button @click="showFilter = true">
+                Filter
+              </el-button>
             </div>
           </div>
         </div>
@@ -78,7 +84,7 @@
         <div class="overflow-x-auto">
           <el-table
             v-loading="loading"
-            :data="combinedScoreList"
+            :data="pagedData"
             class="w-full modern-table"
             stripe
             :row-class-name="getRowClassName"
@@ -283,6 +289,31 @@
           </el-table>
         </div>
 
+        <div class="p-6 flex justify-between items-center">
+          <div>
+            <el-select
+              v-model="itemsPerPage"
+              placeholder="Items per page"
+              style="width: 120px;"
+            >
+              <el-option
+                v-for="option in perPageOptions"
+                :key="option"
+                :label="option === Infinity ? 'Semua' : option"
+                :value="option"
+              />
+            </el-select>
+          </div>
+          <el-pagination
+            v-if="itemsPerPage !== Infinity"
+            v-model:current-page="currentPage"
+            :page-size="itemsPerPage"
+            :total="filteredData.length"
+            layout="total, prev, pager, next, jumper"
+            background
+          />
+        </div>
+
         <!-- Empty State -->
         <div
           v-if="!loading && combinedScoreList.length === 0"
@@ -344,16 +375,34 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import combinedScoreService, { CombinedScore } from '@/services/combinedScoreService';
+import FormFilterDataNilai from './FormFilterDataNilai.vue';
 
 const router = useRouter();
 
 const combinedScoreList = ref<CombinedScore[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
+
+// Search
+const search = ref('');
+
+// Filter
+const showFilter = ref(false);
+const appliedFilter = ref<{ column: string; value: string } | null>(null);
+const filterableColumns = [
+  { label: 'NIK', value: 'user_nik' },
+  { label: 'Nama Peserta', value: 'user_name' },
+  { label: 'Status', value: 'status' },
+];
+
+// Pagination
+const currentPage = ref(1);
+const itemsPerPage = ref(10);
+const perPageOptions = [10, 20, 50, Infinity];
 
 const fetchCombinedScores = async () => {
   loading.value = true;
@@ -368,6 +417,63 @@ const fetchCombinedScores = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const getStatus = (item: CombinedScore): string => {
+    if (item.pretest_score !== null && item.posttest_score !== null) {
+        return 'Selesai';
+    }
+    if (item.pretest_score !== null || item.posttest_score !== null) {
+        return 'Proses';
+    }
+    return 'Belum Mulai';
+};
+
+const filteredData = computed(() => {
+  let data = combinedScoreList.value;
+
+  // Apply search
+  if (search.value) {
+    data = data.filter(item =>
+      item.user_name.toLowerCase().includes(search.value.toLowerCase())
+    );
+  }
+
+  // Apply filter from popup
+  if (appliedFilter.value && appliedFilter.value.value) {
+    const { column, value } = appliedFilter.value;
+    const lowerCaseValue = String(value).toLowerCase();
+    data = data.filter(item => {
+       if (column === 'status') {
+        const status = getStatus(item);
+        return status.toLowerCase().includes(lowerCaseValue);
+      } else {
+        const itemValue = item[column as keyof CombinedScore];
+        if (itemValue === null || itemValue === undefined) {
+          return false;
+        }
+        return String(itemValue).toLowerCase().includes(lowerCaseValue);
+      }
+    });
+  }
+
+  return data;
+});
+
+const pagedData = computed(() => {
+    if (itemsPerPage.value === Infinity) {
+        return filteredData.value;
+    }
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
+  return filteredData.value.slice(start, end);
+});
+
+
+
+const handleApplyFilter = (filter: { column: string; value: string }) => {
+  appliedFilter.value = filter;
+  currentPage.value = 1;
 };
 
 const handleRowClick = (row: CombinedScore) => {

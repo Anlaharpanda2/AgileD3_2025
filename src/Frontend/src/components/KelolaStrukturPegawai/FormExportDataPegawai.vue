@@ -22,6 +22,10 @@ const props = defineProps<{
   data: Array<Record<string, unknown>>
 }>()
 
+defineEmits(['close'])
+
+
+
 // Kolom-kolom yang akan diekspor
 const exportColumns = [
   { key: "nama", label: "Nama" },

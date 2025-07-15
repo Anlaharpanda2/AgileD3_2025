@@ -15,37 +15,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.0'
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          tools: composer
 
-    - name: Copy .env
-      run: cp .env.example .env
-      working-directory: ./src/backend
+      - name: Copy .env
+        run: cp .env.example .env
+        working-directory: src/backend
 
-    - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      working-directory: ./src/backend
+      - name: Install Composer dependencies
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        working-directory: src/backend
 
-    - name: Generate key
-      run: php artisan key:generate
-      working-directory: ./src/backend
+      - name: Generate Application Key
+        run: php artisan key:generate
+        working-directory: src/backend
 
-    - name: Directory Permissions
-      run: chmod -R 777 storage bootstrap/cache
-      working-directory: ./src/backend
+      - name: Set Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
+        working-directory: src/backend
 
-    - name: Create Database
-      run: |
-        mkdir -p database
-        touch database/database.sqlite
-      working-directory: ./src/backend
+      - name: Create SQLite Database
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
+        working-directory: src/backend
 
-    - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
-      env:
-        DB_CONNECTION: sqlite
-        DB_DATABASE: database/database.sqlite
-      run: php artisan test
-      working-directory: ./src/backend
+      - name: Run Tests
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
+        run: php artisan test --verbose
+        working-directory: src/backend

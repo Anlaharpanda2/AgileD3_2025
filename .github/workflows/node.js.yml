@@ -3,8 +3,12 @@ name: Node.js CI
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'src/frontend/**'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'src/frontend/**'
 
 jobs:
   build:
@@ -12,10 +16,11 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22.x]  # sesuai Node kamu versi 22.14.0
+        node-version: [22.x]  # gunakan versi Node.js yang sesuai
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -26,12 +31,12 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-        working-directory: ./src/frontend
+        working-directory: src/frontend
 
       - name: Build project
         run: npm run build
-        working-directory: ./src/frontend
+        working-directory: src/frontend
 
       - name: Run Integration Tests
         run: npm run test:integration
-        working-directory: ./src/frontend
+        working-directory: src/frontend

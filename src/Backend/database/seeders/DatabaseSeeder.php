@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             UserMasyarakatSeeder::class,
             UsersMasyarakat::class,
+            PretestSeeder::class,
+            PosttestSeeder::class,
         ]);
     }
 }

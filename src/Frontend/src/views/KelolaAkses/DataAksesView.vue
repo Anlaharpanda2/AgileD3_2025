@@ -27,6 +27,7 @@
       class="sm:full-screen"
       @close="showEdit = false"
     />
+    <PermissionDeniedModal :is-visible="showPermissionModal" @update:is-visible="showPermissionModal = $event" />
     <!-- Main Container -->
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6">
       <!-- Page Header -->
@@ -400,30 +401,10 @@
                   >
                     <div class="flex flex-col p-2">
                       <button
-                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-all duration-300 touch-highlight dropdown-item"
-                        :style="{ 'animation-delay': '0.3s' }"
-                        @click.stop="goToTrash"
-                      >
-                        <svg
-                          class="w-4 h-4 mr-2"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
-                        Data Sampah
-                      </button>
-                      <button
                         :disabled="selected.length === 0"
                         class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-50 hover:text-red-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed touch-highlight dropdown-item"
                         :style="{ 'animation-delay': '0.4s' }"
-                        @click.stop="onMassDeleteClick"
+                        @click.stop="handleMassDeleteClick()"
                       >
                         <svg
                           class="w-4 h-4 mr-2"
@@ -446,29 +427,10 @@
                 <!-- Desktop Right Controls -->
                 <div class="hidden sm:flex sm:gap-3">
                   <button
-                    class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
-                    title="Data Sampah"
-                    @click="goToTrash"
-                  >
-                    <svg
-                      class="w-4 h-4 mr-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
-                  </button>
-                  <button
                     :disabled="selected.length === 0"
                     class="inline-flex items-center px-4 py-2.5 border border-red-300 rounded-lg text-sm font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     title="Hapus Massal"
-                    @click="onMassDeleteClick"
+                    @click="handleMassDeleteClick()"
                   >
                     <svg
                       class="w-4 h-4 mr-2"
@@ -488,7 +450,7 @@
                 </div>
                 <button
                   class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-lg text-sm font-medium hover:from-pink-600 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200 shadow-md w-full sm:w-auto touch-highlight"
-                  @click.stop="showTambah = true"
+                  @click.stop="handleShowTambah()"
                 >
                   <svg
                     class="w-4 h-4 mr-2"
@@ -535,6 +497,7 @@
               borderBottom: '1px solid #f3f4f6'
             }"
             class="modern-table full-width-cells"
+            :row-class-name="getRowClassName"
             @selection-change="onSelectionChange"
             @row-click="goToDetail"
           >
@@ -546,12 +509,24 @@
 
             <el-table-column
               prop="name"
-              label="Nama"
+              label="Nama Lengkap"
               min-width="150"
             >
               <template #default="{ row }">
                 <div class="font-medium text-gray-900 hover:text-pink-600 transition-colors full-width-content line-clamp-2">
                   {{ row.name }}
+                </div>
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              prop="username"
+              label="Username"
+              min-width="120"
+            >
+              <template #default="{ row }">
+                <div class="text-gray-600 text-sm full-width-content">
+                  {{ row.username }}
                 </div>
               </template>
             </el-table-column>
@@ -615,7 +590,7 @@
                   <button
                     class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors"
                     title="Edit"
-                    @click.stop="openEdit(row)"
+                    @click.stop="handleOpenEdit(row)"
                   >
                     <svg
                       class="w-4 h-4"
@@ -634,7 +609,7 @@
                   <button
                     class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition-colors"
                     title="Hapus"
-                    @click.stop="onDelete(row)"
+                    @click.stop="handleDelete(row)"
                   >
                     <svg
                       class="w-4 h-4"
@@ -663,6 +638,9 @@
           v-for="row in pagedData"
           :key="row.id"
           class="bg-white rounded-xl shadow-sm border border-gray-100 p-4"
+          :class="{
+            '!bg-green-100 hover:!bg-green-200': row.main === 1
+          }"
           @click="goToDetail(row, { type: 'data' }, $event)"
         >
           <div class="flex items-center justify-between mb-2">
@@ -677,6 +655,9 @@
               <div>
                 <p class="font-medium text-gray-900 text-sm">
                   {{ row.name }}
+                </p>
+                <p class="text-xs text-gray-600">
+                  {{ row.username }}
                 </p>
                 <p class="text-xs text-gray-600">
                   {{ row.email }}
@@ -694,13 +675,13 @@
           <div class="flex gap-2">
             <button
               class="flex-1 py-2 bg-blue-100 text-blue-600 rounded-lg text-sm hover:bg-blue-200 transition-colors touch-highlight"
-              @click.stop="openEdit(row)"
+              @click.stop="handleOpenEdit(row)"
             >
               Edit
             </button>
             <button
               class="flex-1 py-2 bg-red-100 text-red-600 rounded-lg text-sm hover:bg-red-200 transition-colors touch-highlight"
-              @click.stop="onDelete(row)"
+              @click.stop="handleDelete(row)"
             >
               Hapus
             </button>
@@ -800,6 +781,7 @@ import FormTambahDataAkses from "../../components/KelolaAkses/FormTambahDataAkse
 import FormFilterDataAkses from "../../components/KelolaAkses/FormFilterDataAkses.vue";
 import FormSortingDataAkses from "../../components/KelolaAkses/FormSortingDataAkses.vue";
 import { ElNotification } from 'element-plus';
+import PermissionDeniedModal from "../../components/Modals/PermissionDeniedModal.vue";
 
 const goToDetail = (row: UserAkses, column: Record<string, unknown>, event: MouseEvent) => {
   // Prevent navigation if the click is on the selection checkbox or action buttons
@@ -814,8 +796,10 @@ const goToDetail = (row: UserAkses, column: Record<string, unknown>, event: Mous
 interface UserAkses {
   id: number;
   name: string;
+  username: string;
   email: string;
   role: string;
+  main?: string; // Tambahkan properti 'main'
   created_at?: string; // Optional: date of creation, used for sorting
   updated_at?: string; // Optional: date of last update
 }
@@ -832,6 +816,68 @@ const showEdit = ref(false);
 const showTambah = ref(false);
 const showSort = ref(false);
 const showFilter = ref(false);
+const showPermissionModal = ref(false); // Pindahkan deklarasi ke sini
+const isCurrentUserMainOperator = ref(false); // New reactive variable for main operator status
+
+const showPermissionDenied = () => {
+  showPermissionModal.value = true;
+};
+
+// Function to verify main operator status from backend
+async function verifyMainOperatorStatus() {
+  const userId = localStorage.getItem('userId');
+  if (!userId) {
+    isCurrentUserMainOperator.value = false;
+    return;
+  }
+
+  try {
+    const response = await api.get('/kelola/akses');
+    const users = Array.isArray(response) ? response : response.data || [];
+    const currentUser = users.find((user: any) => String(user.id) === userId);
+
+    if (currentUser && currentUser.main === 1) {
+      isCurrentUserMainOperator.value = true;
+    } else {
+      isCurrentUserMainOperator.value = false;
+    }
+  } catch (error) {
+    console.error('Error verifying main operator status:', error);
+    isCurrentUserMainOperator.value = false;
+  }
+};
+
+const handleShowTambah = () => {
+  if (!isCurrentUserMainOperator.value) {
+    showPermissionDenied();
+    return;
+  }
+  showTambah.value = true;
+};
+
+const handleMassDeleteClick = () => {
+  if (!isCurrentUserMainOperator.value) {
+    showPermissionDenied();
+    return;
+  }
+  onMassDeleteClick();
+};
+
+const handleOpenEdit = (row: UserAkses) => {
+  if (!isCurrentUserMainOperator.value) {
+    showPermissionDenied();
+    return;
+  }
+  openEdit(row);
+};
+
+const handleDelete = (row: UserAkses) => {
+  if (!isCurrentUserMainOperator.value) {
+    showPermissionDenied();
+    return;
+  }
+  onDelete(row);
+};
 
 const editData = ref<UserAkses | null>(null);
 const perPageOptions = [10, 20, 50, 100, "all"];
@@ -992,6 +1038,14 @@ function toggleSelection(row: UserAkses) {
   }
 }
 
+function getRowClassName({ row }: { row: UserAkses }) {
+  if (row.main === 1) {
+    return '!bg-green-100 hover:!bg-green-200'; // Hijau lebih tebal
+  } else {
+    return ''; // Tidak ada latar belakang untuk yang bukan operator utama
+  }
+}
+
 function formatDate(dateString: string): string {
   const date = new Date(dateString);
   const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
@@ -1037,17 +1091,6 @@ async function onMassDeleteClick() {
   }
 }
 
-// Navigates to the trash data page (if applicable for access management)
-async function goToTrash() {
-  // Jika ada fitur trash untuk akses, arahkan ke sana
-  // window.location.href = '/data/akses/sampah';
-  ElNotification({
-    title: 'Info',
-    message: 'Fitur data sampah untuk akses belum diimplementasikan.',
-    type: 'info',
-    duration: 3000,
-  });
-}
 
 // Handles deletion of a single row
 async function onDelete(row: UserAkses) {
@@ -1120,6 +1163,7 @@ onMounted(async () => {
 
   // Fetch data when the component is mounted
   await fetchData();
+  await verifyMainOperatorStatus(); // Verify main operator status on mount
 });
 
 // Lifecycle hook: Called before the component is unmounted
@@ -1177,13 +1221,13 @@ onBeforeUnmount(() => {
   border-radius: 0;
 }
 
-.modern-table :deep(.el-table__row:hover) {
-  background-color: #f8fafc !important;
-}
-
 .modern-table :deep(.el-table__row:hover td) {
   background-color: #f8fafc !important;
 }
+
+
+
+
 
 .modern-table :deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
   background-color: #ec4899;

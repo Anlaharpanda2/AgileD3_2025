@@ -23,9 +23,12 @@ class KelolaAksesController extends Controller
                 'email' => 'required|email|unique:users',
                 'role' => 'required|string|max:50',
                 'password' => 'required|string|min:6',
+                'main' => 'boolean', // Tambahkan validasi untuk 'main'
             ]);
 
             $validated['password'] = Hash::make($validated['password']);
+            // Pastikan 'main' ada di $validated, default ke false jika tidak ada
+            $validated['main'] = $request->has('main') ? (bool)$request->input('main') : false;
 
             $user = User::create($validated);
 
@@ -47,12 +50,21 @@ class KelolaAksesController extends Controller
                 'email' => 'required|email|unique:users,email,' . $user->id,
                 'role' => 'required|string|max:50',
                 'password' => 'nullable|string|min:6',
+                'main' => 'nullable|boolean', // Tambahkan validasi untuk 'main'
             ]);
 
             if (!empty($validated['password'])) {
                 $validated['password'] = Hash::make($validated['password']);
             } else {
                 unset($validated['password']);
+            }
+
+            // Tangani kolom 'main'
+            if ($request->has('main')) {
+                $validated['main'] = (bool)$request->input('main');
+            } else {
+                // Jika 'main' tidak ada dalam request, pastikan tidak diubah
+                unset($validated['main']);
             }
 
             $user->update($validated);

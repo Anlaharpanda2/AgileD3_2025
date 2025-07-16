@@ -75,7 +75,7 @@
           <nav class="space-y-2">
             <!-- Menu Items -->
             <template
-              v-for="item in menuItems"
+              v-for="item in filteredMenuItems"
               :key="item.id"
             >
               <!-- Single Menu Item -->
@@ -193,7 +193,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 // Tipe untuk menu items
@@ -221,6 +221,25 @@ const openSubmenus = reactive<Record<MenuKey, boolean>>({
   pengaduan: false
 });
 
+const getUserRole = () => localStorage.getItem('role') || '';
+
+// Mendapatkan daftar role efektif (asli + virtual)
+const getEffectiveRoles = () => {
+  const role = getUserRole();
+  const roles = [role];
+
+  // Tambahkan role virtual 'bukanOP' jika bukan operator dan bukan pegawai
+  if (role !== 'operator' && role !== 'pegawai') {
+    roles.push('bukanOP');
+  }
+
+  // Tambahkan role 'guest' jika tidak ada role (belum login)
+  if (!role) {
+    roles.push('guest');
+  }
+
+  return roles;
+};
 
 
 // Definisi menu items sebagai konstanta untuk optimasi
@@ -250,6 +269,20 @@ const menuItems: MenuItem[] = [
       { id: '3-3', label: 'Data Nilai', url: '/data/nilai', icon: '', roles: ['operator', 'pegawai'] },
       { id: '3-4', label: 'Data Soal', url: '/data/soal', icon: '', roles: ['operator', 'pegawai'] }
     ]
+  },
+  {
+    id: '8',
+    label: 'Pelatihan',
+    url: '/status-pelatihan',
+    icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
+    roles: ['bukanOP']
+  },
+  {
+    id: '9',
+    label: 'Pengaduan',
+    url: '/pengaduan/cari',
+    icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
+    roles: ['bukanOP']
   },
   {
     id: '4',
@@ -292,6 +325,32 @@ const menuItems: MenuItem[] = [
   }
 ];
 
+// Filter menu berdasarkan role user
+const filteredMenuItems = computed(() => {
+  const effectiveRoles = getEffectiveRoles();
+
+  const filterMenu = (item: MenuItem): MenuItem | null => {
+    // Cek role utama
+    if (item.roles && !item.roles.some(r => effectiveRoles.includes(r))) {
+      return null;
+    }
+
+    // Filter children (submenu)
+    if (item.children) {
+      const filteredChildren = item.children.map(filterMenu).filter(Boolean) as MenuItem[];
+      
+      if (filteredChildren.length === 0) {
+        return null; // Sembunyikan parent jika tidak ada anak yang terlihat
+      }
+      
+      return { ...item, children: filteredChildren };
+    }
+
+    return item;
+  };
+
+  return menuItems.map(filterMenu).filter(Boolean) as MenuItem[];
+});
 
 
 // Functions

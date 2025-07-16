@@ -43,6 +43,7 @@ class AuthOperatorController extends Controller
                 'name' => $user->name,
                 'role' => $user->role,
                 'email' => $user->email,
+                'main' => $user->main,
             ],
             'token' => $token,
         ]);

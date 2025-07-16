@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('username')->unique();
             $table->enum('role', ['pegawai', 'operator'])->default('pegawai');
+            $table->boolean('main')->default(false);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

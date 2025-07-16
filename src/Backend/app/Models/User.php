@@ -14,7 +14,7 @@ class User extends Authenticatable
     use HasFactory;
     use HasApiTokens, Notifiable;
     protected $table = 'users';
-    protected $fillable = ['name','username', 'email', 'role', 'create_at', 'update_at'];
+    protected $fillable = ['name', 'username', 'email', 'role', 'password', 'main'];
     public function getAuthIdentifierName()
     {
         return 'username';

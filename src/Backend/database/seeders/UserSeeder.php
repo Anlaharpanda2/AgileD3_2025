@@ -16,6 +16,7 @@ class UserSeeder extends Seeder
             'username' => 'operator',
             'role' => 'operator',
             'email' => 'operator@example.com',
+            'main' => true,
             'password' => Hash::make('Aa12345!')
         ]);
 

@@ -314,16 +314,7 @@ const handleProfileClick = () => {
 const handleLogout = async () => {
   try {
     const currentRole = user.value.role;
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('role');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('token');
-    localStorage.removeItem('savedusername');
-    localStorage.removeItem('savedpassword');
-    localStorage.removeItem('savedName');
-    localStorage.removeItem('email'); 
-    localStorage.removeItem('savedNIK');
-    localStorage.removeItem('Ttl');
+    localStorage.clear();
     
     let redirectToPath = '/login/masyarakat'; 
     if (currentRole === 'operator') {

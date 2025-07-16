@@ -55,26 +55,28 @@
           </div>
         </div>
         
-        <!-- Kolom Ilustrasi -->
+        <!-- Kolom Foto Kepala Dinas -->
         <div
           class="w-full md:w-1/2 px-4 hidden sm:block"
           data-aos="fade-left"
         >
           <div class="flex items-center justify-center h-96 mt-12 md:mt-0">
-            <div class="w-[17.5rem] h-[17.5rem] bg-gradient-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center animate-pulse">
-              <svg
-                class="text-pink-500"
-                xmlns="http://www.w3.org/2000/svg"
-                width="140"
-                height="140"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path
-                  fill="currentColor"
-                  d="M12 4.006A5 5 0 0 1 12.252 14h-.504A5 5 0 0 1 12 4.006m1 11.93a7.002 7.002 0 0 0-1-13.93a7 7 0 0 0-1 13.93V17H8v2h3v3h2v-3h3v-2h-3z"
-                />
-              </svg>
+            <div class="relative">
+              <!-- Background Circle dengan Gradient -->
+              <div class="w-[20rem] h-[20rem] bg-gradient-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center shadow-lg">
+                <!-- Foto Kepala Dinas -->
+                <div class="w-[17.5rem] h-[17.5rem] rounded-full overflow-hidden border-4 border-white shadow-xl">
+                  <img
+                    src="/kadis.png"
+                    alt="Kepala Dinas DP3AP2KB"
+                    class="w-full h-full object-cover object-center"
+                  />
+                </div>
+              </div>
+              
+              <!-- Decorative Elements -->
+              <div class="absolute -top-2 -right-2 w-8 h-8 bg-pink-400 rounded-full opacity-70 animate-pulse"></div>
+              <div class="absolute -bottom-4 -left-4 w-6 h-6 bg-purple-400 rounded-full opacity-60 animate-pulse delay-300"></div>
             </div>
           </div>
         </div>

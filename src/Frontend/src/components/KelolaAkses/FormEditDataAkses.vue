@@ -124,6 +124,33 @@
                   </el-input>
                 </el-form-item>
                 <el-form-item
+                  label="Username"
+                  prop="username"
+                >
+                  <el-input
+                    v-model="form.username"
+                    placeholder="Masukkan username"
+                    size="large"
+                    class="modern-input"
+                  >
+                    <template #prefix>
+                      <svg
+                        class="w-4 h-4 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                    </template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item
                   label="Email"
                   prop="email"
                 >
@@ -168,6 +195,21 @@
                       :value="option"
                     />
                   </el-select>
+                </el-form-item>
+                <el-form-item label="Operator Utama">
+                  <div
+                    class="relative inline-block w-14 h-8 rounded-full cursor-pointer transition-colors duration-200 ease-in-out"
+                    :class="form.main === 1 ? 'bg-green-500' : 'bg-gray-300'"
+                    @click="form.main = form.main === 1 ? 0 : 1"
+                  >
+                    <span
+                      class="absolute left-1 top-1 w-6 h-6 rounded-full bg-white shadow transform transition-transform duration-200 ease-in-out"
+                      :class="form.main === 1 ? 'translate-x-6' : 'translate-x-0'"
+                    ></span>
+                  </div>
+                  <p class="text-xs text-gray-500 mt-1">
+                    {{ form.main === 1 ? 'Pengguna ini adalah operator utama.' : 'Pengguna ini bukan operator utama.' }}
+                  </p>
                 </el-form-item>
               </div>
             </div>
@@ -243,26 +285,32 @@ const props = defineProps({
 const emit = defineEmits(['close']);
 
 const formRef = ref<FormInstance | null>(null);
-const roleOptions = ['operator', 'pegawai', 'masyarakat'];
+const roleOptions = ['operator', 'pegawai'];
 
 const form = reactive<{
   id: number | null;
   name: string;
+  username: string;
   email: string;
   role: string;
+  main?: number; // Tambahkan properti 'main'
 }>({
   id: null,
   name: '',
+  username: '',
   email: '',
   role: '',
+  main: 0, // Default ke 0
 });
 
-const applyInitialData = (data: Record<string, unknown>) => {
+const applyInitialData = (data: Record<string, any>) => {
   if (data) {
     form.id = data.id as number;
     form.name = data.name as string;
+    form.username = data.username as string;
     form.email = data.email as string;
     form.role = data.role as string;
+    form.main = data.main as number; // Inisialisasi main
   }
 };
 
@@ -272,6 +320,7 @@ watch(() => props.initialData, (newVal) => {
 
 const rules = {
   name: [{ required: true, message: 'Nama wajib diisi', trigger: 'blur' }],
+  username: [{ required: true, message: 'Username wajib diisi', trigger: 'blur' }],
   email: [
     { required: true, message: 'Email wajib diisi', trigger: 'blur' },
     { type: 'email', message: 'Format email tidak valid', trigger: ['blur', 'change'] },
@@ -291,8 +340,10 @@ const submitForm = () => {
 
     const payload = {
       name: form.name,
+      username: form.username,
       email: form.email,
       role: form.role,
+      main: form.main, // Tambahkan properti main ke payload
     };
 
     try {

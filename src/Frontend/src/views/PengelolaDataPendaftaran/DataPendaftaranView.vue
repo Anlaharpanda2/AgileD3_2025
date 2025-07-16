@@ -415,6 +415,7 @@
                   >
                     <div class="flex flex-col p-2">
                       <button
+                        v-if="isOperator"
                         class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-all duration-300 touch-highlight dropdown-item"
                         :style="{ 'animation-delay': '0.1s' }"
                         @click.stop="showQuota = true; closeAllDropdowns()"
@@ -455,6 +456,7 @@
                         Export Data
                       </button>
                       <button
+                        v-if="isOperator"
                         :disabled="selected.length === 0"
                         class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-50 hover:text-red-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed touch-highlight dropdown-item"
                         :style="{ 'animation-delay': '0.2s' }"
@@ -476,6 +478,7 @@
                         Tolak Massal
                       </button>
                       <button
+                        v-if="isOperator"
                         :disabled="selected.length === 0"
                         class="flex items-center px-4 py-2 text-sm text-green-700 hover:bg-green-50 hover:text-green-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed touch-highlight dropdown-item"
                         :style="{ 'animation-delay': '0.3s' }"
@@ -502,6 +505,7 @@
                 <!-- Desktop Right Controls -->
                 <div class="hidden sm:flex sm:gap-3">
                   <button
+                    v-if="isOperator"
                     class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
                     title="Atur Quota"
                     @click="showQuota = true"
@@ -545,6 +549,7 @@
                     </svg>
                   </button>
                   <button
+                    v-if="isOperator"
                     :disabled="selected.length === 0"
                     class="inline-flex items-center px-4 py-2.5 border border-red-300 rounded-lg text-sm font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     title="Tolak Massal"
@@ -566,6 +571,7 @@
                     Tolak Massal
                   </button>
                   <button
+                    v-if="isOperator"
                     :disabled="selected.length === 0"
                     class="inline-flex items-center px-4 py-2.5 border border-green-300 rounded-lg text-sm font-medium text-green-700 bg-white hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     title="Terima Massal"
@@ -730,6 +736,7 @@
             </el-table-column>
 
             <el-table-column
+              v-if="isOperator"
               label="Aksi"
               width="100"
               fixed="right"
@@ -818,7 +825,10 @@
             <p>Jenis Usaha: {{ row.jenis_usaha }}</p>
             <p>Penghasilan/Bulan: {{ row.penghasilan_perbulan }}</p>
           </div>
-          <div class="flex gap-2">
+          <div
+            v-if="isOperator"
+            class="flex gap-2"
+          >
             <button
               class="flex-1 py-2 bg-green-100 text-green-600 rounded-lg text-sm hover:bg-green-200 transition-colors touch-highlight"
               @click.stop="openEdit(row)"
@@ -933,6 +943,8 @@ import { AxiosError } from 'axios';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+const userRole = ref(localStorage.getItem('role') || '');
+const isOperator = computed(() => userRole.value === 'operator');
 
 // Fungsi goToDetail dari kode2, disesuaikan dengan event target dari kode1
 const goToDetail = (row: pendaftar, column: Record<string, unknown>, event: MouseEvent) => {
@@ -1310,6 +1322,7 @@ let clickOutsideHandler: ((e: Event) => void) | null = null;
 
 // Lifecycle hook: Called after the component has mounted (gabungan dari kode1 dan kode2)
 onMounted(async () => {
+  userRole.value = localStorage.getItem('role') || '';
   // Tambahkan listener klik global untuk menutup dropdown saat mengklik di luar (dari kode1)
   clickOutsideHandler = (e: Event) => {
     const path = (e as MouseEvent).composedPath() as HTMLElement[];

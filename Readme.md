@@ -10,11 +10,11 @@
 
 ## 👩‍💻 Anggota Pengembang
 
-* **Manajer Proyek**: Anla Harpanda
+* **Manajer Proyek**: Anla Harpanda (2311083015)
 * **Tim Proyek**:
-    * Agel Deska Wisamulya
-    * Nadya Hermalia Putri
-    * Vania Ulimaz Rivani
+    * Agel Deska Wisamulya (2311082002)
+    * Nadya Hermalia Putri (2311082034)
+    * Vania Ulimaz Rivani (2311081038)
 ### ✨ Fitur Utama
 
 #### Untuk Masyarakat:

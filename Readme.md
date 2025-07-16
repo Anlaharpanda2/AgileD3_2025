@@ -8,6 +8,13 @@
   <b>Pepsikuburger</b> (Pelayanan Publik Terintegrasi Kuat, Bergerak Responsif) adalah website resmi dari DP3AP2KB Sumatera Barat. Platform ini hadir untuk mendukung pelayanan publik yang lebih cepat, transparan, dan terintegrasi.
 </p>
 
+## 👩‍💻 Anggota Pengembang
+
+* **Manajer Proyek**: Anla Harpanda
+* **Tim Proyek**:
+    * Agel Deska Wisamulya
+    * Nadya Hermalia Putri
+    * Vania Ulimaz Rivani
 ### ✨ Fitur Utama
 
 #### Untuk Masyarakat:

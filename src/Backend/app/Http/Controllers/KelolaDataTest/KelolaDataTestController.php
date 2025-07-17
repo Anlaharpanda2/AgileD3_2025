@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\kelolaDataTest;
+namespace App\Http\Controllers\KelolaDataTest;
 use App\Http\Controllers\Controller;
 use App\Models\DataTest;
 use Illuminate\Http\Request;

@@ -1,6 +1,6 @@
 <?php
 
-    namespace App\Http\Controllers\KelolaPretestPostest;
+namespace App\Http\Controllers\DataNilai;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

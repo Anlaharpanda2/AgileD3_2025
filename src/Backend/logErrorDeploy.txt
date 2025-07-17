@@ -1,7 +1,0 @@
-Starting Container
-
-[laravel:warn] Your app configuration references the MYSQL_ATTR_SSL_CA environment variable, but it is not set.
-
-[laravel:warn] Your app configuration references the MYSQL_ATTR_SSL_CA environment variable, but it is not set.
-
-[server:info] Server starting on port 8080

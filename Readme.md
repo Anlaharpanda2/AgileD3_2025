@@ -1,4 +1,4 @@
-# 🚀 Pepsikuburger: Platform Layanan Masyarakat DP3AP2KB Sumbar
+# 🚀 Pepsikuburger: Platform Layanan Masyarakat DP3AP2KB Provinsi Sumatera Barat
 
 <p align="center">
   <img src="assets/Logo/logo.png" alt="Logo Pepsikuburger" width="300">

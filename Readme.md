@@ -5,6 +5,14 @@
 </p>
 
 <p align="center">
+  <img src="https://img.shields.io/badge/Laravel-11-FF2D20?style=for-the-badge&logo=laravel" alt="Laravel 11">
+  <img src="https://img.shields.io/badge/Vue.js-3-4FC08D?style=for-the-badge&logo=vue.js" alt="Vue 3">
+  <img src="https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite" alt="Vite">
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql" alt="MySQL">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="License MIT">
+</p>
+
+<p align="center">
   <b>Pepsikuburger</b> (Pelayanan Publik Terintegrasi Kuat, Bergerak Responsif) adalah website resmi dari DP3AP2KB Sumatera Barat. Platform ini hadir untuk mendukung pelayanan publik yang lebih cepat, transparan, dan terintegrasi.
 </p>
 
@@ -30,13 +38,6 @@
 - **Dashboard Admin**: Menyajikan visualisasi data yang komprehensif dan interaktif.
 - **Manajemen Data**: Dilengkapi 11 fitur CRUD dan 16 *tools* interaktif untuk memudahkan pengelolaan data dinas.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Laravel-11-FF2D20?style=for-the-badge&logo=laravel" alt="Laravel 11">
-  <img src="https://img.shields.io/badge/Vue.js-3-4FC08D?style=for-the-badge&logo=vue.js" alt="Vue 3">
-  <img src="https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite" alt="Vite">
-  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql" alt="MySQL">
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="License MIT">
-</p>
 
 ---
 

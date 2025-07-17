@@ -261,7 +261,7 @@ const handleSearch = async () => {
 
   if (searchCode.value.length !== 6 || !/^[0-9]+$/.test(searchCode.value)) {
     error.value = 'Kode pengaduan harus 6 digit angka.';
-    ElMessage.error(error.value);
+    ElMessage.error(error.value as string);
     return;
   }
 
@@ -285,7 +285,7 @@ const handleSearch = async () => {
     } else {
       error.value = 'Terjadi kesalahan yang tidak diketahui.';
     }
-    ElMessage.error(error.value);
+    ElMessage.error(error.value as string);
   } finally {
     isSearching.value = false;
   }

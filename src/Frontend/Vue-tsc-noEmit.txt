@@ -1,0 +1,50 @@
+src/components/KelolaDataPendaftaran/FormTerimaDataPendaftaran.vue(149,27): error TS2322: Type 'Date | null' is not assignable to type 'EpPropMergeType<(new (...args: any[]) => string | number | Date | string[] | [DateModelType, DateModelType]) | (() => ModelValueType) | ((new (...args: any[]) => string | ... 3 more ... | [...]) | (() => ModelValueType))[], unknown, unknown> | undefined'.
+  Type 'null' is not assignable to type 'EpPropMergeType<(new (...args: any[]) => string | number | Date | string[] | [DateModelType, DateModelType]) | (() => ModelValueType) | ((new (...args: any[]) => string | ... 3 more ... | [...]) | (() => ModelValueType))[], unknown, unknown> | undefined'.
+src/components/KelolaDataPendaftaran/FormTerimaDataPendaftaran.vue(314,5): error TS2322: Type 'string | number | Date | null' is not assignable to type 'number | null'.
+  Type 'string' is not assignable to type 'number'.
+src/components/KelolaDataPendaftaran/FormTerimaDataPendaftaran.vue(389,13): error TS2367: This comparison appears to be unintentional because the types 'Date | null | undefined' and 'string' have no overlap.
+src/views/Login/LoginMasyarakat.vue(68,38): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+src/views/PengelolaDataKonsultasi/DataKonsultasiSampahView.vue(26,8): error TS2740: Type '{ id: number; nama_pelapor: string; nama_korban: string; deskripsi: string; alamat: string; waktu_kejadian: string; kasus: string; no_hp: string; saksi: string; status: string; lampiran: string; created_at?: string | undefined; updated_at?: string | undefined; deleted_at?: string | undefined; }' is missing the following properties from type '{ id: number | null; nik: string; nama: string; jenis_kelamin: string; tanggal_konsultasi: string; topik: string; status: string; alamat: string; no_telepon: string; }': nik, nama, jenis_kelamin, tanggal_konsultasi, and 2 more.
+src/views/PengelolaDataKonsultasi/DataKonsultasiView.vue(26,8): error TS2740: Type '{ id: number; nama_pelapor: string; nama_korban: string; deskripsi: string; alamat: string; waktu_kejadian: string; kasus: string; no_hp: string; saksi: string; status: string; lampiran: string; created_at?: string | undefined; updated_at?: string | undefined; }' is missing the following properties from type '{ id: number | null; nik: string; nama: string; jenis_kelamin: string; tanggal_konsultasi: string; topik: string; status: string; alamat: string; no_telepon: string; }': nik, nama, jenis_kelamin, tanggal_konsultasi, and 2 more.
+src/views/PengelolaDataPanitia/DataPanitiaSampahView.vue(1012,23): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'.
+      Type 'undefined' is not assignable to type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+src/views/PengelolaDataPanitia/DataPanitiaSampahView.vue(1012,58): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'.
+      Type 'undefined' is not assignable to type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+src/views/PengelolaDataPelatihan/DataPelatihanSampahView.vue(1159,23): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'.
+      Type 'undefined' is not assignable to type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+src/views/PengelolaDataPelatihan/DataPelatihanSampahView.vue(1159,58): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'.
+      Type 'undefined' is not assignable to type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+src/views/PengelolaStrukturPegawai/DataStrukturPegawaiSampahView.vue(1011,23): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'.
+      Type 'undefined' is not assignable to type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+src/views/PengelolaStrukturPegawai/DataStrukturPegawaiSampahView.vue(1011,58): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'.
+      Type 'undefined' is not assignable to type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.

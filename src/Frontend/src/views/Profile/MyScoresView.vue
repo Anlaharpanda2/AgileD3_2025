@@ -131,7 +131,9 @@ onMounted(async () => {
     } else {
       error.value = 'Gagal memuat nilai: Terjadi kesalahan tidak dikenal.';
     }
-    ElMessage.error(error.value);
+    if (error.value) {
+      ElMessage.error(error.value);
+    }
     console.error(err);
   } finally {
     isLoading.value = false;

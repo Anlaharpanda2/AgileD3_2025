@@ -267,7 +267,7 @@ watch(() => props.modelValue, (newVal) => {
     if (props.initialFilters) {
       localActiveFilters.value = { ...props.initialFilters };
       localSelectedColumns.value = Object.keys(props.initialFilters).filter(
-        key => props.initialFilters[key] !== null && props.initialFilters[key] !== ''
+        key => props.initialFilters && props.initialFilters[key] !== null && props.initialFilters[key] !== ''
       );
     } else {
       localActiveFilters.value = {};

@@ -109,7 +109,7 @@
               >
                 <div
                   class="group flex items-center justify-between px-4 py-3 text-gray-700 rounded-xl hover:bg-gray-50 cursor-pointer transition-all duration-300"
-                  @click="toggleSubmenu(item.key)"
+                  @click="toggleSubmenu(item.key as MenuKey)"
                 >
                   <div class="flex items-center">
                     <component
@@ -130,7 +130,7 @@
                   </div>
                   <svg 
                     class="w-4 h-4 transition-transform duration-300"
-                    :class="{ 'rotate-180': openSubmenus[item.key] }"
+                    :class="{ 'rotate-180': openSubmenus[item.key as MenuKey] }"
                     fill="none" 
                     viewBox="0 0 24 24" 
                     stroke="currentColor"
@@ -145,7 +145,7 @@
                 </div>
                 <transition name="submenu">
                   <div
-                    v-show="openSubmenus[item.key]"
+                    v-show="openSubmenus[item.key as MenuKey]"
                     class="ml-8 mt-1 space-y-1"
                   >
                     <div

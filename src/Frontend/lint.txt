@@ -3,8 +3,45 @@
 > eslint . --ext .js,.ts,.vue
 
 
-D:\PBL\AgileD3_2025\src\Frontend\src\components\Layouts\TheFooter.vue
-  56:17  warning  'v-html' directive can lead to XSS attack  vue/no-v-html
+D:\PBL\AgileD3_2025\src\Frontend\src\components\KelolaDataPendaftaran\FormTerimaDataPendaftaran.vue
+  354:25  error  'FormItemRule' is not defined  no-undef
+  386:25  error  'FormItemRule' is not defined  no-undef
 
-✖ 1 problem (0 errors, 1 warning)
+D:\PBL\AgileD3_2025\src\Frontend\src\views\Login\LoginMasyarakat.vue
+   78:26   error    'AxiosError' is not defined                                                   no-undef
+   95:4    warning  Expected 1 line break after opening tag (`<div>`), but 2 line breaks found    vue/multiline-html-element-content-newline
+   97:115  warning  Expected 1 line break after opening tag (`<div>`), but 2 line breaks found    vue/multiline-html-element-content-newline
+   99:169  warning  Require self-closing on HTML elements (<div>)                                 vue/html-self-closing
+  100:139  warning  Require self-closing on HTML elements (<div>)                                 vue/html-self-closing
+  105:8    warning  Expected 1 line break after opening tag (`<div>`), but 2 line breaks found    vue/multiline-html-element-content-newline
+  107:101  warning  'style' should be on a new line                                               vue/max-attributes-per-line
+  111:114  warning  Require self-closing on HTML elements (<div>)                                 vue/html-self-closing
+  115:110  warning  'src' should be on a new line                                                 vue/max-attributes-per-line
+  115:133  warning  'alt' should be on a new line                                                 vue/max-attributes-per-line
+  117:74   warning  'src' should be on a new line                                                 vue/max-attributes-per-line
+  117:97   warning  'alt' should be on a new line                                                 vue/max-attributes-per-line
+  129:100  warning  Expected 1 line break after opening tag (`<h2>`), but no line breaks found    vue/singleline-html-element-content-newline
+  129:105  warning  Expected 1 line break before closing tag (`</h2>`), but no line breaks found  vue/singleline-html-element-content-newline
+  134:49   warning  'class' should be on a new line                                               vue/max-attributes-per-line
+  134:49   warning  Attribute "class" should go before "@submit.prevent"                          vue/attributes-order
+  137:54   warning  'src' should be on a new line                                                 vue/max-attributes-per-line
+  137:108  warning  'alt' should be on a new line                                                 vue/max-attributes-per-line
+  150:54   warning  'src' should be on a new line                                                 vue/max-attributes-per-line
+  150:106  warning  'alt' should be on a new line                                                 vue/max-attributes-per-line
+  164:19   warning  Attribute "id" should go before "v-model"                                     vue/attributes-order
+  168:39   warning  'class' should be on a new line                                               vue/max-attributes-per-line
+  181:40   warning  'class' should be on a new line                                               vue/max-attributes-per-line
+  188:44   warning  'class' should be on a new line                                               vue/max-attributes-per-line
+  198:41   warning  'class' should be on a new line                                               vue/max-attributes-per-line
+  199:125  warning  'class' should be on a new line                                               vue/max-attributes-per-line
+  199:160  warning  'alt' should be on a new line                                                 vue/max-attributes-per-line
+  202:40   warning  'class' should be on a new line                                               vue/max-attributes-per-line
+  203:84   warning  'class' should be on a new line                                               vue/max-attributes-per-line
+  203:119  warning  'alt' should be on a new line                                                 vue/max-attributes-per-line
+
+D:\PBL\AgileD3_2025\src\Frontend\src\views\PengelolaDataPengaduan\DataPengaduanView.vue
+  739:73  warning  Expected 1 line break after opening tag (`<div>`), but 2 line breaks found  vue/multiline-html-element-content-newline
+
+✖ 33 problems (3 errors, 30 warnings)
+  0 errors and 24 warnings potentially fixable with the `--fix` option.
 

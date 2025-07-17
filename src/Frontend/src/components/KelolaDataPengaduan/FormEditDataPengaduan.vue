@@ -404,7 +404,21 @@ const emit = defineEmits(['close']);
 const formRef = ref<FormInstance | null>(null);
 
 // Reactive form state
-const form = reactive({
+const form = reactive<{
+  id: number | null;
+  nama_pelapor: string;
+  nama_korban: string;
+  deskripsi: string;
+  alamat: string;
+  waktu_kejadian: Date | null;
+  kasus: string;
+  no_hp: string;
+  saksi: string;
+  status: string;
+  lampiran: File | null; // Untuk menyimpan file lampiran baru
+  lampiran_preview_url: string | null; // Untuk menampilkan preview lampiran yang baru dipilih
+  current_lampiran_url: string | null; // Untuk menampilkan lampiran yang sudah ada
+}>({
   id: null,
   nama_pelapor: '',
   nama_korban: '',
@@ -414,27 +428,28 @@ const form = reactive({
   kasus: '',
   no_hp: '',
   saksi: '',
-  status: 'diproses',
-  lampiran: null, // Untuk menyimpan file lampiran baru
-  lampiran_preview_url: null, // Untuk menampilkan preview lampiran yang baru dipilih
-  current_lampiran_url: null, // Untuk menampilkan lampiran yang sudah ada
+  status: '',
+  lampiran: null,
+  lampiran_preview_url: null,
+  current_lampiran_url: null,
 });
 
 // Function to apply initial data to the form
-const applyInitialData = (data: Record<string, unknown>) => {
+const applyInitialData = (data: Record<string, string | number | Date | File | null>) => {
   if (data) {
     form.id = data.id as number || null;
-    form.nama_pelapor = String(data.nama_pelapor || '');
-    form.nama_korban = String(data.nama_korban || '');
-    form.deskripsi = String(data.deskripsi || '');
-    form.alamat = String(data.alamat || '');
+    form.nama_pelapor = data.nama_pelapor as string || '';
+    form.nama_korban = data.nama_korban as string || '';
+    form.deskripsi = data.deskripsi as string || '';
+    form.alamat = data.alamat as string || '';
     form.waktu_kejadian = data.waktu_kejadian ? new Date(data.waktu_kejadian as string) : null;
-    form.kasus = String(data.kasus || '');
-    form.no_hp = String(data.no_hp || '');
-    form.saksi = String(data.saksi || '');
-    form.status = String(data.status || 'diproses');
-    form.current_lampiran_url = String(data.lampiran_url || (data.lampiran ? `/storage/${data.lampiran}` : null));
+    form.kasus = data.kasus as string || '';
+    form.no_hp = data.no_hp as string || '';
+    form.saksi = data.saksi as string || '';
+    form.status = data.status as string || 'diproses';
+    form.current_lampiran_url = data.lampiran_url as string || (data.lampiran ? `/storage/${data.lampiran}` : null);
     form.lampiran = null;
+    form.lampiran_preview_url = null;
   }
 };
 
@@ -468,6 +483,7 @@ const handleFileUpload = (event: Event) => {
 
 // Form submission logic
 const submitForm = () => {
+  if (!formRef.value) return;
   formRef.value.validate(async (valid: boolean) => {
     if (!valid) {
       ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });
@@ -477,13 +493,13 @@ const submitForm = () => {
     const formData = new FormData();
     formData.append('_method', 'PUT'); // Laravel requires _method for PUT with form-data
     for (const key in form) {
-      if (key === 'lampiran' && form[key]) {
-        formData.append(key, form[key]);
-      } else if (key !== 'lampiran' && key !== 'lampiran_preview_url' && key !== 'current_lampiran_url' && form[key] !== null) {
-        if (key === 'waktu_kejadian' && form[key] instanceof Date) {
-          formData.append(key, form[key].toISOString().slice(0, 19).replace('T', ' ')); // Format ke YYYY-MM-DD HH:mm:ss
+      if (key === 'lampiran' && (form as Record<string, string | number | Date | File | null>)[key]) {
+        formData.append(key, (form as Record<string, string | number | Date | File | null>)[key] as File);
+      } else if (key !== 'lampiran' && key !== 'lampiran_preview_url' && key !== 'current_lampiran_url' && (form as Record<string, string | number | Date | File | null>)[key] !== null) {
+        if (key === 'waktu_kejadian' && (form as Record<string, string | number | Date | File | null>)[key] instanceof Date) {
+          formData.append(key, ((form as Record<string, string | number | Date | File | null>)[key] as Date).toISOString().slice(0, 19).replace('T', ' ')); // Format ke YYYY-MM-DD HH:mm:ss
         } else {
-          formData.append(key, form[key]);
+          formData.append(key, (form as Record<string, string | number | Date | File | null>)[key] as string);
         }
       }
     }

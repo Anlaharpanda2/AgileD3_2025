@@ -375,12 +375,19 @@ import { ElNotification, FormInstance } from 'element-plus';
 import api from '../../api.js';
 import { AxiosError } from 'axios';
 
-const props = defineProps({
+const props = defineProps<{
   initialData: {
-    type: Object,
-    required: true
-  },
-});
+    id: number | null;
+    nik: string;
+    nama: string;
+    jenis_kelamin: string;
+    tanggal_konsultasi: string; // Comes as string from API
+    topik: string;
+    status: string;
+    alamat: string;
+    no_telepon: string;
+  };
+}>();
 
 const emit = defineEmits(['close']);
 
@@ -414,13 +421,17 @@ const form = reactive<{
 });
 
 // Function to apply initial data to the form (tidak berubah fungsionalitas)
-const applyInitialData = (data: Record<string, unknown>) => {
+const applyInitialData = (data: Record<string, string | number | null | Date>) => {
   if (data) {
-    form.id = data.id || null;
-    Object.assign(form, data);
-    if (form.tanggal_konsultasi && typeof form.tanggal_konsultasi === 'string') {
-      form.tanggal_konsultasi = new Date(form.tanggal_konsultasi);
-    }
+    form.id = typeof data.id === 'number' ? data.id : null;
+    form.nik = typeof data.nik === 'string' ? data.nik : '';
+    form.nama = typeof data.nama === 'string' ? data.nama : '';
+    form.jenis_kelamin = typeof data.jenis_kelamin === 'string' ? data.jenis_kelamin : '';
+    form.tanggal_konsultasi = data.tanggal_konsultasi ? new Date(data.tanggal_konsultasi as string) : null;
+    form.topik = typeof data.topik === 'string' ? data.topik : '';
+    form.status = typeof data.status === 'string' ? data.status : '';
+    form.alamat = typeof data.alamat === 'string' ? data.alamat : '';
+    form.no_telepon = typeof data.no_telepon === 'string' ? data.no_telepon : '';
   }
 };
 
@@ -446,6 +457,7 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 // Form submission logic (tidak berubah fungsionalitas)
 const submitForm = () => {
+  if (!formRef.value) return;
   formRef.value.validate(async (valid: boolean) => {
     if (!valid) {
       ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });

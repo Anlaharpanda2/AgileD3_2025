@@ -224,18 +224,18 @@ async function ExportPdf(headerText: string, titleText: string, showLogo1: boole
 
   // Header Dokumen
   doc.setFontSize(headerFontSize)
-  doc.setFont(undefined, 'bold')
+  doc.setFont('helvetica', 'bold')
   const centerX = pageWidth / 2
-  const headerLines = doc.splitTextToSize(headerText, pageWidth / 3)
+  const headerLines = doc.splitTextToSize(headerText, pageWidth / 3).filter((line: string | undefined | null) => line !== undefined && line !== null);
   
-  headerLines.forEach(line => {
+  headerLines.forEach((line: string) => {
     doc.text(line, centerX, currentY, { align: 'center' })
     currentY += headerFontSize * 1.3
   })
 
   const defaultText = "Jalan Rasuna Said No. 74 Telp. (0751) 7053781 Fax. (0751) 7053781 Padang 25114"
   doc.setFontSize(fontSize8)
-  doc.setFont(undefined, 'normal')
+  doc.setFont('helvetica', 'normal')
   doc.text(defaultText, centerX, currentY, { align: 'center' })
 
   const minY = 20 + Math.max(logo1Size.height, logo2Size.height)
@@ -249,9 +249,9 @@ async function ExportPdf(headerText: string, titleText: string, showLogo1: boole
   // Judul Dokumen (opsional)
   if (titleText) {
     doc.setFontSize(titleFontSize)
-    doc.setFont(undefined, 'bold')
-    const titleLines = doc.splitTextToSize(titleText, pageWidth - (margin * 2))
-    titleLines.forEach(line => {
+    doc.setFont('helvetica', 'bold')
+    const titleLines = doc.splitTextToSize(String(titleText), pageWidth - (margin * 2))
+    titleLines.forEach((line: string) => {
       doc.text(line, centerX, currentY, { align: 'center' })
       currentY += titleFontSize * 1.5
     })
@@ -272,7 +272,7 @@ async function ExportPdf(headerText: string, titleText: string, showLogo1: boole
     didDrawPage: () => {
       const footerY = pageHeight - 20
       doc.setFontSize(fontSize8)
-      doc.setFont(undefined, 'normal')
+      doc.setFont('helvetica', 'normal')
       doc.text(getCurrentUrl(), margin, footerY, { align: 'left' })
       doc.text(`Dicetak pada: ${getCurrentDateTime()}`, pageWidth - margin, footerY, { align: 'right' })
     },

@@ -369,14 +369,14 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'; // Removed 'watch' and 'onMounted' as they are not used in FormTambahDataKonsultasi
-import { ElNotification } from 'element-plus';
+import { reactive, ref } from 'vue';
+import { ElNotification, FormInstance } from 'element-plus';
 import api from '../../api.js'; // Pastikan path ini benar
 
 // Removed props as FormTambahDataKonsultasi does not use initialData
 const emit = defineEmits(['close']);
 
-const formRef = ref(null);
+const formRef = ref<FormInstance | null>(null);
 const jenisKelaminOptions = ['laki-laki', 'perempuan'];
 
 // Form fields definition (copied from FormTambahDataKonsultasi.vue)
@@ -413,6 +413,7 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 // Form submission logic (copied from FormTambahDataKonsultasi.vue)
 const submitForm = () => {
+  if (!formRef.value) return;
   formRef.value.validate(async (valid: boolean) => {
     if (!valid) {
       ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });
@@ -420,9 +421,7 @@ const submitForm = () => {
     }
     const payload = {
       ...form,
-      tanggal_konsultasi: form.tanggal_konsultasi instanceof Date
-        ? `${form.tanggal_konsultasi.getFullYear()}-${String(form.tanggal_konsultasi.getMonth() + 1).padStart(2, '0')}-${String(form.tanggal_konsultasi.getDate()).padStart(2, '0')}`
-        : form.tanggal_konsultasi,
+      tanggal_konsultasi: form.tanggal_konsultasi ? `${(form.tanggal_konsultasi as Date).getFullYear()}-${String((form.tanggal_konsultasi as Date).getMonth() + 1).padStart(2, '0')}-${String((form.tanggal_konsultasi as Date).getDate()).padStart(2, '0')}` : null,
     };
     try {
       console.log('Kirim JSON:', JSON.stringify(payload));
@@ -441,7 +440,7 @@ const submitForm = () => {
       let errorMessage = 'Gagal menyimpan data. Terjadi kesalahan jaringan atau server.';
       if (error instanceof Error) {
         if ('response' in error && error.response && typeof error.response === 'object' && 'data' in error.response && error.response.data && typeof error.response.data === 'object' && 'message' in error.response.data) {
-          errorMessage = error.response.data.message;
+          errorMessage = error.response.data.message as string;
         } else {
           errorMessage = error.message;
         }

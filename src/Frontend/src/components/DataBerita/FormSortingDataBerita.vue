@@ -193,8 +193,20 @@ const props = defineProps<{
     data: Record<string, unknown>[];
 }>();
 
+interface Berita {
+  id: number;
+  judul: string;
+  jenis_konten: string;
+  isi: string;
+  foto: string;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
+  [key: string]: string | number | undefined; // Add index signature
+}
+
 const emits = defineEmits<{
-  (e: 'apply-sort', payload: { column: string; order: 'asc' | 'desc'; sortedData: Record<string, unknown>[] }): void;
+  (e: 'apply-sort', payload: { column: string; order: 'asc' | 'desc'; sortedData: Berita[] }): void;
   (e: 'cancel-sort'): void;
   (e: 'update:visible', value: boolean): void;
 }>();
@@ -242,7 +254,7 @@ function applySort(): void {
         : String(valueB).localeCompare(String(valueA));
     }
   });
-  emits('apply-sort', { column: form.column, order: form.order, sortedData: sortedCopy });
+  emits('apply-sort', { column: form.column, order: form.order, sortedData: sortedCopy as Berita[] });
   closeForm();
 }
 

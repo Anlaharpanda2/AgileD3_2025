@@ -1155,8 +1155,10 @@ function toggleSelection(row: Peserta) {
 async function fetchData() {
   try {
     const res = await api.get('/kelola/pelatihan/trash');
-    tableData.value = (Array.isArray(res) ? res : res.data || []).sort((a, b) => {
-      return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+    tableData.value = (Array.isArray(res) ? res : res.data || []).sort((a: Peserta, b: Peserta) => {
+      const dateA = a.updated_at ? new Date(a.updated_at).getTime() : 0;
+      const dateB = b.updated_at ? new Date(b.updated_at).getTime() : 0;
+      return dateB - dateA;
     });
   } catch (error) {
     console.error('Error fetching data:', error);

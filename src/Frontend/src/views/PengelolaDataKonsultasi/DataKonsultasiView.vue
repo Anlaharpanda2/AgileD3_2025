@@ -990,17 +990,17 @@ import api from "../../api.js";
 import SimpleLayout from "../../layouts/SimpleLayout.vue";
 import FormExportDataKonsultasi from "../../components/KelolaDataKonsultasi/FormExportDataKonsultasi.vue";
 import FormImportDataKonsultasi from "../../components/KelolaDataKonsultasi/FormImportDataKonsultasi.vue";
-import FormEditDataKonsultasi from "../../components/KelolaDataKonsultasi/FormEditDataKonsultasi.vue";
+import FormEditDataKonsultasi from '../../components/KelolaDataKonsultasi/FormEditDataKonsultasi.vue'
 import FormTambahDataKonsultasi from "../../components/KelolaDataKonsultasi/FormTambahDataKonsultasi.vue";
 import FormFilterDataKonsultasi from "../../components/KelolaDataKonsultasi/FormFilterDataKonsultasi.vue";
 import FormSortingDataKonsultasi from "../../components/KelolaDataKonsultasi/FormSortingDataKonsultasi.vue";
 import { ElNotification } from 'element-plus';
+import { Eye, EyeOff } from 'lucide-vue-next';
 
 
 
 
-// Interface for Konsultasi data structure
-interface Konsultasi {
+interface Pengaduan {
   id: number;
   nama_pelapor: string;
   nama_korban: string;
@@ -1009,16 +1009,16 @@ interface Konsultasi {
   waktu_kejadian: string;
   kasus: string;
   no_hp: string;
-  saksi: string;
+  saksi: string | null;
   status: string;
-  lampiran: string;
-  created_at?: string; // Optional: date of creation, used for sorting
-  updated_at?: string; // Optional: date of last update
+  lampiran: string | null;
+  created_at?: string;
+  updated_at?: string;
 }
 
 // Reactive state variables
-const tableData = ref<Konsultasi[]>([]);
-const selected = ref<Konsultasi[]>([]);
+const tableData = ref<Pengaduan[]>([]);
+const selected = ref<Pengaduan[]>([]);
 const search = ref("");
 const loading = ref(false);
 const itemsPerPage = ref<number | string>(10);
@@ -1031,19 +1031,44 @@ const showTambah = ref(false);
 const showSort = ref(false);
 const showFilter = ref(false);
 
-const editData = ref<Konsultasi | null>(null);
+const userRole = ref(''); // Untuk menyimpan peran dari local storage
+
+// Tentukan canModify dan isOperator berdasarkan userRole
+const canModify = computed(() => userRole.value !== 'pegawai');
+const isOperator = computed(() => userRole.value !== 'pegawai');
+
+const editData = ref<{
+  id: number | null;
+  nik: string;
+  nama: string;
+  jenis_kelamin: string;
+  tanggal_konsultasi: string;
+  topik: string;
+  status: string;
+  alamat: string;
+  no_telepon: string;
+} | null>(null);
 const perPageOptions = [10, 20, 50, 100, "all"];
 const showAllColumns = ref(false); // Controls visibility of additional table columns
 
 // Function to open the edit form with selected row data
-const openEdit = (row: Konsultasi) => {
-  editData.value = { ...row }; // Create a copy to avoid direct mutation
+const openEdit = (row: Pengaduan) => {
+  editData.value = { 
+    id: row.id,
+    nik: '', // Placeholder, as Pengaduan doesn't have nik
+    nama: row.nama_pelapor, // Map nama_pelapor to nama
+    jenis_kelamin: '', // Placeholder
+    tanggal_konsultasi: new Date().toISOString(), // Placeholder
+    topik: row.kasus, // Map kasus to topik
+    status: row.status,
+    alamat: row.alamat,
+    no_telepon: row.no_hp, // Map no_hp to no_telepon
+  };
   showEdit.value = true;
-  // loading.value = false; // This line might be redundant here, loading is managed by fetchData
 };
 
 const handleSort = (payload: { column: string; order: 'asc' | 'desc'; sortedData: Record<string, unknown>[] }) => {
-  tableData.value = payload.sortedData as unknown as Konsultasi[];
+  tableData.value = payload.sortedData as unknown as Pengaduan[];
   showSort.value = false;
 };
 
@@ -1110,7 +1135,7 @@ const filteredData = computed(() => {
 
     if (filterValue !== null && filterValue !== '') {
       data = data.filter(item => {
-        const itemValue = item[key as keyof Konsultasi]; // Access item property dynamically
+        const itemValue = item[key as keyof Pengaduan]; // Access item property dynamically
         if (itemValue === null || itemValue === undefined) {
           return false; // If item value is null/undefined, it doesn't match
         }
@@ -1186,12 +1211,12 @@ const visiblePages = computed<(number | '...')[]>(() => {
 });
 
 // Handles selection change from El-Table (for desktop)
-function onSelectionChange(rows: Konsultasi[]) {
+function onSelectionChange(rows: Pengaduan[]) {
   selected.value = rows;
 }
 
 // Toggles selection for mobile card view
-function toggleSelection(row: Konsultasi) {
+function toggleSelection(row: Pengaduan) {
   const index = selected.value.findIndex(item => item.id === row.id);
   if (index >= 0) {
     selected.value.splice(index, 1); // Deselect
@@ -1246,7 +1271,7 @@ async function goToTrash() {
 }
 
 // Handles deletion of a single row
-async function onDelete(row: Konsultasi) {
+async function onDelete(row: Pengaduan) {
   loading.value = true; // Show loading indicator
   try {
     await api.delete(`/kelola/konsultasi/${row.id}`); // Delete by ID
@@ -1270,7 +1295,7 @@ async function onDelete(row: Konsultasi) {
   }
 }
 
-async function completeConsultation(row: Konsultasi) {
+async function completeConsultation(row: Pengaduan) {
   loading.value = true;
   try {
     await api.patch(`/kelola/konsultasi/${row.id}/complete`);
@@ -1302,7 +1327,7 @@ async function fetchData() {
   loading.value = true; // Start loading indicator
   try {
     const res = await api.get('/kelola/konsultasi');
-    let fetchedData: Konsultasi[] = Array.isArray(res) ? res : res.data || [];
+    let fetchedData: Pengaduan[] = Array.isArray(res) ? res : res.data || [];
 
     // --- START: MODIFIKASI UNTUK PENGURUTAN DATA TERBARU ---
     // Sort the data by 'created_at' in descending order (newest first)
@@ -1349,6 +1374,12 @@ onMounted(async () => {
 
   // Fetch data when the component is mounted
   await fetchData();
+
+  // Get role from local storage
+  const storedRole = localStorage.getItem('role');
+  if (storedRole) {
+    userRole.value = storedRole;
+  }
 });
 
 // Lifecycle hook: Called before the component is unmounted
@@ -1480,7 +1511,7 @@ onBeforeUnmount(() => {
 .dropdown-enter-from,
 .dropdown-leave-to {
   opacity: 0;
-  transform: translateY(-20px) scale(0.9);
+  transform: translateY(-20px) scale(0.95);
 }
 
 .dropdown-enter-to,
@@ -1608,5 +1639,35 @@ select:focus {
     height: 100%;
     overflow-y: auto;
   }
+}
+</style>
+
+<style>
+/* Global styles for dropdowns */
+.el-dropdown__popper {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+.el-dropdown-menu {
+  padding: 8px !important;
+}
+
+.el-dropdown-menu__item {
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+  font-size: 14px !important;
+  transition: background-color 0.2s ease, color 0.2s ease !important;
+}
+
+.el-dropdown-menu__item:hover {
+  background-color: #fce7f3 !important;
+  color: #be185d !important;
+}
+
+.el-dropdown-menu__item:focus {
+  background-color: #fce7f3 !important;
+  color: #be185d !important;
 }
 </style>

@@ -558,12 +558,25 @@ import { ElNotification, FormInstance, FormItemRule } from 'element-plus';
 import api from '../../api.js';
 import { AxiosError } from 'axios';
 
-const props = defineProps({
+const props = defineProps<{
   initialData: {
-    type: Object,
-    required: true
-  },
-});
+    id: number | null;
+    nik: string;
+    nama: string;
+    jenis_bimtek: string;
+    kegiatan_dimulai: string;
+    kegiatan_berakhir: string;
+    tempat_kegiatan: string;
+    angkatan: number | null;
+    tempat_tanggal_lahir: string;
+    pendidikan: string;
+    status: string;
+    alamat: string;
+    jenis_usaha: string;
+    penghasilan_perbulan: string;
+    nomor_telefon: string;
+  };
+}>();
 
 const emit = defineEmits(['close']);
 
@@ -574,7 +587,23 @@ const statusOptions = ['kawin', 'lajang', 'janda'];
 
 
 // Reactive form state (tidak berubah fungsionalitas)
-const form = reactive({
+const form = reactive<{
+  id: number | null;
+  nik: string;
+  nama: string;
+  jenis_bimtek: string;
+  kegiatan_dimulai: Date | null;
+  kegiatan_berakhir: Date | null;
+  tempat_kegiatan: string;
+  angkatan: number | null;
+  tempat_tanggal_lahir: string;
+  pendidikan: string;
+  status: string;
+  alamat: string;
+  jenis_usaha: string;
+  penghasilan_perbulan: string;
+  nomor_telefon: string;
+}>({
   id: null,
   nik: '',
   nama: '',
@@ -593,19 +622,23 @@ const form = reactive({
 });
 
 // Function to apply initial data to the form (tidak berubah fungsionalitas)
-const applyInitialData = (data: Record<string, unknown>) => {
+const applyInitialData = (data: Record<string, string | number | Date | null>) => {
   if (data) {
-    form.id = data.id || null;
-    Object.assign(form, data);
-    if (form.kegiatan_dimulai && typeof form.kegiatan_dimulai === 'string') {
-      form.kegiatan_dimulai = new Date(form.kegiatan_dimulai);
-    }
-    if (form.kegiatan_berakhir && typeof form.kegiatan_berakhir === 'string') {
-      form.kegiatan_berakhir = new Date(form.kegiatan_berakhir);
-    }
-    if (form.angkatan !== null && typeof form.angkatan === 'string') {
-      form.angkatan = Number(form.angkatan);
-    }
+    form.id = (data.id as number) || null;
+    form.nik = (data.nik as string) || '';
+    form.nama = (data.nama as string) || '';
+    form.jenis_bimtek = (data.jenis_bimtek as string) || '';
+    form.kegiatan_dimulai = data.kegiatan_dimulai ? new Date(data.kegiatan_dimulai as string) : null;
+    form.kegiatan_berakhir = data.kegiatan_berakhir ? new Date(data.kegiatan_berakhir as string) : null;
+    form.tempat_kegiatan = (data.tempat_kegiatan as string) || '';
+    form.angkatan = (data.angkatan as number) || null;
+    form.tempat_tanggal_lahir = (data.tempat_tanggal_lahir as string) || '';
+    form.pendidikan = (data.pendidikan as string) || '';
+    form.status = (data.status as string) || '';
+    form.alamat = (data.alamat as string) || '';
+    form.jenis_usaha = (data.jenis_usaha as string) || '';
+    form.penghasilan_perbulan = (data.penghasilan_perbulan as string) || '';
+    form.nomor_telefon = (data.nomor_telefon as string) || '';
   }
 };
 
@@ -654,6 +687,7 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 // Form submission logic (tidak berubah fungsionalitas)
 const submitForm = () => {
+  if (!formRef.value) return;
   formRef.value.validate(async (valid: boolean) => {
     if (!valid) {
       ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });
@@ -662,12 +696,8 @@ const submitForm = () => {
 
     const payload = {
       ...form,
-      kegiatan_dimulai: form.kegiatan_dimulai instanceof Date
-        ? `${form.kegiatan_dimulai.getFullYear()}-${String(form.kegiatan_dimulai.getMonth() + 1).padStart(2, '0')}-${String(form.kegiatan_dimulai.getDate()).padStart(2, '0')}`
-        : form.kegiatan_dimulai,
-      kegiatan_berakhir: form.kegiatan_berakhir instanceof Date
-        ? `${form.kegiatan_berakhir.getFullYear()}-${String(form.kegiatan_berakhir.getMonth() + 1).padStart(2, '0')}-${String(form.kegiatan_berakhir.getDate()).padStart(2, '0')}`
-        : form.kegiatan_berakhir,
+      kegiatan_dimulai: form.kegiatan_dimulai ? `${(form.kegiatan_dimulai as Date).getFullYear()}-${String((form.kegiatan_dimulai as Date).getMonth() + 1).padStart(2, '0')}-${String((form.kegiatan_dimulai as Date).getDate()).padStart(2, '0')}` : null,
+      kegiatan_berakhir: form.kegiatan_berakhir ? `${(form.kegiatan_berakhir as Date).getFullYear()}-${String((form.kegiatan_berakhir as Date).getMonth() + 1).padStart(2, '0')}-${String((form.kegiatan_berakhir as Date).getDate()).padStart(2, '0')}` : null,
       angkatan: Number(form.angkatan),
     };
 

@@ -258,7 +258,16 @@ const emit = defineEmits(['close']);
 const formRef = ref<FormInstance | null>(null);
 const statusOptions = ['aktif', 'nonaktif'];
 
-const form = reactive({
+const form = reactive<{
+  id: number | null;
+  idPegawai: string;
+  nama: string;
+  alamat: string;
+  email: string;
+  jabatan: string;
+  noHp: string;
+  status: string;
+}>({
   id: null,
   idPegawai: '',
   nama: '',
@@ -271,7 +280,7 @@ const form = reactive({
 
 const applyInitialData = (data: Record<string, unknown>) => {
   if (data) {
-    form.id = data.id || null;
+    form.id = typeof data.id === 'number' ? data.id : null;
     Object.assign(form, data);
   }
 };
@@ -294,6 +303,7 @@ const rules = {
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 const submitForm = () => {
+  if (!formRef.value) return;
   formRef.value.validate(async (valid: boolean) => {
     if (!valid) {
       ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });

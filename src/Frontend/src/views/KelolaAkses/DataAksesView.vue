@@ -27,7 +27,10 @@
       class="sm:full-screen"
       @close="showEdit = false"
     />
-    <PermissionDeniedModal :is-visible="showPermissionModal" @update:is-visible="showPermissionModal = $event" />
+    <PermissionDeniedModal
+      :is-visible="showPermissionModal"
+      @update:is-visible="showPermissionModal = $event"
+    />
     <!-- Main Container -->
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6">
       <!-- Page Header -->
@@ -595,7 +598,7 @@
             >
               <template #default="{ row }">
                 <div class="text-gray-600 text-sm full-width-content">
-                  {{ formatDate(row.created_at) }}
+                  {{ formatDate(row.created_at || '') }}
                 </div>
               </template>
             </el-table-column>
@@ -608,7 +611,7 @@
             >
               <template #default="{ row }">
                 <div class="text-gray-600 text-sm full-width-content">
-                  {{ formatDate(row.updated_at) }}
+                  {{ formatDate(row.updated_at || '') }}
                 </div>
               </template>
             </el-table-column>
@@ -703,8 +706,8 @@
             </span>
           </div>
           <div class="text-xs text-gray-600 mb-2">
-            <p>Dibuat: {{ formatDate(row.created_at) }}</p>
-            <p>Diperbarui: {{ formatDate(row.updated_at) }}</p>
+            <p>Dibuat: {{ formatDate(row.created_at || '') }}</p>
+            <p>Diperbarui: {{ formatDate(row.updated_at || '') }}</p>
           </div>
           <div
             v-if="userRole && userRole !== 'pegawai'"
@@ -837,7 +840,7 @@ interface UserAkses {
   username: string;
   email: string;
   role: string;
-  main?: string; // Tambahkan properti 'main'
+  main?: number; // Tambahkan properti 'main'
   created_at?: string; // Optional: date of creation, used for sorting
   updated_at?: string; // Optional: date of last update
 }
@@ -854,6 +857,7 @@ const showEdit = ref(false);
 const showTambah = ref(false);
 const showSort = ref(false);
 const showFilter = ref(false);
+const showExport = ref(false);
 const showPermissionModal = ref(false); // Pindahkan deklarasi ke sini
 const isCurrentUserMainOperator = ref(false); // New reactive variable for main operator status
 const showAllColumns = ref(false);
@@ -875,7 +879,7 @@ async function verifyMainOperatorStatus() {
   try {
     const response = await api.get('/kelola/akses');
     const users = Array.isArray(response) ? response : response.data || [];
-    const currentUser = users.find((user: any) => String(user.id) === userId);
+    const currentUser = users.find((user: UserAkses) => String(user.id) === userId);
 
     if (currentUser) {
       userRole.value = currentUser.role;

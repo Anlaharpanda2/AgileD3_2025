@@ -203,8 +203,19 @@ const props = defineProps<{
   data: Record<string, unknown>[];
 }>();
 
+interface UserAkses {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+  role: string;
+  main?: number; // Tambahkan properti 'main'
+  created_at?: string; // Optional: date of creation, used for sorting
+  updated_at?: string; // Optional: date of last update
+}
+
 const emits = defineEmits<{
-  (e: 'apply-sort', payload: { column: string; order: 'asc' | 'desc'; sortedData: Record<string, unknown>[] }): void;
+  (e: 'apply-sort', payload: { column: string; order: 'asc' | 'desc'; sortedData: UserAkses[] }): void;
   (e: 'cancel-sort'): void;
   (e: 'update:visible', value: boolean): void;
 }>();
@@ -276,7 +287,7 @@ function applySort(): void {
         : String(valueB).localeCompare(String(valueA));
     }
   });
-  emits('apply-sort', { column: form.column, order: form.order, sortedData: sortedCopy });
+  emits('apply-sort', { column: form.column, order: form.order, sortedData: sortedCopy as unknown as UserAkses[] });
   closeForm(); // Close form, but state is preserved
 }
 

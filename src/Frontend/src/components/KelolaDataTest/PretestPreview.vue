@@ -196,7 +196,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
 import { Pretest, Question } from '@/services/pretestService';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

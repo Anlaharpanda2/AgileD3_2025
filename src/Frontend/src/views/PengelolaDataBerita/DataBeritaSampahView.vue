@@ -571,7 +571,7 @@
             >
               <template #default="{ row }">
                 <div class="text-gray-600 text-sm full-width-content">
-                  {{ new Date(row.updated_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) }}
+                  {{ new Date(row.updated_at || '').toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) }}
                 </div>
               </template>
             </el-table-column>
@@ -583,7 +583,7 @@
             >
               <template #default="{ row }">
                 <div class="text-gray-600 text-sm full-width-content">
-                  {{ new Date(row.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) }}
+                  {{ new Date(row.created_at || '').toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) }}
                 </div>
               </template>
             </el-table-column>
@@ -688,8 +688,8 @@
             </span>
           </div>
           <div class="text-xs text-gray-600 mb-2">
-            <p>Diperbarui: {{ new Date(row.updated_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
-            <p>Dibuat: {{ new Date(row.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
+            <p>Diperbarui: {{ new Date(row.updated_at || '').toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
+            <p>Dibuat: {{ new Date(row.created_at || '').toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
           </div>
           <div class="flex gap-2">
             <button
@@ -965,8 +965,8 @@ function toggleSelection(row: Berita) {
 async function fetchData() {
   try {
     const res = await api.get('/kelola/berita/trash');
-    tableData.value = (Array.isArray(res) ? res : res.data || []).sort((a, b) => {
-      return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+    tableData.value = (Array.isArray(res) ? res : res.data || []).sort((a: Berita, b: Berita) => {
+      return new Date(b.updated_at || '').getTime() - new Date(a.updated_at || '').getTime();
     });
   } catch (error) {
     console.error('Error fetching data:', error);

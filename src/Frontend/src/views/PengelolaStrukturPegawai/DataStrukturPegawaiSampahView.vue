@@ -35,7 +35,7 @@
         <el-button
           type="default"
           plain
-          class="flex items-center gap-2 !text-pink-600 !border-pink-500 hover:!bg-pink-50 hover:!text-white hover:!bg-pink-400 hover:!border-pink-500"
+          class="flex items-center gap-2 !text-pink-600 !border-pink-500 hover:!text-white hover:!bg-pink-400 hover:!border-pink-500"
           @click="goBack"
         >
           <el-icon><ArrowLeft /></el-icon>
@@ -849,8 +849,8 @@ function goBack() {
 }
 
 // Fungsi untuk menangani data yang diurutkan dari FormSortingDataPegawai
-function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: Pegawai[] }) {
-  tableData.value = payload.sortedData;
+function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: Record<string, unknown>[] }) {
+  tableData.value = payload.sortedData as unknown as Pegawai[];
 }
 
 interface Pegawai {
@@ -1007,8 +1007,10 @@ function toggleSelection(row: Pegawai) {
 async function fetchData() {
   try {
     const res = await api.get('/kelola/struktur-pegawai/trash');
-    tableData.value = (Array.isArray(res) ? res : res.data || []).sort((a, b) => {
-      return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+    tableData.value = (Array.isArray(res) ? res : res.data || []).sort((a: Pegawai, b: Pegawai) => {
+      const dateA = a.updated_at ? new Date(a.updated_at).getTime() : 0;
+      const dateB = b.updated_at ? new Date(b.updated_at).getTime() : 0;
+      return dateB - dateA;
     });
   } catch (error) {
     console.error('Error fetching data:', error);

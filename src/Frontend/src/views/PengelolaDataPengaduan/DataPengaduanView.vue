@@ -738,27 +738,6 @@
               <template #default="{ row }">
                 <div class="flex items-center gap-2 full-width-content">
                   <button
-                    v-if="row.status === 'diproses'"
-                    class="w-8 h-8 flex items-center justify-center rounded-lg bg-green-100 text-green-600 hover:bg-green-200 transition-colors"
-                    title="Selesai"
-                    @click.stop="completeConsultation(row)"
-                  >
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </button>
-                  <button
                     class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors"
                     title="Edit"
                     @click.stop="openEdit(row)"
@@ -1013,11 +992,6 @@ const openEdit = (row: Pengaduan) => {
   showEdit.value = true;
 };
 
-const openTindakLanjut = (id: number) => {
-  tindakLanjutId.value = id;
-  showTindakLanjut.value = true;
-};
-
 const handleTindakLanjutSubmit = async (data: { id: number; tindakan: string; keterangan: string }) => {
   if (data.tindakan === 'konsultasi') {
     loading.value = true;
@@ -1269,8 +1243,8 @@ async function onDelete(row: Pengaduan) {
 }
 
 // Fungsi untuk menangani data yang diurutkan dari FormSortingDataPengaduan
-function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: Pengaduan[] }) {
-  tableData.value = payload.sortedData;
+function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: Record<string, unknown>[] }) {
+  tableData.value = payload.sortedData as unknown as Pengaduan[];
 }
 
 /**

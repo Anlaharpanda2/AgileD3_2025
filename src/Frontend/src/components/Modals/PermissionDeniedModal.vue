@@ -23,19 +23,26 @@
               stroke-linejoin="round"
               stroke-width="2"
               d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-            ></path>
+            />
           </svg>
         </div>
-        <h3 class="text-2xl font-bold text-gray-800 mb-3">Akses Ditolak!</h3>
+        <h3 class="text-2xl font-bold text-gray-800 mb-3">
+          Akses Ditolak!
+        </h3>
         <p class="text-gray-600 mb-6">
           Anda bukan operator utama. Operator utama adalah pengguna dengan label hijau di tampilan data.
           Jika Anda merasa perlu mengubah data, mintalah mereka untuk melakukannya.
           Namun, jika Anda ingin mengubah kata sandi akun Anda, maka Anda bisa melakukannya pada halaman
-          <router-link to="/reset/forgot" class="text-blue-600 hover:underline font-medium">ubah password</router-link> berikut.
+          <router-link
+            to="/reset/forgot"
+            class="text-blue-600 hover:underline font-medium"
+          >
+            ubah password
+          </router-link> berikut.
         </p>
         <button
-          @click="closeModal"
           class="px-6 py-3 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+          @click="closeModal"
         >
           Mengerti
         </button>
@@ -45,12 +52,8 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue';
 
-const props = defineProps<{
-  isVisible: boolean;
-}>();
-
+defineProps<{ isVisible: boolean }>();
 const emit = defineEmits(['update:isVisible']);
 
 const closeModal = () => {

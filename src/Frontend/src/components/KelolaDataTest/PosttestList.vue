@@ -211,7 +211,7 @@
                     <button 
                       class="inline-flex items-center p-1.5 border border-transparent text-xs font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
                       title="Lihat Detail"
-                      @click="viewPosttest(posttest.id)"
+                      @click="viewPosttest(posttest.id!)"
                     >
                       <svg
                         class="w-4 h-4"
@@ -236,7 +236,7 @@
                     <button 
                       class="inline-flex items-center p-1.5 border border-transparent text-xs font-medium rounded-md text-pink-700 bg-pink-100 hover:bg-pink-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-all duration-200"
                       title="Edit Posttest"
-                      @click="editPosttest(posttest.id)"
+                      @click="editPosttest(posttest.id!)"
                     >
                       <svg
                         class="w-4 h-4"
@@ -255,7 +255,7 @@
                     <button 
                       class="inline-flex items-center p-1.5 border border-transparent text-xs font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200"
                       title="Hapus Posttest"
-                      @click="deletePosttest(posttest.id)"
+                      @click="deletePosttest(posttest.id!)"
                     >
                       <svg
                         class="w-4 h-4"

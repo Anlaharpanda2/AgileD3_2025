@@ -274,42 +274,58 @@
 
 <script setup lang="ts">
 import { reactive, ref, watch } from 'vue';
-import { ElNotification } from 'element-plus';
+import { ElNotification, FormInstance } from 'element-plus';
 import api from '../../api.js'; // Pastikan path ini benar
 
-const props = defineProps({
-  initialData: {
-    type: Object,
-    required: true
-  },
-});
+interface Panitia {
+  id: number | null;
+  email: string;
+  jabatan: string;
+  nama_panitia: string;
+  no_hp: string;
+  foto: string | null;
+  foto_url?: string | null;
+  current_foto_url?: string | null;
+}
+
+const props = defineProps<{
+  initialData: Panitia;
+}>();
 
 const emit = defineEmits(['close']);
 
-const formRef = ref(null);
+const formRef = ref<FormInstance | null>(null);
 
 // Reactive form state
-const form = reactive({
+const form = reactive<{
+  id: number | null;
+  email: string;
+  jabatan: string;
+  nama_panitia: string;
+  no_hp: string;
+  foto: File | null; // Untuk menyimpan file foto baru
+  current_foto_url: string | null; // Untuk menampilkan foto yang sudah ada
+}>({
   id: null,
   email: '',
   jabatan: '',
   nama_panitia: '',
   no_hp: '',
-  foto: null, // Untuk menyimpan file foto baru
-  current_foto_url: null, // Untuk menampilkan foto yang sudah ada
+  foto: null,
+  current_foto_url: null,
 });
 
 // Function to apply initial data to the form
  
-const applyInitialData = (data: Record<string, unknown>) => {
+const applyInitialData = (data: Panitia) => {
   if (data) {
     form.id = data.id || null;
     form.email = data.email || '';
     form.jabatan = data.jabatan || '';
     form.nama_panitia = data.nama_panitia || '';
     form.no_hp = data.no_hp || '';
-    form.current_foto_url = data.foto_url || (data.foto ? `/storage/${data.foto}` : null); // Gunakan foto_url atau fallback ke path lama
-    form.foto = null; // Reset foto baru saat membuka form edit
+    form.current_foto_url = data.foto_url || (data.foto ? `/storage/${data.foto}` : null);
+    form.foto = null;
   }
 };
 
@@ -343,6 +359,7 @@ const handleFileUpload = (event: Event) => {
 
 // Form submission logic
 const submitForm = () => {
+  if (!formRef.value) return;
   formRef.value.validate(async (valid: boolean) => {
     if (!valid) {
       ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });
@@ -352,10 +369,10 @@ const submitForm = () => {
     const formData = new FormData();
     formData.append('_method', 'PUT'); // Laravel requires _method for PUT with form-data
     for (const key in form) {
-      if (key === 'foto' && form[key]) {
-        formData.append(key, form[key]);
-      } else if (key !== 'foto' && key !== 'current_foto_url' && form[key] !== null) {
-        formData.append(key, form[key]);
+      if (key === 'foto' && form[key as keyof typeof form]) {
+        formData.append(key, form[key as keyof typeof form] as File);
+      } else if (key !== 'foto' && key !== 'current_foto_url' && form[key as keyof typeof form] !== null) {
+        formData.append(key, form[key as keyof typeof form] as string);
       }
     }
 
@@ -379,7 +396,7 @@ const submitForm = () => {
       let errorMessage = 'Gagal memperbarui data. Terjadi kesalahan jaringan atau server.';
       if (error instanceof Error) {
         if ('response' in error && error.response && typeof error.response === 'object' && 'data' in error.response && error.response.data && typeof error.response.data === 'object' && 'message' in error.response.data) {
-          errorMessage = error.response.data.message;
+          errorMessage = (error.response.data.message as string);
         } else {
           errorMessage = error.message;
         }

@@ -482,22 +482,22 @@
             >
               <template #default="{ row }">
                 <div
-            v-if="isOperator"
-            class="flex gap-2"
-          >
-            <button
-              class="flex-1 py-2 bg-blue-100 text-blue-600 rounded-lg text-sm hover:bg-blue-200 transition-colors touch-highlight"
-              @click.stop="openEdit(row)"
-            >
-              Edit
-            </button>
-            <button
-              class="flex-1 py-2 bg-red-100 text-red-600 rounded-lg text-sm hover:bg-red-200 transition-colors touch-highlight"
-              @click.stop="onDelete(row)"
-            >
-              Hapus
-            </button>
-          </div>
+                  v-if="isOperator"
+                  class="flex gap-2"
+                >
+                  <button
+                    class="flex-1 py-2 bg-blue-100 text-blue-600 rounded-lg text-sm hover:bg-blue-200 transition-colors touch-highlight"
+                    @click.stop="openEdit(row)"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    class="flex-1 py-2 bg-red-100 text-red-600 rounded-lg text-sm hover:bg-red-200 transition-colors touch-highlight"
+                    @click.stop="onDelete(row)"
+                  >
+                    Hapus
+                  </button>
+                </div>
               </template>
             </el-table-column>
           </el-table>
@@ -626,8 +626,8 @@ const showEdit = ref(false);
 const showTambah = ref(false);
 const showSort = ref(false);
 const showFilter = ref(false);
-const editData = ref(null);
-const TambahData = ref(null);
+const editData = ref<Berita | null>(null);
+const TambahData = ref<Berita | null>(null);
 const activeFilters = ref<{ [key: string]: string | number | null }>({});
 const perPageOptions = [10, 20, 50, 100, "all"];
 const router = useRouter()
@@ -639,7 +639,13 @@ const openEdit = (row: Berita) => {
 };
 
 const openTambah = () => {
-  TambahData.value = true;
+  TambahData.value = {
+    id: 0,
+    judul: '',
+    jenis_konten: '',
+    isi: '',
+    foto: '',
+  };
   showTambah.value = true;
   loading.value = false;
 };

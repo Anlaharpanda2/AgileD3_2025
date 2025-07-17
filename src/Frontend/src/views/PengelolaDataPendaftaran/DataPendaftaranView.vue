@@ -1020,8 +1020,8 @@ function handleQuotaUpdated() {
 }
 
 // Fungsi untuk menangani data yang diurutkan dari FormSortingDatapendaftaran
-function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: pendaftar[] }) {
-  tableData.value = payload.sortedData;
+function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: Record<string, unknown>[] }) {
+  tableData.value = payload.sortedData as unknown as pendaftar[];
   // Opsional: Anda bisa menyimpan kolom dan urutan yang diterapkan jika diperlukan
   // currentSortColumn.value = payload.column;
   // currentSortOrder.value = payload.order;

@@ -862,7 +862,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import api from "../../api.js";
 import SimpleLayout from "../../layouts/SimpleLayout.vue";
-import FormEditDataKonsultasi from "../../components/KelolaDataKonsultasi/FormEditDataKonsultasi.vue";
+import FormEditDataKonsultasi from '../../components/KelolaDataKonsultasi/FormEditDataKonsultasi.vue'
 import FormTambahDataKonsultasi from "../../components/KelolaDataKonsultasi/FormTambahDataKonsultasi.vue";
 import FormFilterDataKonsultasi from "../../components/KelolaDataKonsultasi/FormFilterDataKonsultasi.vue";
 import FormSortingDataKonsultasi from "../../components/KelolaDataKonsultasi/FormSortingDataKonsultasi.vue";
@@ -878,11 +878,11 @@ function goBack() {
 }
 
 // Fungsi untuk menangani data yang diurutkan dari FormSortingDataKonsultasi
-function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: Konsultasi[] }) {
-  tableData.value = payload.sortedData;
+function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: Record<string, unknown>[] }) {
+  tableData.value = payload.sortedData as unknown as Pengaduan[];
 }
 
-interface Konsultasi {
+interface Pengaduan {
   id: number;
   nama_pelapor: string;
   nama_korban: string;
@@ -891,16 +891,16 @@ interface Konsultasi {
   waktu_kejadian: string;
   kasus: string;
   no_hp: string;
-  saksi: string;
+  saksi: string | null;
   status: string;
-  lampiran: string;
+  lampiran: string | null;
   created_at?: string;
   updated_at?: string;
   deleted_at?: string;
 }
 
-const tableData = ref<Konsultasi[]>([]);
-const selected = ref<Konsultasi[]>([]);
+const tableData = ref<Pengaduan[]>([]);
+const selected = ref<Pengaduan[]>([]);
 const search = ref("");
 const loading = ref(false);
 const itemsPerPage = ref<number | string>(10);
@@ -910,7 +910,17 @@ const showSort = ref(false);
 const showFilter = ref(false);
 const showTambah = ref(false);
 const showEdit = ref(false);
-const editData = ref<Konsultasi | null>(null);
+const editData = ref<{
+  id: number | null;
+  nik: string;
+  nama: string;
+  jenis_kelamin: string;
+  tanggal_konsultasi: string;
+  topik: string;
+  status: string;
+  alamat: string;
+  no_telepon: string;
+} | null>(null);
 const showAllColumns = ref(false);
 const perPageOptions = [10, 20, 50, 100, "all"];
 
@@ -995,7 +1005,7 @@ const filteredData = computed(() => {
     const filterValue = activeFilters.value[key];
     if (filterValue !== null && filterValue !== '') {
       data = data.filter(item => {
-        const itemValue = item[key as keyof Konsultasi];
+        const itemValue = item[key as keyof Pengaduan];
         if (itemValue === null || itemValue === undefined) {
           return false;
         }
@@ -1063,11 +1073,11 @@ const visiblePages = computed<(number | '...')[]>(() => {
 
   return pages;
 });
-function onSelectionChange(rows: Konsultasi[]) {
+function onSelectionChange(rows: Pengaduan[]) {
   selected.value = rows;
 }
 
-function toggleSelection(row: Konsultasi) {
+function toggleSelection(row: Pengaduan) {
   const index = selected.value.findIndex(item => item.id === row.id);
   if (index > -1) {
     selected.value.splice(index, 1);
@@ -1079,8 +1089,8 @@ function toggleSelection(row: Konsultasi) {
 async function fetchData() {
   try {
     const res = await api.get('/kelola/konsultasi/trash');
-    tableData.value = (Array.isArray(res) ? res : res.data || []).sort((a, b) => {
-      return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+    tableData.value = (Array.isArray(res) ? res : res.data || []).sort((a: Pengaduan, b: Pengaduan) => {
+      return new Date(b.updated_at || '').getTime() - new Date(a.updated_at || '').getTime();
     });
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -1094,7 +1104,7 @@ async function fetchData() {
 }
 
 
-async function onDeleteClick(row: Konsultasi) {
+async function onDeleteClick(row: Pengaduan) {
   ElMessageBox.confirm(
     `Apakah Anda yakin ingin menghapus data ${row.nama_pelapor} secara permanen?`,
     'Konfirmasi Hapus Permanen',
@@ -1127,7 +1137,7 @@ async function onDeleteClick(row: Konsultasi) {
   });
 }
 
-async function onRestoreClick(row: Konsultasi) {
+async function onRestoreClick(row: Pengaduan) {
   ElMessageBox.confirm(
     `Apakah Anda yakin ingin memulihkan data ${row.nama_pelapor}?`,
     'Konfirmasi Pemulihan',

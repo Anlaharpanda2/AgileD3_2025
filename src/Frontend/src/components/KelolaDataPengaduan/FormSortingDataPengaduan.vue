@@ -214,6 +214,7 @@ interface Pengaduan {
   created_at?: string; // Optional: date of creation, used for sorting
   updated_at?: string; // Optional: date of last update
   deleted_at?: string; // Added for trash data
+  [key: string]: string | number | null | undefined; // Add index signature
 }
 
 const props = defineProps<{

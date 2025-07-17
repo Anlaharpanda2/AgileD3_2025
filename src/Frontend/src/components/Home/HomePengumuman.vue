@@ -6,7 +6,7 @@
       class="text-center p-6 border-b border-gray-200"
       data-aos="fade-up"
     >
-      <h2 class="text-2xl font-bold text-gray-800">
+      <h2 class="text-4xl font-bold text-gray-800">
         Pengumuman
       </h2>
       <p class="text-sm text-gray-500 mt-1">

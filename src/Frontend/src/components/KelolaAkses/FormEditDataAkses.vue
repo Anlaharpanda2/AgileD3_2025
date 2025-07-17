@@ -205,7 +205,7 @@
                     <span
                       class="absolute left-1 top-1 w-6 h-6 rounded-full bg-white shadow transform transition-transform duration-200 ease-in-out"
                       :class="form.main === 1 ? 'translate-x-6' : 'translate-x-0'"
-                    ></span>
+                    />
                   </div>
                   <p class="text-xs text-gray-500 mt-1">
                     {{ form.main === 1 ? 'Pengguna ini adalah operator utama.' : 'Pengguna ini bukan operator utama.' }}
@@ -303,7 +303,7 @@ const form = reactive<{
   main: 0, // Default ke 0
 });
 
-const applyInitialData = (data: Record<string, any>) => {
+const applyInitialData = (data: Record<string, unknown>) => {
   if (data) {
     form.id = data.id as number;
     form.name = data.name as string;

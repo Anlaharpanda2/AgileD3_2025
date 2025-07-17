@@ -17,12 +17,12 @@
       class="sm:full-screen"
     />
     <FormTambahDataFasilitas
-      v-if="showTambah && userRole.value !== 'pegawai'"
+      v-if="showTambah && userRole !== 'pegawai'"
       class="sm:full-screen"
       @close="showTambah = false"
     />
     <FormEditDataFasilitas
-      v-if="showEdit && editData && userRole.value !== 'pegawai'"
+      v-if="showEdit && editData && userRole !== 'pegawai'"
       :initial-data="editData"
       class="sm:full-screen"
       @close="showEdit = false"
@@ -34,7 +34,7 @@
       @close="showExport = false"
     />
     <FormImportDataFasilitas
-      v-if="showImport && userRole.value !== 'pegawai'"
+      v-if="showImport && userRole !== 'pegawai'"
       class="sm:full-screen"
       @close="showImport = false"
     />
@@ -936,7 +936,6 @@ import FormFilterDataFasilitas from "@/components/KelolaDataFasilitas/FormFilter
 import FormSortingDataFasilitas from "@/components/KelolaDataFasilitas/FormSortingDataFasilitas.vue";
 import { ElNotification } from 'element-plus';
 import { Eye, EyeOff } from 'lucide-vue-next';
-import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
@@ -1075,7 +1074,7 @@ const totalPages = computed(() =>
 
 // Computed property for data to display on the current page
 const pagedData = computed(() => {
-  const perPage = typeof itemsPerPage.value === "number" ? itemsPerPage.value : 1;
+  const perPage = typeof itemsPerPage.value === "number" ? itemsPerPage.value : filteredData.value.length;
   const start = (currentPage.value - 1) * perPage;
   return filteredData.value.slice(start, start + perPage);
 });

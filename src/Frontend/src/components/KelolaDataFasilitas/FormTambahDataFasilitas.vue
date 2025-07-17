@@ -271,12 +271,12 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
-import { ElNotification } from 'element-plus';
+import { ElNotification, FormInstance } from 'element-plus';
 import api from '../../api.js'; // Pastikan path ini benar
 
 defineEmits(['close']);
 
-const formRef = ref(null);
+const formRef = ref<FormInstance | null>(null);
 const statusOptions = ['tersedia', 'tidak tersedia', 'dalam perbaikan'];
 
 // Form fields definition
@@ -324,6 +324,7 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 // Form submission logic
 const submitForm = () => {
+  if (!formRef.value) return;
   formRef.value.validate(async (valid: boolean) => {
     if (!valid) {
       ElNotification({

@@ -203,8 +203,21 @@ const props = defineProps<{
   data: Record<string, unknown>[];
 }>();
 
+interface Fasilitas {
+  id: number;
+  nama_fasilitas: string;
+  deskripsi: string;
+  kategori: string;
+  jumlah: number;
+  status: string;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
+  [key: string]: string | number | undefined; // Add index signature
+}
+
 const emits = defineEmits<{
-  (e: 'apply-sort', payload: { column: string; order: 'asc' | 'desc'; sortedData: Record<string, unknown>[] }): void;
+  (e: 'apply-sort', payload: { column: string; order: 'asc' | 'desc'; sortedData: Fasilitas[] }): void;
   (e: 'cancel-sort'): void;
   (e: 'update:visible', value: boolean): void;
 }>();
@@ -269,7 +282,7 @@ function applySort(): void {
         : String(valueB).localeCompare(String(valueA));
     }
   });
-  emits('apply-sort', { column: form.column, order: form.order, sortedData: sortedCopy });
+  emits('apply-sort', { column: form.column, order: form.order, sortedData: sortedCopy as Fasilitas[] });
   closeForm();
 }
 

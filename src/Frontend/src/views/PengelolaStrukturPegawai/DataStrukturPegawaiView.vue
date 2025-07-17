@@ -17,12 +17,12 @@
       class="sm:full-screen"
     />
     <FormTambahDataPegawai
-      v-if="showTambah && userRole.value !== 'pegawai'"
+      v-if="showTambah && userRole !== 'pegawai'"
       class="sm:full-screen"
       @close="showTambah = false"
     />
     <FormEditDataPegawai
-      v-if="showEdit && editData && userRole.value !== 'pegawai'"
+      v-if="showEdit && editData && userRole !== 'pegawai'"
       :initial-data="editData"
       class="sm:full-screen"
       @close="showEdit = false"
@@ -34,7 +34,7 @@
       @close="showExport = false"
     />
     <FormImportDataPegawai
-      v-if="showImport && userRole.value !== 'pegawai'"
+      v-if="showImport && userRole !== 'pegawai'"
       class="sm:full-screen"
       @close="showImport = false"
     />
@@ -1141,8 +1141,8 @@ async function goToTrash() {
 }
 
 // Fungsi untuk menangani data yang diurutkan dari FormSortingDataPegawai
-function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: Pegawai[] }) {
-  tableData.value = payload.sortedData;
+function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: Record<string, unknown>[] }) {
+  tableData.value = payload.sortedData as unknown as Pegawai[];
 }
 
 async function onDelete(row: Pegawai) {

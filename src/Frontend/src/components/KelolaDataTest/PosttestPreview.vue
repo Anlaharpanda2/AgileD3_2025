@@ -35,7 +35,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
 import { Posttest } from '@/services/posttestService';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

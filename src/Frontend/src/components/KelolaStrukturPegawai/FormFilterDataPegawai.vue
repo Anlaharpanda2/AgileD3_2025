@@ -293,9 +293,10 @@ watch(() => props.modelValue, (newVal) => {
   localDialogVisible.value = newVal;
   if (newVal) {
     if (props.initialFilters) {
-      localActiveFilters.value = { ...props.initialFilters };
-      localSelectedColumns.value = Object.keys(props.initialFilters).filter(
-        key => props.initialFilters[key] !== null && props.initialFilters[key] !== ''
+      const initialFilters = props.initialFilters; // Variabel lokal untuk mempersempit tipe
+      localActiveFilters.value = { ...initialFilters };
+      localSelectedColumns.value = Object.keys(initialFilters).filter(
+        key => initialFilters[key] !== null && initialFilters[key] !== ''
       );
     } else {
       localActiveFilters.value = {};

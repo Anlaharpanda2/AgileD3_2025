@@ -70,13 +70,13 @@
                     src="/kadis.png"
                     alt="Kepala Dinas DP3AP2KB"
                     class="w-full h-full object-cover object-center"
-                  />
+                  >
                 </div>
               </div>
               
               <!-- Decorative Elements -->
-              <div class="absolute -top-2 -right-2 w-8 h-8 bg-pink-400 rounded-full opacity-70 animate-pulse"></div>
-              <div class="absolute -bottom-4 -left-4 w-6 h-6 bg-purple-400 rounded-full opacity-60 animate-pulse delay-300"></div>
+              <div class="absolute -top-2 -right-2 w-8 h-8 bg-pink-400 rounded-full opacity-70 animate-pulse" />
+              <div class="absolute -bottom-4 -left-4 w-6 h-6 bg-purple-400 rounded-full opacity-60 animate-pulse delay-300" />
             </div>
           </div>
         </div>

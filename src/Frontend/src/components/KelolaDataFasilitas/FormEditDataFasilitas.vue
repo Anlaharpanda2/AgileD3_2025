@@ -273,7 +273,7 @@
 
 <script setup lang="ts">
 import { reactive, ref, watch } from 'vue';
-import { ElNotification } from 'element-plus';
+import { ElNotification, FormInstance } from 'element-plus';
 import api from '../../api.js'; // Pastikan path ini benar
 
 const props = defineProps({
@@ -285,7 +285,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close']);
 
-const formRef = ref(null);
+const formRef = ref<FormInstance | null>(null);
 const statusOptions = ['tersedia', 'tidak tersedia', 'dalam perbaikan'];
 
 // Form fields definition

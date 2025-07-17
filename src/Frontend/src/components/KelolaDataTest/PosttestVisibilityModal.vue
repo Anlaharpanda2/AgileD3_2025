@@ -36,7 +36,7 @@
               class="transition-all duration-300 ease-in-out"
               active-color="#EC4899"
               inactive-color="#D1D5DB" 
-              @change="(newValue) => handleSwitchChange(scope.row, newValue as boolean)"
+              @change="(newValue: boolean) => handleSwitchChange(scope.row, newValue)"
             />
           </template>
         </el-table-column>

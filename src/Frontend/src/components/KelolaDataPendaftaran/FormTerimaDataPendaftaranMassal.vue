@@ -144,9 +144,9 @@
                       <!-- Input Field -->
                       <div class="flex-1">
                         <el-date-picker
-                          v-if="field.component === ElDatePicker"
+                          v-if="field.type === 'date'"
                           :id="field.key"
-                          v-model="form[field.key]"
+                          v-model="(form as any)[field.key]"
                           :type="field.type"
                           :placeholder="`Masukkan ${field.label.toLowerCase()}`"
                           :name="field.key"
@@ -154,9 +154,9 @@
                           class="w-full modern-input"
                         />
                         <el-input
-                          v-else-if="field.component === ElInput"
+                          v-else-if="field.type === 'text' || field.type === 'number'"
                           :id="field.key"
-                          v-model="form[field.key]"
+                          v-model="(form as any)[field.key]"
                           :type="field.type"
                           :placeholder="`Masukkan ${field.label.toLowerCase()}`"
                           :name="field.key"
@@ -164,7 +164,7 @@
                           class="w-full modern-input"
                         />
                         <el-select
-                          v-else-if="field.component === ElSelect"
+                          v-else-if="field.type === 'select'"
                           :id="field.key"
                           v-model="form.status"
                           placeholder="Pilih Status"
@@ -283,7 +283,7 @@ const emit = defineEmits(['close']);
 const formRef = ref<FormInstance | null>(null);
 const statusOptions = ['kawin', 'lajang', 'janda'];
 
-const fields = [
+const fields: Array<{ key: string; label: string; component: typeof ElInput | typeof ElDatePicker | typeof ElSelect; type: 'year' | 'month' | 'date' | 'dates' | 'week' | 'datetime' | 'datetimerange' | 'daterange' | 'monthrange' | 'yearrange' | 'text' | 'number' | 'select'; }> = [
   { key: 'kegiatan_dimulai', label: 'Kegiatan Dimulai', component: ElDatePicker, type: 'date' },
   { key: 'kegiatan_berakhir', label: 'Kegiatan Berakhir', component: ElDatePicker, type: 'date' },
   { key: 'tempat_kegiatan', label: 'Tempat Kegiatan', component: ElInput, type: 'text' },
@@ -291,7 +291,13 @@ const fields = [
 ];
 
 // Initial form state from FormTerimaDataPendaftaranMassal.vue
-const form = reactive({
+const form = reactive<{
+  kegiatan_dimulai: Date | null;
+  kegiatan_berakhir: Date | null;
+  tempat_kegiatan: string;
+  angkatan: number | null;
+  status: string;
+}>({ 
   kegiatan_dimulai: null,
   kegiatan_berakhir: null,
   tempat_kegiatan: '',
@@ -403,6 +409,7 @@ const rules = {
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 const submitForm = () => {
+  if (!formRef.value) return;
   formRef.value.validate(async (valid: boolean) => {
     if (!valid) {
       ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });

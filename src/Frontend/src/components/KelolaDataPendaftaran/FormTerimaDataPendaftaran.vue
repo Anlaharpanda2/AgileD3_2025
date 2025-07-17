@@ -144,19 +144,20 @@
                       <!-- Input Field -->
                       <div class="flex-1">
                         <el-date-picker
-                          v-if="field.component === ElDatePicker"
+                          v-if="field.type === 'date'"
                           :id="field.key"
-                          v-model="form[field.key]"
+                          v-model="form[field.key] as unknown as string"
                           :type="field.type"
                           :placeholder="`Masukkan ${field.label.toLowerCase()}`"
                           :name="field.key"
                           clearable
                           class="w-full modern-input"
+                          value-format="YYYY-MM-DD"
                         />
                         <el-input
-                          v-else-if="field.component === ElInput"
+                          v-else-if="field.type === 'text' || field.type === 'number'"
                           :id="field.key"
-                          v-model="form[field.key]"
+                          v-model="form[field.key] as string | number"
                           :type="field.type"
                           :placeholder="`Masukkan ${field.label.toLowerCase()}`"
                           :name="field.key"
@@ -164,9 +165,9 @@
                           class="w-full modern-input"
                         />
                         <el-select
-                          v-else-if="field.component === ElSelect"
+                          v-else-if="field.type === 'select'"
                           :id="field.key"
-                          v-model="form[field.key]"
+                          v-model="form[field.key] as string"
                           :placeholder="`Pilih ${field.label.toLowerCase()}`"
                           :name="field.key"
                           clearable
@@ -268,7 +269,7 @@
 
 <script setup lang="ts">
 import { reactive, ref, watch } from 'vue';
-import { ElNotification, FormInstance, ElInput, ElDatePicker, ElSelect } from 'element-plus';
+import { ElNotification, FormInstance, FormItemRule, ElInput, ElDatePicker, ElSelect } from 'element-plus';
 import api from '../../api.js';
 import { AxiosError } from 'axios'; 
 
@@ -284,32 +285,42 @@ const emit = defineEmits(['close']);
 const formRef = ref<FormInstance | null>(null); 
 const statusOptions = ['kawin', 'lajang', 'janda']; 
 
-const fields = [
+const fields: Array<{ key: string; label: string; component: typeof ElInput | typeof ElDatePicker | typeof ElSelect; type: 'year' | 'month' | 'date' | 'dates' | 'week' | 'datetime' | 'datetimerange' | 'daterange' | 'monthrange' | 'yearrange' | 'text' | 'number' | 'select'; }> = [
   { key: 'kegiatan_dimulai', label: 'Kegiatan Dimulai', component: ElDatePicker, type: 'date' },
   { key: 'kegiatan_berakhir', label: 'Kegiatan Berakhir', component: ElDatePicker, type: 'date' },
   { key: 'tempat_kegiatan', label: 'Tempat Kegiatan', component: ElInput, type: 'text' },
   { key: 'angkatan', label: 'Angkatan', component: ElInput, type: 'number' },
 ];
 
-const form = reactive({
+const form = reactive<{
+  id: number | null;
+  kegiatan_dimulai: Date | null;
+  kegiatan_berakhir: Date | null;
+  tempat_kegiatan: string;
+  angkatan: number | null;
+  status: string;
+  [key: string]: string | number | Date | null | undefined; // Add index signature
+}>({ 
   id: null,
   kegiatan_dimulai: null,
   kegiatan_berakhir: null,
   tempat_kegiatan: '',
   angkatan: null,
+  status: '',
 });
 
-const applyInitialData = (data: Record<string, unknown>) => {
+const applyInitialData = (data: Record<string, string | number | Date | null>) => {
   if (data) {
-    form.id = data.id || null;
+    form.id = typeof data.id === 'number' ? data.id : null;
     fields.forEach(field => {
       if (field.key in data) {
-        if (field.component === 'el-date-picker' && typeof data[field.key] === 'string') {
-          form[field.key] = new Date(data[field.key]);
-        } else if (field.type === 'number' && typeof data[field.key] === 'string') {
-          form[field.key] = Number(data[field.key]);
+        const value = data[field.key];
+        if (field.component === ElDatePicker && typeof value === 'string') {
+          form[field.key] = new Date(value);
+        } else if (field.type === 'number') {
+          form[field.key] = Number(value);
         } else {
-          form[field.key] = data[field.key];
+          form[field.key] = value;
         }
       }
     });
@@ -341,8 +352,7 @@ const rules = {
        
        
        
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      validator: (rule: any, value: any, callback: (error?: Error) => void) => {
+      validator: (rule: FormItemRule, value: Date | null | undefined, callback: (error?: Error) => void) => {
         if (!value || !(value instanceof Date)) {
           callback();
           return;
@@ -374,10 +384,9 @@ const rules = {
        
        
        
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      validator: (rule: any, value: any, callback: (error?: Error) => void) => {
+      validator: (rule: FormItemRule, value: number | null | undefined, callback: (error?: Error) => void) => {
         const number = Number(value);
-        if (value === '' || value === null || value === undefined) {
+        if (value === null || value === undefined) {
           callback(new Error('Angkatan wajib diisi'));
         } else if (isNaN(number)) {
           callback(new Error('Angkatan harus berupa angka'));
@@ -395,6 +404,7 @@ const rules = {
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 const submitForm = () => {
+  if (!formRef.value) return;
   formRef.value.validate(async (valid: boolean) => {
     if (!valid) {
       ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });
@@ -403,12 +413,8 @@ const submitForm = () => {
 
     const payload = {
       ...form,
-      kegiatan_dimulai: form.kegiatan_dimulai instanceof Date
-        ? `${form.kegiatan_dimulai.getFullYear()}-${String(form.kegiatan_dimulai.getMonth() + 1).padStart(2, '0')}-${String(form.kegiatan_dimulai.getDate()).padStart(2, '0')}`
-        : form.kegiatan_dimulai,
-      kegiatan_berakhir: form.kegiatan_berakhir instanceof Date
-        ? `${form.kegiatan_berakhir.getFullYear()}-${String(form.kegiatan_berakhir.getMonth() + 1).padStart(2, '0')}-${String(form.kegiatan_berakhir.getDate()).padStart(2, '0')}`
-        : form.kegiatan_berakhir,
+      kegiatan_dimulai: form.kegiatan_dimulai ? `${(form.kegiatan_dimulai as Date).getFullYear()}-${String((form.kegiatan_dimulai as Date).getMonth() + 1).padStart(2, '0')}-${String((form.kegiatan_dimulai as Date).getDate()).padStart(2, '0')}` : null,
+      kegiatan_berakhir: form.kegiatan_berakhir ? `${(form.kegiatan_berakhir as Date).getFullYear()}-${String((form.kegiatan_berakhir as Date).getMonth() + 1).padStart(2, '0')}-${String((form.kegiatan_berakhir as Date).getDate()).padStart(2, '0')}` : null,
       angkatan: Number(form.angkatan), 
     };
 

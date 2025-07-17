@@ -552,14 +552,14 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'; // Removed 'watch' and 'onMounted' as they are not used in FormTambahDataPelatihan
-import { ElNotification } from 'element-plus';
+import { reactive, ref } from 'vue';
+import { ElNotification, FormInstance } from 'element-plus';
 import api from '../../api.js'; // Pastikan path ini benar
 
 // Removed props as FormTambahDataPelatihan does not use initialData
 const emit = defineEmits(['close']);
 
-const formRef = ref(null);
+const formRef = ref<FormInstance | null>(null);
 const statusOptions = ['kawin', 'lajang', 'janda'];
 
 // Form fields definition (copied from FormTambahDataPelatihan.vue)
@@ -627,6 +627,7 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 // Form submission logic (copied from FormTambahDataPelatihan.vue)
 const submitForm = () => {
+  if (!formRef.value) return;
   formRef.value.validate(async (valid: boolean) => {
     if (!valid) {
       ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });
@@ -634,12 +635,8 @@ const submitForm = () => {
     }
     const payload = {
       ...form,
-      kegiatan_dimulai: form.kegiatan_dimulai instanceof Date
-        ? `${form.kegiatan_dimulai.getFullYear()}-${String(form.kegiatan_dimulai.getMonth() + 1).padStart(2, '0')}-${String(form.kegiatan_dimulai.getDate()).padStart(2, '0')}`
-        : form.kegiatan_dimulai,
-      kegiatan_berakhir: form.kegiatan_berakhir instanceof Date
-        ? `${form.kegiatan_berakhir.getFullYear()}-${String(form.kegiatan_berakhir.getMonth() + 1).padStart(2, '0')}-${String(form.kegiatan_berakhir.getDate()).padStart(2, '0')}`
-        : form.kegiatan_berakhir,
+      kegiatan_dimulai: form.kegiatan_dimulai ? `${(form.kegiatan_dimulai as Date).getFullYear()}-${String((form.kegiatan_dimulai as Date).getMonth() + 1).padStart(2, '0')}-${String((form.kegiatan_dimulai as Date).getDate()).padStart(2, '0')}` : null,
+      kegiatan_berakhir: form.kegiatan_berakhir ? `${(form.kegiatan_berakhir as Date).getFullYear()}-${String((form.kegiatan_berakhir as Date).getMonth() + 1).padStart(2, '0')}-${String((form.kegiatan_berakhir as Date).getDate()).padStart(2, '0')}` : null,
       angkatan: Number(form.angkatan),
     };
     try {
@@ -659,7 +656,7 @@ const submitForm = () => {
       let errorMessage = 'Gagal menyimpan data. Terjadi kesalahan jaringan atau server.';
       if (error instanceof Error) {
         if ('response' in error && error.response && typeof error.response === 'object' && 'data' in error.response && error.response.data && typeof error.response.data === 'object' && 'message' in error.response.data) {
-          errorMessage = error.response.data.message;
+          errorMessage = error.response.data.message as string;
         } else {
           errorMessage = error.message;
         }

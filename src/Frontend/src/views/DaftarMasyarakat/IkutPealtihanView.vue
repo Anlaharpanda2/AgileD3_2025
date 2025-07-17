@@ -404,7 +404,7 @@
                       :key="key"
                       class="flex flex-col"
                     >
-                      <span class="text-sm font-medium text-gray-500">{{ formatLabel(key) }}</span>
+                      <span class="text-sm font-medium text-gray-500">{{ formatLabel(String(key)) }}</span>
                       <span class="text-base text-gray-800 font-semibold">{{ value || '-' }}</span>
                     </div>
                   </div>
@@ -557,7 +557,21 @@ const steps = [
   { label: 'Selesai' },
 ];
 
-const form = reactive({
+interface FormData {
+  nama: string;
+  nik: string;
+  tempat_tanggal_lahir: string;
+  status: string;
+  pendidikan: string;
+  nomor_telefon: string;
+  alamat: string;
+  jenis_bimtek: string;
+  jenis_usaha: string;
+  penghasilan_perbulan: string;
+  [key: string]: string | number | null; // Add index signature
+}
+
+const form = reactive<FormData>({
   nama: '',
   nik: '',
   tempat_tanggal_lahir: '',
@@ -707,15 +721,15 @@ const isStepClickable = computed(() => (index: number) => {
 });
 
 const nextStep = () => {
-  const requiredFields = {
-    0: ['nama', 'nik', 'tempat_tanggal_lahir', 'status', 'pendidikan', 'nomor_telefon', 'alamat'],
-    1: ['jenis_bimtek'],
-    2: ['jenis_usaha', 'penghasilan_perbulan'],
-    3: [], // No specific required fields for summary step, as it's just a review
-  };
+  const requiredFields: string[][] = [
+    ['nama', 'nik', 'tempat_tanggal_lahir', 'status', 'pendidikan', 'nomor_telefon', 'alamat'],
+    ['jenis_bimtek'],
+    ['jenis_usaha', 'penghasilan_perbulan'],
+    [], // No specific required fields for summary step, as it's just a review
+  ];
 
   const fields = requiredFields[currentStep.value];
-  const isValid = fields.every(field => form[field]);
+  const isValid = fields.every((field: string) => form[field]);
 
   if (isValid) {
     currentStep.value++;
@@ -736,7 +750,7 @@ const submitData = async () => {
     'jenis_usaha', 'penghasilan_perbulan',
   ];
 
-  const isValid = requiredFields.every(field => form[field]);
+  const isValid = requiredFields.every(field => form[field as keyof FormData]);
 
   if (!isValid) {
     ElNotification({
@@ -768,7 +782,7 @@ const submitData = async () => {
     console.error('Error submitting data:', error);
     ElNotification({
       title: 'Gagal',
-      message: error.response?.data?.message || 'Terjadi kesalahan saat menyimpan data.',
+      message: error instanceof Error ? error.message : 'Terjadi kesalahan saat menyimpan data.',
       type: 'error',
       duration: 0,
     });

@@ -813,8 +813,8 @@ function goBack() {
 }
 
 // Fungsi untuk menangani data yang diurutkan dari FormSortingDataPengaduan
-function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: Pengaduan[] }) {
-  tableData.value = payload.sortedData;
+function handleApplySort(payload: { column: string; order: 'asc' | 'desc'; sortedData: Record<string, unknown>[] }) {
+  tableData.value = payload.sortedData as unknown as Pengaduan[];
 }
 
 // Interface for Pengaduan data structure
@@ -1015,7 +1015,7 @@ async function fetchData() {
   loading.value = true; // Start loading indicator
   try {
     const res = await api.get('/kelola/pengaduan/trash');
-    tableData.value = (Array.isArray(res) ? res : res.data || []).sort((a, b) => {
+    tableData.value = (Array.isArray(res) ? res : res.data || []).sort((a: Pengaduan, b: Pengaduan) => {
       return new Date(b.updated_at || 0).getTime() - new Date(a.updated_at || 0).getTime();
     });
   } catch (error) {

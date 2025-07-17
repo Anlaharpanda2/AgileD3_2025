@@ -379,7 +379,7 @@ const submitPosttest = async () => {
 
   const answersToSend = Object.entries(userAnswers).map(([questionId, selectedOption]) => ({
     question_id: Number(questionId),
-    selected_option: selectedOption,
+    selected_option: selectedOption!,
   }));
 
   try {

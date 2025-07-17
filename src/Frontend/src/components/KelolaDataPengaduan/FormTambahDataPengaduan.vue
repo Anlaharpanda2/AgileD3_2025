@@ -384,7 +384,19 @@ const emit = defineEmits(['close']);
 const formRef = ref<FormInstance | null>(null);
 
 // Reactive form state
-const form = reactive({
+const form = reactive<{
+  nama_pelapor: string;
+  nama_korban: string;
+  deskripsi: string;
+  alamat: string;
+  waktu_kejadian: Date | null;
+  kasus: string;
+  no_hp: string;
+  saksi: string;
+  status: string;
+  lampiran: File | null; // Untuk menyimpan file lampiran
+  lampiran_preview_url: string | null; // Untuk menampilkan preview lampiran yang baru dipilih
+}>({
   nama_pelapor: '',
   nama_korban: '',
   deskripsi: '',
@@ -393,9 +405,9 @@ const form = reactive({
   kasus: '',
   no_hp: '',
   saksi: '',
-  status: 'diproses', // Default status
-  lampiran: null, // Untuk menyimpan file lampiran
-  lampiran_preview_url: null, // Untuk menampilkan preview lampiran yang baru dipilih
+  status: '',
+  lampiran: null,
+  lampiran_preview_url: null,
 });
 
 // Form validation rules
@@ -423,6 +435,7 @@ const handleFileUpload = (event: Event) => {
 
 // Form submission logic
 const submitForm = () => {
+  if (!formRef.value) return;
   formRef.value.validate(async (valid: boolean) => {
     if (!valid) {
       ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });
@@ -431,13 +444,13 @@ const submitForm = () => {
 
     const formData = new FormData();
     for (const key in form) {
-      if (key === 'lampiran' && form[key]) {
-        formData.append(key, form[key]);
-      } else if (key !== 'lampiran' && key !== 'lampiran_preview_url' && form[key] !== null) {
-        if (key === 'waktu_kejadian' && form[key] instanceof Date) {
-          formData.append(key, form[key].toISOString().slice(0, 19).replace('T', ' ')); // Format ke YYYY-MM-DD HH:mm:ss
+      if (key === 'lampiran' && (form as Record<string, string | Date | File | null>)[key]) {
+        formData.append(key, (form as Record<string, string | Date | File | null>)[key] as File);
+      } else if (key !== 'lampiran' && key !== 'lampiran_preview_url' && (form as Record<string, string | Date | File | null>)[key] !== null) {
+        if (key === 'waktu_kejadian' && (form as Record<string, string | Date | File | null>)[key] instanceof Date) {
+          formData.append(key, ((form as Record<string, string | Date | File | null>)[key] as Date).toISOString().slice(0, 19).replace('T', ' ')); // Format ke YYYY-MM-DD HH:mm:ss
         } else {
-          formData.append(key, form[key]);
+          formData.append(key, (form as Record<string, string | Date | File | null>)[key] as string);
         }
       }
     }

@@ -287,21 +287,28 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
-import { ElNotification } from 'element-plus';
+import { ElNotification, FormInstance } from 'element-plus';
 import api from '../../api.js'; // Pastikan path ini benar
 
 const emit = defineEmits(['close']);
 
-const formRef = ref(null);
+const formRef = ref<FormInstance | null>(null);
 
 // Reactive form state
-const form = reactive({
+const form = reactive<{
+  email: string;
+  jabatan: string;
+  nama_panitia: string;
+  no_hp: string;
+  foto: File | null; // Untuk menyimpan file foto
+  foto_preview_url: string | null; // Untuk menampilkan preview foto yang baru dipilih
+}>({ 
   email: '',
   jabatan: '',
   nama_panitia: '',
   no_hp: '',
-  foto: null, // Untuk menyimpan file foto
-  foto_preview_url: null, // Untuk menampilkan preview foto yang baru dipilih
+  foto: null,
+  foto_preview_url: null,
 });
 
 // Form validation rules
@@ -329,6 +336,7 @@ const handleFileUpload = (event: Event) => {
 
 // Form submission logic
 const submitForm = () => {
+  if (!formRef.value) return;
   formRef.value.validate(async (valid: boolean) => {
     if (!valid) {
       ElNotification({ title: 'Validasi gagal', message: 'Periksa input form Anda.', type: 'warning' });
@@ -337,10 +345,10 @@ const submitForm = () => {
 
     const formData = new FormData();
     for (const key in form) {
-      if (key === 'foto' && form[key]) {
-        formData.append(key, form[key]);
+      if (key === 'foto' && (form as Record<string, string | File | null>)[key]) {
+        formData.append(key, (form as Record<string, string | File | null>)[key] as File);
       } else if (key !== 'foto') {
-        formData.append(key, form[key]);
+        formData.append(key, (form as Record<string, string | File | null>)[key] as string);
       }
     }
 
@@ -364,7 +372,7 @@ const submitForm = () => {
       let errorMessage = 'Gagal menyimpan data. Terjadi kesalahan jaringan atau server.';
       if (error instanceof Error) {
         if ('response' in error && error.response && typeof error.response === 'object' && 'data' in error.response && error.response.data && typeof error.response.data === 'object' && 'message' in error.response.data) {
-          errorMessage = error.response.data.message;
+          errorMessage = error.response.data.message as string;
         } else {
           errorMessage = error.message;
         }

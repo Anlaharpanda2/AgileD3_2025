@@ -219,6 +219,7 @@ import { ref, onMounted, computed } from 'vue'
 import type { Component } from 'vue'
 import { useRouter } from 'vue-router'
 import SimpleLayout from '@/layouts/SimpleLayout.vue'
+import { ElNotification } from 'element-plus' // Import ElNotification
 import { 
   Database, 
   Users, 
@@ -254,6 +255,9 @@ interface CardData {
   category?: string
 }
 
+const userRole = ref(localStorage.getItem('role') || '');
+const isOperator = computed(() => userRole.value === 'operator');
+
 // Reactive data
 const cards = ref<CardData[]>([
   {
@@ -261,7 +265,7 @@ const cards = ref<CardData[]>([
     title: 'Data Pendaftaran',
     description: 'Pengelola data pendaftaran peserta dan administrasi pendaftaran',
     icon: 'document',
-    buttonText: 'Kelola Data',
+    buttonText: isOperator.value ? 'Kelola Data' : 'Lihat Data',
     buttonColor: 'pink',
     route: '/data/pendaftaran',
     category: 'admin'
@@ -271,7 +275,7 @@ const cards = ref<CardData[]>([
     title: 'Berita & Pengumuman',
     description: 'Pengelola berita dan pengumuman untuk publikasi informasi',
     icon: 'newspaper',
-    buttonText: 'Kelola Data',
+    buttonText: isOperator.value ? 'Kelola Data' : 'Lihat Data',
     buttonColor: 'pink',
     route: '/data/berita',
     category: 'communication'
@@ -281,7 +285,7 @@ const cards = ref<CardData[]>([
     title: 'Pengaduan',
     description: 'Pengelola pengaduan dan sistem pelaporan masalah',
     icon: 'shield',
-    buttonText: 'Kelola Data',
+    buttonText: isOperator.value ? 'Kelola Data' : 'Lihat Data',
     buttonColor: 'pink',
     route: '/data/pengaduan',
     category: 'communication'
@@ -291,7 +295,7 @@ const cards = ref<CardData[]>([
     title: 'Konsultasi',
     description: 'Pengelola konsultasi dan layanan bantuan pengguna',
     icon: 'chat',
-    buttonText: 'Kelola Data',
+    buttonText: isOperator.value ? 'Kelola Data' : 'Lihat Data',
     buttonColor: 'pink',
     route: '/data/konsultasi',
     category: 'communication'
@@ -301,7 +305,7 @@ const cards = ref<CardData[]>([
     title: 'Panitia Kegiatan',
     description: 'Pengelola data panitia kegiatan dan organisasi acara',
     icon: 'users',
-    buttonText: 'Kelola Data',
+    buttonText: isOperator.value ? 'Kelola Data' : 'Lihat Data',
     buttonColor: 'pink',
     route: '/data/panitia',
     category: 'admin'
@@ -311,7 +315,7 @@ const cards = ref<CardData[]>([
     title: 'Akses Admin',
     description: 'Pengelola akses admin dan pengaturan hak akses pengguna',
     icon: 'lock',
-    buttonText: 'Kelola Data',
+    buttonText: isOperator.value ? 'Kelola Data' : 'Lihat Data',
     buttonColor: 'pink',
     route: '/data/akses',
     category: 'admin'
@@ -321,7 +325,7 @@ const cards = ref<CardData[]>([
     title: 'Fasilitas',
     description: 'Pengelola fasilitas dan infrastruktur pendukung',
     icon: 'building',
-    buttonText: 'Kelola Data',
+    buttonText: isOperator.value ? 'Kelola Data' : 'Lihat Data',
     buttonColor: 'pink',
     route: '/data/fasilitas',
     category: 'admin'
@@ -331,7 +335,7 @@ const cards = ref<CardData[]>([
     title: 'Struktur Pegawai',
     description: 'Pengelola struktur pegawai dan organisasi karyawan',
     icon: 'user',
-    buttonText: 'Kelola Data',
+    buttonText: isOperator.value ? 'Kelola Data' : 'Lihat Data',
     buttonColor: 'pink',
     route: '/data/struktur-pegawai',
     category: 'admin'
@@ -341,7 +345,7 @@ const cards = ref<CardData[]>([
     title: 'Nilai Pretest & Postest',
     description: 'Melihat nilai pretest dan postest peserta pelatihan',
     icon: 'chart',
-    buttonText: 'Lihat Data',
+    buttonText: 'Lihat Data', // No change needed for this one
     buttonColor: 'pink',
     route: '/data/nilai',
     category: 'training'
@@ -351,7 +355,7 @@ const cards = ref<CardData[]>([
     title: 'Pretest & Postest',
     description: 'Pengelola pretest dan postest untuk evaluasi peserta',
     icon: 'clipboard',
-    buttonText: 'Kelola Data',
+    buttonText: isOperator.value ? 'Kelola Data' : 'Lihat Data',
     buttonColor: 'pink',
     route: '/data/soal',
     category: 'training'
@@ -361,7 +365,7 @@ const cards = ref<CardData[]>([
     title: 'Peserta Pelatihan',
     description: 'Pengelola peserta pelatihan dan manajemen kursus',
     icon: 'book',
-    buttonText: 'Kelola Data',
+    buttonText: isOperator.value ? 'Kelola Data' : 'Lihat Data',
     buttonColor: 'pink',
     route: '/data/pelatihan',
     category: 'training'
@@ -418,6 +422,18 @@ const handleCardClick = (card: CardData) => {
 const handleButtonClick = (card: CardData) => {
   isLoading.value = true
   
+  // Check if the user is an operator and the button text is 'Kelola Data'
+  if (!isOperator.value && card.buttonText === 'Kelola Data') {
+    ElNotification({
+      title: 'Akses Ditolak',
+      message: 'Anda tidak memiliki izin untuk memodifikasi data ini. Hanya operator yang dapat melakukan perubahan.',
+      type: 'warning',
+      duration: 3000,
+    });
+    isLoading.value = false;
+    return;
+  }
+
   // Simulate API call or navigation
   setTimeout(() => {
     handleCardClick(card)

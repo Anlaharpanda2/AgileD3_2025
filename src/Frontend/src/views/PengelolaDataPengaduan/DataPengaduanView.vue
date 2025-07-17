@@ -17,12 +17,12 @@
       class="sm:full-screen"
     />
     <FormTambahDataPengaduan
-      v-if="showTambah"
+      v-if="showTambah && isOperator"
       class="sm:full-screen"
       @close="showTambah = false"
     />
     <FormEditDataPengaduan
-      v-if="showEdit && editData"
+      v-if="showEdit && editData && isOperator"
       :initial-data="editData"
       class="sm:full-screen"
       @close="showEdit = false"
@@ -34,7 +34,7 @@
       @close="showExport = false"
     />
     <FormImportDataPengaduan
-      v-if="showImport"
+      v-if="showImport && isOperator"
       class="sm:full-screen"
       @close="showImport = false"
     />
@@ -450,6 +450,7 @@
                         Export Data
                       </button>
                       <button
+                        v-if="isOperator"
                         class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-all duration-300 touch-highlight dropdown-item"
                         :style="{ 'animation-delay': '0.2s' }"
                         @click.stop="showImport = true; closeAllDropdowns()"
@@ -470,6 +471,7 @@
                         Import Data
                       </button>
                       <button
+                        v-if="isOperator"
                         class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-all duration-300 touch-highlight dropdown-item"
                         :style="{ 'animation-delay': '0.3s' }"
                         @click.stop="goToTrash"
@@ -490,6 +492,7 @@
                         Data Sampah
                       </button>
                       <button
+                        v-if="isOperator"
                         :disabled="selected.length === 0"
                         class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-50 hover:text-red-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed touch-highlight dropdown-item"
                         :style="{ 'animation-delay': '0.4s' }"
@@ -545,6 +548,7 @@
                     </svg>
                   </button>
                   <button
+                    v-if="isOperator"
                     class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
                     title="Import Data"
                     @click="showImport = true"
@@ -564,6 +568,7 @@
                     </svg>
                   </button>
                   <button
+                    v-if="isOperator"
                     class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
                     title="Data Sampah"
                     @click="goToTrash"
@@ -583,6 +588,7 @@
                     </svg>
                   </button>
                   <button
+                    v-if="isOperator"
                     :disabled="selected.length === 0"
                     class="inline-flex items-center px-4 py-2.5 border border-red-300 rounded-lg text-sm font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     title="Hapus Massal"
@@ -605,6 +611,7 @@
                   </button>
                 </div>
                 <button
+                  v-if="isOperator"
                   class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-lg text-sm font-medium hover:from-pink-600 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200 shadow-md w-full sm:w-auto touch-highlight"
                   @click.stop="showTambah = true"
                 >
@@ -723,12 +730,34 @@
             </el-table-column>
 
             <el-table-column
+              v-if="isOperator"
               label="Aksi"
               width="120"
               fixed="right"
             >
               <template #default="{ row }">
                 <div class="flex items-center gap-2 full-width-content">
+                  <button
+                    v-if="row.status === 'diproses'"
+                    class="w-8 h-8 flex items-center justify-center rounded-lg bg-green-100 text-green-600 hover:bg-green-200 transition-colors"
+                    title="Selesai"
+                    @click.stop="completeConsultation(row)"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </button>
                   <button
                     class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors"
                     title="Edit"
@@ -747,24 +776,6 @@
                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                       />
                     </svg>
-                  </button>
-                  <button
-                    class="w-8 h-8 flex items-center justify-center rounded-lg bg-green-100 text-green-600 hover:bg-green-200 transition-colors"
-                    title="Tindak Lanjut"
-                    @click.stop="openTindakLanjut(row.id)"
-                  >
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    ><path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M5 13l4 4L19 7"
-                    /></svg>
                   </button>
                   <button
                     class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition-colors"
@@ -928,6 +939,9 @@
 
 <script lang="ts" setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+
+const userRole = ref(localStorage.getItem('role') || '');
+const isOperator = computed(() => userRole.value === 'operator');
 import api from "../../api.js";
 import SimpleLayout from "../../layouts/SimpleLayout.vue";
 import FormExportDataPengaduan from "../../components/KelolaDataPengaduan/FormExportDataPengaduan.vue";

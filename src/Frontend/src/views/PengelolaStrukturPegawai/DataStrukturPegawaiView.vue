@@ -936,6 +936,9 @@ import { ElNotification } from 'element-plus';
 import { Eye, EyeOff } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
 
+const userRole = ref(localStorage.getItem('role') || '');
+const isOperator = computed(() => userRole.value === 'operator');
+
 const router = useRouter();
 
 interface Pegawai {

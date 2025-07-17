@@ -443,6 +443,7 @@
                         Export Data
                       </button>
                       <button
+                        v-if="userRole.value !== 'pegawai'"
                         class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-all duration-300 touch-highlight dropdown-item"
                         :style="{ 'animation-delay': '0.2s' }"
                         @click.stop="showImport = true; closeAllDropdowns()"
@@ -457,12 +458,13 @@
                             stroke-linecap="round"
                             stroke-linejoin="round"
                             stroke-width="2"
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
                           />
                         </svg>
                         Import Data
                       </button>
                       <button
+                        v-if="userRole.value !== 'pegawai'"
                         class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-all duration-300 touch-highlight dropdown-item"
                         :style="{ 'animation-delay': '0.3s' }"
                         @click.stop="goToTrash"
@@ -483,6 +485,7 @@
                         Data Sampah
                       </button>
                       <button
+                        v-if="userRole.value !== 'pegawai'"
                         :disabled="selected.length === 0"
                         class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-50 hover:text-red-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed touch-highlight dropdown-item"
                         :style="{ 'animation-delay': '0.4s' }"
@@ -508,6 +511,7 @@
                 </transition>
                 <!-- Desktop Right Controls -->
                 <div class="hidden sm:flex sm:gap-3">
+                  <div class="hidden sm:flex sm:gap-3">
                   <button
                     class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
                     :title="showAllColumns ? 'Sembunyikan Kolom' : 'Tampilkan Semua Kolom'"
@@ -553,7 +557,7 @@
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         stroke-width="2"
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
                       />
                     </svg>
                   </button>

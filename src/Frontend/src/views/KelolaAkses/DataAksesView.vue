@@ -427,6 +427,36 @@
                 <!-- Desktop Right Controls -->
                 <div class="hidden sm:flex sm:gap-3">
                   <button
+                    class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
+                    :title="showAllColumns ? 'Sembunyikan Kolom' : 'Tampilkan Semua Kolom'"
+                    @click="showAllColumns = !showAllColumns"
+                  >
+                    <component
+                      :is="showAllColumns ? EyeOff : Eye"
+                      class="w-4 h-4"
+                    />
+                  </button>
+                  <button
+                    class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
+                    title="Export Data"
+                    @click="showExport = true"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    v-if="userRole.value !== 'pegawai'"
                     :disabled="selected.length === 0"
                     class="inline-flex items-center px-4 py-2.5 border border-red-300 rounded-lg text-sm font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     title="Hapus Massal"
@@ -449,6 +479,7 @@
                   </button>
                 </div>
                 <button
+                  v-if="userRole.value !== 'pegawai'"
                   class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-lg text-sm font-medium hover:from-pink-600 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200 shadow-md w-full sm:w-auto touch-highlight"
                   @click.stop="handleShowTambah()"
                 >
@@ -581,6 +612,7 @@
             </el-table-column>
 
             <el-table-column
+              v-if="userRole.value !== 'pegawai'"
               label="Aksi"
               width="120"
               fixed="right"
@@ -672,7 +704,10 @@
             <p>Dibuat: {{ formatDate(row.created_at) }}</p>
             <p>Diperbarui: {{ formatDate(row.updated_at) }}</p>
           </div>
-          <div class="flex gap-2">
+          <div
+            v-if="userRole.value !== 'pegawai'"
+            class="flex gap-2"
+          >
             <button
               class="flex-1 py-2 bg-blue-100 text-blue-600 rounded-lg text-sm hover:bg-blue-200 transition-colors touch-highlight"
               @click.stop="handleOpenEdit(row)"

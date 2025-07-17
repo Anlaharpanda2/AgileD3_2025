@@ -123,7 +123,7 @@ Setelah sistem berjalan, gunakan akun demo berikut untuk masuk:
 
 ## 🌐 Link Demo
 
-*Link demo untuk proyek ini akan ditambahkan di sini jika sudah tersedia.*
+*pepsikuburger.vercel.app*
 
 ---
 

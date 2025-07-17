@@ -1,7 +1,7 @@
 # 🚀 Pepsikuburger: Platform Layanan Masyarakat DP3AP2KB Sumbar
 
 <p align="center">
-  <img src="assets/logo/logo.png" alt="Logo Pepsikuburger" width="300">
+  <img src="assets/Logo/logo.png" alt="Logo Pepsikuburger" width="300">
 </p>
 
 <p align="center">
@@ -123,7 +123,7 @@ Setelah sistem berjalan, gunakan akun demo berikut untuk masuk:
 
 ## 🌐 Link Demo
 
-*pepsikuburger.vercel.app*
+[pepsikuburger.vercel.app](https://pepsikuburger.vercel.app)
 
 ---
 

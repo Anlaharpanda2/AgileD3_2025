@@ -1,7 +1,13 @@
 import axios from 'axios';
 
+// Gunakan variabel lingkungan Vercel
+// VITE_API_BASE_URL akan diatur di Vercel Dashboard
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api';
+const STORAGE_URL_ENV = import.meta.env.VITE_STORAGE_URL || 'http://127.0.0.1:8000/storage/';
+
+
 const api = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api',
+    baseURL: API_BASE_URL,
 });
 
 api.interceptors.response.use(
@@ -22,5 +28,5 @@ api.interceptors.response.use(
     }
 );
 
-export const STORAGE_URL = 'http://127.0.0.1:8000/storage/';
+export const STORAGE_URL = STORAGE_URL_ENV ; // Gunakan variabel lingkungan di sini
 export default api;

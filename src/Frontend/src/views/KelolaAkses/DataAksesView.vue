@@ -456,7 +456,7 @@
                     </svg>
                   </button>
                   <button
-                    v-if="userRole.value !== 'pegawai'"
+                    v-if="userRole && userRole !== 'pegawai'"
                     :disabled="selected.length === 0"
                     class="inline-flex items-center px-4 py-2.5 border border-red-300 rounded-lg text-sm font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     title="Hapus Massal"
@@ -479,7 +479,7 @@
                   </button>
                 </div>
                 <button
-                  v-if="userRole.value !== 'pegawai'"
+                  v-if="userRole && userRole !== 'pegawai'"
                   class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-lg text-sm font-medium hover:from-pink-600 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200 shadow-md w-full sm:w-auto touch-highlight"
                   @click.stop="handleShowTambah()"
                 >
@@ -588,6 +588,7 @@
 
             <!-- Columns to be conditionally displayed -->
             <el-table-column
+              v-if="showAllColumns"
               prop="created_at"
               label="Dibuat Pada"
               min-width="160"
@@ -600,6 +601,7 @@
             </el-table-column>
 
             <el-table-column
+              v-if="showAllColumns"
               prop="updated_at"
               label="Diperbarui Pada"
               min-width="160"
@@ -612,7 +614,7 @@
             </el-table-column>
 
             <el-table-column
-              v-if="userRole.value !== 'pegawai'"
+              v-if="userRole && userRole !== 'pegawai'"
               label="Aksi"
               width="120"
               fixed="right"
@@ -705,7 +707,7 @@
             <p>Diperbarui: {{ formatDate(row.updated_at) }}</p>
           </div>
           <div
-            v-if="userRole.value !== 'pegawai'"
+            v-if="userRole && userRole !== 'pegawai'"
             class="flex gap-2"
           >
             <button
@@ -816,6 +818,7 @@ import FormTambahDataAkses from "../../components/KelolaAkses/FormTambahDataAkse
 import FormFilterDataAkses from "../../components/KelolaAkses/FormFilterDataAkses.vue";
 import FormSortingDataAkses from "../../components/KelolaAkses/FormSortingDataAkses.vue";
 import { ElNotification } from 'element-plus';
+import { Eye, EyeOff } from 'lucide-vue-next';
 import PermissionDeniedModal from "../../components/Modals/PermissionDeniedModal.vue";
 
 const goToDetail = (row: UserAkses, column: Record<string, unknown>, event: MouseEvent) => {
@@ -853,6 +856,8 @@ const showSort = ref(false);
 const showFilter = ref(false);
 const showPermissionModal = ref(false); // Pindahkan deklarasi ke sini
 const isCurrentUserMainOperator = ref(false); // New reactive variable for main operator status
+const showAllColumns = ref(false);
+const userRole = ref(null);
 
 const showPermissionDenied = () => {
   showPermissionModal.value = true;
@@ -863,6 +868,7 @@ async function verifyMainOperatorStatus() {
   const userId = localStorage.getItem('userId');
   if (!userId) {
     isCurrentUserMainOperator.value = false;
+    userRole.value = null;
     return;
   }
 
@@ -871,13 +877,16 @@ async function verifyMainOperatorStatus() {
     const users = Array.isArray(response) ? response : response.data || [];
     const currentUser = users.find((user: any) => String(user.id) === userId);
 
-    if (currentUser && currentUser.main === 1) {
-      isCurrentUserMainOperator.value = true;
+    if (currentUser) {
+      userRole.value = currentUser.role;
+      isCurrentUserMainOperator.value = currentUser.main === 1;
     } else {
+      userRole.value = null;
       isCurrentUserMainOperator.value = false;
     }
   } catch (error) {
     console.error('Error verifying main operator status:', error);
+    userRole.value = null;
     isCurrentUserMainOperator.value = false;
   }
 };

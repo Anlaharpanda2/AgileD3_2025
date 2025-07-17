@@ -42,6 +42,7 @@
           
           <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
             <button 
+              v-if="isOperator"
               class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-all duration-200"
               @click="showVisibilityModal = true"
             >
@@ -67,6 +68,7 @@
               Kelola Visibilitas
             </button>
             <button 
+              v-if="isOperator"
               class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-all duration-200 shadow-sm"
               @click="$router.push({ name: 'CreatePretest' })"
             >
@@ -115,7 +117,10 @@
                 <th class="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
-                <th class="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th 
+                  v-if="isOperator"
+                  class="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Aksi
                 </th>
               </tr>
@@ -229,6 +234,7 @@
                       </svg>
                     </button>
                     <button 
+                      v-if="isOperator"
                       class="inline-flex items-center p-1.5 border border-transparent text-xs font-medium rounded-md text-pink-700 bg-pink-100 hover:bg-pink-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-all duration-200"
                       title="Edit Pretest"
                       @click="editPretest(pretest.id)"
@@ -248,6 +254,7 @@
                       </svg>
                     </button>
                     <button 
+                      v-if="isOperator"
                       class="inline-flex items-center p-1.5 border border-transparent text-xs font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200"
                       title="Hapus Pretest"
                       @click="deletePretest(pretest.id)"
@@ -365,6 +372,9 @@ import { useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import pretestService, { Pretest } from '@/services/pretestService';
 import PretestVisibilityModal from './PretestVisibilityModal.vue';
+
+const userRole = ref(localStorage.getItem('role') || '');
+const isOperator = computed(() => userRole.value === 'operator');
 
 const router = useRouter();
 const pretests = ref<Pretest[]>([]);

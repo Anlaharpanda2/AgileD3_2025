@@ -6659,8 +6659,8 @@
             "type": "library",
             "extra": {
                 "laravel": {
-                    "providers": [
-                        "Laravel\\Pail\\PailServiceProvider"
+                    "dont-discover": [
+                        "laravel/pail"
                     ]
                 },
                 "branch-alias": {

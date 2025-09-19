@@ -250,20 +250,6 @@ Route::patch('/Panitia/{nik}/ubah-foto', [KelolaDataPanitiaController::class, 'u
 Route::get('/kelola/akses',[KelolaAksesController::class,'index']);
 
 
-// api untuk kelola struktur pegawai
-Route::get('/kelola/pegawai', [StrukturPegawaiController::class, 'index']);
-Route::post('/kelola/pegawai', [StrukturPegawaiController::class, 'store']);
-Route::get('/pegawai/{id}', [StrukturPegawaiController::class, 'show']);
-Route::put('kelola/pegawai/{id}', [StrukturPegawaiController::class, 'update']);
-Route::delete('kelola/pegawai/{id}', [StrukturPegawaiController::class, 'destroy']); 
-Route::post('/destroy-massal', [StrukturPegawaiController::class, 'destroyMassal']);
-Route::get('/trash', [StrukturPegawaiController::class, 'trash']);
-Route::post('/restore/{id}', [StrukturPegawaiController::class, 'restore']);
-Route::post('/restore-massal', [StrukturPegawaiController::class, 'restoreMassal']);
-Route::delete('/force-delete/{id}', [StrukturPegawaiController::class, 'forceDelete']);
-Route::post('/force-delete-massal', [StrukturPegawaiController::class, 'forceDeleteMassal']);
-Route::post('/import', [StrukturPegawaiController::class, 'impor']);
-
 // Konsultasi Data Management
 Route::post('kelola/konsultasi/impor', [KelolaDataKonsultasiController::class, 'impor']);
 Route::get('kelola/konsultasi/trash', [KelolaDataKonsultasiController::class, 'trash']);

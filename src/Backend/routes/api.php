@@ -19,7 +19,7 @@ use App\Http\Controllers\KelolaAkses\KelolaAksesController;
 use App\Http\Controllers\KelolaDataFasilitas\KelolaDataFasilitasController;
 use App\Http\Controllers\KelolaStrukturPegawai\KelolaStrukturPegawaiController;
 use App\Http\Controllers\DataNilai\DataNilaiController;
-use App\Http\Controllers\kelolaDataTest\KelolaDataTestController;
+use App\Http\Controllers\KelolaDataTest\KelolaDataTestController;
 use App\Http\Controllers\KelolaDataTest\PretestController;
 use App\Http\Controllers\KelolaDataTest\PosttestController;
 use App\Http\Controllers\KelolaDataPelatihan\KelolaDataPelatihanController;

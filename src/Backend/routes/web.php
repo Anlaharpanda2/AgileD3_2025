@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+
 Route::get('/seeder', function () {
     $directory = database_path('seeders');
     $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory));

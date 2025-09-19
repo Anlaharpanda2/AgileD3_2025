@@ -1,4 +1,12 @@
 <?php return array (
+  'jenssegers/mongodb' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'MongoDB\\Laravel\\MongoDBServiceProvider',
+      1 => 'MongoDB\\Laravel\\MongoDBBusServiceProvider',
+    ),
+  ),
   'laravel/sanctum' => 
   array (
     'providers' => 

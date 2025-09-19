@@ -1,19 +1,27 @@
 <?php
 
-use Illuminate\Http\Request;
+/**
+ * Vercel / Laravel Bridge
+ *
+ * Ini adalah entry point untuk semua request. Tujuannya adalah memastikan
+ * semua variabel server ($_SERVER) diatur dengan benar sebelum meneruskan
+ * request ke entry point publik Laravel.
+ */
 
-define('LARAVEL_START', microtime(true));
+// Menangani path routing Vercel
+$_SERVER['DOCUMENT_ROOT'] = getcwd();
+$_SERVER['SCRIPT_FILENAME'] = __DIR__ . '/../public/index.php';
+$_SERVER['SCRIPT_NAME'] = '/index.php';
+$_SERVER['PHP_SELF'] = '/index.php';
 
-// Tentukan apakah aplikasi sedang dalam maintenance
-if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
-    require $maintenance;
+// Memperbaiki REQUEST_URI dan PATH_INFO (paling penting untuk API)
+if (isset($_SERVER['REQUEST_URI'])) {
+    // Menghapus query string dari URI jika ada
+    $requestUri = strtok($_SERVER['REQUEST_URI'], '?');
+    $_SERVER['PATH_INFO'] = $requestUri;
+} else {
+    $_SERVER['PATH_INFO'] = '/';
 }
 
-// Daftarkan Composer Autoloader
-require __DIR__.'/../vendor/autoload.php';
-
-// Bootstrap aplikasi Laravel dan tangani request
-// Ini adalah cara yang benar untuk Laravel 11
-$app = require_once __DIR__.'/../bootstrap/app.php';
-
-$app->handleRequest(Request::capture());
+// Teruskan request ke entry point publik Laravel
+require __DIR__ . '/../public/index.php';

@@ -27,12 +27,6 @@
         "VIEW_COMPILED_PATH": "/tmp",
         "CACHE_DRIVER": "array",
         "LOG_CHANNEL": "stderr",
-        "SESSION_DRIVER": "cookie",
-        "DB_CONNECTION": "pgsql",
-        "DB_HOST": "dp3ap2kb-dp3ap2kb.i.aivencloud.com",
-        "DB_PORT": "28894",
-        "DB_DATABASE": "defaultdb",
-        "DB_USERNAME": "avnadmin",
-        "DB_SSLMODE": "require"
+        "SESSION_DRIVER": "cookie"
     }
 }

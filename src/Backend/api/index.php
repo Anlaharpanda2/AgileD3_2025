@@ -1,33 +1,14 @@
 <?php
 
-// Direktori /tmp adalah satu-satunya tempat yang bisa kita tulis di Vercel
-$storagePath = '/tmp/storage';
-$cachePath = $storagePath . '/framework/cache';
-$configCachePath = $storagePath . '/bootstrap/cache/config.php';
-$routesCachePath = $storagePath . '/bootstrap/cache/routes.php';
+// Tentukan path untuk file cache di direktori /tmp
+$configCachePath = '/tmp/bootstrap/cache/config.php';
+$routesCachePath = '/tmp/bootstrap/cache/routes.php';
 
-// Buat direktori yang diperlukan jika belum ada
-if (!is_dir($cachePath)) {
-    mkdir($cachePath, 0777, true);
-}
-if (!is_dir(dirname($configCachePath))) {
-    mkdir(dirname($configCachePath), 0777, true);
-}
-
-// Bootstrap aplikasi Laravel untuk mengakses fungsionalitasnya
-require __DIR__.'/../vendor/autoload.php';
-$app = require_once __DIR__.'/../bootstrap/app.php';
-
-// Arahkan Laravel untuk menggunakan direktori /tmp untuk cache
-$app->useStoragePath($storagePath);
-
-// Cek dan buat cache jika tidak ada.
-// Ini hanya akan berjalan pada request pertama ke sebuah instance lambda.
+// Jika cache tidak ada, ini berarti kita harus memuat file konfigurasi secara manual
+// Ini adalah fallback untuk lingkungan serverless di mana build-time caching gagal.
 if (!file_exists($configCachePath)) {
-    $app->make(Illuminate\Contracts\Console\Kernel::class)->call('config:cache');
-}
-if (!file_exists($routesCachePath)) {
-    $app->make(Illuminate\Contracts\Console\Kernel::class)->call('route:cache');
+    // Trik ini "menipu" Laravel agar berpikir tidak ada cache dan harus memuat file config satu per satu
+    define('LARAVEL_PRUNE_CONFIG', true);
 }
 
 // Perbaiki path request dari Vercel agar bisa dibaca oleh Router
@@ -35,10 +16,5 @@ if (isset($_SERVER['REQUEST_URI'])) {
     $_SERVER['PATH_INFO'] = $_SERVER['REQUEST_URI'];
 }
 
-// Teruskan request ke kernel HTTP Laravel untuk diproses
-$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
-$response = $kernel->handle(
-    $request = Illuminate\Http\Request::capture()
-);
-$response->send();
-$kernel->terminate($request, $response);
+// Teruskan request ke Laravel seperti biasa
+require __DIR__ . '/../public/index.php';

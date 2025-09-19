@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 Route::get('/seeder', function () {
@@ -62,4 +63,13 @@ Route::get('/', function () {
         'totalEndpoints' => $totalApiCount, 
         'totalUris' => count($rows), 
     ]);
+});
+
+Route::get('/debug-all-routes', function () {
+    try {
+        Artisan::call('route:list');
+        return '<pre>' . Artisan::output() . '</pre>';
+    } catch (\Exception $e) {
+        return "Error running route:list: " . $e->getMessage();
+    }
 });

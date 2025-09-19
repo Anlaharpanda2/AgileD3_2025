@@ -3,14 +3,16 @@
 /**
  * Vercel / Laravel Bridge
  *
- * File ini hanya memiliki SATU tugas: memperbaiki path URL dari Vercel
- * sebelum meneruskannya ke Laravel.
+ * Ini adalah entry point untuk semua request. Tujuannya adalah memastikan
+ * semua variabel server ($_SERVER) diatur dengan benar sebelum meneruskan
+ * request ke entry point publik Laravel.
  */
 
-// Perbaiki REQUEST_URI menjadi PATH_INFO agar Router Laravel bisa membacanya.
-if (isset($_SERVER['REQUEST_URI'])) {
-    $_SERVER['PATH_INFO'] = $_SERVER['REQUEST_URI'];
-}
+// Menangani path routing Vercel
+$_SERVER['DOCUMENT_ROOT'] = getcwd();
+$_SERVER['SCRIPT_FILENAME'] = __DIR__ . '/../public/index.php';
+$_SERVER['SCRIPT_NAME'] = '/index.php';
+$_SERVER['PHP_SELF'] = '/index.php';
 
-// Teruskan request ke entry point publik Laravel yang sudah benar.
+// Teruskan request ke entry point publik Laravel
 require __DIR__ . '/../public/index.php';

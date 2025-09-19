@@ -278,3 +278,7 @@ Route::put('kelola/konsultasi/{data_konsultasi}', [KelolaDataKonsultasiControlle
 Route::delete('kelola/konsultasi/{data_konsultasi}', [KelolaDataKonsultasiController::class, 'destroy']);
 Route::get('/konsultasi/{id_konsultasi}', [KelolaDataKonsultasiController::class, 'show']);
 Route::patch('/konsultasi/{id_konsultasi}/ubah-foto', [KelolaDataKonsultasiController::class, 'ubahFoto']);
+
+Route::get('/test-api', function () {
+    return response()->json(['message' => 'File routes/api.php berhasil dimuat!']);
+});

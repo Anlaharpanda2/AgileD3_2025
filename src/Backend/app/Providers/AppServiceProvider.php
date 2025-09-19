@@ -22,18 +22,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Log::info('AppServiceProvider: boot() method started.'); // Log ini
+        // Log::info('AppServiceProvider: boot() method started.'); // Log ini
 
-        // Coba akses database sederhana di sini
-        try {
-            // Hanya lakukan ini jika Anda yakin tabel 'users' ada
-            $userCount = \App\Models\User::count();
-            Log::info('Database check: Found ' . $userCount . ' users.');
-        } catch (\Exception $e) {
-            Log::error('Database connection or query failed in boot(): ' . $e->getMessage());
-        }
+        // // Coba akses database sederhana di sini
+        // try {
+        //     // Hanya lakukan ini jika Anda yakin tabel 'users' ada
+        //     $userCount = \App\Models\User::count();
+        //     Log::info('Database check: Found ' . $userCount . ' users.');
+        // } catch (\Exception $e) {
+        //     Log::error('Database connection or query failed in boot(): ' . $e->getMessage());
+        // }
 
-        // ... kode yang sudah ada ...
-        Log::info('AppServiceProvider: boot() method finished.'); // Log ini
+        // // ... kode yang sudah ada ...
+        // Log::info('AppServiceProvider: boot() method finished.'); // Log ini
     }
 }

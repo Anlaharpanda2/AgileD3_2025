@@ -3,7 +3,6 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "vercel-build": "echo '--- VERCEL-BUILD SCRIPT IS RUNNING ---' && php artisan config:cache && php artisan route:cache && echo '--- VERCEL-BUILD SCRIPT FINISHED ---'",
         "dev": "vite"
     },
     "devDependencies": {

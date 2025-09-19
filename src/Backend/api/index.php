@@ -1,19 +1,16 @@
 <?php
 
-use Illuminate\Http\Request;
+/**
+ * Vercel / Laravel Bridge
+ *
+ * File ini hanya memiliki SATU tugas: memperbaiki path URL dari Vercel
+ * sebelum meneruskannya ke Laravel.
+ */
 
-define('LARAVEL_START', microtime(true));
-
-// Tentukan apakah aplikasi sedang dalam maintenance
-if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
-    require $maintenance;
+// Perbaiki REQUEST_URI menjadi PATH_INFO agar Router Laravel bisa membacanya.
+if (isset($_SERVER['REQUEST_URI'])) {
+    $_SERVER['PATH_INFO'] = $_SERVER['REQUEST_URI'];
 }
 
-// Daftarkan Composer Autoloader
-require __DIR__.'/../vendor/autoload.php';
-
-// Bootstrap aplikasi Laravel dan tangani request
-// Ini adalah cara yang benar untuk Laravel 11
-$app = require_once __DIR__.'/../bootstrap/app.php';
-
-$app->handleRequest(Request::capture());
+// Teruskan request ke entry point publik Laravel yang sudah benar.
+require __DIR__ . '/../public/index.php';
